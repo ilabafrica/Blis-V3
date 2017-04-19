@@ -67,7 +67,7 @@ Explain how to run the automated tests for this system
 Explain what these tests test and why
 
 ```
-Give an example
+Coming soon
 ```
 
 ### And coding style tests
@@ -75,7 +75,7 @@ Give an example
 Explain what these tests test and why
 
 ```
-Give an example
+Coming soon
 ```
 
 ## Deployment
@@ -98,7 +98,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Derrick Rono** - *Initial work* - [drizzentic](https://github.com/drizzentic)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
