@@ -20,15 +20,39 @@ class CreatePatientsTable extends Migration
                 ->references('human_names')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('telecom')
                 ->references('contact_points')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->enum('gender',['male','female','other','unknown']);
+            $table->enum('gender', ['male', 'female', 'other', 'unknown']);
             $table->date('birth_date');
             $table->dateTime('deceased')->nullable()->default(null);
             $table->integer('address')
                 ->references('addresses')->on('id')->onUpdate('cascade')->onDelete('cascade');
-
-
-
-
+            $table->enum('marital_status', [
+                'annulled',
+                'divorced',
+                'interlocutory',
+                'legally_separated',
+                'married',
+                'polygamous',
+                'never_married',
+                'domestic_partner',
+                'unmarried',
+                'widowed',
+                'unknown'
+            ]);
+            $table->integer('multiple_birth')->default(0);
+            $table->string('photo')->nullable();
+            //linked to patient contact
+            //If patient is animal fields
+            $table->boolean('animal')->default(0);
+            $table->string('animal_species')->nullable();
+            $table->string('animal_breed')->nullable();
+            $table->string('animal_gender_status')->nullable();
+            //End of if patient is animal fields
+            //linked to patient communication
+            $table->enum('general_practitioner_type', ['organization', 'practitioner'])->nullable();
+            $table->integer('general_practitioner_id')->nullable();
+            $table->integer('managing_organization')->nullable()
+                ->references('organizations')->on('id')->onUpdate('cascade')->onDelete('cascade');
+            //linked to patient link
             $table->timestamps();
         });
     }

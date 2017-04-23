@@ -15,13 +15,13 @@ class CreateHumanNamesTable extends Migration
     {
         Schema::create('human_names', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('use',['usual','official','temp','nickname','anonymous','old','maiden']);
+            $table->enum('use', ['usual', 'official', 'temp', 'nickname', 'anonymous', 'old', 'maiden']);
             $table->string('text');
-            $table->string('family');
-            $table->string('given');
-            $table->string('prefix');
-            $table->string('suffix');
-            $table->date('period');
+            $table->string('family')->nullable();
+            $table->string('given')->nullable();
+            $table->string('prefix')->nullable();
+            $table->string('suffix')->nullable();
+            $table->date('period')->nullable();
             $table->timestamps();
         });
     }

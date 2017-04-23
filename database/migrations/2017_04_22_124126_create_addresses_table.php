@@ -15,16 +15,16 @@ class CreateAddressesTable extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('use',['home','work','temp','old']);
-            $table->enum('type',['postal','physical','both']);
+            $table->enum('use', ['home', 'work', 'temp', 'old']);
+            $table->enum('type', ['postal', 'physical', 'both']);
             $table->string('text');
-            $table->string('line');
-            $table->string('city');
-            $table->string('district');
-            $table->string('state');
-            $table->string('postal_code');
-            $table->string('country');
-            $table->date('period');
+            $table->string('line')->nullable();
+            $table->string('city')->nullable();
+            $table->string('district')->nullable();
+            $table->string('state')->nullable();
+            $table->string('postal_code')->nullable();
+            $table->string('country')->nullable();
+            $table->date('period')->nullable();
             $table->timestamps();
         });
     }

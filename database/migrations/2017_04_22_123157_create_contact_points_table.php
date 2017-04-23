@@ -15,11 +15,11 @@ class CreateContactPointsTable extends Migration
     {
         Schema::create('contact_points', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('system',['phone','fax','email','pager','url','sms','other']);
+            $table->enum('system', ['phone', 'fax', 'email', 'pager', 'url', 'sms', 'other']);
             $table->string('value');
-            $table->enum('use',['home','work','temp','old','mobile']);
-            $table->integer('rank')->unsigned();
-            $table->date('period');
+            $table->enum('use', ['home', 'work', 'temp', 'old', 'mobile']);
+            $table->integer('rank')->unsigned()->nullable();
+            $table->date('period')->nullable();
             $table->timestamps();
         });
     }
