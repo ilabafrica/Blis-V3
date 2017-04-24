@@ -15,6 +15,8 @@ class CreateContactPointsTable extends Migration
     {
         Schema::create('contact_points', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id')->unsigned()
+                ->references('users')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->enum('system', ['phone', 'fax', 'email', 'pager', 'url', 'sms', 'other']);
             $table->string('value');
             $table->enum('use', ['home', 'work', 'temp', 'old', 'mobile']);

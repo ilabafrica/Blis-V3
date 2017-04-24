@@ -15,6 +15,8 @@ class CreatePatientsTable extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id')->unsigned()
+                ->references('users')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('active')->default(1);
             $table->integer('name')
                 ->references('human_names')->on('id')->onUpdate('cascade')->onDelete('cascade');
