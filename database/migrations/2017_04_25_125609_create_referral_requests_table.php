@@ -22,13 +22,13 @@ class CreateReferralRequestsTable extends Migration
             $table->integer('type')->unsigned(); 
             $table->integer('priority')->nullable(); 
             $table->string('serviceRequested')->nullable(); 
-            $table->integer('serviceRequested')->nullable()->unsigned(); 
+            $table->integer('subject')->nullable()->unsigned(); 
             $table->dateTime('occurence')->nullable(); 
             $table->integer('requester')->unsigned(); 
             $table->integer('specialty')->unsigned(); 
             $table->integer('recipient')->unsigned(); 
             $table->integer('reason_code')->unsigned()->nullable();
-            $table->string('reason_reference')->unsigned()->nullable();
+            $table->string('reason_reference')->nullable();
             $table->string('supporting_info')->nullable();
             $table->string('description')->nullable();
             $table->string('note')->nullable();

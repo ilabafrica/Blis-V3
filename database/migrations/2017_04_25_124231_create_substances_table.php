@@ -18,7 +18,7 @@ class CreateSubstancesTable extends Migration
             $table->integer('status'); //status id
             $table->integer('category')->unsigned(); //codeable concept id
             $table->integer('code')->unsigned(); //codeable concept id
-            $table->string('description')->unsigned(); 
+            $table->string('description')->nullable(); 
             $table->timestamps();
         });
     }

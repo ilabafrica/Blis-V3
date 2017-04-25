@@ -34,9 +34,9 @@ class CreateProcedureRequestsTable extends Migration
             $table->smallInteger('performer_type')->unsigned();
             $table->integer('performer')->unsigned();
             $table->integer('reason_code')->unsigned()->nullable();
-            $table->string('reason_reference')->unsigned()->nullable();
+            $table->string('reason_reference')->nullable();
             $table->string('supporting_info')->nullable();
-            $table->integer('specimen')->unsigned();
+            $table->integer('specimen')->unsigned()->nullable();
             $table->smallInteger('body_site')->unsigned();
             $table->string('note')->nullable();
             $table->string('relevant_history')->nullable(); 
