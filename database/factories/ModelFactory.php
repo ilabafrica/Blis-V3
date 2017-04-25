@@ -96,3 +96,18 @@ $factory->define(\App\DB\Patient::class, function (Faker\Generator $faker) {
         ]),
     ];
 });
+
+$factory->define(\App\DB\Practitioner::class, function (Faker\Generator $faker) {
+
+    $userId  = factory(User::class)->create()->id;
+
+    return [
+        'user_id' => $userId,
+        'name' => factory(\App\DB\HumanName::class)->create(['user_id'=>$userId])->id,
+        'telecom' => factory(\App\DB\ContactPoint::class)->create(['user_id'=>$userId])->id,
+        'gender' => \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
+        'birth_date' => \Faker\Factory::create()->date(),
+        'address' => factory(\App\DB\Address::class)->create(['user_id'=>$userId])->id
+    ];
+});
+

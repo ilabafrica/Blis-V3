@@ -7,6 +7,7 @@ use App\DB\ContactPoint;
 use App\DB\HumanName;
 use App\DB\Organization;
 use App\DB\Patient;
+use App\DB\Practitioner;
 use App\User;
 use App\UserType;
 use Faker\Generator as Facker;
@@ -48,8 +49,8 @@ class UserTest extends TestCase
     /* Test */
     public function testaddNewPatient()
     {
-
-        $userId  = factory(User::class)->create()->id;
+        $userTypeId  = factory(UserType::class)->create(['name'=>'patient'])->id;
+        $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;
         $patientArray = [
             'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
@@ -186,6 +187,7 @@ class UserTest extends TestCase
         $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;
         
         $organizationArray = [
+            'user_id' => $userId,
             'type' =>  \Faker\Factory::create()->randomElement([
                 'healthcare_provider',
                 'hospital_department',
@@ -211,7 +213,139 @@ class UserTest extends TestCase
 
         $this->assertDatabaseHas('organizations',$organizationArray);
     }
+    
+    /* Test */
+    public function testaddNewOrganizationContact()
+    {
+        $userId  = factory(User::class)->create()->id;
+        $OrganizationContactArray = [
+            'organization_id' => factory(Organization::class)->create(['user_id'=>$userId])->id,
+            'purpose' =>  \Faker\Factory::create()->randomElement([
+                'billing', 
+                'administrative', 
+                'human_resource', 
+                'payor', 
+                'patient', 
+                'press'
+            ]),
+            'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
+            'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
+            'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
 
+        ];
 
+        $this->post('/api/organizationcontact/', $OrganizationContactArray);
+
+        $this->assertDatabaseHas('organization_contact',$OrganizationContactArray);
+    }
+    
+    /* Test */
+    public function testaddNewPatientCommunication()
+    {
+        $userId  = factory(User::class)->create()->id;
+        $patientId  = factory(Patient::class)->create(['user_id'=>$userId])->id;
+        $PatientCommunicationArray = [
+            'patient_id' => $patientId,
+            'language' =>  \Faker\Factory::create()->randomElement([
+                'sw', 
+                'en', 
+                'fr', 
+                'es', 
+                'de', 
+                'ar', 
+                'zh'
+            ])
+        ];
+
+        $this->post('/api/patientcommunication/', $PatientCommunicationArray);
+
+        $this->assertDatabaseHas('patient_communications',$PatientCommunicationArray);
+    }
+
+    /* Test */
+    public function testaddNewPractitioner()
+    {
+        $userTypeId  = factory(UserType::class)->create(['name'=>'practitioner'])->id;
+        $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;
+        $PractitionerArray = [
+            'user_id' => $userId,
+            'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
+            'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
+            'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
+            'gender' =>  \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
+            'birth_date' => \Faker\Factory::create()->date(),
+            'photo' =>  \Faker\Factory::create()->url
+
+        ];
+
+        $this->post('/api/practitioner/', $PractitionerArray);
+
+        $this->assertDatabaseHas('practitioners',$PractitionerArray);
+    }
+
+    /* Test */
+    public function testaddNewPractitionerQualification()
+    {
+        $userId  = factory(User::class)->create()->id;
+        $practitionerId  = factory(Practitioner::class)->create(['user_id'=>$userId])->id;
+        $PractitionerQualificationArray = [
+            'practitioner_id' => $practitionerId,
+            'name' => \Faker\Factory::create()->word,
+            'period' => \Faker\Factory::create()->date(),
+            'issuer' => factory(Organization::class)->create(['user_id'=>$userId])->id
+
+        ];
+
+        $this->post('/api/practitionerqualification/', $PractitionerQualificationArray);
+
+        $this->assertDatabaseHas('practitioner_qualifications',$PractitionerQualificationArray);
+    }
+
+    /* Test */
+    public function testaddNewPractitionerCommunication()
+    {
+        $practitionerId  = factory(Practitioner::class)->create()->id;
+        $patientId  = factory(Patient::class)->create()->id;
+        $PractitionerCommunicationArray = [
+            'practitioner_id' => $practitionerId,
+            'patient_id' => $patientId,
+            'language' =>  \Faker\Factory::create()->randomElement([
+                'sw',
+                'en',
+                'fr',
+                'es',
+                'de',
+                'ar',
+                'zh'
+            ]),
+
+        ];
+
+        $this->post('/api/practitionercommunication/', $PractitionerCommunicationArray);
+
+        $this->assertDatabaseHas('practitioner_communication',$PractitionerCommunicationArray);
+    }
+
+    /* Test */
+    public function testaddNewPatientLink()
+    {
+        $patientId  = factory(Patient::class)->create()->id;
+        $other  = factory(Patient::class)->create()->id;
+        $PatientLinkArray = [
+            'patient_id' => $patientId,
+            'other' => $other,
+            'type' =>  \Faker\Factory::create()->randomElement([
+                'replaced_by',
+                'replaces',
+                'refer',
+                'see_also'
+            ])
+
+            ];
+
+        $this->post('/api/patientlink/', $PatientLinkArray);
+
+        $this->assertDatabaseHas('patient_links',$PatientLinkArray);
+    }
 
 }

@@ -15,6 +15,8 @@ class CreateOrganizationsTable extends Migration
     {
         Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id')->unsigned()
+                ->references('users')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('active')->default(1);
             $table->enum('type', [
                 'healthcare_provider',
