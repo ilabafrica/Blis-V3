@@ -1,0 +1,217 @@
+<?php
+
+namespace Tests\Unit\DB;
+
+use App\DB\Address;
+use App\DB\ContactPoint;
+use App\DB\HumanName;
+use App\DB\Organization;
+use App\DB\Patient;
+use App\User;
+use App\UserType;
+use Faker\Generator as Facker;
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
+class UserTest extends TestCase
+{
+    use DatabaseMigrations;
+
+    /* Test */
+    public function testaddNewUserType()
+    {
+        $userTypeArray = [
+            'name' => 'test name',
+            'description' => 'decription here'
+        ];
+
+        $this->post('/api/usertype/add', $userTypeArray);
+
+        $this->assertDatabaseHas('user_types',$userTypeArray);
+    }
+    
+    /* Test */
+    public function testaddNewUser()
+    {
+        $userArray = [
+            'type' => factory(UserType::class)->create()->id,
+            'email' => 'test@example.com',
+            'password' => '1234678'
+        ];
+
+        $this->post('/user/add', $userArray);
+
+        $this->assertDatabaseHas('users',$userArray);
+    }
+
+    /* Test */
+    public function testaddNewPatient()
+    {
+
+        $userId  = factory(User::class)->create()->id;
+        $patientArray = [
+            'user_id' => $userId,
+            'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
+            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
+            'gender' => \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
+            'birth_date' => \Faker\Factory::create()->date(),
+            'deceased' => \Faker\Factory::create()->date(),
+            'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
+            'marital_status' => \Faker\Factory::create()->randomElement([
+                'annulled',
+                'divorced',
+                'interlocutory',
+                'legally_separated',
+                'married',
+                'polygamous',
+                'never_married',
+                'domestic_partner',
+                'unmarried',
+                'widowed',
+                'unknown'
+            ]),
+            'multiple_birth' => 1,
+            'photo' => 'path/to/photo/here',
+            'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
+            'general_practitioner_id' => 1,
+            'managing_organization' => factory(Organization::class)->create()->id
+        ];
+
+        $this->post('/api/patient/add', $patientArray);
+
+        $this->assertDatabaseHas('patients',$patientArray);
+    }
+
+
+    /* Test */
+    public function testaddNewhumannames()
+    {
+
+        $humannamesArray = [
+            'user_id' => factory(User::class)->create()->id,
+            'use' => \Faker\Factory::create()->randomElement(['usual', 'official', 'temp', 'nickname', 'anonymous', 'old', 'maiden']),
+            'text' => \Faker\Factory::create()->word,
+            'family' => \Faker\Factory::create()->word,
+            'given' => \Faker\Factory::create()->word,
+            'prefix' => \Faker\Factory::create()->word,
+            'suffix' => \Faker\Factory::create()->word,
+            'period' => \Faker\Factory::create()->date()
+
+        ];
+
+        $this->post('/api/humanname/add', $humannamesArray);
+
+        $this->assertDatabaseHas('human_names',$humannamesArray);
+    }
+
+
+    /* Test */
+    public function testaddNewContactPoint()
+    {
+
+        $ContactPointArray = [
+            'user_id' => factory(User::class)->create()->id,
+            'system' =>  \Faker\Factory::create()->randomElement(['phone', 'fax', 'email', 'pager', 'url', 'sms', 'other']),
+            'value' => \Faker\Factory::create()->word,
+            'use' =>  \Faker\Factory::create()->randomElement(['home', 'work', 'temp', 'old', 'mobile']),
+            'rank' => \Faker\Factory::create()->number,
+            'period' => \Faker\Factory::create()->date()
+            
+        ];
+
+        $this->post('/api/contactpoint', $ContactPointArray);
+
+        $this->assertDatabaseHas('contact_points',$ContactPointArray);
+    }
+
+    /* Test */
+    public function testaddNewAddresses()
+    {
+        $AddressesArray = [
+            'use' =>  \Faker\Factory::create()->randomElement(['home', 'work', 'temp', 'old']),
+            'type' =>  \Faker\Factory::create()->randomElement(['postal', 'physical', 'both']),
+            'text' => \Faker\Factory::create()->word,
+            'line' => \Faker\Factory::create()->word,
+            'city' => \Faker\Factory::create()->word,
+            'district' => \Faker\Factory::create()->word,
+            'state' => \Faker\Factory::create()->word,
+            'postal_code' => \Faker\Factory::create()->word,
+            'country' => \Faker\Factory::create()->word,
+            'period' => \Faker\Factory::create()->date(),
+        ];
+
+        $this->post('/api/address', $AddressesArray);
+
+        $this->assertDatabaseHas('addresses',$AddressesArray);
+    }
+
+
+    /* Test */
+    public function testaddNewPatientContact()
+    {
+        $userId  = factory(User::class)->create()->id;
+        $patientId  = factory(Patient::class)->create(['user_id'=>$userId])->id;
+        $PatientContactArray = [
+            'patient_id' => $patientId,
+            'relationship' =>  \Faker\Factory::create()->randomElement([
+                'emergency_contact',
+                'employer',
+                'federal_agency',
+                'insurance_company',
+                'next_of_kin',
+                'other',
+                'state_agency',
+                'unknown'
+            ]),
+            'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
+            'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
+            'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
+            'gender' =>  \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
+            'organization_id' => factory(Organization::class)->create(['user_id'=>$userId])->id,
+            'period' => \Faker\Factory::create()->date(),
+        ];
+
+        $this->post('/api/patientcontact', $PatientContactArray);
+
+        $this->assertDatabaseHas('patient_contacts',$PatientContactArray);
+    }
+    
+
+    /* Test */
+    public function testaddNewOrganization()
+    {
+        $userTypeId  = factory(UserType::class)->create(['name'=>'organization'])->id;
+        
+        $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;
+        
+        $organizationArray = [
+            'type' =>  \Faker\Factory::create()->randomElement([
+                'healthcare_provider',
+                'hospital_department',
+                'organizational_team',
+                'government',
+                'insurance_company',
+                'educational_institute',
+                'religious_institution',
+                'clinical_research_sponsor',
+                'community_group',
+                'corporation',
+                'other'
+            ]),
+            'name' => \Faker\Factory::create()->word,
+            'alias' => \Faker\Factory::create()->word,
+            'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
+            'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
+            'part_of' => factory(Organization::class)->create(['user_id'=>$userId])->id,
+            'end_point' =>  \Faker\Factory::create()->url
+        ];
+
+        $this->post('/api/organization', $organizationArray);
+
+        $this->assertDatabaseHas('organizations',$organizationArray);
+    }
+
+
+
+}
