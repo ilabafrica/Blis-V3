@@ -16,9 +16,13 @@ class CreateProcessingsTable extends Migration
         Schema::create('processings', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description');
-            $table->smallInteger('procedure')->unsigned();
+            $table->integer('procedure')->unsigned();
             $table->dateTime('period');
             $table->timestamps();
+
+            //Relationships
+            $table->foreign('procedure')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+
         });
     }
 

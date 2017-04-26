@@ -17,12 +17,16 @@ class CreateSpecimensTable extends Migration
             $table->increments('id');
             $table->integer('accessionIdentifier')->nullable(); // Identifier assigned by the lab
             $table->integer('status')->unsigned(); //status id
-            $table->smallInteger('type')->unsigned();
+            $table->integer('type')->unsigned();
             $table->string('subject');
             $table->dateTime('receivedTime');
             $table->integer('parent')->nullable();
             $table->string('note')->nullable();
             $table->timestamps();
+
+            //Relationships
+            
+            $table->foreign('type')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

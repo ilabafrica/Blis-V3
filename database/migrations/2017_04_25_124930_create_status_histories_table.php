@@ -18,6 +18,11 @@ class CreateStatusHistoriesTable extends Migration
             $table->integer('code')->unsigned();
             $table->integer('episode_of_care_id')->unsigned();
             $table->timestamps();
+
+            //Relationships
+            $table->foreign('code')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('episode_of_care_id')->references('id')->on('episodeof_cares')->onUpdate('cascade')->onDelete('cascade');
+            
         });
     }
 

@@ -18,6 +18,10 @@ class CreateIngredientsTable extends Migration
             $table->integer('quantity')->nullable();
             $table->integer('substance')->unsigned()->nullable();
             $table->timestamps();
+
+            //Relationships
+            $table->foreign('substance')->references('id')->on('substances')->onUpdate('cascade')->onDelete('cascade');
+            
         });
     }
 

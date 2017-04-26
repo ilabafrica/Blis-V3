@@ -19,8 +19,13 @@ class CreateContainersTable extends Migration
             $table->smallInteger('type');
             $table->Integer('capacity');
             $table->Integer('quantity_id')->unsigned();
-            $table->smallInteger('additive')->unsigned(); //substance id
+            $table->integer('additive')->unsigned(); //substance id
             $table->timestamps();
+
+            //relationships
+            $table->foreign('quantity_id')->references('id')->on('quantities')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('additive')->references('id')->on('substances')->onUpdate('cascade')->onDelete('cascade');
+            
         });
     }
 

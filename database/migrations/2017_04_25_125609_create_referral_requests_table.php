@@ -15,7 +15,7 @@ class CreateReferralRequestsTable extends Migration
     {
         Schema::create('referral_requests', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('basedOn')->unsigned()->nullable(); //episode of care
+            $table->integer('based_on')->unsigned()->nullable(); //episode of care
             $table->integer('replaces')->unsigned()->nullable();  //Request(s) replaced by this request
             $table->integer('group_identifier')->unsigned()->nullable();  //Request(s) replaced by this request
             $table->integer('status')->unsigned(); 
@@ -33,6 +33,17 @@ class CreateReferralRequestsTable extends Migration
             $table->string('description')->nullable();
             $table->string('note')->nullable();
             $table->timestamps();
+
+
+            //Relationships
+            $table->foreign('based_on')->references('id')->on('episodeof_cares')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('replaces')->references('id')->on('referral_requests')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('status')->references('id')->on('statuses')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('type')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('subject')->references('id')->on('patient')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('specialty')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('recipient')->references('id')->on('practitioners')->onUpdate('cascade')->onDelete('cascade');
+            
         });
     }
 

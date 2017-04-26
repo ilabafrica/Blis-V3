@@ -16,11 +16,18 @@ class CreateCollectionsTable extends Migration
         Schema::create('collections', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('collector')->unsigned();
-            $table->dateTime('collectedDateTime');
+            $table->dateTime('collection_time');
             $table->integer('quantity_id')->unsigned();
-            $table->smallInteger('method')->unsigned();
-            $table->smallInteger('bodySite')->unsigned();
+            $table->integer('method')->unsigned();
+            $table->integer('body_site')->unsigned();
             $table->timestamps();
+
+
+            //relationships
+            $table->foreign('collector')->references('id')->on('practitioners')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('quantity_id')->references('id')->on('quantities')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('method')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('body_site')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

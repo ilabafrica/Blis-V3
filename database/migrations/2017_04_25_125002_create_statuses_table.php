@@ -18,6 +18,10 @@ class CreateStatusesTable extends Migration
             $table->string('name');
             $table->timestamps();
         });
+
+        Schema::create('specimens', function (Blueprint $table) {
+            $table->foreign('status')->references('id')->on('statuses')->onUpdate('cascade')->onDelete('cascade');
+        });
     }
 
     /**

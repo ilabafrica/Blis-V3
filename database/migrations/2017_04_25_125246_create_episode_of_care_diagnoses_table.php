@@ -20,6 +20,10 @@ class CreateEpisodeOfCareDiagnosesTable extends Migration
             $table->string('rank');
             $table->integer('episode_of_care_id')->unsigned();
             $table->timestamps();
+
+            //Relationships
+            $table->foreign('episode_of_care_id')->references('id')->on('episodeof_cares')->onUpdate('cascade')->onDelete('cascade');
+            
         });
     }
 

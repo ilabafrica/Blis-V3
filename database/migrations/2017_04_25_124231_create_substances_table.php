@@ -20,6 +20,12 @@ class CreateSubstancesTable extends Migration
             $table->integer('code')->unsigned(); //codeable concept id
             $table->string('description')->nullable(); 
             $table->timestamps();
+
+            //Relationships
+            $table->foreign('category')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('status')->references('id')->on('statuses')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('code')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+            
         });
     }
 
