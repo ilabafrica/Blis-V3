@@ -57,7 +57,7 @@ class UserTest extends TestCase
             'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
             'gender' => \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
             'birth_date' => \Faker\Factory::create()->date(),
-            'deceased' => \Faker\Factory::create()->date(),
+            'deceased' => \Faker\Factory::create()->boolean(),
             'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
             'marital_status' => \Faker\Factory::create()->randomElement([
                 'annulled',
@@ -92,11 +92,11 @@ class UserTest extends TestCase
         $humannamesArray = [
             'user_id' => factory(User::class)->create()->id,
             'use' => \Faker\Factory::create()->randomElement(['usual', 'official', 'temp', 'nickname', 'anonymous', 'old', 'maiden']),
-            'text' => \Faker\Factory::create()->word,
-            'family' => \Faker\Factory::create()->word,
-            'given' => \Faker\Factory::create()->word,
-            'prefix' => \Faker\Factory::create()->word,
-            'suffix' => \Faker\Factory::create()->word,
+            'text' => 'text_name',
+            'family' => 'family_name',
+            'given' => 'given_name',
+            'prefix' => 'name_prefix',
+            'suffix' => 'name_suffix',
             'period' => \Faker\Factory::create()->date()
 
         ];

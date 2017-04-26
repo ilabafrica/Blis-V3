@@ -20,11 +20,11 @@ class CreatePatientsTable extends Migration
             $table->boolean('active')->default(1);
             $table->integer('name')
                 ->references('human_names')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('telecom')
-                ->references('contact_points')->on('id')->onUpdate('cascade')->onDelete('cascade');
+//            $table->integer('telecom')
+//                ->references('contact_points')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->enum('gender', ['male', 'female', 'other', 'unknown']);
             $table->date('birth_date');
-            $table->dateTime('deceased')->nullable()->default(null);
+            $table->boolean('deceased')->default(0);
             $table->integer('address')
                 ->references('addresses')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->enum('marital_status', [
