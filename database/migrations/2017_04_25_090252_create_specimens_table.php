@@ -15,11 +15,11 @@ class CreateSpecimensTable extends Migration
     {
         Schema::create('specimens', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('accessionIdentifier')->nullable(); // Identifier assigned by the lab
+            $table->integer('accession_identifier')->nullable(); // Identifier assigned by the lab
             $table->integer('status')->unsigned(); //status id
             $table->integer('type')->unsigned();
-            $table->string('subject');
-            $table->dateTime('receivedTime');
+            $table->integer('subject');
+            $table->dateTime('received_time');
             $table->integer('parent')->nullable();
             $table->string('note')->nullable();
             $table->timestamps();
