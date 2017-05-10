@@ -36,4 +36,32 @@ class SpecimensTest extends TestCase
 
     	$this->assertEquals(200,$response->getStatusCode());
     }
+
+    public function testListSpecimen(){
+    	\Log::info("List Specimen");
+    	$response=$this->get('specimen');
+
+    	$this->assertEquals(200,$response->getStatusCode());
+    	//data
+    	$data=json_decode($response->getBody());
+
+    	$this->assertArrayHasKey('accessionIdentifier', $data);
+    }
+
+    public function testUpdateSpecimen(){
+    	$specimen=array(
+    		'accessionIdentifier'=>"BG1212",
+    		'status'=>"1", //Codeable Concept Code e.g unsatisfactory
+    		'type'=>"12" //Codeable Concept Code e.g Serum
+    		);
+    	$response=$this->put('/api/specimen/1',$specimen);
+
+    	$this->assertEquals(200,$response->getStatusCode());
+    }
+
+    public function testDeleteSpecimen(){
+    	
+    	$response=$this->delete('/api/specimen/1');
+    	$this->assertEquals(200,$response->getStatusCode());
+    }
 }
