@@ -21,7 +21,7 @@ class CreateReferralRequestsTable extends Migration
             $table->integer('status')->unsigned(); 
             $table->integer('type')->unsigned(); 
             $table->integer('priority')->nullable(); 
-            $table->string('serviceRequested')->nullable(); 
+            $table->string('service_requested')->nullable(); 
             $table->integer('subject')->nullable()->unsigned(); 
             $table->dateTime('occurence')->nullable(); 
             $table->integer('requester')->unsigned(); 

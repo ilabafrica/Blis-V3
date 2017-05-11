@@ -86,3 +86,4 @@ class ProcedureRequestTest extends TestCase
     	$response=$this->delete('/api/procedure_request/1');
     	$this->assertEquals(200,$response->getStatusCode());
     }
+}

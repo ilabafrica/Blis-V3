@@ -19,10 +19,10 @@ class CreateCareTeamsTable extends Migration
             $table->integer('status')->unsigned(); //status id
             $table->integer('category')->unsigned();
             $table->string('name');
-            $table->string('subject')->nullable();
+            $table->integer('subject')->nullable()->unsigned();
             $table->integer('context')->unsigned(); //episode of care id
             $table->integer('period')->nullable();
-            $table->string('reason_code')->nullable();
+            $table->integer('reason_code')->nullable()->unsigned();
             $table->string('reason_reference')->nullable();
             $table->integer('managing_organization')->unsigned(); //org id
             $table->string('comment')->nullable();
