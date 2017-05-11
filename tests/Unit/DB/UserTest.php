@@ -27,7 +27,7 @@ class UserTest extends TestCase
             'description' => 'decription here'
         ];
 
-        $this->post('/api/usertype/add', $userTypeArray);
+        $this->post('/api/usertype/', $userTypeArray);
 
         $this->assertDatabaseHas('user_types',$userTypeArray);
     }
@@ -41,7 +41,7 @@ class UserTest extends TestCase
             'password' => '1234678'
         ];
 
-        $this->post('/user/add', $userArray);
+        $this->post('/user/', $userArray);
 
         $this->assertDatabaseHas('users',$userArray);
     }
@@ -79,7 +79,7 @@ class UserTest extends TestCase
             'managing_organization' => factory(Organization::class)->create()->id
         ];
 
-        $this->post('/api/patient/add', $patientArray);
+        $this->post('/api/patient/', $patientArray);
 
         $this->assertDatabaseHas('patients',$patientArray);
     }
@@ -101,7 +101,7 @@ class UserTest extends TestCase
 
         ];
 
-        $this->post('/api/humanname/add', $humannamesArray);
+        $this->post('/api/humanname/', $humannamesArray);
 
         $this->assertDatabaseHas('human_names',$humannamesArray);
     }
