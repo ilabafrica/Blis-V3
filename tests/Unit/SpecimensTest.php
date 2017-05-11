@@ -8,16 +8,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class SpecimensTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $this->assertTrue(true);
-    }
-
+  
     /**
      * Test Create Specimen
      */
@@ -60,7 +51,7 @@ class SpecimensTest extends TestCase
     }
 
     public function testDeleteSpecimen(){
-    	
+
     	$response=$this->delete('/api/specimen/1');
     	$this->assertEquals(200,$response->getStatusCode());
     }

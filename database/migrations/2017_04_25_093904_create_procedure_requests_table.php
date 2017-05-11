@@ -19,9 +19,9 @@ class CreateProcedureRequestsTable extends Migration
             $table->string('based_on')->nullable();
             $table->string('replaces')->nullable();
             $table->integer('requisition')->nullable();
-            $table->string('status');
-            $table->string('intent');
-            $table->string('priority');
+            $table->integer('status')->unsigned();
+            $table->integer('intent')->unsigned(); //codeable concept
+            $table->integer('priority')->unsigned();
             $table->boolean('do_not_perform');
             $table->integer('category')->unsigned();
             $table->integer('code')->unsigned();
@@ -44,6 +44,8 @@ class CreateProcedureRequestsTable extends Migration
 
             //Relationships
             $table->foreign('category')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('priority')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('intent')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('code')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('context')->references('id')->on('episodeof_cares')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('requester')->references('id')->on('practitioners')->onUpdate('cascade')->onDelete('cascade');
@@ -52,6 +54,7 @@ class CreateProcedureRequestsTable extends Migration
             $table->foreign('reason_code')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('body_site')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('specimen')->references('id')->on('specimens')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('status')->references('id')->on('statuses')->onUpdate('cascade')->onDelete('cascade');
             
         });
     }
