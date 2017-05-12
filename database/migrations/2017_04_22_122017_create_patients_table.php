@@ -22,14 +22,14 @@ class CreatePatientsTable extends Migration
                 ->references('human_names')->on('id')->onUpdate('cascade')->onDelete('cascade');
 //            $table->integer('telecom')
 //                ->references('contact_points')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('gender')->unsigned()
-                  ->references('id')->on('codeable_concepts');
+            $table->integer('gender')->unsigned();
+                  
             $table->date('birth_date');
             $table->boolean('deceased')->default(0);
             $table->integer('address')
                 ->references('addresses')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('marital_status')->unsigned()
-                  ->references('id')->on('codeable_concepts');
+            $table->integer('marital_status')->unsigned();
+                  
             $table->integer('multiple_birth')->default(0);
             $table->string('photo')->nullable();
             //linked to patient contact
@@ -46,6 +46,10 @@ class CreatePatientsTable extends Migration
                 ->references('organizations')->on('id')->onUpdate('cascade')->onDelete('cascade');
             //linked to patient link
             $table->timestamps();
+
+            //Relationships
+            $table->foreign('gender')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+             $table->foreign('marital_status')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

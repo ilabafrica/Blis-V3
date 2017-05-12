@@ -18,8 +18,7 @@ class CreateOrganizationsTable extends Migration
             $table->integer('user_id')->unsigned()
                 ->references('users')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('active')->default(1);
-            $table->integer('type')->unsigned()
-                  ->references('id')->on('codeable_concepts');
+            $table->integer('type')->unsigned();                  
             $table->string('name');
             $table->string('alias')->nullable();
             $table->integer('telecom')->nullable()
@@ -31,6 +30,9 @@ class CreateOrganizationsTable extends Migration
             //Has organization contact linked
             $table->string('end_point')->nullable();
             $table->timestamps();
+
+            //Relationships
+            $table->foreign('type')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

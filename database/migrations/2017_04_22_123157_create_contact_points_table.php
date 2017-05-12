@@ -17,14 +17,16 @@ class CreateContactPointsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()
                 ->references('users')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('system')->unsigned()
-                  ->references('id')->on('codeable_concepts');
+            $table->integer('system')->unsigned();                  
             $table->string('value');
-            $table->integer('use')->unsigned()
-                  ->references('id')->on('codeable_concepts');
+            $table->integer('use')->unsigned();                  
             $table->integer('rank')->unsigned()->nullable();
             $table->date('period')->nullable();
             $table->timestamps();
+
+            //Relationships
+            $table->foreign('system')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('use')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

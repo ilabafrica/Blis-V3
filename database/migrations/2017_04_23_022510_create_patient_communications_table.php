@@ -17,10 +17,13 @@ class CreatePatientCommunicationsTable extends Migration
             $table->increments('id');
             $table->integer('patient_id')
                 ->references('patients')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('language')->unsigned()
-                  ->references('id')->on('codeable_concepts');
+            $table->integer('language')->unsigned();                  
             $table->boolean('preferred')->default(1);
             $table->timestamps();
+
+            //Relationships
+
+            $table->foreign('language')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

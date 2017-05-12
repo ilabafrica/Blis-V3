@@ -24,13 +24,15 @@ class CreatePractitionersTable extends Migration
                 ->references('contact_points')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('address')->nullable()
                 ->references('addresses')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('gender')->unsigned()
-                  ->references('id')->on('codeable_concepts');
+            $table->integer('gender')->unsigned();                  
             $table->date('birth_date');
             $table->string('photo')->nullable();
             //linked to practitioners qualification
             //linked to practitioners communication
             $table->timestamps();
+
+            //Relationships
+            $table->foreign('gender')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
