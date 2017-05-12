@@ -19,7 +19,8 @@ class CreatePatientLinksTable extends Migration
                 ->references('patients')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('other')
                 ->references('patients')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->enum('type', ['replaced_by', 'replaces', 'refer', 'see_also']);
+            $table->integer('type')->unsigned()
+                  ->references('id')->on('codeable_concepts');
             $table->timestamps();
         });
     }

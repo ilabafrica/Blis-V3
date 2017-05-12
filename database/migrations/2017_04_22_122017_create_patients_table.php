@@ -22,24 +22,14 @@ class CreatePatientsTable extends Migration
                 ->references('human_names')->on('id')->onUpdate('cascade')->onDelete('cascade');
 //            $table->integer('telecom')
 //                ->references('contact_points')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->enum('gender', ['male', 'female', 'other', 'unknown']);
+            $table->integer('gender')->unsigned()
+                  ->references('id')->on('codeable_concepts');
             $table->date('birth_date');
             $table->boolean('deceased')->default(0);
             $table->integer('address')
                 ->references('addresses')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->enum('marital_status', [
-                'annulled',
-                'divorced',
-                'interlocutory',
-                'legally_separated',
-                'married',
-                'polygamous',
-                'never_married',
-                'domestic_partner',
-                'unmarried',
-                'widowed',
-                'unknown'
-            ]);
+            $table->integer('marital_status')->unsigned()
+                  ->references('id')->on('codeable_concepts');
             $table->integer('multiple_birth')->default(0);
             $table->string('photo')->nullable();
             //linked to patient contact

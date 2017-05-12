@@ -24,7 +24,8 @@ class CreatePractitionersTable extends Migration
                 ->references('contact_points')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('address')->nullable()
                 ->references('addresses')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->enum('gender', ['male', 'female', 'other', 'unknown']);
+            $table->integer('gender')->unsigned()
+                  ->references('id')->on('codeable_concepts');
             $table->date('birth_date');
             $table->string('photo')->nullable();
             //linked to practitioners qualification

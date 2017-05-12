@@ -18,19 +18,8 @@ class CreateOrganizationsTable extends Migration
             $table->integer('user_id')->unsigned()
                 ->references('users')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('active')->default(1);
-            $table->enum('type', [
-                'healthcare_provider',
-                'hospital_department',
-                'organizational_team',
-                'government',
-                'insurance_company',
-                'educational_institute',
-                'religious_institution',
-                'clinical_research_sponsor',
-                'community_group',
-                'corporation',
-                'other'
-            ]);
+            $table->integer('type')->unsigned()
+                  ->references('id')->on('codeable_concepts');
             $table->string('name');
             $table->string('alias')->nullable();
             $table->integer('telecom')->nullable()

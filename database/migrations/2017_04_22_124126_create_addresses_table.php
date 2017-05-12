@@ -15,8 +15,10 @@ class CreateAddressesTable extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('use', ['home', 'work', 'temp', 'old']);
-            $table->enum('type', ['postal', 'physical', 'both']);
+            $table->integer('use')->unsigned()
+                  ->references('id')->on('codeable_concepts');
+            $table->integer('type')->unsigned()
+                  ->references('id')->on('codeable_concepts');
             $table->string('text');
             $table->string('line')->nullable();
             $table->string('city')->nullable();

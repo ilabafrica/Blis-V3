@@ -17,9 +17,11 @@ class CreateContactPointsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()
                 ->references('users')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->enum('system', ['phone', 'fax', 'email', 'pager', 'url', 'sms', 'other']);
+            $table->integer('system')->unsigned()
+                  ->references('id')->on('codeable_concepts');
             $table->string('value');
-            $table->enum('use', ['home', 'work', 'temp', 'old', 'mobile']);
+            $table->integer('use')->unsigned()
+                  ->references('id')->on('codeable_concepts');
             $table->integer('rank')->unsigned()->nullable();
             $table->date('period')->nullable();
             $table->timestamps();

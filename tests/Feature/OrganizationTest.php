@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class OrganizationTest# extends TestCase
+class OrganizationTest extends TestCase
 {
     /**
      * A basic test example.
@@ -92,7 +92,7 @@ class OrganizationTest# extends TestCase
     $this->organizationDataUpdate,$organizationSaved[0]['id']);
     $this->put('api/organization',$OrganizationUpdate);
 
-     $this->assertEquals($OrganizationUpdated->name,$this->$organizationDataUpdate['name']);
+     $this->assertEquals($OrganizationUpdated->name,$organizationDataUpdate['name']);
 
     }
 
@@ -104,7 +104,7 @@ class OrganizationTest# extends TestCase
     	$organizationDeleted = $organization
     	->delete('api/organization',$organization[0]['id']);
         
-
+       $this->assertEquals(200, $organizationDeleted->getStatusCode());
 
     }
 

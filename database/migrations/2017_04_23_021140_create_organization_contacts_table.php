@@ -17,7 +17,8 @@ class CreateOrganizationContactsTable extends Migration
             $table->increments('id');
             $table->integer('organization_id')
                 ->references('organizations')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->enum('purpose', ['billing', 'administrative', 'human_resource', 'payor', 'patient', 'press']);
+            $table->integer('purpose')->unsigned()
+                  ->references('id')->on('codeable_concepts');
             $table->integer('name')
                 ->references('human_names')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('telecom')

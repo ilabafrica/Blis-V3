@@ -17,7 +17,8 @@ class CreatePatientCommunicationsTable extends Migration
             $table->increments('id');
             $table->integer('patient_id')
                 ->references('patients')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->enum('language', ['sw', 'en', 'fr', 'es', 'de', 'ar', 'zh']);
+            $table->integer('language')->unsigned()
+                  ->references('id')->on('codeable_concepts');
             $table->boolean('preferred')->default(1);
             $table->timestamps();
         });
