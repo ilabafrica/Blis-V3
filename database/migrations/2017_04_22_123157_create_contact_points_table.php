@@ -16,7 +16,7 @@ class CreateContactPointsTable extends Migration
         Schema::create('contact_points', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()
-                ->references('users')->on('id')->onUpdate('cascade')->onDelete('cascade');
+                ->references('users')->on('id')->onUpdate('cascade');
             $table->integer('system')->unsigned();                  
             $table->string('value');
             $table->integer('use')->unsigned();                  
@@ -25,8 +25,8 @@ class CreateContactPointsTable extends Migration
             $table->timestamps();
 
             //Relationships
-            $table->foreign('system')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('use')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('system')->references('id')->on('codeable_concepts')->onUpdate('cascade');
+            $table->foreign('use')->references('id')->on('codeable_concepts')->onUpdate('cascade');
         });
     }
 

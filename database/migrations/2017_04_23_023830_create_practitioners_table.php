@@ -32,7 +32,7 @@ class CreatePractitionersTable extends Migration
             $table->timestamps();
 
             //Relationships
-            $table->foreign('gender')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('gender')->references('id')->on('codeable_concepts')->onUpdate('cascade');
         });
     }
 

@@ -16,7 +16,7 @@ class CreateHumanNamesTable extends Migration
         Schema::create('human_names', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()
-                ->references('users')->on('id')->onUpdate('cascade')->onDelete('cascade');
+                ->references('users')->on('id')->onUpdate('cascade');
             $table->integer('us')->unsigned();                  
             $table->string('text');
             $table->string('family')->nullable();

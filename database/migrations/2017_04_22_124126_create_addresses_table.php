@@ -28,8 +28,8 @@ class CreateAddressesTable extends Migration
             $table->timestamps();
 
             //Relationships
-            $table->foreign('use')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');            
-            $table->foreign('type')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('use')->references('id')->on('codeable_concepts')->onUpdate('cascade');            
+            $table->foreign('type')->references('id')->on('codeable_concepts')->onUpdate('cascade');
         });
     }
 

@@ -24,7 +24,7 @@ class CreatePractitionerCommunicationsTable extends Migration
             $table->timestamps();
 
             //Relationships
-            $table->foreign('language')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('language')->references('id')->on('codeable_concepts')->onUpdate('cascade');
         });
     }
 

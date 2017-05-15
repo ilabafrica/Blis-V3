@@ -26,19 +26,7 @@ class OrganizationTest extends TestCase
         $this->organizationData = array
     	( 
     		'user_id' => $userId,
-            'type' =>  \Faker\Factory::create()->randomElement([
-                'healthcare_provider',
-                'hospital_department',
-                'organizational_team',
-                'government',
-                'insurance_company',
-                'educational_institute',
-                'religious_institution',
-                'clinical_research_sponsor',
-                'community_group',
-                'corporation',
-                'other'
-            ]),
+            'type' =>  factory(\App\CodeableConcepts::class)->create()->id,
             'name' => \Faker\Factory::create()->word,
             'alias' => \Faker\Factory::create()->word,
             'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
@@ -49,19 +37,7 @@ class OrganizationTest extends TestCase
         );
         $this->organizationDataUpdate = array (
             
-            'type' =>  \Faker\Factory::create()->randomElement([
-                'healthcare_provider',
-                'hospital_department',
-                'organizational_team',
-                'government',
-                'insurance_company',
-                'educational_institute',
-                'religious_institution',
-                'clinical_research_sponsor',
-                'community_group',
-                'corporation',
-                'other'
-            ]),
+            'type' => factory(\App\CodeableConcepts::class)->create()->id,
             'name' => \Faker\Factory::create()->word,
             'alias' => \Faker\Factory::create()->word,
             'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,

@@ -33,7 +33,7 @@ class HumanTest extends TestCase
     	$this->HumannameDataUpdate = array
     	(
 
-    		 'use' => \Faker\Factory::create()->randomElement(['usual', 'official', 'temp', 'nickname', 'anonymous', 'old', 'maiden']),
+    		 'use' => factory(\App\CodeableConcepts::class)->create()->id,
             'text' => 'text_name',
             'family' => 'family_name',
             'given' => 'given_name',

@@ -24,7 +24,7 @@ $factory->define(\App\DB\HumanName::class, function (Faker\Generator $faker) {
 
     return [
         'user_id' => factory(\App\User::class)->create()->id,
-        'use' => $faker->randomElement(['usual', 'official', 'temp', 'nickname', 'anonymous', 'old', 'maiden']),
+        'use' =>factory(\App\CodeableConcepts::class)->create()->id,
         'text' => $faker->word
     ];
 });
@@ -34,7 +34,7 @@ $factory->define(\App\DB\ContactPoint::class, function (Faker\Generator $faker) 
 
     return [
         'user_id' => factory(\App\User::class)->create()->id,
-        'system' => $faker->randomElement(['phone', 'fax', 'email', 'pager', 'url', 'sms', 'other']),
+        'system' => factory(\App\CodeableConcepts::class)->create()->id,
         'value' => $faker->word,
         'use' => $faker->randomElement(['home', 'work', 'temp', 'old', 'mobile'])
     ];
@@ -43,8 +43,8 @@ $factory->define(\App\DB\ContactPoint::class, function (Faker\Generator $faker) 
 $factory->define(\App\DB\Address::class, function (Faker\Generator $faker) {
 
     return [
-        'use' => $faker->randomElement(['home', 'work', 'temp', 'old']),
-        'type' => $faker->randomElement(['postal', 'physical', 'both']),
+        'use' => factory(\App\CodeableConcepts::class)->create()->id,
+        'type' => factory(\App\CodeableConcepts::class)->create()->id,
         'test' => $faker->word,
     ];
 });
@@ -52,19 +52,7 @@ $factory->define(\App\DB\Address::class, function (Faker\Generator $faker) {
 $factory->define(\App\DB\Organization::class, function (Faker\Generator $faker) {
 
     return [
-        'type' => $faker->randomElement([
-            'healthcare_provider',
-            'hospital_department',
-            'organizational_team',
-            'government',
-            'insurance_company',
-            'educational_institute',
-            'religious_institution',
-            'clinical_research_sponsor',
-            'community_group',
-            'corporation',
-            'other'
-        ]),
+        'type' => factory(\App\CodeableConcepts::class)->create()->id,
         'name' => $faker->word,
     ];
 });
@@ -78,22 +66,10 @@ $factory->define(\App\DB\Patient::class, function (Faker\Generator $faker) {
         'user_id' => $userId,
         'name' => factory(\App\DB\HumanName::class)->create(['user_id'=>$userId])->id,
         'telecom' => factory(\App\DB\ContactPoint::class)->create(['user_id'=>$userId])->id,
-        'gender' => \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
+        'gender' => factory(\App\CodeableConcepts::class)->create()->id,
         'birth_date' => \Faker\Factory::create()->date(),
         'address' => factory(\App\DB\Address::class)->create(['user_id'=>$userId])->id,
-        'marital_status' => \Faker\Factory::create()->randomElement([
-            'annulled',
-            'divorced',
-            'interlocutory',
-            'legally_separated',
-            'married',
-            'polygamous',
-            'never_married',
-            'domestic_partner',
-            'unmarried',
-            'widowed',
-            'unknown'
-        ]),
+        'marital_status' => factory(\App\CodeableConcepts::class)->create()->id,
     ];
 });
 
@@ -105,7 +81,7 @@ $factory->define(\App\DB\Practitioner::class, function (Faker\Generator $faker) 
         'user_id' => $userId,
         'name' => factory(\App\DB\HumanName::class)->create(['user_id'=>$userId])->id,
         'telecom' => factory(\App\DB\ContactPoint::class)->create(['user_id'=>$userId])->id,
-        'gender' => \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
+        'gender' => factory(\App\CodeableConcepts::class)->create()->id,
         'birth_date' => \Faker\Factory::create()->date(),
         'address' => factory(\App\DB\Address::class)->create(['user_id'=>$userId])->id
     ];

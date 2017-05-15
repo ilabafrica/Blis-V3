@@ -33,23 +33,11 @@ class PatientTest extends TestCase
       $this->input= array(
             'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'gender' => \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
+            'gender' => factory(\App\CodeableConcepts::class)->create()->id,
             'birth_date' => \Faker\Factory::create()->date(),
             'deceased' => \Faker\Factory::create()->boolean(),
             'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
-            'marital_status' => \Faker\Factory::create()->randomElement([
-                'annulled',
-                'divorced',
-                'interlocutory',
-                'legally_separated',
-                'married',
-                'polygamous',
-                'never_married',
-                'domestic_partner',
-                'unmarried',
-                'widowed',
-                'unknown'
-            ]),
+            'marital_status' => factory(\App\CodeableConcepts::class)->create()->id,
             'multiple_birth' => 1,
             'photo' => 'path/to/photo/here',
             'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
@@ -57,24 +45,12 @@ class PatientTest extends TestCase
             'managing_organization' => factory(Organization::class)->create()->id
         );
 
-      $this->inputUpdate = array(
-             'gender' => \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
+      $this->PatientUpdate = array(
+             'gender' => factory(\App\CodeableConcepts::class)->create()->id,
             'birth_date' => \Faker\Factory::create()->date(),
             'deceased' => \Faker\Factory::create()->boolean(),
             'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
-            'marital_status' => \Faker\Factory::create()->randomElement([
-                'annulled',
-                'divorced',
-                'interlocutory',
-                'legally_separated',
-                'married',
-                'polygamous',
-                'never_married',
-                'domestic_partner',
-                'unmarried',
-                'widowed',
-                'unknown'
-            ]),
+            'marital_status' =>factory(\App\CodeableConcepts::class)->create()->id,
             'multiple_birth' => 1,
             'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
             'general_practitioner_id' => 1,
@@ -87,23 +63,11 @@ class PatientTest extends TestCase
         $patientArray = [
             'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'gender' => \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
+            'gender' => factory(\App\CodeableConcepts::class)->create()->id,
             'birth_date' => \Faker\Factory::create()->date(),
             'deceased' => \Faker\Factory::create()->boolean(),
             'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
-            'marital_status' => \Faker\Factory::create()->randomElement([
-                'annulled',
-                'divorced',
-                'interlocutory',
-                'legally_separated',
-                'married',
-                'polygamous',
-                'never_married',
-                'domestic_partner',
-                'unmarried',
-                'widowed',
-                'unknown'
-            ]),
+            'marital_status' => factory(\App\CodeableConcepts::class)->create()->id,
             'multiple_birth' => 1,
             'photo' => 'path/to/photo/here',
             'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
@@ -118,14 +82,13 @@ class PatientTest extends TestCase
 
     public function testDeletePatient()
     {
-        //$patient = factory(App\patient::class,3)->make();
+        $patient = factory(App\patient::class,3)->make();
 
         $patient = Patient::orderBy('id','dec')->take(1)->get()->toArray();
 
-        $PatientDelet = $patient->delete('api/patient',$patient[0]['id']);
+        $PatientDeleted = $patient->delete('api/patient',$patient[0]['id']);
         
-        $patientDeleted = Patient::withTrashed()
-                        ->find($PatientDelet);
+        $this->assertEquals(200, $PatientDeleted->getStatusCode());
 
         
     }
@@ -136,7 +99,7 @@ class PatientTest extends TestCase
 
       $patientSaved = Patient::orderBy('id','dec')->take(1)->get()->toArray();
 
-     $updatePatient =  $this->update($this->inputUpdate,$patientSaved[0]['id']);
+     $updatePatient =  $this->update($this->PatientUpdate,$patientSaved[0]['id']);
 
     $this->put('api/patient',$updatePatient);
    }

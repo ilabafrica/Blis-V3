@@ -51,6 +51,7 @@ class UserTest extends TestCase
     {
         $userTypeId  = factory(UserType::class)->create(['name'=>'patient'])->id;
         $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;
+
         $patientArray = [
             'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
@@ -59,19 +60,7 @@ class UserTest extends TestCase
             'birth_date' => \Faker\Factory::create()->date(),
             'deceased' => \Faker\Factory::create()->boolean(),
             'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
-            'marital_status' => \Faker\Factory::create()->randomElement([
-                'annulled',
-                'divorced',
-                'interlocutory',
-                'legally_separated',
-                'married',
-                'polygamous',
-                'never_married',
-                'domestic_partner',
-                'unmarried',
-                'widowed',
-                'unknown'
-            ]),
+            'marital_status' => factory(\App\CodeableConcepts::class)->create()->id,
             'multiple_birth' => 1,
             'photo' => 'path/to/photo/here',
             'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
@@ -113,7 +102,7 @@ class UserTest extends TestCase
 
         $ContactPointArray = [
             'user_id' => factory(User::class)->create()->id,
-            'system' =>  \Faker\Factory::create()->randomElement(['phone', 'fax', 'email', 'pager', 'url', 'sms', 'other']),
+            'system' =>  factory(\App\CodeableConcepts::class)->create()->id,
             'value' => \Faker\Factory::create()->word,
             'use' =>  \Faker\Factory::create()->randomElement(['home', 'work', 'temp', 'old', 'mobile']),
             'rank' => \Faker\Factory::create()->number,
@@ -155,16 +144,7 @@ class UserTest extends TestCase
         $patientId  = factory(Patient::class)->create(['user_id'=>$userId])->id;
         $PatientContactArray = [
             'patient_id' => $patientId,
-            'relationship' =>  \Faker\Factory::create()->randomElement([
-                'emergency_contact',
-                'employer',
-                'federal_agency',
-                'insurance_company',
-                'next_of_kin',
-                'other',
-                'state_agency',
-                'unknown'
-            ]),
+            'relationship' =>  factory(\App\CodeableConcepts::class)->create()->id,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
             'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
             'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
@@ -188,19 +168,7 @@ class UserTest extends TestCase
         
         $organizationArray = [
             'user_id' => $userId,
-            'type' =>  \Faker\Factory::create()->randomElement([
-                'healthcare_provider',
-                'hospital_department',
-                'organizational_team',
-                'government',
-                'insurance_company',
-                'educational_institute',
-                'religious_institution',
-                'clinical_research_sponsor',
-                'community_group',
-                'corporation',
-                'other'
-            ]),
+            'type' =>  factory(\App\CodeableConcepts::class)->create()->id,
             'name' => \Faker\Factory::create()->word,
             'alias' => \Faker\Factory::create()->word,
             'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
@@ -220,14 +188,7 @@ class UserTest extends TestCase
         $userId  = factory(User::class)->create()->id;
         $OrganizationContactArray = [
             'organization_id' => factory(Organization::class)->create(['user_id'=>$userId])->id,
-            'purpose' =>  \Faker\Factory::create()->randomElement([
-                'billing', 
-                'administrative', 
-                'human_resource', 
-                'payor', 
-                'patient', 
-                'press'
-            ]),
+            'purpose' => factory(\App\CodeableConcepts::class)->create()->id,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
             'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
             'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
@@ -246,15 +207,7 @@ class UserTest extends TestCase
         $patientId  = factory(Patient::class)->create(['user_id'=>$userId])->id;
         $PatientCommunicationArray = [
             'patient_id' => $patientId,
-            'language' =>  \Faker\Factory::create()->randomElement([
-                'sw', 
-                'en', 
-                'fr', 
-                'es', 
-                'de', 
-                'ar', 
-                'zh'
-            ])
+            'language' =>  factory(\App\CodeableConcepts::class)->create()->id
         ];
 
         $this->post('/api/patientcommunication/', $PatientCommunicationArray);
@@ -309,15 +262,7 @@ class UserTest extends TestCase
         $PractitionerCommunicationArray = [
             'practitioner_id' => $practitionerId,
             'patient_id' => $patientId,
-            'language' =>  \Faker\Factory::create()->randomElement([
-                'sw',
-                'en',
-                'fr',
-                'es',
-                'de',
-                'ar',
-                'zh'
-            ]),
+            'language' => factory(\App\CodeableConcepts::class)->create()->id,
 
         ];
 
@@ -334,12 +279,7 @@ class UserTest extends TestCase
         $PatientLinkArray = [
             'patient_id' => $patientId,
             'other' => $other,
-            'type' =>  \Faker\Factory::create()->randomElement([
-                'replaced_by',
-                'replaces',
-                'refer',
-                'see_also'
-            ])
+            'type' => factory(\App\CodeableConcepts::class)->create()->id
 
             ];
 
