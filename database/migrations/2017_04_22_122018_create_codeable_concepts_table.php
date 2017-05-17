@@ -19,6 +19,13 @@ class CreateCodeableConceptsTable extends Migration
             $table->string('description');
             $table->timestamps();
         });
+
+        Schema::table('patients', function(Blueprint $table){
+            //Relationships
+            $table->foreign('gender')->references('id')->on('codeable_concepts')->onUpdate('cascade');
+             $table->foreign('marital_status')->references('id')->on('codeable_concepts')->onUpdate('cascade');
+
+        });
     }
 
     /**

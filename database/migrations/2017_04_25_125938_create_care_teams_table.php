@@ -31,7 +31,6 @@ class CreateCareTeamsTable extends Migration
             //Relationships
             $table->foreign('status')->references('id')->on('statuses')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('category')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('context')->references('id')->on('episodeof_cares')->onUpdate('cascade')->onDelete('cascade');
             
         });
     }

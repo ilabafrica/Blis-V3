@@ -31,7 +31,12 @@ class CreateEpisodeofCaresTable extends Migration
             $table->foreign('patient')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('managing_organization')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('care_manager')->references('id')->on('practitioners')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('team')->references('id')->on('teams')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('team')->references('id')->on('care_teams')->onUpdate('cascade')->onDelete('cascade');
+            
+        });
+
+        Schema::table('care_teams', function(Blueprint $table){
+            $table->foreign('context')->references('id')->on('episodeof_cares')->onUpdate('cascade')->onDelete('cascade');
             
         });
     }

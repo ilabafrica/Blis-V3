@@ -13,6 +13,7 @@ class CreatePatientsTable extends Migration
      */
     public function up()
     {
+    
         Schema::create('patients', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()
@@ -47,10 +48,7 @@ class CreatePatientsTable extends Migration
             //linked to patient link
             $table->timestamps();
 
-            //Relationships
-            $table->foreign('gender')->references('id')->on('codeable_concepts')->onUpdate('cascade');
-             $table->foreign('marital_status')->references('id')->on('codeable_concepts')->onUpdate('cascade');
-        });
+                    });
     }
 
     /**

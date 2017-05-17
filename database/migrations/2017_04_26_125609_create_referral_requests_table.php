@@ -40,7 +40,7 @@ class CreateReferralRequestsTable extends Migration
             $table->foreign('replaces')->references('id')->on('referral_requests')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('status')->references('id')->on('statuses')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('type')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('subject')->references('id')->on('patient')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('subject')->references('id')->on('patients')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('specialty')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('recipient')->references('id')->on('practitioners')->onUpdate('cascade')->onDelete('cascade');
             

@@ -16,7 +16,7 @@ class CreateContainersTable extends Migration
         Schema::create('containers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description');
-            $table->Integer('type');
+            $table->Integer('type')->unsigned();
             $table->Integer('capacity');
             $table->Integer('quantity_id')->unsigned();
             $table->integer('additive')->unsigned(); //substance id

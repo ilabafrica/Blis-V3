@@ -15,7 +15,7 @@ class CreateSubstancesTable extends Migration
     {
         Schema::create('substances', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('status'); //status id
+            $table->integer('status')->unsigned(); //status id
             $table->integer('category')->unsigned(); //codeable concept id
             $table->integer('code')->unsigned(); //codeable concept id
             $table->string('description')->nullable(); 
