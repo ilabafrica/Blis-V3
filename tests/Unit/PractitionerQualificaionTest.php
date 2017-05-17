@@ -1,8 +1,8 @@
   <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
-use App\DB\Practitioner;
+use App\Models\Practitioner;
 use Faker\Generator as Facker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;

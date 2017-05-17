@@ -22,7 +22,7 @@ class CreateCodeableConceptsTable extends Migration
 
         Schema::table('patients', function(Blueprint $table){
             //Relationships
-            $table->foreign('gender')->references('id')->on('codeable_concepts')->onUpdate('cascade');
+            $table->foreign('gender')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');;
              $table->foreign('marital_status')->references('id')->on('codeable_concepts')->onUpdate('cascade');
 
         });

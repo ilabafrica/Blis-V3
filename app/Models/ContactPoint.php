@@ -1,10 +1,10 @@
 <?php
 
-namespace App\DB;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Organization extends Model
+class ContactPoint extends Model
 {
     //
 }

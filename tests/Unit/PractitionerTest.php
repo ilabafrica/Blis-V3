@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
-use App\DB\HumanName;
-use App\DB\User;
-use App\DB\UserType;
-use App\DB\Practitioner;
+use App\Models\HumanName;
+use App\Models\User;
+use App\Models\UserType;
+use App\Models\Practitioner;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

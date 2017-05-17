@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 
-use App\DB\User;
+use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Unit\DB;
+namespace Tests\Unit\Models;
 
-use App\DB\Address;
-use App\DB\ContactPoint;
-use App\DB\HumanName;
-use App\DB\Organization;
-use App\DB\Patient;
-use App\DB\Practitioner;
+use App\Models\Address;
+use App\Models\ContactPoint;
+use App\Models\HumanName;
+use App\Models\Organization;
+use App\Models\Patient;
+use App\Models\Practitioner;
 use App\User;
 use App\UserType;
 use Faker\Generator as Facker;

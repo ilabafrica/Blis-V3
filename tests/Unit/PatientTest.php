@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
-use App\DB\HumanName;
+use App\Models\HumanName;
 use App\User;
 use App\UserType;
-use App\DB\Patient;
+use App\Models\Patient;
 use Faker\Generator as Facker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;

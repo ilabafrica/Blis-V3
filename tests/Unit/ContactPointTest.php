@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use App\User;
-use App\DB\ContactPoint;
+use App\Models\ContactPoint;
 use Faker\Generator as Facker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
