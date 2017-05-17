@@ -13,7 +13,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class OrganizationContactTest extends TestCase
 {
-	use DatabaseMigrations;
+	// Organization on behalf of which the contact is acting or for which the contact is working.
+    use DatabaseMigrations;
     /**
      * A basic test example.
      *

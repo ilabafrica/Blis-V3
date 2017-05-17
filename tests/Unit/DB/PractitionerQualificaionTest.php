@@ -8,10 +8,13 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+ 
+ // Qualifications obtained by training and certification.
 
 class PractitionerQualificaionTest extends TestCase
 {
 	use DatabaseMigrations;
+
     /**
      * A basic test example.
      *

@@ -11,9 +11,12 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+ //A person who is directly or indirectly involved in the provisioning of healthcare.
+
 class PractitionerTest extends TestCase
 {
 	use DatabaseMigrations;
+
     /**
      * A basic test example.
      *

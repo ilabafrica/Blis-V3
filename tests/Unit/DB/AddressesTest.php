@@ -8,9 +8,11 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+ //Address for the contact person.
 class AddressesTest extends TestCase
 {
     use DatabaseMigrations;
+
     /**
      * A basic test example.
      *

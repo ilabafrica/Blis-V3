@@ -8,9 +8,12 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+//Link to another patient resource that concerns the same actual patient.
+
 class PatientLinkTest extends TestCase
 {
     use DatabaseMigrations;
+
     /**
      * A basic test example.
      *

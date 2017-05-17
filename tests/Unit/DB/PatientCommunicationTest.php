@@ -11,9 +11,12 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+ // Languages which may be used to communicate with the patient about his or her health.
+
 class PatientCommunicationTest extends TestCase
 {
 	use DatabaseMigrations;
+
     /**
      * A basic test example.
      *

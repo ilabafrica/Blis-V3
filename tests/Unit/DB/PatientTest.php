@@ -12,6 +12,8 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+//Demographics and other administrative information about an individual or animal receiving care or other health-related services.
+
 class PatientTest extends TestCase
 {
     /**
@@ -19,6 +21,7 @@ class PatientTest extends TestCase
      *
      * @return void
      */
+
     use DatabaseMigrations;
 
     /*@Test*/
