@@ -14,9 +14,9 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $search = Input::get('search');
+        // $search = Input::get('search');
         
-        $patients = Patient::search($search)->orderBy('id', 'desc')->paginate();
+        $patients = Patient::orderBy('id', 'desc')->paginate();
 
         return response()->json($patients);
 

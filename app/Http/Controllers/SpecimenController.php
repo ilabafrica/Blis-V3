@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Specimen;
 
-use Input;
-use Auth;
-
 class SpecimenController extends Controller
 {
     /**
@@ -17,13 +14,13 @@ class SpecimenController extends Controller
      */
     public function index()
     {
-      $specimentypes = Specimen::orderBy('name', 'ASC')->get();
+      $specimentypes = Specimen::orderBy('id', 'ASC')->get();
         
         //load a raw set of specimens
 
-        if(Input::has('raw')){
-            return response()->json($specimentypes);
-        }
+        // if(Input::has('raw')){
+        // }
+        return response()->json($specimentypes);
     }
 
     /**
