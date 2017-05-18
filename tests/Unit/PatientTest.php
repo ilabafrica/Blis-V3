@@ -43,7 +43,7 @@ class PatientTest extends TestCase
             'marital_status' => factory(\App\CodeableConcepts::class)->create()->id,
             'multiple_birth' => 1,
             'photo' => 'path/to/photo/here',
-            'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
+            'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']), 
             'general_practitioner_id' => 1,
             'managing_organization' => factory(Organization::class)->create()->id
         );
@@ -59,7 +59,7 @@ class PatientTest extends TestCase
             'general_practitioner_id' => 1,
             'managing_organization' => factory(Organization::class)->create()->id);
     }
-    public function testStore()
+    public function testStorePatient()
     {
         $userTypeId  = factory(UserType::class)->create(['name'=>'patient'])->id;
         $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;
