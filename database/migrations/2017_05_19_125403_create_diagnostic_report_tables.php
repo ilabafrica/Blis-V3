@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDiagnosticReportsTable extends Migration
+class CreateDiagnosticReportTables extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class CreateDiagnosticReportsTable extends Migration
         //Based on FHIR - https://www.hl7.org/fhir/diagnosticreport.html
         Schema::create('panels', function (Blueprint $table) {
             $table->increments('id');
-            $table->increments('panel_type_id')->unsigned();
+            $table->integer('panel_type_id')->unsigned();
             $table->integer('performed_by')->unsigned();//User who performed this report
             $table->integer('specimen_id')->unsigned(); // Specimens this report is based on
             $table->string('conclusion'); // Clinical Interpretation of test results
@@ -29,7 +29,7 @@ class CreateDiagnosticReportsTable extends Migration
             $table->softDeletes();
 
             $table->foreign('performed_by')->references('id')->on('users');
-            $table->foreign('specimen_id')->references('id')->on('specimen');
+            $table->foreign('specimen_id')->references('id')->on('specimens');
             $table->foreign('coded_diagnosis')->references('id')->on('codeable_concepts');
             $table->foreign('status_id')->references('id')->on('codeable_concepts');
         });
@@ -45,7 +45,7 @@ class CreateDiagnosticReportsTable extends Migration
             $table->softDeletes();
 
             $table->foreign('category_id')->references('id')->on('codeable_concepts');
-            $table->foreign('code_id')->references('id')->on('code');
+            $table->foreign('code_id')->references('id')->on('coding');
             $table->foreign('status_id')->references('id')->on('codeable_concepts');
         });
 
@@ -54,7 +54,6 @@ class CreateDiagnosticReportsTable extends Migration
             $table->increments('id');
             $table->integer('status_id')->unsigned();
             $table->integer('category_id')->unsigned();
-            $table->integer('code_id')->unsigned();
             $table->integer('panel_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->integer('quantity_id')->unsigned();
@@ -67,7 +66,6 @@ class CreateDiagnosticReportsTable extends Migration
             $table->softDeletes();
 
             $table->foreign('category_id')->references('id')->on('codeable_concepts');
-            $table->foreign('code_id')->references('id')->on('code');
             $table->foreign('status_id')->references('id')->on('codeable_concepts');
             $table->foreign('panel_id')->references('id')->on('panels');
             $table->foreign('user_id')->references('id')->on('users');
@@ -89,7 +87,7 @@ class CreateDiagnosticReportsTable extends Migration
 
             $table->foreign('result_type')->references('id')->on('codeable_concepts');
             $table->foreign('category_id')->references('id')->on('codeable_concepts');
-            $table->foreign('code_id')->references('id')->on('codeable_concepts');
+            $table->foreign('code_id')->references('id')->on('coding');
             $table->foreign('status_id')->references('id')->on('codeable_concepts');
         });
 
