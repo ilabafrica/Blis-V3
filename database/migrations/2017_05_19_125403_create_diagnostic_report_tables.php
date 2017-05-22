@@ -69,7 +69,7 @@ class CreateDiagnosticReportTables extends Migration
             $table->foreign('status_id')->references('id')->on('codeable_concepts');
             $table->foreign('panel_id')->references('id')->on('panels');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('quantity_id')->references('id')->on('quantites');
+            $table->foreign('quantity_id')->references('id')->on('quantities');
             $table->foreign('data_absent_reason')->references('id')->on('codeable_concepts');
             $table->foreign('interpretation')->references('id')->on('codeable_concepts');
         });
@@ -108,22 +108,6 @@ class CreateDiagnosticReportTables extends Migration
             $table->foreign('interpretation')->references('id')->on('codeable_concepts');
         });
 
-        Schema::create('component_types', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('code_id')->unsigned();
-            $table->integer('result_type_id')->unsigned();
-            $table->integer('reference_range_id')->unsigned();
-            $table->integer('parent_id');//For sub-components
-
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreign('code_id')->references('id')->on('codeable_concepts');
-            $table->foreign('result_type')->references('id')->on('codeable_concepts');
-            $table->foreign('reference_range_id')->references('id')->on('reference_ranges');
-            $table->foreign('parent_id')->references('id')->on('components');
-        });
-
         Schema::create('reference_ranges', function (Blueprint $table) {
             $table->increments('id');
             $table->float('low_normal');
@@ -140,6 +124,22 @@ class CreateDiagnosticReportTables extends Migration
             $table->softDeletes();
 
             $table->foreign('age_type')->references('id')->on('codeable_concepts');
+        });
+
+        Schema::create('component_types', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('code_id')->unsigned();
+            $table->integer('result_type_id')->unsigned();
+            $table->integer('reference_range_id')->unsigned();
+            $table->integer('parent_id')->unsigned();//For sub-components
+
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('code_id')->references('id')->on('codeable_concepts');
+            $table->foreign('result_type_id')->references('id')->on('codeable_concepts');
+            $table->foreign('reference_range_id')->references('id')->on('reference_ranges');
+            $table->foreign('parent_id')->references('id')->on('components');
         });
     }
 
