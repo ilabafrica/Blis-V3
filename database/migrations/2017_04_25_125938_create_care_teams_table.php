@@ -16,7 +16,7 @@ class CreateCareTeamsTable extends Migration
         Schema::create('care_teams', function (Blueprint $table) {
             $table->increments('id');
             $table->string('identifiers')->nullable();
-            $table->integer('status')->unsigned(); //status id
+            $table->integer('status_id')->unsigned(); //status id
             $table->integer('category')->unsigned();
             $table->string('name');
             $table->integer('subject')->nullable()->unsigned();
@@ -24,7 +24,7 @@ class CreateCareTeamsTable extends Migration
             $table->integer('period')->nullable();
             $table->integer('reason_code')->nullable()->unsigned();
             $table->string('reason_reference')->nullable();
-            $table->integer('managing_organization')->unsigned(); //org id
+            $table->integer('organization_id')->unsigned(); //org id
             $table->string('comment')->nullable();
             $table->timestamps();
 

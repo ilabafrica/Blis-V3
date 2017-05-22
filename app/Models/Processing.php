@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-class UserType extends Model
+// Processing and processing step details
+class Processing extends Model
 {
     //
 }

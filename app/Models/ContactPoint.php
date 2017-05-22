@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserType extends Model
+class ContactPoint extends Model
 {
     //
 }

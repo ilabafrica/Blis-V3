@@ -23,7 +23,7 @@ class CreatePatientCommunicationsTable extends Migration
 
             //Relationships
 
-            $table->foreign('language')->references('id')->on('codeable_concepts')->onUpdate('cascade');
+            $table->foreign('language')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
