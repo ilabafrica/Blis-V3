@@ -2,7 +2,8 @@
 
 namespace Tests\Unit;
 
-use Organization;
+use App\Models\Organization;
+use App\Models\OrganizationContact;
 use App\User;
 use App\UserType;
 use Faker\Generator as Facker;
@@ -52,16 +53,16 @@ class OrganizationContactTest extends TestCase
     }
     public function testUpdateOrganizationContact()
     {
-       $organizationcontact = factory(OrganizationContact::class,3)->make();
-    $this->post('api/organizationcontact',$organizationcontact);
+        $organizationcontact = factory(OrganizationContact::class,3)->make();
+        $this->post('api/organizationcontact',$organizationcontact);
 
-    $organizationcontactSaved = Organization::orderBy('id','desc')->take(1)->get()->toArray();
+        $organizationcontactSaved = Organization::orderBy('id','desc')->take(1)->get()->toArray();
 
-    $OrganizationcontactUpdated = $this->update(
-    $this->OrganizationContactDataUpdate,$organizationcontactSaved[0]['id']);
-    $this->put('api/organizationcontact',$OrganizationcontactUpdated);
+        $OrganizationcontactUpdated = $this->update(
+        $this->OrganizationContactDataUpdate,$organizationcontactSaved[0]['id']);
+        $this->put('api/organizationcontact',$OrganizationcontactUpdated);
 
-     $this->assertEquals($OrganizationcontactUpdated->name,$OrganizationContactDataUpdate['name']);
+         $this->assertEquals($OrganizationcontactUpdated->name,$OrganizationContactDataUpdate['name']);
     }
 
     public function testDeleteOrganizationContact()

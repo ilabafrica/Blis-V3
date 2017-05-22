@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\HumanName;
-use App\Models\User;
+use App\User;
 use App\Models\UserType;
 use App\Models\Practitioner;
 use Tests\TestCase;

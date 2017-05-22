@@ -3,7 +3,8 @@
 namespace Tests\Unit;
 
 
-use App\Models\User;
+use App\User;
+use App\UserType;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -11,43 +12,40 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class UserTest extends TestCase
 {
+    use DatabaseMigrations;
+
     /**
      * A basic test example.
      *
      * @return void
      */#
-
-    public function setVariables()
-    {
-    	$this->userData = array
-    	(
-    		'type' => factory(UserType::class)->create()->id,
-            'email' => 'test@example.com',
-            'password' => '1234678'
-    		);
-    	$this->userDataUpdate = array 
-    	(
-    		'email' => 'testUser@example.com',
-            'password' => '87654321'
-    		
-    		);
-    }
     public function testUserStore()
     {
-        
+        $userData = array
+        (
+            'type' => factory(UserType::class)->create()->id,
+            'email' => 'test@example.com',
+            'password' => '1234678'
+        );
 
-        $this->post('/user/', $this->userData);
+        $this->post('/user/', $userData);
 
-        $this->assertDatabaseHas('users',$this->userData);
+        $this->assertDatabaseHas('users',$userData);
     }
     public function testUserUpdate()
     {
-        $user = factory(user::class,3)->make();
+        $userDataUpdate = array 
+        (
+            'email' => 'testUser@example.com',
+            'password' => '87654321'
+            
+        );
+        $user = factory(User::class,3)->make();
         $this->post('api/user',$user);
 
         $userSaved = User::orderBy('id','desc')->take(1)->get()->toArray();#
         $userUpdated = $this->update(
-        	$this->userDataUpdate,$userSaved[0]['id']);
+        	$userDataUpdate,$userSaved[0]['id']);
         
         $this->put('api/user',$userUpdated);
 

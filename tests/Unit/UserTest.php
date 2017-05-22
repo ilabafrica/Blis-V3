@@ -10,7 +10,7 @@ use App\Models\Patient;
 use App\Models\Practitioner;
 use App\User;
 use App\UserType;
-use Faker\Generator as Facker;
+use Faker\Generator as Faker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -55,12 +55,11 @@ class UserTest extends TestCase
         $patientArray = [
             'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
             'gender' => \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
             'birth_date' => \Faker\Factory::create()->date(),
             'deceased' => \Faker\Factory::create()->boolean(),
-            'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
-            'marital_status' => factory(\App\CodeableConcepts::class)->create()->id,
+            'address' => factory(Address::class)->create()->id,
+            'marital_status' => factory(\App\Models\CodeableConcept::class)->create()->id,
             'multiple_birth' => 1,
             'photo' => 'path/to/photo/here',
             'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
@@ -102,10 +101,10 @@ class UserTest extends TestCase
 
         $ContactPointArray = [
             'user_id' => factory(User::class)->create()->id,
-            'system' =>  factory(\App\CodeableConcepts::class)->create()->id,
+            'system' =>  factory(\App\Models\CodeableConcept::class)->create()->id,
             'value' => \Faker\Factory::create()->word,
             'use' =>  \Faker\Factory::create()->randomElement(['home', 'work', 'temp', 'old', 'mobile']),
-            'rank' => \Faker\Factory::create()->number,
+            'rank' => \Faker\Factory::create()->numberBetween(1,20),
             'period' => \Faker\Factory::create()->date()
             
         ];
@@ -144,10 +143,10 @@ class UserTest extends TestCase
         $patientId  = factory(Patient::class)->create(['user_id'=>$userId])->id;
         $PatientContactArray = [
             'patient_id' => $patientId,
-            'relationship' =>  factory(\App\CodeableConcepts::class)->create()->id,
+            'relationship' =>  factory(\App\Models\CodeableConcept::class)->create()->id,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
             'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
-            'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
+            'address' => factory(Address::class)->create()->id,
             'gender' =>  \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
             'organization_id' => factory(Organization::class)->create(['user_id'=>$userId])->id,
             'period' => \Faker\Factory::create()->date(),
@@ -168,11 +167,11 @@ class UserTest extends TestCase
         
         $organizationArray = [
             'user_id' => $userId,
-            'type' =>  factory(\App\CodeableConcepts::class)->create()->id,
+            'type' =>  factory(\App\Models\CodeableConcept::class)->create()->id,
             'name' => \Faker\Factory::create()->word,
             'alias' => \Faker\Factory::create()->word,
             'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
-            'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
+            'address' => factory(Address::class)->create()->id,
             'part_of' => factory(Organization::class)->create(['user_id'=>$userId])->id,
             'end_point' =>  \Faker\Factory::create()->url
         ];
@@ -188,16 +187,16 @@ class UserTest extends TestCase
         $userId  = factory(User::class)->create()->id;
         $OrganizationContactArray = [
             'organization_id' => factory(Organization::class)->create(['user_id'=>$userId])->id,
-            'purpose' => factory(\App\CodeableConcepts::class)->create()->id,
+            'purpose' => factory(\App\Models\CodeableConcept::class)->create()->id,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
             'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
-            'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
+            'address' => factory(Address::class)->create()->id,
 
         ];
 
         $this->post('/api/organizationcontact/', $OrganizationContactArray);
 
-        $this->assertDatabaseHas('organization_contact',$OrganizationContactArray);
+        $this->assertDatabaseHas('organization_contacts',$OrganizationContactArray);
     }
     
     /* Test */
@@ -207,7 +206,7 @@ class UserTest extends TestCase
         $patientId  = factory(Patient::class)->create(['user_id'=>$userId])->id;
         $PatientCommunicationArray = [
             'patient_id' => $patientId,
-            'language' =>  factory(\App\CodeableConcepts::class)->create()->id
+            'language' =>  factory(\App\Models\CodeableConcept::class)->create()->id
         ];
 
         $this->post('/api/patientcommunication/', $PatientCommunicationArray);
@@ -224,7 +223,7 @@ class UserTest extends TestCase
             'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
             'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
-            'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
+            'address' => factory(Address::class)->create()->id,
             'gender' =>  \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
             'birth_date' => \Faker\Factory::create()->date(),
             'photo' =>  \Faker\Factory::create()->url
@@ -262,13 +261,13 @@ class UserTest extends TestCase
         $PractitionerCommunicationArray = [
             'practitioner_id' => $practitionerId,
             'patient_id' => $patientId,
-            'language' => factory(\App\CodeableConcepts::class)->create()->id,
+            'language' => factory(\App\Models\CodeableConcept::class)->create()->id,
 
         ];
 
         $this->post('/api/practitionercommunication/', $PractitionerCommunicationArray);
 
-        $this->assertDatabaseHas('practitioner_communication',$PractitionerCommunicationArray);
+        $this->assertDatabaseHas('practitioner_communications',$PractitionerCommunicationArray);
     }
 
     /* Test */
@@ -279,7 +278,7 @@ class UserTest extends TestCase
         $PatientLinkArray = [
             'patient_id' => $patientId,
             'other' => $other,
-            'type' => factory(\App\CodeableConcepts::class)->create()->id
+            'type' => factory(\App\Models\CodeableConcept::class)->create()->id
 
             ];
 
