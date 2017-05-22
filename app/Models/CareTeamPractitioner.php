@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-class UserType extends Model
+//Members of the of the care team
+class CareTeamPractitioner extends Model
 {
     //
 }

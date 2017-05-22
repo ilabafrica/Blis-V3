@@ -27,7 +27,7 @@ class CreateOrganizationContactsTable extends Migration
             $table->timestamps();
             
             //Relationships
-            $table->foreign('purpose')->references('id')->on('codeable_concepts')->onUpdate('cascade');
+            $table->foreign('purpose')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

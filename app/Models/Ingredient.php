@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-class UserType extends Model
+// Composition information about the substance
+class Ingredient extends Model
 {
     //
 }
