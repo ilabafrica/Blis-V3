@@ -145,7 +145,7 @@ class UserTest extends TestCase
             'patient_id' => $patientId,
             'relationship' =>  factory(\App\Models\CodeableConcept::class)->create()->id,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
+            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
             'address' => factory(Address::class)->create()->id,
             'gender' =>  \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
             'organization_id' => factory(Organization::class)->create(['user_id'=>$userId])->id,
@@ -170,7 +170,7 @@ class UserTest extends TestCase
             'type' =>  factory(\App\Models\CodeableConcept::class)->create()->id,
             'name' => \Faker\Factory::create()->word,
             'alias' => \Faker\Factory::create()->word,
-            'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
+            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
             'address' => factory(Address::class)->create()->id,
             'part_of' => factory(Organization::class)->create(['user_id'=>$userId])->id,
             'end_point' =>  \Faker\Factory::create()->url
@@ -189,7 +189,7 @@ class UserTest extends TestCase
             'organization_id' => factory(Organization::class)->create(['user_id'=>$userId])->id,
             'purpose' => factory(\App\Models\CodeableConcept::class)->create()->id,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
+            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
             'address' => factory(Address::class)->create()->id,
 
         ];
@@ -222,7 +222,7 @@ class UserTest extends TestCase
         $PractitionerArray = [
             'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
+            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
             'address' => factory(Address::class)->create()->id,
             'gender' =>  \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
             'birth_date' => \Faker\Factory::create()->date(),

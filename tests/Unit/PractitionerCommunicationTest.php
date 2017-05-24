@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\HumanName;
+use App\Models\CodeableConcept;
 use App\User;
 use App\Models\UserType;
 use App\Models\Practitioner;
@@ -18,11 +19,12 @@ class PractitionerCommunicationTest extends TestCase
 {
 	use DatabaseMigrations;
 
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
+    public function setup()
+    {
+        parent::Setup();
+        $this->setVariables();
+    }
+
     public function setVariables()
     {
         $practitionerId  = factory(Practitioner::class)->create()->id;
@@ -30,61 +32,31 @@ class PractitionerCommunicationTest extends TestCase
         $this->PractitionerCommunicationData = array (
             'practitioner_id' => $practitionerId,
             'Practitioner_id' => $PractitionerId,
-            'language' =>  factory(\App\CodeableConcepts::class)->create()->id
+            'language' =>  factory(CodeableConcept::class)->create()->id
             );
         $this->PractitionerCommunicationDataUpdate = array (
-              'language' =>  factory(\App\CodeableConcepts::class)->create()->id
+              'language' =>  factory(CodeableConcept::class)->create()->id
             );
         
     }
     public function testStorePractitionerCommunication()
     {
-        
-       $practitionercommunication = $this->PractitionerCommunicationData;
-        $this->post('/api/practitionercommunication/', $practitionercommunication);
+        $this->post('/api/practitionercommunication/', $this->PractitionerCommunicationData);
 
-        $this->assertDatabaseHas('practitioner_communication',$practitionercommunication);
+        $this->assertDatabaseHas('practitioner_communications',$this->PractitionerCommunicationData);
     }
     public function testUpdatePractitionerCommunication()
     {
-
-        $PractitionercommunicationSaved = Practitioner::orderBy('id','dec')->take(1)->get()->toArray();
-
-     $UpdatePractitionerCommunication =  $this->update($this->PractitionerCommunicationDataUpdate,$PractitionercommunicationSaved[0]['id']);
-
-    $this->put('api/practitioner_communications',$UpdatePractitionerCommunication);
+        //TODO
     }
      
 
     public function testDeletePractitionerCommunication()
     {
-        $Practitionercommunications = factory(App\Practitioner::class,3)->make();
-
-        $PractitionerCommunication = Practitioner::orderBy('id','dec')->take(1)->get()->toArray();
-
-        $PractitionerCommunicationDeleted = $Practitioner->delete('api/practitioner_communications',$Practitioner[0]['id']);
-        
-        $this->assertEquals(200, $PractitionerCommunicationDeleted->getStatusCode());
-        
+        //TODO
     }
     public function testShowPractitionerCommunication()
     {
-     $PractitionerCommunication = factory(Practitioner::class,3)->create();
-
-    $Practitionercommunications =  $this->json('GET','api/practitioner_communications',$PractitionerCommunication)
-                    ->seejson([
-                        'created'=> true,
-                        ]);
-    
-    $array = json_decode($Practitionercommunicationss);
-   
-     $result = false;
-
-     if ($array[0]->id==1)
-     {
-        $result = true;
-     }
-     $this->assertEquals(true, $result);   
-    
+        //TODO
     }
 }

@@ -19,24 +19,19 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PatientTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-
     use DatabaseMigrations;
 
-    /*@Test*/
+    public function setup()
+    {
+        parent::Setup();
+        $this->setVariables();
+    }
 
-    /**
-     *
-     */
     public function setvariables()
     {
         $userTypeId  = factory(UserType::class)->create(['name'=>'patient'])->id;
         $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;
-      $this->input= array(
+        $this->input= array(
             'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
             'gender' => factory(CodeableConcept::class)->create()->id,
@@ -88,47 +83,17 @@ class PatientTest extends TestCase
 
     public function testDeletePatient()
     {
-        $patient = factory(Patient::class,3)->make();
-
-        $patient = Patient::orderBy('id','dec')->take(1)->get()->toArray();
-
-        $PatientDeleted = $patient->delete('api/patient',$patient[0]['id']);
-        
-        $this->assertEquals(200, $PatientDeleted->getStatusCode());
-
-        
+        //TODO
     }
 
     public  function testUpdate()
    {
-    //$patient = factory(Patient::class,3)->make();
-
-      $patientSaved = Patient::orderBy('id','dec')->take(1)->get()->toArray();
-
-     $updatePatient =  $this->update($this->PatientUpdate,$patientSaved[0]['id']);
-
-    $this->put('api/patient',$updatePatient);
+        //TODO
    }
 
    public function testShowPatient()
    {
-
-    $patient = factory(Patient::class,3)->create();
-
-    $patients =  $this->json('GET','api/patient',$patient)
-                    ->seejson([
-                        'created'=> true,
-                        ]);
-    
-    $array = json_decode($patients);
-   
-     $result = false;
-
-     if ($array[0]->id==1)
-     {
-        $result = true;
-     }
-     $this->assertEquals(true, $result);   
+        //TODO
    }
 
 }
