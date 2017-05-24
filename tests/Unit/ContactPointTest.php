@@ -13,73 +13,49 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class ContactPointTest extends TestCase
 {
 	use DatabaseMigrations;
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
 
-    public function setVariables()
 
-    {
-    	$this->ContactPointData = array(
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
+	/**
+	 * A basic test example.
+	 *
+	 * @return void
+	 */
 
-    		 'user_id' => factory(User::class)->create()->id,
-            'system' =>  \Faker\Factory::create()->randomElement(['phone', 'fax', 'email', 'pager', 'url', 'sms', 'other']),
-            'value' => \Faker\Factory::create()->word,
-            'use' =>  \Faker\Factory::create()->randomElement(['home', 'work', 'temp', 'old', 'mobile']),
-            'rank' => \Faker\Factory::create()->number,
-            'period' => \Faker\Factory::create()->date()
-            );
-    	$this->ContactPointDataUpdate = array(
+	public function setVariables()
+	{
+		$this->ContactPointData = array(
+			'user_id' => factory(User::class)->create()->id,
+			'system' =>  \Faker\Factory::create()->randomElement(['phone', 'fax', 'email', 'pager', 'url', 'sms', 'other']),
+			'value' => \Faker\Factory::create()->word,
+			'use' =>  \Faker\Factory::create()->randomElement(['home', 'work', 'temp', 'old', 'mobile']),
+			'rank' => \Faker\Factory::create()->randomNumber(),
+			'period' => \Faker\Factory::create()->date()
+			);
+		$this->ContactPointDataUpdate = array();
+	}
+	
+	public function testStoreContactPoint()
+	{
+		$this->post('/api/contactpoint', $this->ContactPointData);
 
-    		);
-    }
-     public function testStoreContactPoint()
-    {
+		$this->assertDatabaseHas('contact_points',$this->ContactPointData);
+	}
 
-        $ContactPoint = $this->ContactPointData;
+	public function testUpdateContactPoint()
+	{
+		//TODO
+	}
 
-        $this->post('/api/contactpoint', $ContactPoint);
-
-        $this->assertDatabaseHas('contact_points',$ContactPointData);
-    }
-
-    public function testUpdateContactPoint()
-    {
-    	$contactpoint = factory(ContactPoint::class,3)->make();
-    	$this->post('api/contactpoint',$contactpoint);
-    	$contactpointSaved = ContactPoint::orderBy('id','desc')->take(1)->get()->toArray();
-
-    	$contactpointupdated = $this->update(
-    		$this->ContactPointDataUpdate,$contactpointSaved[0]['id']);
-    	$this->put('api/contactpoint',$contactpointupdated);
-    	$this->assertEquals(200, $contactpointupdated->getStatusCode());
-
-    }
-
-     public function testContactPointDeleted()
-     {
-     	factory(ContactPoint::class,3)->make();
-     	$contactpoint = ContactPoint::orderBy('id','desc')->take(1)->get()->toArray();
-     	$contactpointdeleted = $contactpoint->delete('api/contactpoint',$contactpoint[0]['id']);
-
-     	$this->assertEquals(200, $contactpointdeleted->getStatusCode());
-     }
-    public function testShowContactPoint()
-    {
-        $contactpoints =  factory(ContactPoint::class,3)->create();
-        $contactpoint = $this->json('GET','api/contactpoint',$contactpoints)
-        				->seeJson([
-        					'result'=>true]);
-
-        $array = json_decode($contactpoint);
-        $result = false;
-
-        if($array[0]->id==1)
-        {
-        	$result = true;
-        }	
-        $this->assertEquals(true, $result);
-    }
+	 public function testContactPointDeleted()
+	 {
+		//TODO
+	 }
+	public function testShowContactPoint()
+	{
+		//TODO
+	}
 }

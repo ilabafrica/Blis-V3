@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\User;
 use App\UserType;
 use App\Models\Patient;
+use App\Models\CodeableConcept;
 use Faker\Generator as Facker; 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -17,75 +18,44 @@ class PatientCommunicationTest extends TestCase
 {
 	use DatabaseMigrations;
 
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function setVariables($value='')
+    public function setup()
+    {
+        parent::Setup();
+        $this->setVariables();
+    }
+
+    public function setVariables()
     {
     	 $userId  = factory(User::class)->create()->id;
     	 $patientId  = factory(Patient::class)->create(['user_id'=>$userId])->id;
          $this->PatientCommunicationData = array (
             'patient_id' => $patientId,
-            'language' => factory(\App\CodeableConcepts::class)->create()->id
+            'language' => factory(CodeableConcept::class)->create()->id
          	);
          $this->patientcommunicationdataupdate = array(
-            factory(\App\CodeableConcepts::class)->create()->id
+            factory(CodeableConcept::class)->create()->id
          	);
 
     }
-     public function testStorePatientCommunication()
+    public function testStorePatientCommunication()
     {
-       
-        
-        $PatientCommunication = $this->PatientCommunicationData;
-            
+        $this->post('/api/patientcommunication/',$this->PatientCommunicationData);
 
-        $this->post('/api/patientcommunication/', $PatientCommunication);
-
-        $this->assertDatabaseHas('patient_communications',$PatientCommunicationArray);
+        $this->assertDatabaseHas('patient_communications', $this->PatientCommunicationData);
     }
     public function testUpdatePatientCommunication()
     {
-
-        $patientcommunicationSaved = Patient::orderBy('id','dec')->take(1)->get()->toArray();
-
-     $UpdatePatientCommunication =  $this->update($this->patientcommunicationdataupdate,$patientcommunicationSaved[0]['id']);
-
-    $this->put('api/patient_communications',$updatePatientCommunication);
+        //TODO
     }
      
 
     public function testDeletePatientCommunication()
     {
-    	$patientcommunications = factory(App\patient::class,3)->make();
-
-        $PatientCommunication = Patient::orderBy('id','dec')->take(1)->get()->toArray();
-
-        $PatientCommunicationDeleted = $PatientCommunication->delete('api/patient_communications',$patient[0]['id']);
-        
-        $this->assertEquals(200, $PatientCommunicationDeleted->getStatusCode());
+    	//TODO
     	
     }
     public function testShowPatientCommunication()
     {
-     $PatientCommunication = factory(Patient::class,3)->create();
-
-    $patientcommunications =  $this->json('GET','api/patient_communications',$PatientCommunication)
-                    ->seejson([
-                        'created'=> true,
-                        ]);
-    
-    $array = json_decode($patientcommunicationss);
-   
-     $result = false;
-
-     if ($array[0]->id==1)
-     {
-        $result = true;
-     }
-     $this->assertEquals(true, $result);   
-   	
+        //TODO
     }
 }
