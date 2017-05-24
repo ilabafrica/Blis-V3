@@ -65,6 +65,14 @@ $factory->define(\App\Models\Organization::class, function (Faker\Generator $fak
     ];
 });
 
+$factory->define(\App\Models\OrganizationContact::class, function (Faker\Generator $faker) {
+
+    return [
+        'organization_id' => factory(\App\Models\Organization::class)->create()->id,
+        'purpose' => factory(\App\Models\CodeableConcept::class)->create()->id,
+    ];
+});
+
 
 $factory->define(\App\Models\Patient::class, function (Faker\Generator $faker) {
     
