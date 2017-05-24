@@ -19,12 +19,19 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(\App\Models\CodeableConcept::class, function (Faker\Generator $faker) {
+
+    return [
+        'code' => $faker->word,
+        'description' => $faker->word
+    ];
+});
 
 $factory->define(\App\Models\HumanName::class, function (Faker\Generator $faker) {
 
     return [
         'user_id' => factory(\App\User::class)->create()->id,
-        'use' =>factory(\App\CodeableConcepts::class)->create()->id,
+        'use' =>factory(\App\Models\CodeableConcept::class)->create()->id,
         'text' => $faker->word
     ];
 });
@@ -34,25 +41,26 @@ $factory->define(\App\Models\ContactPoint::class, function (Faker\Generator $fak
 
     return [
         'user_id' => factory(\App\User::class)->create()->id,
-        'system' => factory(\App\CodeableConcepts::class)->create()->id,
+        'system' => factory(\App\Models\CodeableConcept::class)->create()->id,
         'value' => $faker->word,
-        'use' => $faker->randomElement(['home', 'work', 'temp', 'old', 'mobile'])
+        'use' => factory(\App\Models\CodeableConcept::class)->create()->id,
     ];
 });
 
 $factory->define(\App\Models\Address::class, function (Faker\Generator $faker) {
 
     return [
-        'use' => factory(\App\CodeableConcepts::class)->create()->id,
-        'type' => factory(\App\CodeableConcepts::class)->create()->id,
-        'test' => $faker->word,
+        'use' => factory(\App\Models\CodeableConcept::class)->create()->id,
+        'type' => factory(\App\Models\CodeableConcept::class)->create()->id,
+        'text' => $faker->word,
     ];
 });
 
 $factory->define(\App\Models\Organization::class, function (Faker\Generator $faker) {
 
     return [
-        'type' => factory(\App\CodeableConcepts::class)->create()->id,
+        'user_id' => factory(\App\User::class)->create()->id,
+        'type' => factory(\App\Models\CodeableConcept::class)->create()->id,
         'name' => $faker->word,
     ];
 });
@@ -60,30 +68,29 @@ $factory->define(\App\Models\Organization::class, function (Faker\Generator $fak
 
 $factory->define(\App\Models\Patient::class, function (Faker\Generator $faker) {
     
-    $userId  = factory(User::class)->create()->id;
+    $userId  = factory(\App\User::class)->create()->id;
 
     return [
         'user_id' => $userId,
         'name' => factory(\App\Models\HumanName::class)->create(['user_id'=>$userId])->id,
-        'telecom' => factory(\App\Models\ContactPoint::class)->create(['user_id'=>$userId])->id,
-        'gender' => factory(\App\CodeableConcepts::class)->create()->id,
+        'gender' => factory(\App\Models\CodeableConcept::class)->create()->id,
         'birth_date' => \Faker\Factory::create()->date(),
-        'address' => factory(\App\Models\Address::class)->create(['user_id'=>$userId])->id,
-        'marital_status' => factory(\App\CodeableConcepts::class)->create()->id,
+        'address' => factory(\App\Models\Address::class)->create()->id,
+        'marital_status' => factory(\App\Models\CodeableConcept::class)->create()->id,
     ];
 });
 
 $factory->define(\App\Models\Practitioner::class, function (Faker\Generator $faker) {
 
-    $userId  = factory(User::class)->create()->id;
+    $userId  = factory(\App\User::class)->create()->id;
 
     return [
         'user_id' => $userId,
         'name' => factory(\App\Models\HumanName::class)->create(['user_id'=>$userId])->id,
         'telecom' => factory(\App\Models\ContactPoint::class)->create(['user_id'=>$userId])->id,
-        'gender' => factory(\App\CodeableConcepts::class)->create()->id,
+        'gender' => factory(\App\Models\CodeableConcept::class)->create()->id,
         'birth_date' => \Faker\Factory::create()->date(),
-        'address' => factory(\App\Models\Address::class)->create(['user_id'=>$userId])->id
+        'address' => factory(\App\Models\Address::class)->create()->id,
     ];
 });
 

@@ -3,9 +3,12 @@
 namespace Tests\Unit;
 
 use App\Models\HumanName;
+use App\Models\CodeableConcept;
+use App\Models\Organization;
 use App\User;
 use App\UserType;
 use App\Models\Patient;
+use App\Models\Address;
 use Faker\Generator as Facker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -36,11 +39,11 @@ class PatientTest extends TestCase
       $this->input= array(
             'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'gender' => factory(\App\CodeableConcepts::class)->create()->id,
+            'gender' => factory(CodeableConcept::class)->create()->id,
             'birth_date' => \Faker\Factory::create()->date(),
             'deceased' => \Faker\Factory::create()->boolean(),
-            'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
-            'marital_status' => factory(\App\CodeableConcepts::class)->create()->id,
+            'address' => factory(Address::class)->create()->id,
+            'marital_status' => factory(CodeableConcept::class)->create()->id,
             'multiple_birth' => 1,
             'photo' => 'path/to/photo/here',
             'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']), 
@@ -49,11 +52,11 @@ class PatientTest extends TestCase
         );
 
       $this->PatientUpdate = array(
-             'gender' => factory(\App\CodeableConcepts::class)->create()->id,
+             'gender' => factory(CodeableConcept::class)->create()->id,
             'birth_date' => \Faker\Factory::create()->date(),
             'deceased' => \Faker\Factory::create()->boolean(),
-            'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
-            'marital_status' =>factory(\App\CodeableConcepts::class)->create()->id,
+            'address' => factory(Address::class)->create()->id,
+            'marital_status' =>factory(CodeableConcept::class)->create()->id,
             'multiple_birth' => 1,
             'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
             'general_practitioner_id' => 1,
@@ -66,11 +69,11 @@ class PatientTest extends TestCase
         $patientArray = [
             'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'gender' => factory(\App\CodeableConcepts::class)->create()->id,
+            'gender' => factory(CodeableConcept::class)->create()->id,
             'birth_date' => \Faker\Factory::create()->date(),
             'deceased' => \Faker\Factory::create()->boolean(),
-            'address' => factory(Address::class)->create(['user_id'=>$userId])->id,
-            'marital_status' => factory(\App\CodeableConcepts::class)->create()->id,
+            'address' => factory(Address::class)->create()->id,
+            'marital_status' => factory(CodeableConcept::class)->create()->id,
             'multiple_birth' => 1,
             'photo' => 'path/to/photo/here',
             'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
@@ -85,7 +88,7 @@ class PatientTest extends TestCase
 
     public function testDeletePatient()
     {
-        $patient = factory(App\patient::class,3)->make();
+        $patient = factory(Patient::class,3)->make();
 
         $patient = Patient::orderBy('id','dec')->take(1)->get()->toArray();
 

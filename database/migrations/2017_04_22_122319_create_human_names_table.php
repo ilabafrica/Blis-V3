@@ -17,7 +17,7 @@ class CreateHumanNamesTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()
                 ->references('users')->on('id')->onUpdate('cascade');
-            $table->integer('us')->unsigned();                  
+            $table->integer('use')->unsigned();
             $table->string('text');
             $table->string('family')->nullable();
             $table->string('given')->nullable();
@@ -27,7 +27,7 @@ class CreateHumanNamesTable extends Migration
             $table->timestamps();
 
             //Relationships
-            $table->foreign('us')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('use')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
 
         });
     }

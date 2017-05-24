@@ -55,7 +55,7 @@ class AddressesTest extends TestCase
     }
     public function testUpdateAddresses()
     {
-        $Address = factory(Address::clsss,3)->make();
+        $Address = factory(Address::class,3)->make();
         $AddressSaved = Address::orderBy('id','desc')->take(1)->get()->toArray();
         $AddressUpdated = $this->update($this->AddressDataUpdate,$AddressSaved[0],['id']);
         $Updated = $this->put('api/address',$AddressUpdated);
