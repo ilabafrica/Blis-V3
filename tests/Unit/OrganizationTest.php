@@ -42,7 +42,7 @@ class OrganizationTest extends TestCase
             'type' =>  factory(CodeableConcept::class)->create()->id,
             'name' => \Faker\Factory::create()->word,
             'alias' => \Faker\Factory::create()->word,
-            'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
+            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
             'address' => factory(Address::class)->create()->id,
             'part_of' => factory(Organization::class)->create(['user_id'=>$userId])->id,
             'end_point' =>  \Faker\Factory::create()->url
@@ -53,7 +53,7 @@ class OrganizationTest extends TestCase
             'type' => factory(CodeableConcept::class)->create()->id,
             'name' => \Faker\Factory::create()->word,
             'alias' => \Faker\Factory::create()->word,
-            'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
+            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
             'address' => factory(Address::class)->create()->id,
             'part_of' => factory(Organization::class)->create(['user_id'=>$userId])->id,
             'end_point' =>  \Faker\Factory::create()->url

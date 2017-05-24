@@ -34,7 +34,7 @@ class PractitionerTest extends TestCase
     	( 
     		'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
+            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
             'address' => factory(Address::class)->create()->id,
             'gender' =>  \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
             'birth_date' => \Faker\Factory::create()->date(),
@@ -43,7 +43,7 @@ class PractitionerTest extends TestCase
     	$this->PractitionerDataUpdate = array 
     	 (
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'telcom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
+            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
             'address' => factory(Address::class)->create()->id,
             'gender' =>  \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
             'birth_date' => \Faker\Factory::create()->date(),
