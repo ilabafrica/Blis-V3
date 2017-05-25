@@ -14,6 +14,21 @@ class CreateDiagnosticReportTables extends Migration
     public function up()
     {
         //Based on FHIR - https://www.hl7.org/fhir/diagnosticreport.html
+        Schema::create('panel_types', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('code_id')->unsigned(); //R!  Name/Code for this diagnostic report(panel)
+            $table->integer('status_id')->unsigned();;//Status (string or id)
+            $table->integer('category_id')->unsigned(); // Service category (Heamatology, chemistry)
+
+            //Several timestamps pending/ also responsible actors for various activites
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('category_id')->references('id')->on('codeable_concepts');
+            $table->foreign('code_id')->references('id')->on('coding');
+            $table->foreign('status_id')->references('id')->on('codeable_concepts');
+        });
+
         Schema::create('panels', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('panel_type_id')->unsigned();
@@ -28,24 +43,10 @@ class CreateDiagnosticReportTables extends Migration
             $table->timestamps();
             $table->softDeletes();
 
+            $table->foreign('panel_type_id')->references('id')->on('panel_types');
             $table->foreign('performed_by')->references('id')->on('users');
             $table->foreign('specimen_id')->references('id')->on('specimens');
             $table->foreign('coded_diagnosis_id')->references('id')->on('codeable_concepts');
-            $table->foreign('status_id')->references('id')->on('codeable_concepts');
-        });
-
-        Schema::create('panel_types', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('code_id')->unsigned(); //R!  Name/Code for this diagnostic report(panel)
-            $table->integer('status_id')->unsigned();;//Status (string or id)
-            $table->integer('category_id')->unsigned(); // Service category (Heamatology, chemistry)
-
-            //Several timestamps pending/ also responsible actors for various activites
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreign('category_id')->references('id')->on('codeable_concepts');
-            $table->foreign('code_id')->references('id')->on('coding');
             $table->foreign('status_id')->references('id')->on('codeable_concepts');
         });
 
