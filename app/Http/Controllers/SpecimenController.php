@@ -41,7 +41,7 @@ class SpecimenController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array('name' => 'required|unique:specimen_types,name');
+        $rules = array('type' => 'required|unique:specimen_types,type');
         $validator = Validator::make(Input::all(), $rules);
 
         // process the inputs
@@ -50,8 +50,8 @@ class SpecimenController extends Controller
         } else {
             // store
             $specimentype = new Specimen;
-            $specimentype->name = Input::get('name');
-            $specimentype->description = Input::get('description');            
+            $specimentype->type = Input::get('type');
+            $specimentype->status = Input::get('status');
             $specimentype->save();
 
             return response()->json();  
@@ -98,13 +98,12 @@ class SpecimenController extends Controller
         } else {
             // Update
             $specimentype = Specimen::find($id);
-            $specimentype->name = Input::get('name');
-            $specimentype->description = Input::get('description');
+            $specimentype->type = Input::get('type');
+            $specimentype->status = Input::get('status');
             $specimentype->save();
 
             // redirect
-            return response()->json($validator);             
-        
+            return response()->json($validator);
         }
     }
 

@@ -41,7 +41,7 @@ class PatientController extends Controller
     public function store(Request $request)
     {
        $rules = array(
-            'patient_number' => 'required|unique:patients,patient_number',
+            
             'name'       => 'required',
             'gender' => 'required'
         );
@@ -54,14 +54,10 @@ class PatientController extends Controller
         } 
         else {    
             $patient = new Patient;
-            $patient->patient_number = Input::get('patient_number');
             $patient->name = Input::get('name');
             $patient->gender = Input::get('gender');  
-            $patient->dob = Input::get('dob');
-            $patient->email = Input::get('email');
+            $patient->birth_date = Input::get('birth_date');
             $patient->address = Input::get('address');
-            $patient->phone_number = Input::get('phone_number');
-            $patient->created_by = Auth::user()->id;
             $patient->save();
 
         return response()->json();
@@ -105,10 +101,8 @@ class PatientController extends Controller
     public function update(Request $request, $id)
     {
         $rules = array(
-            'patient_number' => 'required',
             'name'       => 'required',
             'gender' => 'required',
-            'dob' => 'required'
         );
         $validator = Validator::make(Input::all(), $rules);
 
@@ -119,14 +113,11 @@ class PatientController extends Controller
         } else {
             // Update
             $patient = Patient::find($id);
-            $patient->patient_number = Input::get('patient_number');
             $patient->name = Input::get('name');
             $patient->gender = Input::get('gender');
-            $patient->dob = Input::get('dob');
-            $patient->email = Input::get('email');
+            $patient->birth_date = Input::get('birth_date');
             $patient->address = Input::get('address');
             $patient->phone_number = Input::get('phone_number');
-            $patient->created_by = Auth::user()->id;
             $patient->save();
 
             // redirect
