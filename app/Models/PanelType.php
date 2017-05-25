@@ -6,7 +6,7 @@ A diagnostic report or panel is the set of information that is typically provide
 Resource link https://www.hl7.org/fhir/diagnosticreport.html
 */
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

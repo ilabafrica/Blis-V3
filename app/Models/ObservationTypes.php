@@ -7,7 +7,7 @@ Observations are a central element in healthcare, used to support diagnosis, mon
 Source https://www.hl7.org/fhir/observation.html
 */
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
