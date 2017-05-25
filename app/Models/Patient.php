@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class Patient extends Model
 {
 	protected $table = 'patients';
@@ -12,4 +13,5 @@ class Patient extends Model
 	const FEMALE = 1;
 	const BOTH = 2;
 	const UNKNOWN = 3;
+
 }
