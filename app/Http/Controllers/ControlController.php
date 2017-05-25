@@ -51,11 +51,11 @@ class ControlController extends Controller
             $control->description = Input::get('description');
             $control->instrument_id = Input::get('instrument_id');
 
-            // if (Input::get('new-measures')) {
-            //         $newMeasures = Input::get('new-measures');
-            //         $controlMeasure = New ControlMeasureController;
-            //         $controlMeasure->saveMeasuresRanges($newMeasures, $control);
-            // }
+            if (Input::get('new-measures')) {
+                    $newMeasures = Input::get('new-measures');
+                    $controlMeasure = New ControlMeasureController;
+                    $controlMeasure->saveMeasuresRanges($newMeasures, $control);
+            }
             // redirect
             return response()->json();
            
@@ -110,17 +110,17 @@ class ControlController extends Controller
             $control->description = Input::get('description');
             $control->instrument_id = Input::get('instrument_id');
 
-            // if (Input::get('new-measures')) {
-            //     $inputNewMeasures = Input::get('new-measures');
-            //     $measures = New ControlMeasureController;
-            //     $measureIds = $measures->saveMeasuresRanges($inputNewMeasures, $control);
-            // }
+            if (Input::get('new-measures')) {
+                $inputNewMeasures = Input::get('new-measures');
+                $measures = New ControlMeasureController;
+                $measureIds = $measures->saveMeasuresRanges($inputNewMeasures, $control);
+            }
 
-            // if (Input::get('measures')) {
-            //     $inputMeasures = Input::get('measures');
-            //     $measures = New ControlMeasureController;
-            //     $measures->editMeasuresRanges($inputMeasures, $control);
-            // }
+            if (Input::get('measures')) {
+                $inputMeasures = Input::get('measures');
+                $measures = New ControlMeasureController;
+                $measures->editMeasuresRanges($inputMeasures, $control);
+            }
             // redirect
             return response()->json();
         }

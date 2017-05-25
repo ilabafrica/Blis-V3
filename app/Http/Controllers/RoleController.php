@@ -130,8 +130,7 @@ class RoleController extends Controller
         {
             $role = Role::find($id);
             $role->name = Input::get('name');
-            $role->description = Input::get('description');
-            
+            $role->description = Input::get('description');            
             $role->save();
             return response()->json();
         }

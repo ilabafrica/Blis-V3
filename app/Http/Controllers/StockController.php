@@ -198,21 +198,22 @@ class StockController extends Controller
             $usage->save();
             
             return response()->json();
-
-            // $url = Session::get('SOURCE_URL');
-            // if($usage->quantity_used>Stock::find((int)$usage->stock_id)->quantity())
-            // {
-            //     return Redirect::back()->with('message', trans('messages.insufficient-stock'))->withInput(Input::all());
-            // }
-            // else if($usage->quantity_used>Topup::find((int)$usage->request_id)->quantity_ordered)
-            // {
-            //     return Redirect::back()->with('message', trans('messages.issued-greater-than-ordered'))->withInput(Input::all());
-            // }
-            // else
-            // {
-            //     $usage->save();        
-            //     return Redirect::to($url)->with('message', trans('messages.record-successfully-updated'))->with('active_stock', $usage->stock->id);
-            // }
+            // for validation in the Top up and Stock mdels to display different messages in the views.
+            
+            $url = Session::get('SOURCE_URL');
+            if($usage->quantity_used>Stock::find((int)$usage->stock_id)->quantity())
+            {
+                return Redirect::back()->with('message', trans('messages.insufficient-stock'))->withInput(Input::all());
+            }
+            else if($usage->quantity_used>Topup::find((int)$usage->request_id)->quantity_ordered)
+            {
+                return Redirect::back()->with('message', trans('messages.issued-greater-than-ordered'))->withInput(Input::all());
+            }
+            else
+            {
+                $usage->save();        
+                return Redirect::to($url)->with('message', trans('messages.record-successfully-updated'))->with('active_stock', $usage->stock->id);
+            }
         }
     }
     /**
@@ -265,20 +266,21 @@ class StockController extends Controller
             $usage->user_id = Auth::user()->id;
             $usage->save();
 
-            // $url = Session::get('SOURCE_URL');
-            // if($usage->quantity_used>Stock::find((int)$usage->stock_id)->quantity())
-            // {
-            //     return Redirect::back()->with('message', trans('messages.insufficient-stock'))->withInput(Input::all());
-            // }
-            // else if($usage->quantity_used>Topup::find((int)$usage->request_id)->quantity_ordered)
-            // {
-            //     return Redirect::back()->with('message', trans('messages.issued-greater-than-ordered'))->withInput(Input::all());
-            // }
-            // else
-            // {
-            //     $usage->save();
+            // for validation in the Top up and Stock mdels to display different messages in the views.
+            $url = Session::get('SOURCE_URL');
+            if($usage->quantity_used>Stock::find((int)$usage->stock_id)->quantity())
+            {
+                return Redirect::back()->with('message', trans('messages.insufficient-stock'))->withInput(Input::all());
+            }
+            else if($usage->quantity_used>Topup::find((int)$usage->request_id)->quantity_ordered)
+            {
+                return Redirect::back()->with('message', trans('messages.issued-greater-than-ordered'))->withInput(Input::all());
+            }
+            else
+            {
+                $usage->save();
             
-            //     return Redirect::to($url)->with('message', trans('messages.record-successfully-updated'))->with('active_stock', $usage->stock->id);
+                return Redirect::to($url)->with('message', trans('messages.record-successfully-updated'))->with('active_stock', $usage->stock->id);
             // }
         return response()->json($stock);
         }

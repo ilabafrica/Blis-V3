@@ -44,7 +44,7 @@ class SpecimenController extends Controller
         $rules = array('name' => 'required|unique:specimen_types,name');
         $validator = Validator::make(Input::all(), $rules);
 
-        // process the login
+        // process the inputs
         if ($validator->fails()) {
             return response()->json();
         } else {

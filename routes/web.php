@@ -25,7 +25,7 @@ Route::resource('supplier', 'SupplierController');
 Route::resource('item', 'ItemController');
 Route::resource('facility', 'FacilityController');
 Route::resource('drug', 'DrugController');
-Route::resource('critiical', 'CritiicalController');
+Route::resource('critical', 'CriticalController');
 Route::resource('stock', 'StockController');
 Route::resource('permission', 'PermissionController');
 Route::resource('role', 'RoleController');
