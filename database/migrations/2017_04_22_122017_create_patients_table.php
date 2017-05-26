@@ -42,8 +42,8 @@ class CreatePatientsTable extends Migration
             //End of if patient is animal fields
             //linked to patient communication
             $table->enum('general_practitioner_type', ['organization', 'practitioner'])->nullable();
-            $table->integer('general_practitioner_id')->nullable();
-            $table->integer('managing_organization')->nullable()
+            $table->integer('practitioner_id')->unsigned();
+            $table->integer('organization_id')->unsigned()
                 ->references('organizations')->on('id')->onUpdate('cascade')->onDelete('cascade');
             //linked to patient link
             $table->timestamps();

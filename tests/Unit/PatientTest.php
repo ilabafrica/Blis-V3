@@ -72,11 +72,13 @@ class PatientTest extends TestCase
             'multiple_birth' => 1,
             'photo' => 'path/to/photo/here',
             'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
-            'general_practitioner_id' => 1,
-            'managing_organization' => factory(Organization::class)->create()->id
+            'practitioner_id' => 1,
+            'organization_id' => factory(Organization::class)->create()->id
         ];
 
-        $this->post('/api/patient/', $patientArray);
+        $response=$this->post('/api/patient', $patientArray);
+        
+        $this->assertEquals(200,$response->getStatusCode());
 
         $this->assertDatabaseHas('patients',$patientArray);
     }
