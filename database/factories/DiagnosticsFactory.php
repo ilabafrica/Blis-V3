@@ -10,14 +10,13 @@ $factory->define(App\Models\PanelType::class, function (Faker\Generator $faker) 
 
 $factory->define(App\Models\Panel::class, function (Faker\Generator $faker) {
 	return [
-		'panel_type_id' => $faker->randomNumber(),
-		'performed_by' => $faker->randomNumber(),
-		'specimen_id' => $faker->randomNumber(),
-		'conclusion' => $faker->word,
-		'coded_diagnosis' => $faker->randomNumber(),
-		'status_id' => $faker->randomNumber(),
-		'sort_order' => $faker->randomNumber(),
-		'deleted_at' => $faker->dateTimeBetween(),
+		'panel_type_id' = factory(\App\Models\PanelType::class)->create()->id,
+		'performed_by' = factory(\App\User::class)->create()->id,
+		'specimen_id' = factory(\App\Models\Specimen::class)->create()->id,
+		'conclusion' = $faker->word(),
+		'coded_diagnosis_id' = factory(\App\Models\CodeableConcept::class)->create()->id,
+		'status_id' = factory(\App\Models\CodeableConcept::class)->create()->id,
+		'sort_order' = $faker->randomNumber(3)
 	];
 });
 
