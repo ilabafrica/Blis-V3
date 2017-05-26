@@ -43,13 +43,14 @@ class PatientController extends Controller
        $rules = array(
             
             'name'       => 'required',
-            'gender' => 'required'
+            'gender' => 'required',
+            'birth_date'=>'required'
         );
         $validator = \Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
 
-            return response()->json();
+            return response()->json($validator);
             
         } 
         else {    
@@ -68,10 +69,10 @@ class PatientController extends Controller
             $patient->organization_id = $request->input('organization_id');
             $patient->save();
 
-        return response()->json();
-
+        
+            return response()->json($patient);
         }
-
+         
     }
 
     /**
@@ -112,7 +113,7 @@ class PatientController extends Controller
             'name'       => 'required',
             'gender' => 'required',
         );
-        $validator = Validator::make(Input::all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
 
@@ -121,14 +122,20 @@ class PatientController extends Controller
         } else {
             // Update
             $patient = Patient::find($id);
-            $patient->name = Input::get('name');
-            $patient->gender = Input::get('gender');
-            $patient->birth_date = Input::get('birth_date');
-            $patient->address = Input::get('address');
-            $patient->phone_number = Input::get('phone_number');
+            $patient->name = $request->input('name');
+            $patient->user_id = $request->input('user_id');
+            $patient->gender = $request->input('gender');  
+            $patient->birth_date = $request->input('birth_date');
+            $patient->address = $request->input('address');
+            $patient->deceased = $request->input('deceased');
+            $patient->marital_status = $request->input('marital_status');
+            $patient->multiple_birth = $request->input('multiple_birth');
+            $patient->photo = $request->input('photo');
+            $patient->general_practitioner_type = $request->input('general_practitioner_type');
+            $patient->practitioner_id = $request->input('practitioner_id');
+            $patient->organization_id = $request->input('organization_id');
             $patient->save();
 
-            // redirect
             return response()->json();
             
         }
