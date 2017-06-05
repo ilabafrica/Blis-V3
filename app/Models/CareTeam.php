@@ -12,5 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 */
 class CareTeam extends Model
 {
-    //
+    public function Status()
+    {
+    	return $this->hasOne('App\Models\Status');	
+    }
+
+    public function Organization()
+    {
+    	return $this->belongsTo('App\Models\Organization');
+    }
 }

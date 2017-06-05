@@ -8,5 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Practitioner extends Model
 {
-    
+    public function Patient()
+     {
+     return $this->hasMany('App\Patient','general_practitioner_id');
+     	
+     }
+
+     public function PractitionerCommunications()
+     {
+     	return $this->hasMany('App\Models\PractitionerCommunications','practitioner_id');
+     }
+
+     public function PractitionerQualification()
+     {
+     	return $this->hasMany('App\Models\PractitionerQualification','practitioner_id');
+     }
 }

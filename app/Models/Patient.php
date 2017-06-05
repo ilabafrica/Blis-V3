@@ -19,4 +19,36 @@ class Patient extends Model
 	const BOTH = 2;
 	const UNKNOWN = 3;
 
+	public function Address()
+     {
+    	return $this->hasMany('App\Models\Address');
+     }
+ 
+     public function User()
+    {
+     	return $this->belongsTo('App\Models\User');
+     }
+ 
+     public function Practitioner()
+     {
+    	return $this->hasOne('App\Models\Practitioner');
+ 
+     }
+    
+
+     public function PatientCommunications()
+     {
+     	return $this->hasMany('App\Models\PatientCommunications','patient_id');
+     }
+
+     public function PatientContact()
+     {
+     	return $this->hasMany('App\Models\PatientContact','patient_id');
+     }
+
+     public function PatientLinks($value='')
+     {
+     	return $this->hasMany('App\Models\PatientLinks');
+     }
+
 }
