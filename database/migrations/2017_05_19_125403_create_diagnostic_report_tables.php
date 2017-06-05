@@ -51,30 +51,6 @@ class CreateDiagnosticReportTables extends Migration
         });
 
         //Based on https://www.hl7.org/fhir/observation.html
-        Schema::create('observations', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('status_id')->unsigned();
-            $table->integer('category_id')->unsigned();
-            $table->integer('panel_id')->unsigned();
-            $table->integer('user_id')->unsigned();
-            $table->integer('quantity_id')->unsigned();
-            $table->integer('data_absent_reason')->unsigned();// Why the result is missing - CodeableConcept
-            $table->integer('interpretation')->unsigned();
-            $table->string('comment');
-            $table->date('issued');
-
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreign('category_id')->references('id')->on('codeable_concepts');
-            $table->foreign('status_id')->references('id')->on('codeable_concepts');
-            $table->foreign('panel_id')->references('id')->on('panels');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('quantity_id')->references('id')->on('quantities');
-            $table->foreign('data_absent_reason')->references('id')->on('codeable_concepts');
-            $table->foreign('interpretation')->references('id')->on('codeable_concepts');
-        });
-
         Schema::create('observation_types', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('status_id')->unsigned();
@@ -90,6 +66,32 @@ class CreateDiagnosticReportTables extends Migration
             $table->foreign('category_id')->references('id')->on('codeable_concepts');
             $table->foreign('code_id')->references('id')->on('coding');
             $table->foreign('status_id')->references('id')->on('codeable_concepts');
+        });
+
+        Schema::create('observations', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('status_id')->unsigned();
+            $table->integer('category_id')->unsigned();
+            $table->integer('panel_id')->unsigned();
+            $table->integer('observation_type_id')->unsigned();
+            $table->integer('user_id')->unsigned();
+            $table->integer('quantity_id')->unsigned();
+            $table->integer('data_absent_reason')->unsigned();// Why the result is missing - CodeableConcept
+            $table->integer('interpretation')->unsigned();
+            $table->string('comment');
+            $table->date('issued');
+
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('category_id')->references('id')->on('codeable_concepts');
+            $table->foreign('status_id')->references('id')->on('codeable_concepts');
+            $table->foreign('panel_id')->references('id')->on('panels');
+            $table->foreign('observation_type_id')->references('id')->on('observations');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('quantity_id')->references('id')->on('quantities');
+            $table->foreign('data_absent_reason')->references('id')->on('codeable_concepts');
+            $table->foreign('interpretation')->references('id')->on('codeable_concepts');
         });
 
         Schema::create('components', function (Blueprint $table) {

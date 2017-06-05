@@ -17,11 +17,11 @@ class PanelTypeTest extends TestCase
 	
 	public function setVariables()
 	{
-		$panelTypeData = [
+		$this->panelTypeData = array(
 			'code_id' => 1,
 			'status_id' => 1,
 			'category_id' => 1
-			];
+			);
 
 		$this->panelUpdateData = [
 			'code_id' => 2,
@@ -32,25 +32,20 @@ class PanelTypeTest extends TestCase
 
 	public function testListPanelType()
 	{
-		
-		factory(\App\Models\PanelType::class)->create($panelTypeData);
-		$response = $this->json('GET', 'api/paneltype/1', $panelTypeData);
+		factory(\App\Models\PanelType::class)->create($this->panelTypeData);
+		$response = $this->json('GET', 'api/paneltype/1');
 
-		$this->assertDatabaseHas('panel_types', $panelTypeData);
-		$response->assertStatus(200)->assertHasKey($panelTypeData);
+		$this->assertDatabaseHas('panel_types', $this->panelTypeData);
+		$response->assertStatus(200)->assertHasKey($this->panelTypeData);
 	}
 
 	public function testListPanelTypes()
 	{
-		$panelTypeData = array('code_id' => 1,
-			'status_id' => 1,
-			'category_id' => 1,
-			);
-		factory(\App\Models\PanelType::class)->create($panelTypeData);
-		$response = $this->json('GET', 'api/paneltype', $panelTypeData);
+		factory(\App\Models\PanelType::class)->create($this->panelTypeData);
+		$response = $this->json('GET', 'api/paneltype');
 
-		$this->assertDatabaseHas('panel_types', $panelTypeData);
-		$response->assertStatus(200)->assertArrayHasKey($panelTypeData);
+		$this->assertDatabaseHas('panel_types', $this->panelTypeData);
+		$response->assertStatus(200)->assertArrayHasKey($this->panelTypeData);
 	}
 
 	public function testStorePanelType()

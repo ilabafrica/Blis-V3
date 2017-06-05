@@ -17,7 +17,7 @@ class ObservationTypeTest extends TestCase
 	
 	public function setVariables()
 	{
-		$observationTypeData = [
+		$this->observationTypeData = [
 			'code_id' => 1,
 			'status_id' => 1,
 			'category_id' => 1
@@ -33,11 +33,11 @@ class ObservationTypeTest extends TestCase
 	public function testListObservationType()
 	{
 		
-		factory(\App\Models\ObservationType::class)->create($observationTypeData);
-		$response = $this->json('GET', 'api/observationType/1', $ObservationTypeData);
+		factory(\App\Models\ObservationType::class)->create($this->observationTypeData);
+		$response = $this->json('GET', 'api/observationtype/1');
 
-		$this->assertDatabaseHas('panel_types', $ObservationTypeData);
-		$response->assertStatus(200)->assertHasKey($ObservationTypeData);
+		$this->assertDatabaseHas('observation_types', $this->observationTypeData);
+		$response->assertStatus(200)->assertHasKey($this->observationTypeData);
 	}
 
 	public function testListObservationTypes()
@@ -46,10 +46,10 @@ class ObservationTypeTest extends TestCase
 			'status_id' => 1,
 			'category_id' => 1,
 			);
-		factory(\App\Models\ObservationType::class)->create($observationTypeData);
-		$response = $this->json('GET', 'api/observationType', $observationTypeData);
+		factory(\App\Models\ObservationType::class)->create($this->observationTypeData);
+		$response = $this->json('GET', 'api/observationtype');
 
-		$this->assertDatabaseHas('panel_types', $observationTypeData);
+		$this->assertDatabaseHas('observation_types', $this->observationTypeData);
 		$response->assertStatus(200)->assertArrayHasKey($observationTypeData);
 	}
 
@@ -61,9 +61,8 @@ class ObservationTypeTest extends TestCase
 			'status_id' => $faker->randomNumber(),
 			'category_id' => $faker->randomNumber(),
 		);
-		$response = $this->json('POST', 'api/observationType', $observationTypeData);
-		$this->assertDatabaseHas('panel_types', $observationTypeData);
-
+		$response = $this->json('POST', 'api/observationtype', $observationTypeData);
+		$this->assertDatabaseHas('observation_types', $observationTypeData);
 		$response->assertStatus(200);
 	}
 
@@ -73,20 +72,14 @@ class ObservationTypeTest extends TestCase
 			'status_id' => 1,
 			'category_id' => 1,];
 		factory(\App\Models\ObservationType::class)->create($observationTypeData);
-
-		$observationTypeDataUpdate = ['code_id' => 1,
-			'status_id' => 1,
-			'category_id' => 1,];
-
-		$this->put('api/observationType/1', $observationTypeDataUpdate);
-
-		$this->assertDatabaseHas('panel_types', $observationTypeDataUpdate);
+		$this->put('api/observationtype/1', $this->observationTypeUpdateData);
+		$this->assertDatabaseHas('observation_types', $this->observationTypeUpdateData);
 	}
 
 	public function testDeleteObservationType()
 	{
 		factory(\App\Models\ObservationType::class)->create();
-		$response=$this->delete('api/observationType/1');
+		$response=$this->delete('api/observationtype/1');
 		$response->assertStatus(200);
 	}
 }
