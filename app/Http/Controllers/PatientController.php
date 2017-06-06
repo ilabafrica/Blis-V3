@@ -110,10 +110,9 @@ class PatientController extends Controller
     public function update(Request $request, $id)
     {
         $rules = array(
-            'name'       => 'required',
-            'gender' => 'required',
+            'name'       => 'required'
         );
-        $validator = Validator::make($request->all(), $rules);
+        $validator = \Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
 

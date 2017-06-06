@@ -94,11 +94,11 @@ $factory->define(\App\Models\Practitioner::class, function (Faker\Generator $fak
 
     return [
         'user_id' => $userId,
-        'name' => factory(\App\Models\HumanName::class)->create(['user_id'=>$userId])->id,
+        'human_name_id' => factory(\App\Models\HumanName::class)->create(['user_id'=>$userId])->id,
         'telecom' => factory(\App\Models\ContactPoint::class)->create(['user_id'=>$userId])->id,
         'gender' => factory(\App\Models\CodeableConcept::class)->create()->id,
         'birth_date' => \Faker\Factory::create()->date(),
-        'address' => factory(\App\Models\Address::class)->create()->id,
+        'address_id' => factory(\App\Models\Address::class)->create()->id,
     ];
 });
 

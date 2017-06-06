@@ -7,6 +7,7 @@ use App\Models\CodeableConcept;
 use App\Models\Organization;
 use App\User;
 use App\UserType;
+use App\Models\Practitioner;
 use App\Models\Patient;
 use App\Models\Address;
 use Faker\Generator as Facker;
@@ -25,6 +26,7 @@ class PatientTest extends TestCase
     {
         $userTypeId  = factory(UserType::class)->create(['name'=>'patient'])->id;
         $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;
+        $practitioner_id  = factory(Practitioner::class)->create()->id;
         $patientArray = [
             'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
@@ -36,19 +38,22 @@ class PatientTest extends TestCase
             'multiple_birth' => 1,
             'photo' => 'path/to/photo/here',
             'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
-            'practitioner_id' => 1,
+            'practitioner_id' => $practitioner_id,
             'organization_id' => factory(Organization::class)->create()->id
         ];
         factory(\App\Models\Patient::class)->create($patientArray);
         $response=$this->json('POST', '/api/patient', $patientArray);
         
-        $response->assertStatus(200)->assertHasKey("birth_date");
-
+        $response->assertStatus(200);
+        $this->assertArrayHasKey("birth_date",$response->original);
         $this->assertDatabaseHas('patients',$patientArray);
     }
 
     public function testDeletePatient()
     {
+        $userTypeId  = factory(UserType::class)->create(['name'=>'patient'])->id;
+        $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;
+        $practitioner_id  = factory(Practitioner::class)->create()->id;
         $patientArray = [
             'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
@@ -60,18 +65,20 @@ class PatientTest extends TestCase
             'multiple_birth' => 1,
             'photo' => 'path/to/photo/here',
             'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
-            'practitioner_id' => 1,
+            'practitioner_id' => $practitioner_id,
             'organization_id' => factory(Organization::class)->create()->id
         ];
         
         factory(\App\Models\Patient::class)->create($patientArray);
-        factory(\App\Models\Patient::class)->create();
 		$response=$this->delete('api/patient/1');
 		$response->assertStatus(200);
     }
 
     public  function testUpdate()
    {
+        $userTypeId  = factory(UserType::class)->create(['name'=>'patient'])->id;
+        $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;
+        $practitioner_id  = factory(Practitioner::class)->create()->id;
         $patientArray = [
             'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
@@ -83,32 +90,28 @@ class PatientTest extends TestCase
             'multiple_birth' => 1,
             'photo' => 'path/to/photo/here',
             'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
-            'practitioner_id' => 1,
+            'practitioner_id' => $practitioner_id,
             'organization_id' => factory(Organization::class)->create()->id
         ];
         factory(\App\Models\Patient::class)->create($patientArray);
-
+        $this->json('POST', '/api/patient', $patientArray);
         $updatePatientArray = [
-            'deceased' => \Faker\Factory::create()->boolean(),
-            'address' => factory(Address::class)->create()->id,
-            'marital_status' => factory(CodeableConcept::class)->create()->id,
-            'multiple_birth' => 1,
-            'photo' => 'path/to/photo/here',
-            'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
-            'practitioner_id' => 1,
-            'organization_id' => factory(Organization::class)->create()->id
+            'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
+            'gender' => factory(CodeableConcept::class)->create()->id
         ];
 
-        $response=$this->json('PUT', '/api/patient/1', $patientArray);
-        
-        $response->assertStatus(200)->assertHasKey("address");
-
-        $this->assertDatabaseHas('patients',$patientArray);
+        $response=$this->json('PUT', '/api/patient/1', $updatePatientArray);
+        $response->assertStatus(200);
+        $this->assertArrayHasKey("photo",$response->original);
+        $this->assertDatabaseHas('patients',$updatePatientArray);
 
    }
 
    public function testShowPatient()
    {
+        $userTypeId  = factory(UserType::class)->create(['name'=>'patient'])->id;
+        $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;
+        $practitioner_id  = factory(Practitioner::class)->create()->id;
         $patientArray = [
             'user_id' => $userId,
             'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
@@ -120,12 +123,13 @@ class PatientTest extends TestCase
             'multiple_birth' => 1,
             'photo' => 'path/to/photo/here',
             'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
-            'practitioner_id' => 1,
+            'practitioner_id' => $practitioner_id,
             'organization_id' => factory(Organization::class)->create()->id
         ];
         factory(\App\Models\Patient::class)->create($patientArray);
         $response=$this->json('GET', '/api/patient/1', $patientArray);
-        $response->assertStatus(200)->assertHasKey("address");
+        $response->assertStatus(200);
+        $this->assertArrayHasKey("address",$response->original);
         $this->assertDatabaseHas('patients',$patientArray);
    }
 

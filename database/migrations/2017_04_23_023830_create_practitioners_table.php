@@ -18,11 +18,11 @@ class CreatePractitionersTable extends Migration
             $table->boolean('active')->default(1);
             $table->integer('user_id')->unsigned()
                 ->references('users')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('name')
+            $table->integer('human_name_id')
                 ->references('human_names')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('telecom')
                 ->references('contact_points')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('address')->nullable()
+            $table->integer('address_id')->nullable()
                 ->references('addresses')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('gender')->unsigned();                  
             $table->date('birth_date');
