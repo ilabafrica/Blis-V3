@@ -37,7 +37,8 @@ class ObservationTypeTest extends TestCase
 		$response = $this->json('GET', 'api/observationtype/1');
 
 		$this->assertDatabaseHas('observation_types', $this->observationTypeData);
-		$response->assertStatus(200)->assertHasKey($this->observationTypeData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("status_id", $response->original);
 	}
 
 	public function testListObservationTypes()
@@ -64,6 +65,7 @@ class ObservationTypeTest extends TestCase
 		$response = $this->json('POST', 'api/observationtype', $observationTypeData);
 		$this->assertDatabaseHas('observation_types', $observationTypeData);
 		$response->assertStatus(200);
+		$this->assertArrayHasKey("status_id", $response->original);
 	}
 
 	public function testUpdateObservationType()
@@ -72,14 +74,16 @@ class ObservationTypeTest extends TestCase
 			'status_id' => 1,
 			'category_id' => 1,];
 		factory(\App\Models\ObservationType::class)->create($observationTypeData);
-		$this->put('api/observationtype/1', $this->observationTypeUpdateData);
+		$response = $this->json('PUT', 'api/observationtype/1', $this->observationTypeUpdateData);
 		$this->assertDatabaseHas('observation_types', $this->observationTypeUpdateData);
+		$this->assertArrayHasKey("status_id", $response->original);
 	}
 
 	public function testDeleteObservationType()
 	{
 		factory(\App\Models\ObservationType::class)->create();
-		$response=$this->delete('api/observationtype/1');
+		$response=$this->json('DELETE', 'api/observationtype/1');
 		$response->assertStatus(200);
+		$this->assertArrayHasKey("status_id", $response->original);
 	}
 }

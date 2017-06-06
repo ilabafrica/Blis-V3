@@ -36,7 +36,8 @@ class ReferenceRangeTest extends TestCase
 		$response = $this->json('GET', 'api/referencerange/1');
 
 		$this->assertDatabaseHas('reference_ranges', $this->referenceRangeData);
-		$response->assertStatus(200)->assertHasKey($this->referenceRangeData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("age_max", $response->original);
 	}
 
 	public function testListReferenceranges()
@@ -45,7 +46,7 @@ class ReferenceRangeTest extends TestCase
 		$response = $this->json('GET', 'api/referencerange');
 
 		$this->assertDatabaseHas('reference_ranges', $this->referenceRangeData);
-		$response->assertStatus(200)->assertArrayHasKey($this->referenceRangeData);
+		$response->assertStatus(200);
 	}
 
 	public function testStoreReferencerange()
@@ -60,21 +61,24 @@ class ReferenceRangeTest extends TestCase
 		$this->assertDatabaseHas('reference_ranges', $referenceRangeData);
 
 		$response->assertStatus(200);
+		$this->assertArrayHasKey("age_max", $response->original);
 	}
 
 	public function testUpdateReferencerange()
 	{
 		factory(\App\Models\ReferenceRange::class)->create($this->referenceRangeData);
 
-		$this->put('api/referencerange/1', $this->referenceRangeUpdateData);
+		$response = $this->json('PUT', 'api/referencerange/1', $this->referenceRangeUpdateData);
 
 		$this->assertDatabaseHas('reference_ranges', $this->referenceRangeUpdateData);
+		$this->assertArrayHasKey("age_max", $response->original);
 	}
 
 	public function testDeleteReferencerange()
 	{
 		factory(\App\Models\ReferenceRange::class)->create();
-		$response=$this->delete('api/referencerange/1');
+		$response=$this->json('DELETE', 'api/referencerange/1');
 		$response->assertStatus(200);
+		$this->assertArrayHasKey("age_max", $response->original);
 	}
 }

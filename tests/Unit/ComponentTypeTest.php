@@ -36,7 +36,8 @@ class ComponentTypeTest extends TestCase
         $response = $this->json('GET', 'api/componenttype/1');
 
         $this->assertDatabaseHas('component_types', $this->componentTypeData);
-        $response->assertStatus(200)->assertHasKey($this->componentTypeData);
+        $response->assertStatus(200);
+        $this->assertArrayHasKey("result_type_id", $response->original);
     }
 
     public function testListComponentTypes()
@@ -45,7 +46,7 @@ class ComponentTypeTest extends TestCase
         $response = $this->json('GET', 'api/componenttype');
 
         $this->assertDatabaseHas('component_types', $this->componentTypeData);
-        $response->assertStatus(200)->assertArrayHasKey($this->componentTypeData);
+        $response->assertStatus(200);
     }
 
     public function testStoreComponentType()
@@ -60,20 +61,23 @@ class ComponentTypeTest extends TestCase
         $this->assertDatabaseHas('component_types', $componentTypeData);
 
         $response->assertStatus(200);
+        $this->assertArrayHasKey("result_type_id", $response->original);
     }
 
     public function testUpdateComponentType()
     {
         factory(\App\Models\ComponentType::class)->create($this->componentTypeData);
-        $this->put('api/componenttype/1', $this->componentTypeUpdateData);
+        $response = $this->json('PUT', 'api/componenttype/1', $this->componentTypeUpdateData);
         $this->assertDatabaseHas('component_types', $this->componentTypeUpdateData);
+        $this->assertArrayHasKey("result_type_id", $response->original);
     }
 
     public function testDeleteComponentType()
     {
         factory(\App\Models\ComponentType::class)->create();
-        $response=$this->delete('api/componenttype/1');
+        $response=$this->json('DELETE', 'api/componenttype/1');
         $response->assertStatus(200);
+        $this->assertArrayHasKey("result_type_id", $response->original);
     }
 
 }

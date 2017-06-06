@@ -36,7 +36,8 @@ class ComponentTest extends TestCase
         $response = $this->json('GET', 'api/component/1');
 
         $this->assertDatabaseHas('components', $this->componentData);
-        $response->assertStatus(200)->assertHasKey($this->componentData);
+        $response->assertStatus(200);
+        $this->assertArrayHasKey("observation_id", $response->original);
     }
 
     public function testListComponents()
@@ -60,20 +61,23 @@ class ComponentTest extends TestCase
         $this->assertDatabaseHas('components', $componentData);
 
         $response->assertStatus(200);
+        $this->assertArrayHasKey("observation_id", $response->original);
     }
 
     public function testUpdateComponent()
     {
         factory(\App\Models\Component::class)->create($this->componentData);
-        $this->put('api/component/1', $this->componentUpdateData);
+        $response = $this->json('PUT', 'api/component/1', $this->componentUpdateData);
         $this->assertDatabaseHas('components', $this->componentUpdateData);
+        $this->assertArrayHasKey("observation_id", $response->original);
     }
 
     public function testDeleteComponent()
     {
         factory(\App\Models\Component::class)->create();
-        $response=$this->delete('api/component/1');
+        $response=$this->json('DELETE', 'api/component/1');
         $response->assertStatus(200);
+        $this->assertArrayHasKey("observation_id", $response->original);
     }
 
 }

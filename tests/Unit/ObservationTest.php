@@ -36,7 +36,8 @@ class ObservationTest extends TestCase
 		$response = $this->json('GET', 'api/observation/1');
 
 		$this->assertDatabaseHas('observations', $this->observationData);
-		$response->assertStatus(200)->assertHasKey($this->observationData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("category_id", $response->original);
 	}
 
 	public function testListObservations()
@@ -64,6 +65,7 @@ class ObservationTest extends TestCase
 		$this->assertDatabaseHas('observations', $observationData);
 
 		$response->assertStatus(200);
+		$this->assertArrayHasKey("category_id", $response->original);
 	}
 
 	public function testUpdateObservation()
@@ -73,18 +75,16 @@ class ObservationTest extends TestCase
 			'category_id' => 1,];
 		factory(\App\Models\Observation::class)->create($observationData);
 
-		$observationDataUpdate = ['panel_id' => 1,
-			'status_id' => 1,
-			'category_id' => 1,];
-
-		$this->put('api/observation/1', $observationDataUpdate);
-		$this->assertDatabaseHas('observations', $observationDataUpdate);
+		$response = $this->json('PUT', 'api/observation/1', $this->observationDataUpdate);
+		$this->assertDatabaseHas('observations', $this->observationDataUpdate);
+		$this->assertArrayHasKey("category_id", $response->original);
 	}
 
 	public function testDeleteObservation()
 	{
 		factory(\App\Models\PanelType::class)->create();
-		$response=$this->delete('api/observation/1');
+		$response=$this->json('DELETE', 'api/observation/1');
 		$response->assertStatus(200);
+		$this->assertArrayHasKey("category_id", $response->original);
 	}
 }

@@ -36,7 +36,8 @@ class PanelTypeTest extends TestCase
 		$response = $this->json('GET', 'api/paneltype/1');
 
 		$this->assertDatabaseHas('panel_types', $this->panelTypeData);
-		$response->assertStatus(200)->assertHasKey($this->panelTypeData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("status_id", $response->original);
 	}
 
 	public function testListPanelTypes()
@@ -60,6 +61,7 @@ class PanelTypeTest extends TestCase
 		$this->assertDatabaseHas('panel_types', $panelTypeData);
 
 		$response->assertStatus(200);
+		$this->assertArrayHasKey("status_id", $response->original);
 	}
 
 	public function testUpdatePanelType()
@@ -69,19 +71,17 @@ class PanelTypeTest extends TestCase
 			'category_id' => 1,];
 		factory(\App\Models\PanelType::class)->create($panelTypeData);
 
-		$panelTypeDataUpdate = ['code_id' => 1,
-			'status_id' => 1,
-			'category_id' => 1,];
+		$response = $this->json('PUT', 'api/paneltype/1', $this->panelUpdateData);
 
-		$this->put('api/paneltype/1', $panelTypeDataUpdate);
-
-		$this->assertDatabaseHas('panel_types', $panelTypeDataUpdate);
+		$this->assertDatabaseHas('panel_types', $this->panelUpdateData);
+		$this->assertArrayHasKey("status_id", $response->original);
 	}
 
 	public function testDeletePanelType()
 	{
 		factory(\App\Models\PanelType::class)->create();
-		$response=$this->delete('api/paneltype/1');
+		$response=$this->json('DELETE', 'api/paneltype/1');
 		$response->assertStatus(200);
+		$this->assertArrayHasKey("status_id", $response->original);
 	}
 }

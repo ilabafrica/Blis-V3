@@ -38,7 +38,8 @@ class PanelTest extends TestCase
 		$response = $this->json('GET', 'api/panel/1');
 
 		$this->assertDatabaseHas('panels', $this->panelData);
-		$response->assertStatus(200)->assertHasKey($this->panelData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("conclusion", $response->original);
 	}
 
 	public function testListPanels()
@@ -66,20 +67,23 @@ class PanelTest extends TestCase
 		$this->assertDatabaseHas('panels', $panelData);
 
 		$response->assertStatus(200);
+		$this->assertArrayHasKey("conclusion", $response->original);
 	}
 
 	public function testUpdatePanel()
 	{
 		factory(\App\Models\Panel::class)->create($this->panelData);
-		$this->put('api/panel/1', $this->panelUpdateData);
+		$response = $this->json('PUT', 'api/panel/1', $this->panelUpdateData);
 		$this->assertDatabaseHas('panels', $this->panelUpdateData);
+		$this->assertArrayHasKey("conclusion", $response->original);
 	}
 
 	public function testDeletePanel()
 	{
 		factory(\App\Models\Panel::class)->create();
-		$response=$this->delete('api/panel/1');
+		$response=$this->json('DELETE', 'api/panel/1');
 		$response->assertStatus(200);
+		$this->assertArrayHasKey("conclusion", $response->original);
 	}
 
 }
