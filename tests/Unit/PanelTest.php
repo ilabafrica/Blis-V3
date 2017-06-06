@@ -41,7 +41,7 @@ class PanelTest extends TestCase
 		$response->assertStatus(200)->assertHasKey($this->panelData);
 	}
 
-	public function testListPanel()
+	public function testListPanels()
 	{
 		factory(\App\Models\Panel::class)->create($this->panelData);
 		$response = $this->json('GET', 'api/panel');
