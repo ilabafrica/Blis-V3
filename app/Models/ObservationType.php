@@ -11,7 +11,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ObservationTypes extends Model
+class ObservationType extends Model
 {
     //
 }
