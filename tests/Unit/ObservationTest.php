@@ -50,7 +50,7 @@ class ObservationTest extends TestCase
 		$response = $this->json('GET', 'api/observation');
 
 		$this->assertDatabaseHas('observations', $this->observationData);
-		$response->assertStatus(200)->assertArrayHasKey($this->observationData);
+		$response->assertStatus(200);
 	}
 
 	public function testStoreObservation()

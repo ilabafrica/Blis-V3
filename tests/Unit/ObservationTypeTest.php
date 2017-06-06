@@ -51,7 +51,7 @@ class ObservationTypeTest extends TestCase
 		$response = $this->json('GET', 'api/observationtype');
 
 		$this->assertDatabaseHas('observation_types', $this->observationTypeData);
-		$response->assertStatus(200)->assertArrayHasKey($observationTypeData);
+		$response->assertStatus(200);
 	}
 
 	public function testStoreObservationType()

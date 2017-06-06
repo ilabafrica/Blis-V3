@@ -48,7 +48,7 @@ class PanelTest extends TestCase
 		$response = $this->json('GET', 'api/panel');
 
 		$this->assertDatabaseHas('panels', $this->panelData);
-		$response->assertStatus(200)->assertArrayHasKey($this->panelData);
+		$response->assertStatus(200);
 	}
 
 	public function testStorePanel()
