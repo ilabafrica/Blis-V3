@@ -2,14 +2,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ObservationType;
+use App\Models\Address;
 
-class ObservationTypeController extends Controller
+class AddressController extends Controller
 {
 	public function index()
 	{
-		$observationtype=ObservationType::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(ObservationType);
+		$address=Address::orderBy('id', 'ASC')->paginate(20);
+		return response()->json(Address);
 	}
 
 
@@ -22,26 +22,29 @@ class ObservationTypeController extends Controller
 	public function store(Request $request)
 	{
         $rules=array(
-		"status_id" => 'required',
-		"category_id" => 'required',
-		"code_id" => 'required',
-		"result_type" => 'required',
-		"sort_order" => 'required',
+		"use" => 'required',
+		"type" => 'required',
+		"text" => 'required',
 
 		);		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {
-			$observationtype= new ObservationType;
-			$observationtype->status_id = $request->input('status_id');
-			$observationtype->category_id = $request->input('category_id');
-			$observationtype->code_id = $request->input('code_id');
-			$observationtype->result_type = $request->input('result_type');
-			$observationtype->sort_order = $request->input('sort_order');
+			$address= new Address;
+			$address->use = $request->input('use');
+			$address->type = $request->input('type');
+			$address->text = $request->input('text');
+			$address->line = $request->input('line');
+			$address->city = $request->input('city');
+			$address->district = $request->input('district');
+			$address->state = $request->input('state');
+			$address->postal_code = $request->input('postal_code');
+			$address->country = $request->input('country');
+			$address->period = $request->input('period');
 
 			try{
-				$observationtype->save();
-				return response()->json($observationtype);
+				$address->save();
+				return response()->json($address);
 			}
 			catch (\Illuminate\Database\QueryException $e){
 				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
@@ -55,8 +58,8 @@ class ObservationTypeController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$observationtype=ObservationType::findorfails($id);
-		return response()->json($observationtype);
+		$address=Address::findorfails($id);
+		return response()->json($address);
 	}
 
 
@@ -71,27 +74,30 @@ class ObservationTypeController extends Controller
 	{
     
         $rules=array(
-		"status_id" => 'required',
-		"category_id" => 'required',
-		"code_id" => 'required',
-		"result_type" => 'required',
-		"sort_order" => 'required',
+		"use" => 'required',
+		"type" => 'required',
+		"text" => 'required',
 
 		);
         $validator = \Validator::make($request->all(),$rules);
 		 if ($validator->fails()) {
 			 return response()->json($validator,422);
 		} else {
-			$observationtype=ObservationType::findorfail($id);
-			$observationtype->status_id = $request->input('status_id');
-			$observationtype->category_id = $request->input('category_id');
-			$observationtype->code_id = $request->input('code_id');
-			$observationtype->result_type = $request->input('result_type');
-			$observationtype->sort_order = $request->input('sort_order');
+			$address=Address::findorfail($id);
+			$address->use = $request->input('use');
+			$address->type = $request->input('type');
+			$address->text = $request->input('text');
+			$address->line = $request->input('line');
+			$address->city = $request->input('city');
+			$address->district = $request->input('district');
+			$address->state = $request->input('state');
+			$address->postal_code = $request->input('postal_code');
+			$address->country = $request->input('country');
+			$address->period = $request->input('period');
 
 			try{
-				$observationtype->save();
-				return response()->json($observationtype);
+				$address->save();
+				return response()->json($address);
 			}
 			catch (\Illuminate\Database\QueryException $e){
 				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
@@ -107,9 +113,9 @@ class ObservationTypeController extends Controller
      */
 	public function destroy($id){
 		try{
-			$observationtype=ObservationType::findorfails($id);
-			$observationtype->delete();
-			return response()->json($observationtype,200);
+			$address=Address::findorfails($id);
+			$address->delete();
+			return response()->json($address,200);
 		}
 		catch (\Illuminate\Database\QueryException $e){
 			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));

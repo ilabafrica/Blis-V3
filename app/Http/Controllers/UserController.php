@@ -2,14 +2,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ObservationType;
+use App\Models\User;
 
-class ObservationTypeController extends Controller
+class UserController extends Controller
 {
 	public function index()
 	{
-		$observationtype=ObservationType::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(ObservationType);
+		$user=User::orderBy('id', 'ASC')->paginate(20);
+		return response()->json(User);
 	}
 
 
@@ -22,26 +22,23 @@ class ObservationTypeController extends Controller
 	public function store(Request $request)
 	{
         $rules=array(
-		"status_id" => 'required',
-		"category_id" => 'required',
-		"code_id" => 'required',
-		"result_type" => 'required',
-		"sort_order" => 'required',
+		"type" => 'required',
+		"email" => 'required',
+		"password" => 'required',
 
 		);		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {
-			$observationtype= new ObservationType;
-			$observationtype->status_id = $request->input('status_id');
-			$observationtype->category_id = $request->input('category_id');
-			$observationtype->code_id = $request->input('code_id');
-			$observationtype->result_type = $request->input('result_type');
-			$observationtype->sort_order = $request->input('sort_order');
+			$user= new User;
+			$user->type = $request->input('type');
+			$user->email = $request->input('email');
+			$user->password = $request->input('password');
+			$user->remember_token = $request->input('remember_token');
 
 			try{
-				$observationtype->save();
-				return response()->json($observationtype);
+				$user->save();
+				return response()->json($user);
 			}
 			catch (\Illuminate\Database\QueryException $e){
 				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
@@ -55,8 +52,8 @@ class ObservationTypeController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$observationtype=ObservationType::findorfails($id);
-		return response()->json($observationtype);
+		$user=User::findorfails($id);
+		return response()->json($user);
 	}
 
 
@@ -71,27 +68,24 @@ class ObservationTypeController extends Controller
 	{
     
         $rules=array(
-		"status_id" => 'required',
-		"category_id" => 'required',
-		"code_id" => 'required',
-		"result_type" => 'required',
-		"sort_order" => 'required',
+		"type" => 'required',
+		"email" => 'required',
+		"password" => 'required',
 
 		);
         $validator = \Validator::make($request->all(),$rules);
 		 if ($validator->fails()) {
 			 return response()->json($validator,422);
 		} else {
-			$observationtype=ObservationType::findorfail($id);
-			$observationtype->status_id = $request->input('status_id');
-			$observationtype->category_id = $request->input('category_id');
-			$observationtype->code_id = $request->input('code_id');
-			$observationtype->result_type = $request->input('result_type');
-			$observationtype->sort_order = $request->input('sort_order');
+			$user=User::findorfail($id);
+			$user->type = $request->input('type');
+			$user->email = $request->input('email');
+			$user->password = $request->input('password');
+			$user->remember_token = $request->input('remember_token');
 
 			try{
-				$observationtype->save();
-				return response()->json($observationtype);
+				$user->save();
+				return response()->json($user);
 			}
 			catch (\Illuminate\Database\QueryException $e){
 				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
@@ -107,9 +101,9 @@ class ObservationTypeController extends Controller
      */
 	public function destroy($id){
 		try{
-			$observationtype=ObservationType::findorfails($id);
-			$observationtype->delete();
-			return response()->json($observationtype,200);
+			$user=User::findorfails($id);
+			$user->delete();
+			return response()->json($user,200);
 		}
 		catch (\Illuminate\Database\QueryException $e){
 			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));

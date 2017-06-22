@@ -2,14 +2,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ObservationType;
+use App\Models\OrganizationContact;
 
-class ObservationTypeController extends Controller
+class OrganizationContactController extends Controller
 {
 	public function index()
 	{
-		$observationtype=ObservationType::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(ObservationType);
+		$organizationcontact=OrganizationContact::orderBy('id', 'ASC')->paginate(20);
+		return response()->json(OrganizationContact);
 	}
 
 
@@ -22,26 +22,25 @@ class ObservationTypeController extends Controller
 	public function store(Request $request)
 	{
         $rules=array(
-		"status_id" => 'required',
-		"category_id" => 'required',
-		"code_id" => 'required',
-		"result_type" => 'required',
-		"sort_order" => 'required',
+		"organization_id" => 'required',
+		"purpose" => 'required',
+		"name" => 'required',
+		"telecom" => 'required',
 
 		);		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {
-			$observationtype= new ObservationType;
-			$observationtype->status_id = $request->input('status_id');
-			$observationtype->category_id = $request->input('category_id');
-			$observationtype->code_id = $request->input('code_id');
-			$observationtype->result_type = $request->input('result_type');
-			$observationtype->sort_order = $request->input('sort_order');
+			$organizationcontact= new OrganizationContact;
+			$organizationcontact->organization_id = $request->input('organization_id');
+			$organizationcontact->purpose = $request->input('purpose');
+			$organizationcontact->name = $request->input('name');
+			$organizationcontact->telecom = $request->input('telecom');
+			$organizationcontact->address = $request->input('address');
 
 			try{
-				$observationtype->save();
-				return response()->json($observationtype);
+				$organizationcontact->save();
+				return response()->json($organizationcontact);
 			}
 			catch (\Illuminate\Database\QueryException $e){
 				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
@@ -55,8 +54,8 @@ class ObservationTypeController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$observationtype=ObservationType::findorfails($id);
-		return response()->json($observationtype);
+		$organizationcontact=OrganizationContact::findorfails($id);
+		return response()->json($organizationcontact);
 	}
 
 
@@ -71,27 +70,26 @@ class ObservationTypeController extends Controller
 	{
     
         $rules=array(
-		"status_id" => 'required',
-		"category_id" => 'required',
-		"code_id" => 'required',
-		"result_type" => 'required',
-		"sort_order" => 'required',
+		"organization_id" => 'required',
+		"purpose" => 'required',
+		"name" => 'required',
+		"telecom" => 'required',
 
 		);
         $validator = \Validator::make($request->all(),$rules);
 		 if ($validator->fails()) {
 			 return response()->json($validator,422);
 		} else {
-			$observationtype=ObservationType::findorfail($id);
-			$observationtype->status_id = $request->input('status_id');
-			$observationtype->category_id = $request->input('category_id');
-			$observationtype->code_id = $request->input('code_id');
-			$observationtype->result_type = $request->input('result_type');
-			$observationtype->sort_order = $request->input('sort_order');
+			$organizationcontact=OrganizationContact::findorfail($id);
+			$organizationcontact->organization_id = $request->input('organization_id');
+			$organizationcontact->purpose = $request->input('purpose');
+			$organizationcontact->name = $request->input('name');
+			$organizationcontact->telecom = $request->input('telecom');
+			$organizationcontact->address = $request->input('address');
 
 			try{
-				$observationtype->save();
-				return response()->json($observationtype);
+				$organizationcontact->save();
+				return response()->json($organizationcontact);
 			}
 			catch (\Illuminate\Database\QueryException $e){
 				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
@@ -107,9 +105,9 @@ class ObservationTypeController extends Controller
      */
 	public function destroy($id){
 		try{
-			$observationtype=ObservationType::findorfails($id);
-			$observationtype->delete();
-			return response()->json($observationtype,200);
+			$organizationcontact=OrganizationContact::findorfails($id);
+			$organizationcontact->delete();
+			return response()->json($organizationcontact,200);
 		}
 		catch (\Illuminate\Database\QueryException $e){
 			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));

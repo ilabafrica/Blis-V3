@@ -2,14 +2,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Specimen;
+use App\Models\EpisodeofCare;
 
-class SpecimenController extends Controller
+class EpisodeofCareController extends Controller
 {
 	public function index()
 	{
-		$specimen=Specimen::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Specimen);
+		$episodeofcare=EpisodeofCare::orderBy('id', 'ASC')->paginate(20);
+		return response()->json(EpisodeofCare);
 	}
 
 
@@ -24,25 +24,25 @@ class SpecimenController extends Controller
         $rules=array(
 		"status" => 'required',
 		"type" => 'required',
-		"subject" => 'required',
-		"received_time" => 'required',
+		"patient" => 'required',
+		"organization_id" => 'required',
 
 		);		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {
-			$specimen= new Specimen;
-			$specimen->accession_identifier = $request->input('accession_identifier');
-			$specimen->status = $request->input('status');
-			$specimen->type = $request->input('type');
-			$specimen->subject = $request->input('subject');
-			$specimen->received_time = $request->input('received_time');
-			$specimen->parent = $request->input('parent');
-			$specimen->note = $request->input('note');
+			$episodeofcare= new EpisodeofCare;
+			$episodeofcare->status = $request->input('status');
+			$episodeofcare->type = $request->input('type');
+			$episodeofcare->patient = $request->input('patient');
+			$episodeofcare->organization_id = $request->input('organization_id');
+			$episodeofcare->period = $request->input('period');
+			$episodeofcare->practitioners_id = $request->input('practitioners_id');
+			$episodeofcare->team_id = $request->input('team_id');
 
 			try{
-				$specimen->save();
-				return response()->json($specimen);
+				$episodeofcare->save();
+				return response()->json($episodeofcare);
 			}
 			catch (\Illuminate\Database\QueryException $e){
 				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
@@ -56,8 +56,8 @@ class SpecimenController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$specimen=Specimen::findorfails($id);
-		return response()->json($specimen);
+		$episodeofcare=EpisodeofCare::findorfails($id);
+		return response()->json($episodeofcare);
 	}
 
 
@@ -74,26 +74,26 @@ class SpecimenController extends Controller
         $rules=array(
 		"status" => 'required',
 		"type" => 'required',
-		"subject" => 'required',
-		"received_time" => 'required',
+		"patient" => 'required',
+		"organization_id" => 'required',
 
 		);
         $validator = \Validator::make($request->all(),$rules);
 		 if ($validator->fails()) {
 			 return response()->json($validator,422);
 		} else {
-			$specimen=Specimen::findorfail($id);
-			$specimen->accession_identifier = $request->input('accession_identifier');
-			$specimen->status = $request->input('status');
-			$specimen->type = $request->input('type');
-			$specimen->subject = $request->input('subject');
-			$specimen->received_time = $request->input('received_time');
-			$specimen->parent = $request->input('parent');
-			$specimen->note = $request->input('note');
+			$episodeofcare=EpisodeofCare::findorfail($id);
+			$episodeofcare->status = $request->input('status');
+			$episodeofcare->type = $request->input('type');
+			$episodeofcare->patient = $request->input('patient');
+			$episodeofcare->organization_id = $request->input('organization_id');
+			$episodeofcare->period = $request->input('period');
+			$episodeofcare->practitioners_id = $request->input('practitioners_id');
+			$episodeofcare->team_id = $request->input('team_id');
 
 			try{
-				$specimen->save();
-				return response()->json($specimen);
+				$episodeofcare->save();
+				return response()->json($episodeofcare);
 			}
 			catch (\Illuminate\Database\QueryException $e){
 				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
@@ -109,9 +109,9 @@ class SpecimenController extends Controller
      */
 	public function destroy($id){
 		try{
-			$specimen=Specimen::findorfails($id);
-			$specimen->delete();
-			return response()->json($specimen,200);
+			$episodeofcare=EpisodeofCare::findorfails($id);
+			$episodeofcare->delete();
+			return response()->json($episodeofcare,200);
 		}
 		catch (\Illuminate\Database\QueryException $e){
 			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));

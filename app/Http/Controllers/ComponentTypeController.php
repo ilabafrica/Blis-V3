@@ -1,86 +1,114 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\ComponentType;
 use Illuminate\Http\Request;
+use App\Models\ComponentType;
 
 class ComponentTypeController extends Controller
 {
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
 	public function index()
 	{
-		$componentTypes = ComponentType::orderBy('id', 'desc')->paginate();
-		return response()->json($componentTypes);
+		$componenttype=ComponentType::orderBy('id', 'ASC')->paginate(20);
+		return response()->json(ComponentType);
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create()
-	{
-		//
-	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
+    /**
+    * Store a newly created resource in storage.
+    *
+    * @param  \Illuminate\Http\Request
+    * @return \Illuminate\Http\Response
+    */
 	public function store(Request $request)
 	{
-		//
+        $rules=array(
+		"code_id" => 'required',
+		"result_type_id" => 'required',
+		"reference_range_id" => 'required',
+		"parent_id" => 'required',
+
+		);		$validator = \Validator::make($request->all(),$rules);
+		if ($validator->fails()) {
+			 return response()->json($validator);
+		} else {
+			$componenttype= new ComponentType;
+			$componenttype->code_id = $request->input('code_id');
+			$componenttype->result_type_id = $request->input('result_type_id');
+			$componenttype->reference_range_id = $request->input('reference_range_id');
+			$componenttype->parent_id = $request->input('parent_id');
+
+			try{
+				$componenttype->save();
+				return response()->json($componenttype);
+			}
+			catch (\Illuminate\Database\QueryException $e){
+				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
+			}
+		}
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id)
-	{
-		//
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */public function show($id){
+		$componenttype=ComponentType::findorfails($id);
+		return response()->json($componenttype);
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id)
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  request
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
 	{
-		//
+    
+        $rules=array(
+		"code_id" => 'required',
+		"result_type_id" => 'required',
+		"reference_range_id" => 'required',
+		"parent_id" => 'required',
+
+		);
+        $validator = \Validator::make($request->all(),$rules);
+		 if ($validator->fails()) {
+			 return response()->json($validator,422);
+		} else {
+			$componenttype=ComponentType::findorfail($id);
+			$componenttype->code_id = $request->input('code_id');
+			$componenttype->result_type_id = $request->input('result_type_id');
+			$componenttype->reference_range_id = $request->input('reference_range_id');
+			$componenttype->parent_id = $request->input('parent_id');
+
+			try{
+				$componenttype->save();
+				return response()->json($componenttype);
+			}
+			catch (\Illuminate\Database\QueryException $e){
+				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
+			}
+		}
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id)
-	{
-		//
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+	public function destroy($id){
+		try{
+			$componenttype=ComponentType::findorfails($id);
+			$componenttype->delete();
+			return response()->json($componenttype,200);
+		}
+		catch (\Illuminate\Database\QueryException $e){
+			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
+		}
 	}
 }

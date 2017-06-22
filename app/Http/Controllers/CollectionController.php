@@ -2,14 +2,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ObservationType;
+use App\Models\Collection;
 
-class ObservationTypeController extends Controller
+class CollectionController extends Controller
 {
 	public function index()
 	{
-		$observationtype=ObservationType::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(ObservationType);
+		$collection=Collection::orderBy('id', 'ASC')->paginate(20);
+		return response()->json(Collection);
 	}
 
 
@@ -22,26 +22,26 @@ class ObservationTypeController extends Controller
 	public function store(Request $request)
 	{
         $rules=array(
-		"status_id" => 'required',
-		"category_id" => 'required',
-		"code_id" => 'required',
-		"result_type" => 'required',
-		"sort_order" => 'required',
+		"collector" => 'required',
+		"collection_time" => 'required',
+		"quantity_id" => 'required',
+		"method" => 'required',
+		"body_site" => 'required',
 
 		);		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {
-			$observationtype= new ObservationType;
-			$observationtype->status_id = $request->input('status_id');
-			$observationtype->category_id = $request->input('category_id');
-			$observationtype->code_id = $request->input('code_id');
-			$observationtype->result_type = $request->input('result_type');
-			$observationtype->sort_order = $request->input('sort_order');
+			$collection= new Collection;
+			$collection->collector = $request->input('collector');
+			$collection->collection_time = $request->input('collection_time');
+			$collection->quantity_id = $request->input('quantity_id');
+			$collection->method = $request->input('method');
+			$collection->body_site = $request->input('body_site');
 
 			try{
-				$observationtype->save();
-				return response()->json($observationtype);
+				$collection->save();
+				return response()->json($collection);
 			}
 			catch (\Illuminate\Database\QueryException $e){
 				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
@@ -55,8 +55,8 @@ class ObservationTypeController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$observationtype=ObservationType::findorfails($id);
-		return response()->json($observationtype);
+		$collection=Collection::findorfails($id);
+		return response()->json($collection);
 	}
 
 
@@ -71,27 +71,27 @@ class ObservationTypeController extends Controller
 	{
     
         $rules=array(
-		"status_id" => 'required',
-		"category_id" => 'required',
-		"code_id" => 'required',
-		"result_type" => 'required',
-		"sort_order" => 'required',
+		"collector" => 'required',
+		"collection_time" => 'required',
+		"quantity_id" => 'required',
+		"method" => 'required',
+		"body_site" => 'required',
 
 		);
         $validator = \Validator::make($request->all(),$rules);
 		 if ($validator->fails()) {
 			 return response()->json($validator,422);
 		} else {
-			$observationtype=ObservationType::findorfail($id);
-			$observationtype->status_id = $request->input('status_id');
-			$observationtype->category_id = $request->input('category_id');
-			$observationtype->code_id = $request->input('code_id');
-			$observationtype->result_type = $request->input('result_type');
-			$observationtype->sort_order = $request->input('sort_order');
+			$collection=Collection::findorfail($id);
+			$collection->collector = $request->input('collector');
+			$collection->collection_time = $request->input('collection_time');
+			$collection->quantity_id = $request->input('quantity_id');
+			$collection->method = $request->input('method');
+			$collection->body_site = $request->input('body_site');
 
 			try{
-				$observationtype->save();
-				return response()->json($observationtype);
+				$collection->save();
+				return response()->json($collection);
 			}
 			catch (\Illuminate\Database\QueryException $e){
 				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
@@ -107,9 +107,9 @@ class ObservationTypeController extends Controller
      */
 	public function destroy($id){
 		try{
-			$observationtype=ObservationType::findorfails($id);
-			$observationtype->delete();
-			return response()->json($observationtype,200);
+			$collection=Collection::findorfails($id);
+			$collection->delete();
+			return response()->json($collection,200);
 		}
 		catch (\Illuminate\Database\QueryException $e){
 			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));

@@ -2,14 +2,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ObservationType;
+use App\Models\ContactPoint;
 
-class ObservationTypeController extends Controller
+class ContactPointController extends Controller
 {
 	public function index()
 	{
-		$observationtype=ObservationType::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(ObservationType);
+		$contactpoint=ContactPoint::orderBy('id', 'ASC')->paginate(20);
+		return response()->json(ContactPoint);
 	}
 
 
@@ -22,26 +22,26 @@ class ObservationTypeController extends Controller
 	public function store(Request $request)
 	{
         $rules=array(
-		"status_id" => 'required',
-		"category_id" => 'required',
-		"code_id" => 'required',
-		"result_type" => 'required',
-		"sort_order" => 'required',
+		"user_id" => 'required',
+		"system" => 'required',
+		"value" => 'required',
+		"use" => 'required',
 
 		);		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {
-			$observationtype= new ObservationType;
-			$observationtype->status_id = $request->input('status_id');
-			$observationtype->category_id = $request->input('category_id');
-			$observationtype->code_id = $request->input('code_id');
-			$observationtype->result_type = $request->input('result_type');
-			$observationtype->sort_order = $request->input('sort_order');
+			$contactpoint= new ContactPoint;
+			$contactpoint->user_id = $request->input('user_id');
+			$contactpoint->system = $request->input('system');
+			$contactpoint->value = $request->input('value');
+			$contactpoint->use = $request->input('use');
+			$contactpoint->rank = $request->input('rank');
+			$contactpoint->period = $request->input('period');
 
 			try{
-				$observationtype->save();
-				return response()->json($observationtype);
+				$contactpoint->save();
+				return response()->json($contactpoint);
 			}
 			catch (\Illuminate\Database\QueryException $e){
 				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
@@ -55,8 +55,8 @@ class ObservationTypeController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$observationtype=ObservationType::findorfails($id);
-		return response()->json($observationtype);
+		$contactpoint=ContactPoint::findorfails($id);
+		return response()->json($contactpoint);
 	}
 
 
@@ -71,27 +71,27 @@ class ObservationTypeController extends Controller
 	{
     
         $rules=array(
-		"status_id" => 'required',
-		"category_id" => 'required',
-		"code_id" => 'required',
-		"result_type" => 'required',
-		"sort_order" => 'required',
+		"user_id" => 'required',
+		"system" => 'required',
+		"value" => 'required',
+		"use" => 'required',
 
 		);
         $validator = \Validator::make($request->all(),$rules);
 		 if ($validator->fails()) {
 			 return response()->json($validator,422);
 		} else {
-			$observationtype=ObservationType::findorfail($id);
-			$observationtype->status_id = $request->input('status_id');
-			$observationtype->category_id = $request->input('category_id');
-			$observationtype->code_id = $request->input('code_id');
-			$observationtype->result_type = $request->input('result_type');
-			$observationtype->sort_order = $request->input('sort_order');
+			$contactpoint=ContactPoint::findorfail($id);
+			$contactpoint->user_id = $request->input('user_id');
+			$contactpoint->system = $request->input('system');
+			$contactpoint->value = $request->input('value');
+			$contactpoint->use = $request->input('use');
+			$contactpoint->rank = $request->input('rank');
+			$contactpoint->period = $request->input('period');
 
 			try{
-				$observationtype->save();
-				return response()->json($observationtype);
+				$contactpoint->save();
+				return response()->json($contactpoint);
 			}
 			catch (\Illuminate\Database\QueryException $e){
 				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
@@ -107,9 +107,9 @@ class ObservationTypeController extends Controller
      */
 	public function destroy($id){
 		try{
-			$observationtype=ObservationType::findorfails($id);
-			$observationtype->delete();
-			return response()->json($observationtype,200);
+			$contactpoint=ContactPoint::findorfails($id);
+			$contactpoint->delete();
+			return response()->json($contactpoint,200);
 		}
 		catch (\Illuminate\Database\QueryException $e){
 			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));

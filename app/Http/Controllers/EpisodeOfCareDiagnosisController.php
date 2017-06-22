@@ -2,14 +2,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ObservationType;
+use App\Models\EpisodeOfCareDiagnosis;
 
-class ObservationTypeController extends Controller
+class EpisodeOfCareDiagnosisController extends Controller
 {
 	public function index()
 	{
-		$observationtype=ObservationType::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(ObservationType);
+		$episodeofcarediagnosis=EpisodeOfCareDiagnosis::orderBy('id', 'ASC')->paginate(20);
+		return response()->json(EpisodeOfCareDiagnosis);
 	}
 
 
@@ -22,26 +22,24 @@ class ObservationTypeController extends Controller
 	public function store(Request $request)
 	{
         $rules=array(
-		"status_id" => 'required',
-		"category_id" => 'required',
-		"code_id" => 'required',
-		"result_type" => 'required',
-		"sort_order" => 'required',
+		"condition" => 'required',
+		"role" => 'required',
+		"rank" => 'required',
+		"episode_of_care_id" => 'required',
 
 		);		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {
-			$observationtype= new ObservationType;
-			$observationtype->status_id = $request->input('status_id');
-			$observationtype->category_id = $request->input('category_id');
-			$observationtype->code_id = $request->input('code_id');
-			$observationtype->result_type = $request->input('result_type');
-			$observationtype->sort_order = $request->input('sort_order');
+			$episodeofcarediagnosis= new EpisodeOfCareDiagnosis;
+			$episodeofcarediagnosis->condition = $request->input('condition');
+			$episodeofcarediagnosis->role = $request->input('role');
+			$episodeofcarediagnosis->rank = $request->input('rank');
+			$episodeofcarediagnosis->episode_of_care_id = $request->input('episode_of_care_id');
 
 			try{
-				$observationtype->save();
-				return response()->json($observationtype);
+				$episodeofcarediagnosis->save();
+				return response()->json($episodeofcarediagnosis);
 			}
 			catch (\Illuminate\Database\QueryException $e){
 				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
@@ -55,8 +53,8 @@ class ObservationTypeController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$observationtype=ObservationType::findorfails($id);
-		return response()->json($observationtype);
+		$episodeofcarediagnosis=EpisodeOfCareDiagnosis::findorfails($id);
+		return response()->json($episodeofcarediagnosis);
 	}
 
 
@@ -71,27 +69,25 @@ class ObservationTypeController extends Controller
 	{
     
         $rules=array(
-		"status_id" => 'required',
-		"category_id" => 'required',
-		"code_id" => 'required',
-		"result_type" => 'required',
-		"sort_order" => 'required',
+		"condition" => 'required',
+		"role" => 'required',
+		"rank" => 'required',
+		"episode_of_care_id" => 'required',
 
 		);
         $validator = \Validator::make($request->all(),$rules);
 		 if ($validator->fails()) {
 			 return response()->json($validator,422);
 		} else {
-			$observationtype=ObservationType::findorfail($id);
-			$observationtype->status_id = $request->input('status_id');
-			$observationtype->category_id = $request->input('category_id');
-			$observationtype->code_id = $request->input('code_id');
-			$observationtype->result_type = $request->input('result_type');
-			$observationtype->sort_order = $request->input('sort_order');
+			$episodeofcarediagnosis=EpisodeOfCareDiagnosis::findorfail($id);
+			$episodeofcarediagnosis->condition = $request->input('condition');
+			$episodeofcarediagnosis->role = $request->input('role');
+			$episodeofcarediagnosis->rank = $request->input('rank');
+			$episodeofcarediagnosis->episode_of_care_id = $request->input('episode_of_care_id');
 
 			try{
-				$observationtype->save();
-				return response()->json($observationtype);
+				$episodeofcarediagnosis->save();
+				return response()->json($episodeofcarediagnosis);
 			}
 			catch (\Illuminate\Database\QueryException $e){
 				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
@@ -107,9 +103,9 @@ class ObservationTypeController extends Controller
      */
 	public function destroy($id){
 		try{
-			$observationtype=ObservationType::findorfails($id);
-			$observationtype->delete();
-			return response()->json($observationtype,200);
+			$episodeofcarediagnosis=EpisodeOfCareDiagnosis::findorfails($id);
+			$episodeofcarediagnosis->delete();
+			return response()->json($episodeofcarediagnosis,200);
 		}
 		catch (\Illuminate\Database\QueryException $e){
 			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
