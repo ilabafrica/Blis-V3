@@ -29,7 +29,8 @@ class PractitionerController extends Controller
 		"gender" => 'required',
 		"birth_date" => 'required',
 
-		);		$validator = \Validator::make($request->all(),$rules);
+		);
+		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {

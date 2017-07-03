@@ -27,7 +27,8 @@ class PractitionerCommunicationController extends Controller
 		"language" => 'required',
 		"preferred" => 'required',
 
-		);		$validator = \Validator::make($request->all(),$rules);
+		);
+		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {

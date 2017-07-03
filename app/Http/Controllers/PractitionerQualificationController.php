@@ -25,7 +25,8 @@ class PractitionerQualificationController extends Controller
 		"practitioner_id" => 'required',
 		"name" => 'required',
 
-		);		$validator = \Validator::make($request->all(),$rules);
+		);
+		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {

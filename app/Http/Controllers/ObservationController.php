@@ -32,7 +32,8 @@ class ObservationController extends Controller
 		"comment" => 'required',
 		"issued" => 'required',
 
-		);		$validator = \Validator::make($request->all(),$rules);
+		);
+		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {

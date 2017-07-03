@@ -26,7 +26,8 @@ class PanelTypeController extends Controller
 		"status_id" => 'required',
 		"category_id" => 'required',
 
-		);		$validator = \Validator::make($request->all(),$rules);
+		);
+		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {

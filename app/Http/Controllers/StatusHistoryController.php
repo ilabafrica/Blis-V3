@@ -25,7 +25,8 @@ class StatusHistoryController extends Controller
 		"code" => 'required',
 		"episode_of_care_id" => 'required',
 
-		);		$validator = \Validator::make($request->all(),$rules);
+		);
+		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {

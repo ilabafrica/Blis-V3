@@ -33,7 +33,8 @@ class PatientController extends Controller
 		"multiple_birth" => 'required',
 		"animal" => 'required',
 
-		);		$validator = \Validator::make($request->all(),$rules);
+		);
+		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {

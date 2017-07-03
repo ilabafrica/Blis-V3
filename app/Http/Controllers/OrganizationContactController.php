@@ -27,7 +27,8 @@ class OrganizationContactController extends Controller
 		"name" => 'required',
 		"telecom" => 'required',
 
-		);		$validator = \Validator::make($request->all(),$rules);
+		);
+		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {

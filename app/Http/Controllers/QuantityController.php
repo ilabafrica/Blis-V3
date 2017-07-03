@@ -25,7 +25,8 @@ class QuantityController extends Controller
 		"value" => 'required',
 		"unit" => 'required',
 
-		);		$validator = \Validator::make($request->all(),$rules);
+		);
+		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {

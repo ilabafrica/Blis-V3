@@ -28,7 +28,8 @@ class PatientContactController extends Controller
 		"telecom" => 'required',
 		"gender" => 'required',
 
-		);		$validator = \Validator::make($request->all(),$rules);
+		);
+		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {

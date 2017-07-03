@@ -28,7 +28,8 @@ class ComponentController extends Controller
 		"data_absent_reason" => 'required',
 		"interpretation" => 'required',
 
-		);		$validator = \Validator::make($request->all(),$rules);
+		);
+		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {
