@@ -5,7 +5,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class PatientLinkTest extends TestCase
+class SpecimenTest extends TestCase
 {
 	use DatabaseMigrations;
 
@@ -15,52 +15,56 @@ class PatientLinkTest extends TestCase
 	}
 
 	public function setVariables(){
-    	$this->patientlinkData=array(
+    	$this->specimenData=array(
         
+			"status"=>1,
 			"type"=>1,
+			"note"=>'Sample String',
 
         );
-    	$this->updatedpatientlinkData=array(
+    	$this->updatedspecimenData=array(
         
+			"status"=>1,
 			"type"=>1,
+			"note"=>'Sample updated String',
 
         );
 	}
 
-	public function testStorePatientLink()
+	public function testStoreSpecimen()
 	{
-		$response=$this->json('POST', '/api/patientlink',$this->patientlinkData);
+		$response=$this->json('POST', '/api/specimen',$this->specimenData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	public function testListPatientLink()
+	public function testListSpecimen()
 	{
-		$response=$this->json('GET', '/api/patientlink');
+		$response=$this->json('GET', '/api/specimen');
 		$this->assertEquals(200,$response->getStatusCode());
 		
 	}
 
-	public function testShowPatientLink()
+	public function testShowSpecimen()
 	{
-		$this->json('POST', '/api/patientlink',$this->patientlinkData);
-		$response=$this->json('GET', '/api/patientlink/1');
+		$this->json('POST', '/api/specimen',$this->specimenData);
+		$response=$this->json('GET', '/api/specimen/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	public function testUpdatePatientLink()
+	public function testUpdateSpecimen()
 	{
-		$this->json('POST', '/api/patientlink',$this->updatedpatientlinkData);
-		$response=$this->json('PUT', '/api/patientlink');
+		$this->json('POST', '/api/specimen',$this->updatedspecimenData);
+		$response=$this->json('PUT', '/api/specimen');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	public function testDeletePatientLink()
+	public function testDeleteSpecimen()
 	{
-		$this->json('POST', '/api/patientlink',$this->patientlinkData);
-		$response=$this->delete('/api/patientlink/1');
+		$this->json('POST', '/api/specimen',$this->specimenData);
+		$response=$this->delete('/api/specimen/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		
 	}

@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -8,62 +7,64 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ProcessingTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-   
-    public function testStoreProcess(){
+	use DatabaseMigrations;
 
-    	$process=array(
-    		'description'=>"Exposure to heat",
-    		'procedure'=>1,
-    		'period'=>"2014-12-12 12:12:00"
-    		);
-    	$response=$this->post('/api/process',$process);
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
+	public function setVariables(){
+    	$this->processingData=array(
+        
+			"description"=>'Sample String',
+			"procedure"=>1,
 
-    public function testListProcesses(){
+        );
+    	$this->updatedprocessingData=array(
+        
+			"description"=>'Sample updated String',
+			"procedure"=>1,
 
-    	$response=$this->get('/api/process');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+        );
+	}
 
-    	$this->assertArrayHasKey('procedure', $data);
-    }
+	public function testStoreProcessing()
+	{
+		$response=$this->json('POST', '/api/processing',$this->processingData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testListProcess(){
+	public function testListProcessing()
+	{
+		$response=$this->json('GET', '/api/processing');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$response=$this->get('/api/process/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+	public function testShowProcessing()
+	{
+		$this->json('POST', '/api/processing',$this->processingData);
+		$response=$this->json('GET', '/api/processing/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    	$this->assertHasKey('procedure', $data);
-    }
+	public function testUpdateProcessing()
+	{
+		$this->json('POST', '/api/processing',$this->updatedprocessingData);
+		$response=$this->json('PUT', '/api/processing');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testUpdateProcess(){
+	public function testDeleteProcessing()
+	{
+		$this->json('POST', '/api/processing',$this->processingData);
+		$response=$this->delete('/api/processing/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$process=array(
-    		'description'=>"Bacterial Swaps",
-    		'procedure'=>1,
-    		'period'=>"2014-12-12 12:12:00"
-    		);
-    	$response=$this->put('/api/process/1',$process);
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
-
-    	$this->assertHasKey('procedure', $data);
-    }
-
-    public function testDeleteProcess(){
-    	
-    	$response=$this->delete('/api/process/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
 }

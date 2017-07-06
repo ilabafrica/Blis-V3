@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -8,82 +7,72 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PanelTest extends TestCase
 {
-	use DatabaseMigrations; //Run and drop migrations on all tests
+	use DatabaseMigrations;
 
 	public function setup(){
-		parent::setup();
+		parent::Setup();
 		$this->setVariables();
 	}
-	
-	public function setVariables()
-	{
-		$this->panelData = [
-			'panel_type_id' => 1,
-			'specimen_id' => 1,
-			'conclusion' => "Civilized",
-			'sort_order' => 1342
-			];
 
-		$this->panelUpdateData = [
-			'panel_type_id' => 2,
-			'specimen_id' => 2,
-			'conclusion' => "UN-Civilized",
-			'sort_order' => 4312
-			];
-	}
+	public function setVariables(){
+    	$this->panelData=array(
+        
+			"panel_type_id"=>1,
+			"performed_by"=>1,
+			"specimen_id"=>1,
+			"conclusion"=>'Sample String',
+			"coded_diagnosis"=>1,
+			"status_id"=>1,
 
-	public function testListPanel()
-	{
-		factory(\App\Models\Panel::class)->create($this->panelData);
-		$response = $this->json('GET', 'api/panel/1');
+        );
+    	$this->updatedpanelData=array(
+        
+			"panel_type_id"=>1,
+			"performed_by"=>1,
+			"specimen_id"=>1,
+			"conclusion"=>'Sample updated String',
+			"coded_diagnosis"=>1,
+			"status_id"=>1,
 
-		$this->assertDatabaseHas('panels', $this->panelData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("conclusion", $response->original);
-	}
-
-	public function testListPanels()
-	{
-		factory(\App\Models\Panel::class)->create($this->panelData);
-		$response = $this->json('GET', 'api/panel');
-
-		$this->assertDatabaseHas('panels', $this->panelData);
-		$response->assertStatus(200);
+        );
 	}
 
 	public function testStorePanel()
 	{
-		$faker = \Faker\Factory::create();
-		$panelData = array(
-			'panel_type_id' => factory(\App\Models\PanelType::class)->create()->id,
-			'performed_by' => factory(\App\User::class)->create()->id,
-			'specimen_id' => factory(\App\Models\Specimen::class)->create()->id,
-			'conclusion' => $faker->word(),
-			'coded_diagnosis_id' => factory(\App\Models\CodeableConcept::class)->create()->id,
-			'status_id' => factory(\App\Models\CodeableConcept::class)->create()->id,
-			'sort_order' => $faker->randomNumber(3)
-		);
-		$response = $this->json('POST', 'api/panel', $panelData);
-		$this->assertDatabaseHas('panels', $panelData);
+		$response=$this->json('POST', '/api/panel',$this->panelData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("conclusion", $response->original);
+	public function testListPanel()
+	{
+		$response=$this->json('GET', '/api/panel');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
+	public function testShowPanel()
+	{
+		$this->json('POST', '/api/panel',$this->panelData);
+		$response=$this->json('GET', '/api/panel/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
 	}
 
 	public function testUpdatePanel()
 	{
-		factory(\App\Models\Panel::class)->create($this->panelData);
-		$response = $this->json('PUT', 'api/panel/1', $this->panelUpdateData);
-		$this->assertDatabaseHas('panels', $this->panelUpdateData);
-		$this->assertArrayHasKey("conclusion", $response->original);
+		$this->json('POST', '/api/panel',$this->updatedpanelData);
+		$response=$this->json('PUT', '/api/panel');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
 	}
 
 	public function testDeletePanel()
 	{
-		factory(\App\Models\Panel::class)->create();
-		$response=$this->json('DELETE', 'api/panel/1');
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("conclusion", $response->original);
+		$this->json('POST', '/api/panel',$this->panelData);
+		$response=$this->delete('/api/panel/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
 	}
 
 }

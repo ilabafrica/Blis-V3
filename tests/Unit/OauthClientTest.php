@@ -5,7 +5,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class StatusTest extends TestCase
+class OauthClientTest extends TestCase
 {
 	use DatabaseMigrations;
 
@@ -15,52 +15,52 @@ class StatusTest extends TestCase
 	}
 
 	public function setVariables(){
-    	$this->statusData=array(
+    	$this->oauthclientData=array(
         
 			"name"=>'Sample String',
 
         );
-    	$this->updatedstatusData=array(
+    	$this->updatedoauthclientData=array(
         
 			"name"=>'Sample updated String',
 
         );
 	}
 
-	public function testStoreStatus()
+	public function testStoreOauthClient()
 	{
-		$response=$this->json('POST', '/api/status',$this->statusData);
+		$response=$this->json('POST', '/api/oauthclient',$this->oauthclientData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	public function testListStatus()
+	public function testListOauthClient()
 	{
-		$response=$this->json('GET', '/api/status');
+		$response=$this->json('GET', '/api/oauthclient');
 		$this->assertEquals(200,$response->getStatusCode());
 		
 	}
 
-	public function testShowStatus()
+	public function testShowOauthClient()
 	{
-		$this->json('POST', '/api/status',$this->statusData);
-		$response=$this->json('GET', '/api/status/1');
+		$this->json('POST', '/api/oauthclient',$this->oauthclientData);
+		$response=$this->json('GET', '/api/oauthclient/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	public function testUpdateStatus()
+	public function testUpdateOauthClient()
 	{
-		$this->json('POST', '/api/status',$this->updatedstatusData);
-		$response=$this->json('PUT', '/api/status');
+		$this->json('POST', '/api/oauthclient',$this->updatedoauthclientData);
+		$response=$this->json('PUT', '/api/oauthclient');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	public function testDeleteStatus()
+	public function testDeleteOauthClient()
 	{
-		$this->json('POST', '/api/status',$this->statusData);
-		$response=$this->delete('/api/status/1');
+		$this->json('POST', '/api/oauthclient',$this->oauthclientData);
+		$response=$this->delete('/api/oauthclient/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		
 	}

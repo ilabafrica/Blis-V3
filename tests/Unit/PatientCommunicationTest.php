@@ -1,61 +1,68 @@
 <?php
-
 namespace Tests\Unit;
 
-use App\User;
-use App\UserType;
-use App\Models\Patient;
-use App\Models\CodeableConcept;
-use Faker\Generator as Facker; 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-
- // Languages which may be used to communicate with the patient about his or her health.
 
 class PatientCommunicationTest extends TestCase
 {
 	use DatabaseMigrations;
 
-    public function setup()
-    {
-        parent::Setup();
-        $this->setVariables();
-    }
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-    public function setVariables()
-    {
-    	 $userId  = factory(User::class)->create()->id;
-    	 $patientId  = factory(Patient::class)->create(['user_id'=>$userId])->id;
-         $this->PatientCommunicationData = array (
-            'patient_id' => $patientId,
-            'language' => factory(CodeableConcept::class)->create()->id
-         	);
-         $this->patientcommunicationdataupdate = array(
-            factory(CodeableConcept::class)->create()->id
-         	);
+	public function setVariables(){
+    	$this->patientcommunicationData=array(
+        
+			"language"=>1,
 
-    }
-    public function testStorePatientCommunication()
-    {
-        $this->post('/api/patientcommunication/',$this->PatientCommunicationData);
+        );
+    	$this->updatedpatientcommunicationData=array(
+        
+			"language"=>1,
 
-        $this->assertDatabaseHas('patient_communications', $this->PatientCommunicationData);
-    }
-    public function testUpdatePatientCommunication()
-    {
-        //TODO
-    }
-     
+        );
+	}
 
-    public function testDeletePatientCommunication()
-    {
-    	//TODO
-    	
-    }
-    public function testShowPatientCommunication()
-    {
-        //TODO
-    }
+	public function testStorePatientCommunication()
+	{
+		$response=$this->json('POST', '/api/patientcommunication',$this->patientcommunicationData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testListPatientCommunication()
+	{
+		$response=$this->json('GET', '/api/patientcommunication');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
+	public function testShowPatientCommunication()
+	{
+		$this->json('POST', '/api/patientcommunication',$this->patientcommunicationData);
+		$response=$this->json('GET', '/api/patientcommunication/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testUpdatePatientCommunication()
+	{
+		$this->json('POST', '/api/patientcommunication',$this->updatedpatientcommunicationData);
+		$response=$this->json('PUT', '/api/patientcommunication');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testDeletePatientCommunication()
+	{
+		$this->json('POST', '/api/patientcommunication',$this->patientcommunicationData);
+		$response=$this->delete('/api/patientcommunication/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
 }

@@ -1,76 +1,70 @@
 <?php
-
 namespace Tests\Unit;
 
-use App\User;
-use App\Models\HumanName;
-use App\Models\Patient;
-use App\Models\CodeableConcept;
-use App\Models\Address;
-use App\Models\ContactPoint;
-use App\Models\Organization;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-//	A contact party (e.g. guardian, partner, friend) for the patient.
-
 class PatientContactTest extends TestCase
 {
-    public function setup(){
-        parent::setup();
-        $this->setVariables();
-    }
+	use DatabaseMigrations;
 
-    use DatabaseMigrations;
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function setVariables()
-    {
-    	$userId  = factory(User::class)->create()->id;
-        $patientId  = factory(Patient::class)->create(['user_id'=>$userId])->id;
-        $this->patientcontactdata = array(
- 			'patient_id' => $patientId,
-            'relationship' =>  factory(CodeableConcept::class)->create()->id,
-            'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
-            'address' => factory(Address::class)->create()->id,
-            'gender' =>  \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
-            'organization_id' => factory(Organization::class)->create(['user_id'=>$userId])->id,
-            'period' => \Faker\Factory::create()->date()
-    		);
-        $this->PatientContactUpdate = array (
-            'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
-            'address' => factory(Address::class)->create()->id,
-            'gender' =>  \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
-            'organization_id' => factory(Organization::class)->create(['user_id'=>$userId])->id,
-            'period' => \Faker\Factory::create()->date()
-        	);
-    }
-    public function testStorePatientContact()
-    {
-        $this->post('/api/patientcontact', $this->patientcontactdata);
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-        $this->assertDatabaseHas('patient_contacts', $this->patientcontactdata);
-    }
-    public function testDeletePatientContact()
-    {
-        //TODO
-    }
+	public function setVariables(){
+    	$this->patientcontactData=array(
+        
+			"relationship"=>1,
+			"gender"=>1,
+			"period"=>'2017:12:12 15:30:00',
+        );
+    	$this->updatedpatientcontactData=array(
+        
+			"relationship"=>1,
+			"gender"=>1,
+			"period"=>'2016:12:12 15:30:00',
+        );
+	}
 
-    public  function testUpdatePatientContact()
-    {
-        //TODO
-    }
+	public function testStorePatientContact()
+	{
+		$response=$this->json('POST', '/api/patientcontact',$this->patientcontactData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testShowPatientPatientContact()
-    {
-        //TODO
-    }
+	public function testListPatientContact()
+	{
+		$response=$this->json('GET', '/api/patientcontact');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
+	public function testShowPatientContact()
+	{
+		$this->json('POST', '/api/patientcontact',$this->patientcontactData);
+		$response=$this->json('GET', '/api/patientcontact/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testUpdatePatientContact()
+	{
+		$this->json('POST', '/api/patientcontact',$this->updatedpatientcontactData);
+		$response=$this->json('PUT', '/api/patientcontact');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testDeletePatientContact()
+	{
+		$this->json('POST', '/api/patientcontact',$this->patientcontactData);
+		$response=$this->delete('/api/patientcontact/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
 }

@@ -1,12 +1,7 @@
 <?php
-
 namespace Tests\Unit;
 
-use App\User;
-use App\Models\ContactPoint;
-use Faker\Generator as Facker;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -14,48 +9,68 @@ class ContactPointTest extends TestCase
 {
 	use DatabaseMigrations;
 
-
 	public function setup(){
 		parent::Setup();
 		$this->setVariables();
 	}
-	/**
-	 * A basic test example.
-	 *
-	 * @return void
-	 */
 
-	public function setVariables()
-	{
-		$this->ContactPointData = array(
-			'user_id' => factory(User::class)->create()->id,
-			'system' =>  \Faker\Factory::create()->randomElement(['phone', 'fax', 'email', 'pager', 'url', 'sms', 'other']),
-			'value' => \Faker\Factory::create()->word,
-			'use' =>  \Faker\Factory::create()->randomElement(['home', 'work', 'temp', 'old', 'mobile']),
-			'rank' => \Faker\Factory::create()->randomNumber(),
-			'period' => \Faker\Factory::create()->date()
-			);
-		$this->ContactPointDataUpdate = array();
+	public function setVariables(){
+    	$this->contactpointData=array(
+        
+			"user_id"=>1,
+			"system"=>1,
+			"value"=>'Sample String',
+			"use"=>1,
+			"rank"=>1,
+			"period"=>'2017:12:12 15:30:00',
+        );
+    	$this->updatedcontactpointData=array(
+        
+			"user_id"=>1,
+			"system"=>1,
+			"value"=>'Sample updated String',
+			"use"=>1,
+			"rank"=>1,
+			"period"=>'2016:12:12 15:30:00',
+        );
 	}
-	
+
 	public function testStoreContactPoint()
 	{
-		$this->post('/api/contactpoint', $this->ContactPointData);
+		$response=$this->json('POST', '/api/contactpoint',$this->contactpointData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-		$this->assertDatabaseHas('contact_points',$this->ContactPointData);
+	public function testListContactPoint()
+	{
+		$response=$this->json('GET', '/api/contactpoint');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
+	public function testShowContactPoint()
+	{
+		$this->json('POST', '/api/contactpoint',$this->contactpointData);
+		$response=$this->json('GET', '/api/contactpoint/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
 	}
 
 	public function testUpdateContactPoint()
 	{
-		//TODO
+		$this->json('POST', '/api/contactpoint',$this->updatedcontactpointData);
+		$response=$this->json('PUT', '/api/contactpoint');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	 public function testContactPointDeleted()
-	 {
-		//TODO
-	 }
-	public function testShowContactPoint()
+	public function testDeleteContactPoint()
 	{
-		//TODO
+		$this->json('POST', '/api/contactpoint',$this->contactpointData);
+		$response=$this->delete('/api/contactpoint/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
 	}
+
 }

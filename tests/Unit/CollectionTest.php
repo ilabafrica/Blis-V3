@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -8,58 +7,68 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CollectionTest extends TestCase
 {
-    
-    public function testStoreCollection(){
+	use DatabaseMigrations;
 
-    	$collection=array(
-    		'collector'=>1,
-    		'collection_time'=>"2014-12-12 12:12:00",
-    		'quantity_id'=>1, //Refer to
-    		'method'=>1,
-    		'body_site'=>1
-    		);
-    	$response=$this->post('/api/collection',$collection);
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
+	public function setVariables(){
+    	$this->collectionData=array(
+        
+			"collector"=>1,
+			"quantity_id"=>1,
+			"method"=>1,
+			"body_site"=>1,
 
-    public function testListCollections(){
+        );
+    	$this->updatedcollectionData=array(
+        
+			"collector"=>1,
+			"quantity_id"=>1,
+			"method"=>1,
+			"body_site"=>1,
 
-    	$response=$this->get('/api/collection');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+        );
+	}
 
-    	$this->assertArrayHasKey('collector', $data);
-    }
+	public function testStoreCollection()
+	{
+		$response=$this->json('POST', '/api/collection',$this->collectionData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testListCollection(){
+	public function testListCollection()
+	{
+		$response=$this->json('GET', '/api/collection');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$response=$this->get('/api/collection/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+	public function testShowCollection()
+	{
+		$this->json('POST', '/api/collection',$this->collectionData);
+		$response=$this->json('GET', '/api/collection/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    	$this->assertHasKey('collector', $data);
-    }
+	public function testUpdateCollection()
+	{
+		$this->json('POST', '/api/collection',$this->updatedcollectionData);
+		$response=$this->json('PUT', '/api/collection');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testUpdateCollection(){
+	public function testDeleteCollection()
+	{
+		$this->json('POST', '/api/collection',$this->collectionData);
+		$response=$this->delete('/api/collection/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$collection=array(
-    		'collector'=>2,
-    		'collection_time'=>"2014-12-12 12:12:00"
-    		);
-    	$response=$this->put('/api/collection/1',$collection);
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
-
-    	$this->assertHasKey('collector', $data);
-    }
-
-    public function testDeleteCollection(){
-    	
-    	$response=$this->delete('/api/collection/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -8,58 +7,68 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class EpisodeOfCareDiagnosisTest extends TestCase
 {
-    public function testStoreEpisodeOfCareDiagnosis(){
+	use DatabaseMigrations;
 
-    	$episode_of_care_diagnosis=array(
-    		'condition'=>"Discharged",
-    		'role'=>"Discharged",
-    		'rank'=>"Discharged",
-    		'episode_of_care_id'=>1,
-    		);
-    	$response=$this->post('/api/episode_of_care_diagnosis',$episode_of_care_diagnosis);
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
+	public function setVariables(){
+    	$this->episodeofcarediagnosisData=array(
+        
+			"condition"=>'Sample String',
+			"role"=>'Sample String',
+			"rank"=>'Sample String',
+			"episode_of_care_id"=>1,
 
-    public function testListEpisodeOfCareDiagnoses(){
+        );
+    	$this->updatedepisodeofcarediagnosisData=array(
+        
+			"condition"=>'Sample updated String',
+			"role"=>'Sample updated String',
+			"rank"=>'Sample updated String',
+			"episode_of_care_id"=>1,
 
-    	$response=$this->get('/api/episode_of_care_diagnosis');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+        );
+	}
 
-    	$this->assertArrayHasKey('episode_of_care_id', $data);
-    }
+	public function testStoreEpisodeOfCareDiagnosis()
+	{
+		$response=$this->json('POST', '/api/episodeofcarediagnosis',$this->episodeofcarediagnosisData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testListEpisodeOfCareDiagnosis(){
+	public function testListEpisodeOfCareDiagnosis()
+	{
+		$response=$this->json('GET', '/api/episodeofcarediagnosis');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$response=$this->get('/api/episode_of_care_diagnosis/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+	public function testShowEpisodeOfCareDiagnosis()
+	{
+		$this->json('POST', '/api/episodeofcarediagnosis',$this->episodeofcarediagnosisData);
+		$response=$this->json('GET', '/api/episodeofcarediagnosis/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    	$this->assertHasKey('episode_of_care_id', $data);
-    }
+	public function testUpdateEpisodeOfCareDiagnosis()
+	{
+		$this->json('POST', '/api/episodeofcarediagnosis',$this->updatedepisodeofcarediagnosisData);
+		$response=$this->json('PUT', '/api/episodeofcarediagnosis');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testUpdateEpisodeOfCareDiagnosis(){
+	public function testDeleteEpisodeOfCareDiagnosis()
+	{
+		$this->json('POST', '/api/episodeofcarediagnosis',$this->episodeofcarediagnosisData);
+		$response=$this->delete('/api/episodeofcarediagnosis/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$episode_of_care_diagnosis=array(
-    		'condition'=>"Discharged",
-    		'role'=>"Discharged",
-    		'rank'=>"Discharged",
-    		'episode_of_care_id'=>1,
-    		);
-    	$response=$this->put('/api/episode_of_care_diagnosis/1',$episode_of_care_diagnosis);
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
-
-    	$this->assertHasKey('id', $data);
-    }
-
-    public function testDeleteEpisodeOfCareDiagnosis(){
-    	
-    	$response=$this->delete('/api/episode_of_care_diagnosis/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
 }

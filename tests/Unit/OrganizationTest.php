@@ -1,84 +1,76 @@
 <?php
-
 namespace Tests\Unit;
 
-
-use App\Models\Organization;
-use App\UserType;
-use App\Models\CodeableConcept;
-use App\Models\ContactPoint;
-use App\Models\Address;
-use App\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-//A formally or informally recognized grouping of people or organizations formed for the purpose of achieving some form of collective action. Includes companies, institutions, corporations, departments, community groups, healthcare practice groups, etc.
-
 class OrganizationTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    use DatabaseMigrations;
+	use DatabaseMigrations;
 
-    public function setup()
-    {
-        parent::Setup();
-        $this->setVariables();
-    }
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-    public function setVariables()
-    {
-    	$userTypeId  = factory(UserType::class)->create(['name'=>'organization'])->id;
+	public function setVariables(){
+    	$this->organizationData=array(
         
-        $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;#
-        $this->organizationData = array
-    	( 
-    		'user_id' => $userId,
-            'type' =>  factory(CodeableConcept::class)->create()->id,
-            'name' => \Faker\Factory::create()->word,
-            'alias' => \Faker\Factory::create()->word,
-            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
-            'address' => factory(Address::class)->create()->id,
-            'part_of' => factory(Organization::class)->create(['user_id'=>$userId])->id,
-            'end_point' =>  \Faker\Factory::create()->url
-        
+			"user_id"=>1,
+			"type"=>1,
+			"name"=>'Sample String',
+			"alias"=>'Sample String',
+			"end_point"=>'Sample String',
+
         );
-        $this->organizationDataUpdate = array (
-            
-            'type' => factory(CodeableConcept::class)->create()->id,
-            'name' => \Faker\Factory::create()->word,
-            'alias' => \Faker\Factory::create()->word,
-            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
-            'address' => factory(Address::class)->create()->id,
-            'part_of' => factory(Organization::class)->create(['user_id'=>$userId])->id,
-            'end_point' =>  \Faker\Factory::create()->url
+    	$this->updatedorganizationData=array(
         
-        	);
-    }
-    public function testStore()
-    {
-         $this->post('/api/organization', $this->organizationData);
+			"user_id"=>1,
+			"type"=>1,
+			"name"=>'Sample updated String',
+			"alias"=>'Sample updated String',
+			"end_point"=>'Sample updated String',
 
-        $this->assertDatabaseHas('organizations',$this->organizationData);
-    }
+        );
+	}
 
-    public function testUpdate()
-    {
-        //TODO
-    }
+	public function testStoreOrganization()
+	{
+		$response=$this->json('POST', '/api/organization',$this->organizationData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testOrganizationDelete()
-    {
-        //TODO
-    }
+	public function testListOrganization()
+	{
+		$response=$this->json('GET', '/api/organization');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    public function testShowOrganizations()
-    {
-        //TODO
-    }
+	public function testShowOrganization()
+	{
+		$this->json('POST', '/api/organization',$this->organizationData);
+		$response=$this->json('GET', '/api/organization/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testUpdateOrganization()
+	{
+		$this->json('POST', '/api/organization',$this->updatedorganizationData);
+		$response=$this->json('PUT', '/api/organization');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testDeleteOrganization()
+	{
+		$this->json('POST', '/api/organization',$this->organizationData);
+		$response=$this->delete('/api/organization/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
 }

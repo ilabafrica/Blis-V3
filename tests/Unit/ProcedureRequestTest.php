@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -8,82 +7,100 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ProcedureRequestTest extends TestCase
 {
-   public function testStoreProcedureRequest(){
+	use DatabaseMigrations;
 
-    	$procedurerequest=array(
-    		'based_on'=>"sample x",
-    		'replaces'=>"sample y",
-    		'requisition'=>20,
-    		'status'=>1,
-    		'intent'=>1,
-    		'priority'=>1,
-    		'do_not_perform'=>false,
-    		'code'=>1,
-    		'subject'=>"DerrickRono",
-    		'context'=>1,
-    		'occurence'=>"2015-12-12 12:00:00",
-    		'asneeded'=>1,
-    		'requester'=>1,
-    		'performer_type'=>1,
-    		'performer'=>1,
-    		'reason_code'=>1,
-    		'reason_reference'=>"no reason",
-    		'supporting_info'=>"n/a",
-    		'specimen'=>1,
-    		'body_site'=>1,
-    		'note'=>"n/a",
-    		'relevant_history'=>"n/a",
-    		);
-    	$response=$this->post('/api/procedure_request',$procedurerequest);
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
+	public function setVariables(){
+    	$this->procedurerequestData=array(
+        
+			"definition_id"=>1,
+			"based_on"=>'Sample String',
+			"replaces"=>'Sample String',
+			"status"=>1,
+			"intent"=>1,
+			"priority"=>1,
+			"category"=>1,
+			"code"=>1,
+			"subject"=>'Sample String',
+			"context"=>1,
+			"requester"=>1,
+			"performer_type"=>1,
+			"performer"=>1,
+			"reason_code"=>1,
+			"reason_reference"=>'Sample String',
+			"supporting_info"=>'Sample String',
+			"specimen"=>1,
+			"body_site"=>1,
+			"note"=>'Sample String',
+			"relevant_history"=>'Sample String',
 
-    public function testListProcedureRequests(){
+        );
+    	$this->updatedprocedurerequestData=array(
+        
+			"definition_id"=>1,
+			"based_on"=>'Sample updated String',
+			"replaces"=>'Sample updated String',
+			"status"=>1,
+			"intent"=>1,
+			"priority"=>1,
+			"category"=>1,
+			"code"=>1,
+			"subject"=>'Sample updated String',
+			"context"=>1,
+			"requester"=>1,
+			"performer_type"=>1,
+			"performer"=>1,
+			"reason_code"=>1,
+			"reason_reference"=>'Sample updated String',
+			"supporting_info"=>'Sample updated String',
+			"specimen"=>1,
+			"body_site"=>1,
+			"note"=>'Sample updated String',
+			"relevant_history"=>'Sample updated String',
 
-    	$response=$this->get('/api/procedure_request');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+        );
+	}
 
-    	$this->assertArrayHasKey('performer', $data);
-    }
+	public function testStoreProcedureRequest()
+	{
+		$response=$this->json('POST', '/api/procedurerequest',$this->procedurerequestData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testListProcedureRequest(){
+	public function testListProcedureRequest()
+	{
+		$response=$this->json('GET', '/api/procedurerequest');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$response=$this->get('/api/procedure_request/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+	public function testShowProcedureRequest()
+	{
+		$this->json('POST', '/api/procedurerequest',$this->procedurerequestData);
+		$response=$this->json('GET', '/api/procedurerequest/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    	$this->assertHasKey('performer', $data);
-    }
+	public function testUpdateProcedureRequest()
+	{
+		$this->json('POST', '/api/procedurerequest',$this->updatedprocedurerequestData);
+		$response=$this->json('PUT', '/api/procedurerequest');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testUpdateProcedureRequest(){
+	public function testDeleteProcedureRequest()
+	{
+		$this->json('POST', '/api/procedurerequest',$this->procedurerequestData);
+		$response=$this->delete('/api/procedurerequest/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$procedurerequest=array(
-    		'based_on'=>"sample x",
-    		'performer_type'=>1,
-    		'performer'=>1,
-    		'reason_code'=>1,
-    		'reason_reference'=>"many reason",
-    		'supporting_info'=>"n/a",
-    		'specimen'=>1,
-    		'body_site'=>1,
-    		'note'=>"n/a",
-    		'relevant_history'=>"n/a",
-    		);
-    	$response=$this->put('/api/procedure_request/1',$procedurerequest);
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
-
-    	$this->assertHasKey('id', $data);
-    }
-
-    public function testDeleteProcedureRequest(){
-    	
-    	$response=$this->delete('/api/procedure_request/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -8,75 +7,90 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ReferralRequestTest extends TestCase
 {
-   public function testStoreReferralRequest(){
+	use DatabaseMigrations;
 
-    	$referral_request=array(
-    		'based_on'=>1,
-    		'replaces'=>1,
-    		'group_identifier'=>1,
-    		'status'=>1,
-    		'type'=>1,
-    		'priority'=>1,
-    		'subject'=>1,
-    		'service_requested'=>"Discharge",
-    		'occurence'=>"2012-12-12 12:00:00",
-    		'requester'=>1,
-    		'specialty'=>1,
-    		'recipient'=>1,
-    		'reason_code'=>1,
-    		'reason_reference'=>"",
-    		'supporting_info'=>"",
-    		'description'=>"referral from nandi",
-    		'note'=>"n/a"
-    		);
-    	$response=$this->post('/api/referral_request',$referral_request);
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
+	public function setVariables(){
+    	$this->referralrequestData=array(
+        
+			"based_on"=>1,
+			"replaces"=>1,
+			"group_identifier"=>1,
+			"status"=>1,
+			"type"=>1,
+			"service_requested"=>'Sample String',
+			"subject"=>1,
+			"requester"=>1,
+			"specialty"=>1,
+			"recipient"=>1,
+			"reason_code"=>1,
+			"reason_reference"=>'Sample String',
+			"supporting_info"=>'Sample String',
+			"description"=>'Sample String',
+			"note"=>'Sample String',
 
-    public function testListReferralRequests(){
+        );
+    	$this->updatedreferralrequestData=array(
+        
+			"based_on"=>1,
+			"replaces"=>1,
+			"group_identifier"=>1,
+			"status"=>1,
+			"type"=>1,
+			"service_requested"=>'Sample updated String',
+			"subject"=>1,
+			"requester"=>1,
+			"specialty"=>1,
+			"recipient"=>1,
+			"reason_code"=>1,
+			"reason_reference"=>'Sample updated String',
+			"supporting_info"=>'Sample updated String',
+			"description"=>'Sample updated String',
+			"note"=>'Sample updated String',
 
-    	$response=$this->get('/api/referral_request');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+        );
+	}
 
-    	$this->assertArrayHasKey('subject', $data);
-    }
+	public function testStoreReferralRequest()
+	{
+		$response=$this->json('POST', '/api/referralrequest',$this->referralrequestData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testListReferralRequest(){
+	public function testListReferralRequest()
+	{
+		$response=$this->json('GET', '/api/referralrequest');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$response=$this->get('/api/referral_request/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+	public function testShowReferralRequest()
+	{
+		$this->json('POST', '/api/referralrequest',$this->referralrequestData);
+		$response=$this->json('GET', '/api/referralrequest/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    	$this->assertHasKey('subject', $data);
-    }
+	public function testUpdateReferralRequest()
+	{
+		$this->json('POST', '/api/referralrequest',$this->updatedreferralrequestData);
+		$response=$this->json('PUT', '/api/referralrequest');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testUpdateReferralRequest(){
+	public function testDeleteReferralRequest()
+	{
+		$this->json('POST', '/api/referralrequest',$this->referralrequestData);
+		$response=$this->delete('/api/referralrequest/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$referral_request=array(
-    		'based_on'=>1,
-    		'replaces'=>1,
-    		'group_identifier'=>1,
-      		'reason_code'=>1,
-    		'reason_reference'=>"",
-    		'supporting_info'=>"",
-    		'description'=>"referral from nandi",
-    		'note'=>"n/a"
-    		);
-    	$response=$this->put('/api/referral_request/1',$referral_request);
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
-
-    	$this->assertHasKey('id', $data);
-    }
-
-    public function testDeleteReferralRequest(){
-    	
-    	$response=$this->delete('/api/referral_request/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
 }

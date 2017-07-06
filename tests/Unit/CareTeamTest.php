@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -8,67 +7,80 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CareTeamTest extends TestCase
 {
-   public function testStoreCareTeam(){
+	use DatabaseMigrations;
 
-    	$care_team=array(
-    		'identifiers'=>"pablo",
-    		'status'=>1,
-    		'category'=>1,
-    		'name'=>"Sanyore",
-    		'subject'=>1,
-    		'context'=>1,
-    		'period'=>10,
-    		'reason_code'=>1,
-    		'reason_reference'=>"n/a",
-    		'managing_organization'=>1,
-    		'comment'=>"n/a"
-    		);
-    	$response=$this->post('/api/care_team',$care_team);
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
+	public function setVariables(){
+    	$this->careteamData=array(
+        
+			"identifiers"=>'Sample String',
+			"status_id"=>1,
+			"category"=>1,
+			"name"=>'Sample String',
+			"subject"=>1,
+			"context"=>1,
+			"reason_code"=>1,
+			"reason_reference"=>'Sample String',
+			"organization_id"=>1,
+			"comment"=>'Sample String',
 
-    public function testListCareTeams(){
+        );
+    	$this->updatedcareteamData=array(
+        
+			"identifiers"=>'Sample updated String',
+			"status_id"=>1,
+			"category"=>1,
+			"name"=>'Sample updated String',
+			"subject"=>1,
+			"context"=>1,
+			"reason_code"=>1,
+			"reason_reference"=>'Sample updated String',
+			"organization_id"=>1,
+			"comment"=>'Sample updated String',
 
-    	$response=$this->get('/api/care_team');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+        );
+	}
 
-    	$this->assertArrayHasKey('subject', $data);
-    }
+	public function testStoreCareTeam()
+	{
+		$response=$this->json('POST', '/api/careteam',$this->careteamData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testListCareTeam(){
+	public function testListCareTeam()
+	{
+		$response=$this->json('GET', '/api/careteam');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$response=$this->get('/api/care_team/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+	public function testShowCareTeam()
+	{
+		$this->json('POST', '/api/careteam',$this->careteamData);
+		$response=$this->json('GET', '/api/careteam/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    	$this->assertHasKey('subject', $data);
-    }
+	public function testUpdateCareTeam()
+	{
+		$this->json('POST', '/api/careteam',$this->updatedcareteamData);
+		$response=$this->json('PUT', '/api/careteam');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testUpdateCareTeam(){
+	public function testDeleteCareTeam()
+	{
+		$this->json('POST', '/api/careteam',$this->careteamData);
+		$response=$this->delete('/api/careteam/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$care_team=array(
-    		'identifiers'=>"pablo",
-    		'status'=>1,
-    		
-    		'reason_reference'=>"n/a",
-    		'managing_organization'=>1,
-    		'comment'=>"n/a"
-    		);
-    	$response=$this->put('/api/care_team/1',$care_team);
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
-
-    	$this->assertHasKey('id', $data);
-    }
-
-    public function testDeleteCareTeam(){
-    	
-    	$response=$this->delete('/api/care_team/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
 }

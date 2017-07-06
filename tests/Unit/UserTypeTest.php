@@ -5,7 +5,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class StatusTest extends TestCase
+class UserTypeTest extends TestCase
 {
 	use DatabaseMigrations;
 
@@ -15,52 +15,54 @@ class StatusTest extends TestCase
 	}
 
 	public function setVariables(){
-    	$this->statusData=array(
+    	$this->usertypeData=array(
         
 			"name"=>'Sample String',
+			"description"=>'Sample String',
 
         );
-    	$this->updatedstatusData=array(
+    	$this->updatedusertypeData=array(
         
 			"name"=>'Sample updated String',
+			"description"=>'Sample updated String',
 
         );
 	}
 
-	public function testStoreStatus()
+	public function testStoreUserType()
 	{
-		$response=$this->json('POST', '/api/status',$this->statusData);
+		$response=$this->json('POST', '/api/usertype',$this->usertypeData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	public function testListStatus()
+	public function testListUserType()
 	{
-		$response=$this->json('GET', '/api/status');
+		$response=$this->json('GET', '/api/usertype');
 		$this->assertEquals(200,$response->getStatusCode());
 		
 	}
 
-	public function testShowStatus()
+	public function testShowUserType()
 	{
-		$this->json('POST', '/api/status',$this->statusData);
-		$response=$this->json('GET', '/api/status/1');
+		$this->json('POST', '/api/usertype',$this->usertypeData);
+		$response=$this->json('GET', '/api/usertype/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	public function testUpdateStatus()
+	public function testUpdateUserType()
 	{
-		$this->json('POST', '/api/status',$this->updatedstatusData);
-		$response=$this->json('PUT', '/api/status');
+		$this->json('POST', '/api/usertype',$this->updatedusertypeData);
+		$response=$this->json('PUT', '/api/usertype');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	public function testDeleteStatus()
+	public function testDeleteUserType()
 	{
-		$this->json('POST', '/api/status',$this->statusData);
-		$response=$this->delete('/api/status/1');
+		$this->json('POST', '/api/usertype',$this->usertypeData);
+		$response=$this->delete('/api/usertype/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		
 	}

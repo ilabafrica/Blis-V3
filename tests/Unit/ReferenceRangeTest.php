@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -8,77 +7,64 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ReferenceRangeTest extends TestCase
 {
-	use DatabaseMigrations; //Run and drop migrations on all tests
+	use DatabaseMigrations;
 
 	public function setup(){
-		parent::setup();
+		parent::Setup();
 		$this->setVariables();
 	}
-	
-	public function setVariables()
-	{
-		$this->referenceRangeData = array(
-			'high_critical' => 1,
-			'age_min' => 1,
-			'age_max' => 1,
-			);
 
-		$this->referenceRangeUpdateData = [
-			'high_critical' => 2,
-			'age_min' => 2,
-			'age_max' => 2,
-			];
+	public function setVariables(){
+    	$this->referencerangeData=array(
+        
+			"age_type"=>1,
+			"text"=>'Sample String',
+
+        );
+    	$this->updatedreferencerangeData=array(
+        
+			"age_type"=>1,
+			"text"=>'Sample updated String',
+
+        );
+	}
+
+	public function testStoreReferenceRange()
+	{
+		$response=$this->json('POST', '/api/referencerange',$this->referencerangeData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
 	}
 
 	public function testListReferenceRange()
 	{
-		factory(\App\Models\ReferenceRange::class)->create($this->referenceRangeData);
-		$response = $this->json('GET', 'api/referencerange/1');
-
-		$this->assertDatabaseHas('reference_ranges', $this->referenceRangeData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("age_max", $response->original);
+		$response=$this->json('GET', '/api/referencerange');
+		$this->assertEquals(200,$response->getStatusCode());
+		
 	}
 
-	public function testListReferenceranges()
+	public function testShowReferenceRange()
 	{
-		factory(\App\Models\ReferenceRange::class)->create($this->referenceRangeData);
-		$response = $this->json('GET', 'api/referencerange');
-
-		$this->assertDatabaseHas('reference_ranges', $this->referenceRangeData);
-		$response->assertStatus(200);
+		$this->json('POST', '/api/referencerange',$this->referencerangeData);
+		$response=$this->json('GET', '/api/referencerange/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	public function testStoreReferencerange()
+	public function testUpdateReferenceRange()
 	{
-		$faker = \Faker\Factory::create();
-		$referenceRangeData = array(
-			'high_critical' => $faker->randomNumber(),
-			'age_min' => $faker->randomNumber(),
-			'age_max' => $faker->randomNumber(),
-		);
-		$response = $this->json('POST', 'api/referencerange', $referenceRangeData);
-		$this->assertDatabaseHas('reference_ranges', $referenceRangeData);
-
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("age_max", $response->original);
+		$this->json('POST', '/api/referencerange',$this->updatedreferencerangeData);
+		$response=$this->json('PUT', '/api/referencerange');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	public function testUpdateReferencerange()
+	public function testDeleteReferenceRange()
 	{
-		factory(\App\Models\ReferenceRange::class)->create($this->referenceRangeData);
-
-		$response = $this->json('PUT', 'api/referencerange/1', $this->referenceRangeUpdateData);
-
-		$this->assertDatabaseHas('reference_ranges', $this->referenceRangeUpdateData);
-		$this->assertArrayHasKey("age_max", $response->original);
+		$this->json('POST', '/api/referencerange',$this->referencerangeData);
+		$response=$this->delete('/api/referencerange/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
 	}
 
-	public function testDeleteReferencerange()
-	{
-		factory(\App\Models\ReferenceRange::class)->create();
-		$response=$this->json('DELETE', 'api/referencerange/1');
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("age_max", $response->original);
-	}
 }

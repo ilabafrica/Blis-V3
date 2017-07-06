@@ -1,70 +1,68 @@
 <?php
-
 namespace Tests\Unit;
 
-use App\Models\Organization;
-use App\Models\OrganizationContact;
-use App\Models\CodeableConcept;
-use App\Models\HumanName;
-use App\Models\ContactPoint;
-use App\Models\Address;
-use App\User;
-use App\UserType;
-use Faker\Generator as Facker;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class OrganizationContactTest extends TestCase
 {
-	// Organization on behalf of which the contact is acting or for which the contact is working.
-    use DatabaseMigrations;
-    
-    public function setup()
-    {
-        parent::Setup();
-        $this->setVariables();
-    }
+	use DatabaseMigrations;
 
-    public function setVariables()
-    {
-    	$userId  = factory(User::class)->create()->id;
-    	$this->OrganizationContactData = array (
-       'organization_id' => factory(Organization::class)->create(['user_id'=>$userId])->id,
-        'purpose' =>  factory(CodeableConcept::class)->create()->id,
-        'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-        'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
-        'address' => factory(Address::class)->create()->id,
-    		);
-    	$this->OrganizationContactDataUpdate = array (
-       
-        'purpose' => factory(CodeableConcept::class)->create()->id,
-        'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-        'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
-        'address' => factory(Address::class)->create()->id,
-    		);
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-}
-    public function testStoreOrganizationContact()
-    {
-        $this->post('/api/organizationcontact/', $this->OrganizationContactData);
+	public function setVariables(){
+    	$this->organizationcontactData=array(
+        
+			"purpose"=>1,
 
-        $this->assertDatabaseHas('organization_contacts',$this->OrganizationContactData);
-    }
-    public function testUpdateOrganizationContact()
-    {
-        //TODO
-    }
+        );
+    	$this->updatedorganizationcontactData=array(
+        
+			"purpose"=>1,
 
-    public function testDeleteOrganizationContact()
-    {
-    	//TODO
-    }
+        );
+	}
 
-    public function testShowOrganizationContact()
-    {
-        //TODO
-    }
-    
+	public function testStoreOrganizationContact()
+	{
+		$response=$this->json('POST', '/api/organizationcontact',$this->organizationcontactData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testListOrganizationContact()
+	{
+		$response=$this->json('GET', '/api/organizationcontact');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
+	public function testShowOrganizationContact()
+	{
+		$this->json('POST', '/api/organizationcontact',$this->organizationcontactData);
+		$response=$this->json('GET', '/api/organizationcontact/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testUpdateOrganizationContact()
+	{
+		$this->json('POST', '/api/organizationcontact',$this->updatedorganizationcontactData);
+		$response=$this->json('PUT', '/api/organizationcontact');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testDeleteOrganizationContact()
+	{
+		$this->json('POST', '/api/organizationcontact',$this->organizationcontactData);
+		$response=$this->delete('/api/organizationcontact/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
 }

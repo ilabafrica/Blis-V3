@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -8,76 +7,70 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ComponentTest extends TestCase
 {
-    use DatabaseMigrations; //Run and drop migrations on all tests
+	use DatabaseMigrations;
 
-    public function setup(){
-        parent::setup();
-        $this->setVariables();
-    }
-    
-    public function setVariables()
-    {
-        $this->componentData = [
-            'observation_id' => 1,
-            'performed_by' => 1,
-            'result' => "Jordan",
-            ];
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-        $this->componentUpdateData = [
-            'observation_id' => 2,
-            'performed_by' => 2,
-            'result' => "Peter",
-            ];
-    }
+	public function setVariables(){
+    	$this->componentData=array(
+        
+			"observation_id"=>1,
+			"performed_by"=>1,
+			"result"=>'Sample String',
+			"data_absent_reason"=>1,
+			"interpretation"=>1,
 
-    public function testListComponent()
-    {
-        factory(\App\Models\Component::class)->create($this->componentData);
-        $response = $this->json('GET', 'api/component/1');
-
-        $this->assertDatabaseHas('components', $this->componentData);
-        $response->assertStatus(200);
-        $this->assertArrayHasKey("observation_id", $response->original);
-    }
-
-    public function testListComponents()
-    {
-        factory(\App\Models\Component::class)->create($this->componentData);
-        $response = $this->json('GET', 'api/component');
-
-        $this->assertDatabaseHas('components', $this->componentData);
-        $response->assertStatus(200);
-    }
-
-    public function testStoreComponent()
-    {
-        $faker = \Faker\Factory::create();
-        $componentData = array(
-            'observation_id' => 1,
-            'performed_by' => 1,
-            'result' => "Jordan",
         );
-        $response = $this->json('POST', 'api/component', $componentData);
-        $this->assertDatabaseHas('components', $componentData);
+    	$this->updatedcomponentData=array(
+        
+			"observation_id"=>1,
+			"performed_by"=>1,
+			"result"=>'Sample updated String',
+			"data_absent_reason"=>1,
+			"interpretation"=>1,
 
-        $response->assertStatus(200);
-        $this->assertArrayHasKey("observation_id", $response->original);
-    }
+        );
+	}
 
-    public function testUpdateComponent()
-    {
-        factory(\App\Models\Component::class)->create($this->componentData);
-        $response = $this->json('PUT', 'api/component/1', $this->componentUpdateData);
-        $this->assertDatabaseHas('components', $this->componentUpdateData);
-        $this->assertArrayHasKey("observation_id", $response->original);
-    }
+	public function testStoreComponent()
+	{
+		$response=$this->json('POST', '/api/component',$this->componentData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    public function testDeleteComponent()
-    {
-        factory(\App\Models\Component::class)->create();
-        $response=$this->json('DELETE', 'api/component/1');
-        $response->assertStatus(200);
-        $this->assertArrayHasKey("observation_id", $response->original);
-    }
+	public function testListComponent()
+	{
+		$response=$this->json('GET', '/api/component');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
+	public function testShowComponent()
+	{
+		$this->json('POST', '/api/component',$this->componentData);
+		$response=$this->json('GET', '/api/component/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testUpdateComponent()
+	{
+		$this->json('POST', '/api/component',$this->updatedcomponentData);
+		$response=$this->json('PUT', '/api/component');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testDeleteComponent()
+	{
+		$this->json('POST', '/api/component',$this->componentData);
+		$response=$this->delete('/api/component/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
 }

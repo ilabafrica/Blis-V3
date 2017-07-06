@@ -5,7 +5,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class UserTest extends TestCase
+class IngredientTest extends TestCase
 {
 	use DatabaseMigrations;
 
@@ -15,55 +15,52 @@ class UserTest extends TestCase
 	}
 
 	public function setVariables(){
-    	$this->userData=array(
+    	$this->ingredientData=array(
         
-			"email"=>'Sample String',
-			"password"=>'Sample String',
+			"substance"=>1,
 
         );
-    	$this->updateduserData=array(
+    	$this->updatedingredientData=array(
         
-			"email"=>'Sample updated String',
-			"password"=>'Sample updated String',
+			"substance"=>1,
 
         );
 	}
 
-	public function testStoreUser()
+	public function testStoreIngredient()
 	{
-		$response=$this->json('POST', '/api/user',$this->userData);
+		$response=$this->json('POST', '/api/ingredient',$this->ingredientData);
 		$this->assertEquals(200,$response->getStatusCode());
-		dd($response->original);
 		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	public function testListUser()
+	public function testListIngredient()
 	{
-		$response=$this->json('GET', '/api/user');
+		$response=$this->json('GET', '/api/ingredient');
 		$this->assertEquals(200,$response->getStatusCode());
 		
 	}
 
-	public function testShowUser()
+	public function testShowIngredient()
 	{
-		$this->json('POST', '/api/user',$this->userData);
-		$response=$this->json('GET', '/api/user/1');
+		$this->json('POST', '/api/ingredient',$this->ingredientData);
+		$response=$this->json('GET', '/api/ingredient/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	public function testUpdateUser()
+	public function testUpdateIngredient()
 	{
-		$this->json('POST', '/api/user',$this->updateduserData);
-		$response=$this->json('PUT', '/api/user');
+		$this->json('POST', '/api/ingredient',$this->updatedingredientData);
+		$response=$this->json('PUT', '/api/ingredient');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("subject",$response->original);
 	}
 
-	public function testDeleteUser()
+	public function testDeleteIngredient()
 	{
-		$this->json('POST', '/api/user',$this->userData);
-		$response=$this->delete('/api/user/1');
+		$this->json('POST', '/api/ingredient',$this->ingredientData);
+		$response=$this->delete('/api/ingredient/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		
 	}
