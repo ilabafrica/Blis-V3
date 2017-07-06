@@ -33,7 +33,6 @@ class UserTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/user',$this->userData);
 		$this->assertEquals(200,$response->getStatusCode());
-		dd($response->original);
 		$this->assertArrayHasKey("subject",$response->original);
 	}
 
