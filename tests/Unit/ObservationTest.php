@@ -45,7 +45,7 @@ class ObservationTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/observation',$this->observationData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListObservation()

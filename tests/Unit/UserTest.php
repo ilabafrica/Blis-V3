@@ -33,7 +33,7 @@ class UserTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/user',$this->userData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListUser()
@@ -48,7 +48,7 @@ class UserTest extends TestCase
 		$this->json('POST', '/api/user',$this->userData);
 		$response=$this->json('GET', '/api/user/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testUpdateUser()
@@ -56,7 +56,7 @@ class UserTest extends TestCase
 		$this->json('POST', '/api/user',$this->updateduserData);
 		$response=$this->json('PUT', '/api/user');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testDeleteUser()

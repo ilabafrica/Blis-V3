@@ -31,7 +31,7 @@ class PatientCommunicationTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/patientcommunication',$this->patientcommunicationData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListPatientCommunication()

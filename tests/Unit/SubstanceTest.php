@@ -37,7 +37,7 @@ class SubstanceTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/substance',$this->substanceData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListSubstance()
@@ -52,7 +52,7 @@ class SubstanceTest extends TestCase
 		$this->json('POST', '/api/substance',$this->substanceData);
 		$response=$this->json('GET', '/api/substance/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testUpdateSubstance()
@@ -60,7 +60,7 @@ class SubstanceTest extends TestCase
 		$this->json('POST', '/api/substance',$this->updatedsubstanceData);
 		$response=$this->json('PUT', '/api/substance');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testDeleteSubstance()

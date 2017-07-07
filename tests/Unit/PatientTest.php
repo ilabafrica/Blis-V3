@@ -43,7 +43,7 @@ class PatientTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/patient',$this->patientData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListPatient()
@@ -58,7 +58,7 @@ class PatientTest extends TestCase
 		$this->json('POST', '/api/patient',$this->patientData);
 		$response=$this->json('GET', '/api/patient/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testUpdatePatient()
@@ -66,7 +66,7 @@ class PatientTest extends TestCase
 		$this->json('POST', '/api/patient',$this->updatedpatientData);
 		$response=$this->json('PUT', '/api/patient');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testDeletePatient()

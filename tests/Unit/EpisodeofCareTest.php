@@ -41,7 +41,7 @@ class EpisodeofCareTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/episodeofcare',$this->episodeofcareData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListEpisodeofCare()

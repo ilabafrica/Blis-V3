@@ -31,7 +31,7 @@ class OrganizationContactTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/organizationcontact',$this->organizationcontactData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListOrganizationContact()

@@ -59,7 +59,7 @@ class ReferralRequestTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/referralrequest',$this->referralrequestData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListReferralRequest()
@@ -74,7 +74,7 @@ class ReferralRequestTest extends TestCase
 		$this->json('POST', '/api/referralrequest',$this->referralrequestData);
 		$response=$this->json('GET', '/api/referralrequest/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testUpdateReferralRequest()
@@ -82,7 +82,7 @@ class ReferralRequestTest extends TestCase
 		$this->json('POST', '/api/referralrequest',$this->updatedreferralrequestData);
 		$response=$this->json('PUT', '/api/referralrequest');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testDeleteReferralRequest()

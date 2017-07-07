@@ -35,7 +35,7 @@ class PractitionerTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/practitioner',$this->practitionerData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListPractitioner()
@@ -50,7 +50,7 @@ class PractitionerTest extends TestCase
 		$this->json('POST', '/api/practitioner',$this->practitionerData);
 		$response=$this->json('GET', '/api/practitioner/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testUpdatePractitioner()
@@ -58,7 +58,7 @@ class PractitionerTest extends TestCase
 		$this->json('POST', '/api/practitioner',$this->updatedpractitionerData);
 		$response=$this->json('PUT', '/api/practitioner');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testDeletePractitioner()

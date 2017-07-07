@@ -29,7 +29,7 @@ class OauthPersonalAccessClientTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/oauthpersonalaccessclient',$this->oauthpersonalaccessclientData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListOauthPersonalAccessClient()

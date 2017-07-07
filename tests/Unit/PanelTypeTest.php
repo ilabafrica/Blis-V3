@@ -35,7 +35,7 @@ class PanelTypeTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/paneltype',$this->paneltypeData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListPanelType()

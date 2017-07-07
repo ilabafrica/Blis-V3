@@ -37,7 +37,7 @@ class ObservationTypeTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/observationtype',$this->observationtypeData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListObservationType()

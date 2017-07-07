@@ -43,7 +43,7 @@ class HumanNameTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/humanname',$this->humannameData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListHumanName()

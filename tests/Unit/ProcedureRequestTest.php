@@ -69,7 +69,7 @@ class ProcedureRequestTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/procedurerequest',$this->procedurerequestData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListProcedureRequest()
@@ -84,7 +84,7 @@ class ProcedureRequestTest extends TestCase
 		$this->json('POST', '/api/procedurerequest',$this->procedurerequestData);
 		$response=$this->json('GET', '/api/procedurerequest/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testUpdateProcedureRequest()
@@ -92,7 +92,7 @@ class ProcedureRequestTest extends TestCase
 		$this->json('POST', '/api/procedurerequest',$this->updatedprocedurerequestData);
 		$response=$this->json('PUT', '/api/procedurerequest');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testDeleteProcedureRequest()

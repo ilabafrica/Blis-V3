@@ -29,7 +29,7 @@ class OauthAuthCodeTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/oauthauthcode',$this->oauthauthcodeData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListOauthAuthCode()

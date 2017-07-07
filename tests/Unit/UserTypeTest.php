@@ -33,7 +33,7 @@ class UserTypeTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/usertype',$this->usertypeData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListUserType()
@@ -48,7 +48,7 @@ class UserTypeTest extends TestCase
 		$this->json('POST', '/api/usertype',$this->usertypeData);
 		$response=$this->json('GET', '/api/usertype/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testUpdateUserType()
@@ -56,7 +56,7 @@ class UserTypeTest extends TestCase
 		$this->json('POST', '/api/usertype',$this->updatedusertypeData);
 		$response=$this->json('PUT', '/api/usertype');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testDeleteUserType()

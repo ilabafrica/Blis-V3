@@ -39,7 +39,7 @@ class ComponentTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/component',$this->componentData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListComponent()

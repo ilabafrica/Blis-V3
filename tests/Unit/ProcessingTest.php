@@ -33,7 +33,7 @@ class ProcessingTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/processing',$this->processingData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListProcessing()
@@ -48,7 +48,7 @@ class ProcessingTest extends TestCase
 		$this->json('POST', '/api/processing',$this->processingData);
 		$response=$this->json('GET', '/api/processing/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testUpdateProcessing()
@@ -56,7 +56,7 @@ class ProcessingTest extends TestCase
 		$this->json('POST', '/api/processing',$this->updatedprocessingData);
 		$response=$this->json('PUT', '/api/processing');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testDeleteProcessing()

@@ -39,7 +39,7 @@ class QuantityTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/quantity',$this->quantityData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListQuantity()
@@ -54,7 +54,7 @@ class QuantityTest extends TestCase
 		$this->json('POST', '/api/quantity',$this->quantityData);
 		$response=$this->json('GET', '/api/quantity/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testUpdateQuantity()
@@ -62,7 +62,7 @@ class QuantityTest extends TestCase
 		$this->json('POST', '/api/quantity',$this->updatedquantityData);
 		$response=$this->json('PUT', '/api/quantity');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testDeleteQuantity()

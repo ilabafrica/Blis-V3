@@ -33,7 +33,7 @@ class ReferenceRangeTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/referencerange',$this->referencerangeData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListReferenceRange()
@@ -48,7 +48,7 @@ class ReferenceRangeTest extends TestCase
 		$this->json('POST', '/api/referencerange',$this->referencerangeData);
 		$response=$this->json('GET', '/api/referencerange/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testUpdateReferenceRange()
@@ -56,7 +56,7 @@ class ReferenceRangeTest extends TestCase
 		$this->json('POST', '/api/referencerange',$this->updatedreferencerangeData);
 		$response=$this->json('PUT', '/api/referencerange');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testDeleteReferenceRange()

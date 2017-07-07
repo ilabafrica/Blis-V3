@@ -31,7 +31,7 @@ class StatusTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/status',$this->statusData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListStatus()
@@ -46,7 +46,7 @@ class StatusTest extends TestCase
 		$this->json('POST', '/api/status',$this->statusData);
 		$response=$this->json('GET', '/api/status/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testUpdateStatus()
@@ -54,7 +54,7 @@ class StatusTest extends TestCase
 		$this->json('POST', '/api/status',$this->updatedstatusData);
 		$response=$this->json('PUT', '/api/status');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testDeleteStatus()

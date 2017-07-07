@@ -39,7 +39,7 @@ class ContactPointTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/contactpoint',$this->contactpointData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListContactPoint()

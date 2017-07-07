@@ -31,7 +31,7 @@ class OauthClientTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/oauthclient',$this->oauthclientData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 
 	public function testListOauthClient()
