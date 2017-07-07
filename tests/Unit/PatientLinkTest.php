@@ -1,58 +1,68 @@
 <?php
-
 namespace Tests\Unit;
 
-use App\Models\Patient;
 use Tests\TestCase;
-use App\Models\CodeableConcept;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-//Link to another patient resource that concerns the same actual patient.
-
 class PatientLinkTest extends TestCase
 {
-    use DatabaseMigrations;
+	use DatabaseMigrations;
 
-    public function setup()
-    {
-        parent::Setup();
-        $this->setVariables();
-    }
-    
-    public function setVariables()
-    {
-    	$patientId  = factory(Patient::class)->create()->id;
-        $other  = factory(Patient::class)->create()->id;
-        $this->PatientLinkData = array (
-        	'patient_id' => $patientId,
-            'other' => $other,
-            'type' => factory(CodeableConcept::class)->create()->id
-    		);
-    	$this->PatientLinkDataUpdate = array (
-            'other' => $other,
-            'type' => factory(CodeableConcept::class)->create()->id
-    		);
-    }
-     public function testStorePatientLink()
-    {
-        $this->post('/api/patientlink/', $this->PatientLinkData);
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-        $this->assertDatabaseHas('patient_links',$this->PatientLinkData);
-    }
-    public function testUpdatePatientLink()
-    {
-        //TODO
-    }
+	public function setVariables(){
+    	$this->patientlinkData=array(
+        
+			"type"=>1,
 
-    public function testDeletePatientLink()
-    {
-        //TODO
-    }
+        );
+    	$this->updatedpatientlinkData=array(
+        
+			"type"=>1,
 
-    public function testShowPatientLink()
-    {
-        //TODO
-    }
+        );
+	}
+
+	public function testStorePatientLink()
+	{
+		$response=$this->json('POST', '/api/patientlink',$this->patientlinkData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",[$response->original]);
+	}
+
+	public function testListPatientLink()
+	{
+		$response=$this->json('GET', '/api/patientlink');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
+	public function testShowPatientLink()
+	{
+		$this->json('POST', '/api/patientlink',$this->patientlinkData);
+		$response=$this->json('GET', '/api/patientlink/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testUpdatePatientLink()
+	{
+		$this->json('POST', '/api/patientlink',$this->updatedpatientlinkData);
+		$response=$this->json('PUT', '/api/patientlink');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testDeletePatientLink()
+	{
+		$this->json('POST', '/api/patientlink',$this->patientlinkData);
+		$response=$this->delete('/api/patientlink/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
 }

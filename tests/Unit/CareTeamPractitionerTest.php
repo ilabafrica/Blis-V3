@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -8,42 +7,64 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CareTeamPractitionerTest extends TestCase
 {
-   public function testStoreCareTeamPractitioner(){
+	use DatabaseMigrations;
 
-    	$care_team=array(
-    		'team_id'=>1,
-    		'practitioner_id'=>1
-    		);
-    	$response=$this->post('/api/care_team_practitioner',$care_team);
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
+	public function setVariables(){
+    	$this->careteampractitionerData=array(
+        
+			"team_id"=>1,
+			"practioner_id"=>1,
 
-    public function testListCareTeamPractitioners(){
+        );
+    	$this->updatedcareteampractitionerData=array(
+        
+			"team_id"=>1,
+			"practioner_id"=>1,
 
-    	$response=$this->get('/api/care_team_practitioner');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+        );
+	}
 
-    	$this->assertArrayHasKey('team_id', $data);
-    }
+	public function testStoreCareTeamPractitioner()
+	{
+		$response=$this->json('POST', '/api/careteampractitioner',$this->careteampractitionerData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",[$response->original]);
+	}
 
-    public function testListCareTeamPractitioner(){
+	public function testListCareTeamPractitioner()
+	{
+		$response=$this->json('GET', '/api/careteampractitioner');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$response=$this->get('/api/care_team_practitioner/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+	public function testShowCareTeamPractitioner()
+	{
+		$this->json('POST', '/api/careteampractitioner',$this->careteampractitionerData);
+		$response=$this->json('GET', '/api/careteampractitioner/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-    	$this->assertHasKey('team_id', $data);
-    }
+	public function testUpdateCareTeamPractitioner()
+	{
+		$this->json('POST', '/api/careteampractitioner',$this->updatedcareteampractitionerData);
+		$response=$this->json('PUT', '/api/careteampractitioner');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
 
-  
+	public function testDeleteCareTeamPractitioner()
+	{
+		$this->json('POST', '/api/careteampractitioner',$this->careteampractitionerData);
+		$response=$this->delete('/api/careteampractitioner/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    public function testDeleteCareTeamPractitioner(){
-    	
-    	$response=$this->delete('/api/care_team_practitioner/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -8,83 +7,76 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ObservationTest extends TestCase
 {
-	use DatabaseMigrations; //Run and drop migrations on all tests
+	use DatabaseMigrations;
 
 	public function setup(){
-		parent::setup();
+		parent::Setup();
 		$this->setVariables();
 	}
-	
-	public function setVariables()
-	{
-		$this->observationData = array(
-			'panel_id' => 1,
-			'status_id' => 1,
-			'category_id' => 1
-			);
 
-		$this->observationDataUpdate = [
-			'panel_id' => 2,
-			'status_id' => 2,
-			'category_id' => 2
-			];
-	}
-
-	public function testListObservation()
-	{
-		factory(\App\Models\Observation::class)->create($this->observationData);
-		$response = $this->json('GET', 'api/observation/1');
-
-		$this->assertDatabaseHas('observations', $this->observationData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("category_id", $response->original);
-	}
-
-	public function testListObservations()
-	{
-		$observationData = array('panel_id' => 1,
-			'status_id' => 1,
-			'category_id' => 1,
-			);
-		factory(\App\Models\Observation::class)->create($this->observationData);
-		$response = $this->json('GET', 'api/observation');
-
-		$this->assertDatabaseHas('observations', $this->observationData);
-		$response->assertStatus(200);
+	public function setVariables(){
+    	$this->observationData=array(
+        
+			"status_id"=>1,
+			"category_id"=>1,
+			"panel_id"=>1,
+			"user_id"=>1,
+			"quantity_id"=>1,
+			"data_absent_reason"=>1,
+			"interpretation"=>1,
+			"comment"=>'Sample String',
+			"issued"=>'2017:12:12 15:30:00',
+        );
+    	$this->updatedobservationData=array(
+        
+			"status_id"=>1,
+			"category_id"=>1,
+			"panel_id"=>1,
+			"user_id"=>1,
+			"quantity_id"=>1,
+			"data_absent_reason"=>1,
+			"interpretation"=>1,
+			"comment"=>'Sample updated String',
+			"issued"=>'2016:12:12 15:30:00',
+        );
 	}
 
 	public function testStoreObservation()
 	{
-		$faker = \Faker\Factory::create();
-		$observationData = array(
-			'panel_id' => $faker->randomNumber(),
-			'status_id' => $faker->randomNumber(),
-			'category_id' => $faker->randomNumber(),
-		);
-		$response = $this->json('POST', 'api/observation', $observationData);
-		$this->assertDatabaseHas('observations', $observationData);
+		$response=$this->json('POST', '/api/observation',$this->observationData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",[$response->original]);
+	}
 
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("category_id", $response->original);
+	public function testListObservation()
+	{
+		$response=$this->json('GET', '/api/observation');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
+	public function testShowObservation()
+	{
+		$this->json('POST', '/api/observation',$this->observationData);
+		$response=$this->json('GET', '/api/observation/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
 	}
 
 	public function testUpdateObservation()
 	{
-		$observationData = ['panel_id' => 1,
-			'status_id' => 1,
-			'category_id' => 1,];
-		factory(\App\Models\Observation::class)->create($observationData);
-
-		$response = $this->json('PUT', 'api/observation/1', $this->observationDataUpdate);
-		$this->assertDatabaseHas('observations', $this->observationDataUpdate);
-		$this->assertArrayHasKey("category_id", $response->original);
+		$this->json('POST', '/api/observation',$this->updatedobservationData);
+		$response=$this->json('PUT', '/api/observation');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
 	}
 
 	public function testDeleteObservation()
 	{
-		factory(\App\Models\PanelType::class)->create();
-		$response=$this->json('DELETE', 'api/observation/1');
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("category_id", $response->original);
+		$this->json('POST', '/api/observation',$this->observationData);
+		$response=$this->delete('/api/observation/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
 	}
+
 }

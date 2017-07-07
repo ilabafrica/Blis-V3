@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit;
 
 use Tests\TestCase;
@@ -8,58 +7,68 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class SubstanceTest extends TestCase
 {
-     public function testStoreSubstance(){
+	use DatabaseMigrations;
 
-    	$substance=array(
-    		'status'=>10,
-    		'category'=>1,
-    		'code'=>1,
-    		'description'=>"la la land"
-    		);
-    	$response=$this->post('/api/substance',$substance);
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
+	public function setVariables(){
+    	$this->substanceData=array(
+        
+			"status"=>1,
+			"category"=>1,
+			"code"=>1,
+			"description"=>'Sample String',
 
-    public function testListSubstance(){
+        );
+    	$this->updatedsubstanceData=array(
+        
+			"status"=>1,
+			"category"=>1,
+			"code"=>1,
+			"description"=>'Sample updated String',
 
-    	$response=$this->get('/api/substance');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+        );
+	}
 
-    	$this->assertArrayHasKey('code', $data);
-    }
+	public function testStoreSubstance()
+	{
+		$response=$this->json('POST', '/api/substance',$this->substanceData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",[$response->original]);
+	}
 
-    public function testListSubstances(){
+	public function testListSubstance()
+	{
+		$response=$this->json('GET', '/api/substance');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$response=$this->get('/api/substance/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+	public function testShowSubstance()
+	{
+		$this->json('POST', '/api/substance',$this->substanceData);
+		$response=$this->json('GET', '/api/substance/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",[$response->original]);
+	}
 
-    	$this->assertHasKey('code', $data);
-    }
+	public function testUpdateSubstance()
+	{
+		$this->json('POST', '/api/substance',$this->updatedsubstanceData);
+		$response=$this->json('PUT', '/api/substance');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",[$response->original]);
+	}
 
-    public function testUpdateSubstance(){
+	public function testDeleteSubstance()
+	{
+		$this->json('POST', '/api/substance',$this->substanceData);
+		$response=$this->delete('/api/substance/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    	$substance=array(
-    		'status'=>10,
-    		'category'=>1,
-    		'code'=>1,
-    		'description'=>"la la landy"
-    		);
-    	$response=$this->put('/api/substance/1',$substance);
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
-
-    	$this->assertHasKey('id', $data);
-    }
-
-    public function testDeleteSubstance(){
-    	
-    	$response=$this->delete('/api/substance/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    }
 }
