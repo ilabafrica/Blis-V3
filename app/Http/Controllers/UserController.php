@@ -2,14 +2,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Users;
+use App\Models\User;
 
 class UserController extends Controller
 {
 	public function index()
 	{
-		$user=Users::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Users);
+		$user=User::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($user);
 	}
 
 
@@ -31,7 +31,7 @@ class UserController extends Controller
 		if ($validator->fails()) {
 			 return response()->json($validator);
 		} else {
-			$user= new Users;
+			$user= new User;
 			$user->type = $request->input('type');
 			$user->email = $request->input('email');
 			$user->password = $request->input('password');
@@ -53,7 +53,7 @@ class UserController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$user=Users::findorfails($id);
+		$user=User::findorfails($id);
 		return response()->json($user);
 	}
 
@@ -78,7 +78,7 @@ class UserController extends Controller
 		 if ($validator->fails()) {
 			 return response()->json($validator,422);
 		} else {
-			$user=Users::findorfail($id);
+			$user=User::findorfail($id);
 			$user->type = $request->input('type');
 			$user->email = $request->input('email');
 			$user->password = $request->input('password');
@@ -102,7 +102,7 @@ class UserController extends Controller
      */
 	public function destroy($id){
 		try{
-			$user=Users::findorfails($id);
+			$user=User::findorfails($id);
 			$user->delete();
 			return response()->json($user,200);
 		}
