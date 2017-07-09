@@ -8,8 +8,8 @@ class UserTypeController extends Controller
 {
 	public function index()
 	{
-		$usertype=UserType::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(UserType);
+		$usertype = UserType::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($usertype);
 	}
 
 

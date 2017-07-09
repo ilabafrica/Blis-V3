@@ -8,8 +8,8 @@ class HumanNameController extends Controller
 {
 	public function index()
 	{
-		$humanname=HumanName::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(HumanName);
+		$humanname = HumanName::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($humanname);
 	}
 
 

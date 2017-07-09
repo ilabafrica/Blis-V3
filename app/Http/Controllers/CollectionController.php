@@ -8,8 +8,8 @@ class CollectionController extends Controller
 {
 	public function index()
 	{
-		$collection=Collection::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Collection);
+		$collection = Collection::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($collection);
 	}
 
 

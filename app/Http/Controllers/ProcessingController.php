@@ -8,8 +8,8 @@ class ProcessingController extends Controller
 {
 	public function index()
 	{
-		$processing=Processing::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Processing);
+		$processing = Processing::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($processing);
 	}
 
 

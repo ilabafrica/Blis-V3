@@ -8,8 +8,8 @@ class StatusHistoryController extends Controller
 {
 	public function index()
 	{
-		$statushistory=StatusHistory::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(StatusHistory);
+		$statushistory = StatusHistory::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($statushistory);
 	}
 
 

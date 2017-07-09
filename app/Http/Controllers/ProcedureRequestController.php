@@ -8,8 +8,8 @@ class ProcedureRequestController extends Controller
 {
 	public function index()
 	{
-		$procedurerequest=ProcedureRequest::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(ProcedureRequest);
+		$procedurerequest = ProcedureRequest::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($procedurerequest);
 	}
 
 

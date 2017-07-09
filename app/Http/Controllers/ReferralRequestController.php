@@ -8,8 +8,8 @@ class ReferralRequestController extends Controller
 {
 	public function index()
 	{
-		$referralrequest=ReferralRequest::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(ReferralRequest);
+		$referralrequest = ReferralRequest::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($referralrequest);
 	}
 
 

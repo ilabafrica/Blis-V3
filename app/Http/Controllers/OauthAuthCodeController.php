@@ -8,8 +8,8 @@ class OauthAuthCodeController extends Controller
 {
 	public function index()
 	{
-		$oauthauthcode=OauthAuthCode::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(OauthAuthCode);
+		$oauthauthcode = OauthAuthCode::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($oauthauthcode);
 	}
 
 

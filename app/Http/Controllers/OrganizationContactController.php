@@ -8,8 +8,8 @@ class OrganizationContactController extends Controller
 {
 	public function index()
 	{
-		$organizationcontact=OrganizationContact::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(OrganizationContact);
+		$organizationcontact = OrganizationContact::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($organizationcontact);
 	}
 
 

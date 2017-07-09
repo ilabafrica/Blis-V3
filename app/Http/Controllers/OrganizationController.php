@@ -8,8 +8,8 @@ class OrganizationController extends Controller
 {
 	public function index()
 	{
-		$organization=Organization::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Organization);
+		$organization = Organization::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($organization);
 	}
 
 

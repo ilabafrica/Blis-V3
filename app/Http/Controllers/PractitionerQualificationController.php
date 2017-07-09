@@ -8,8 +8,8 @@ class PractitionerQualificationController extends Controller
 {
 	public function index()
 	{
-		$practitionerqualification=PractitionerQualification::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(PractitionerQualification);
+		$practitionerqualification = PractitionerQualification::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($practitionerqualification);
 	}
 
 

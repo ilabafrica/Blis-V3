@@ -8,8 +8,8 @@ class SpecimenController extends Controller
 {
 	public function index()
 	{
-		$specimen=Specimen::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Specimen);
+		$specimen = Specimen::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($specimen);
 	}
 
 

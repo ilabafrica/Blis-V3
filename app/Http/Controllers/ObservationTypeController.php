@@ -8,8 +8,8 @@ class ObservationTypeController extends Controller
 {
 	public function index()
 	{
-		$observationtype=ObservationType::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(ObservationType);
+		$observationtype = ObservationType::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($observationtype);
 	}
 
 

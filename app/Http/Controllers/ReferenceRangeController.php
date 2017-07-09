@@ -8,8 +8,8 @@ class ReferenceRangeController extends Controller
 {
 	public function index()
 	{
-		$referencerange=ReferenceRange::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(ReferenceRange);
+		$referencerange = ReferenceRange::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($referencerange);
 	}
 
 

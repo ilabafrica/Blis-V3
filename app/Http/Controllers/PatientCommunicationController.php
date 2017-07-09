@@ -8,8 +8,8 @@ class PatientCommunicationController extends Controller
 {
 	public function index()
 	{
-		$patientcommunication=PatientCommunication::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(PatientCommunication);
+		$patientcommunication = PatientCommunication::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($patientcommunication);
 	}
 
 

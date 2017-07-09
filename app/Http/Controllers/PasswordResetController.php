@@ -8,8 +8,8 @@ class PasswordResetController extends Controller
 {
 	public function index()
 	{
-		$passwordreset=PasswordReset::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(PasswordReset);
+		$passwordreset = PasswordReset::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($passwordreset);
 	}
 
 

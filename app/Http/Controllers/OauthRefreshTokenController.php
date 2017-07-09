@@ -8,8 +8,8 @@ class OauthRefreshTokenController extends Controller
 {
 	public function index()
 	{
-		$oauthrefreshtoken=OauthRefreshToken::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(OauthRefreshToken);
+		$oauthrefreshtoken = OauthRefreshToken::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($oauthrefreshtoken);
 	}
 
 

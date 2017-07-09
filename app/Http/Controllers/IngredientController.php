@@ -8,8 +8,8 @@ class IngredientController extends Controller
 {
 	public function index()
 	{
-		$ingredient=Ingredient::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Ingredient);
+		$ingredient = Ingredient::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($ingredient);
 	}
 
 

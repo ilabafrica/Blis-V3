@@ -8,8 +8,8 @@ class EpisodeofCareController extends Controller
 {
 	public function index()
 	{
-		$episodeofcare=EpisodeofCare::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(EpisodeofCare);
+		$episodeofcare = EpisodeofCare::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($episodeofcare);
 	}
 
 

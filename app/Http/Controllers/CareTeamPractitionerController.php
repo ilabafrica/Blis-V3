@@ -8,8 +8,8 @@ class CareTeamPractitionerController extends Controller
 {
 	public function index()
 	{
-		$careteampractitioner=CareTeamPractitioner::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(CareTeamPractitioner);
+		$careteampractitioner = CareTeamPractitioner::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($careteampractitioner);
 	}
 
 

@@ -8,8 +8,8 @@ class PanelTypeController extends Controller
 {
 	public function index()
 	{
-		$paneltype=PanelType::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(PanelType);
+		$paneltype = PanelType::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($paneltype);
 	}
 
 

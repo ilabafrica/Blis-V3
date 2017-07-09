@@ -8,8 +8,8 @@ class ComponentController extends Controller
 {
 	public function index()
 	{
-		$component=Component::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Component);
+		$component = Component::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($component);
 	}
 
 

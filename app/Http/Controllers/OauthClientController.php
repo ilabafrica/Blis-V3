@@ -8,8 +8,8 @@ class OauthClientController extends Controller
 {
 	public function index()
 	{
-		$oauthclient=OauthClient::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(OauthClient);
+		$oauthclient = OauthClient::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($oauthclient);
 	}
 
 

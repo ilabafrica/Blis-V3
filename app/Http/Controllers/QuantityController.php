@@ -8,8 +8,8 @@ class QuantityController extends Controller
 {
 	public function index()
 	{
-		$quantity=Quantity::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Quantity);
+		$quantity = Quantity::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($quantity);
 	}
 
 

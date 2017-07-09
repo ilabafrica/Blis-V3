@@ -8,8 +8,8 @@ class ContactPointController extends Controller
 {
 	public function index()
 	{
-		$contactpoint=ContactPoint::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(ContactPoint);
+		$contactpoint = ContactPoint::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($contactpoint);
 	}
 
 

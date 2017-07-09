@@ -8,8 +8,8 @@ class ContainerController extends Controller
 {
 	public function index()
 	{
-		$container=Container::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Container);
+		$container = Container::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($container);
 	}
 
 

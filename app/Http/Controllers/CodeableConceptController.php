@@ -8,8 +8,8 @@ class CodeableConceptController extends Controller
 {
 	public function index()
 	{
-		$codeableconcept=CodeableConcept::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(CodeableConcept);
+		$codeableconcept = CodeableConcept::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($codeableconcept);
 	}
 
 

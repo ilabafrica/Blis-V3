@@ -8,8 +8,8 @@ class SubstanceController extends Controller
 {
 	public function index()
 	{
-		$substance=Substance::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Substance);
+		$substance = Substance::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($substance);
 	}
 
 

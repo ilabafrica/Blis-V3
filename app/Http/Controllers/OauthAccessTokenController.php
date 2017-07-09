@@ -8,8 +8,8 @@ class OauthAccessTokenController extends Controller
 {
 	public function index()
 	{
-		$oauthaccesstoken=OauthAccessToken::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(OauthAccessToken);
+		$oauthaccesstoken = OauthAccessToken::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($oauthaccesstoken);
 	}
 
 

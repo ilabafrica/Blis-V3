@@ -8,8 +8,8 @@ class AddressController extends Controller
 {
 	public function index()
 	{
-		$address=Address::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Address);
+		$address = Address::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($address);
 	}
 
 

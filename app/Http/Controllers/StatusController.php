@@ -8,8 +8,8 @@ class StatusController extends Controller
 {
 	public function index()
 	{
-		$status=Status::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Status);
+		$status = Status::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($status);
 	}
 
 

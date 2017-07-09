@@ -8,7 +8,7 @@ class UserController extends Controller
 {
 	public function index()
 	{
-		$user=User::orderBy('id', 'ASC')->paginate(20);
+		$user = User::orderBy('id', 'ASC')->paginate(20);
 		return response()->json($user);
 	}
 

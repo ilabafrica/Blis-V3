@@ -8,8 +8,8 @@ class MigrationController extends Controller
 {
 	public function index()
 	{
-		$migration=Migration::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Migration);
+		$migration = Migration::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($migration);
 	}
 
 

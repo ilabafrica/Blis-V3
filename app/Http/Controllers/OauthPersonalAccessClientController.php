@@ -8,8 +8,8 @@ class OauthPersonalAccessClientController extends Controller
 {
 	public function index()
 	{
-		$oauthpersonalaccessclient=OauthPersonalAccessClient::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(OauthPersonalAccessClient);
+		$oauthpersonalaccessclient = OauthPersonalAccessClient::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($oauthpersonalaccessclient);
 	}
 
 

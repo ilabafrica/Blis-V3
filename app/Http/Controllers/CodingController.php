@@ -8,8 +8,8 @@ class CodingController extends Controller
 {
 	public function index()
 	{
-		$coding=Coding::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Coding);
+		$coding = Coding::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($coding);
 	}
 
 

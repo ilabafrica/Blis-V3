@@ -8,8 +8,8 @@ class PanelController extends Controller
 {
 	public function index()
 	{
-		$panel=Panel::orderBy('id', 'ASC')->paginate(20);
-		return response()->json(Panel);
+		$panel = Panel::orderBy('id', 'ASC')->paginate(20);
+		return response()->json($panel);
 	}
 
 
