@@ -12,5 +12,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Observation extends Model
 {
-    //
+    
+    public function Components()
+    {
+    	return $this->hasMany('App\Models\Components','observation_id');
+    }
+
+    public function Status()
+    {
+    	return $this->belongsTo('App\Models\Status');
+    }
+    public function Panel()
+    {
+    	return $this->belongsTo('App\Models\Panel');
+    }
+    public function User()
+    {
+    	return $this->belongsTo('App\Models\User');
+    }
+    public function Quantity()
+    {
+    	return $this->belongsTo('App\Models\Quantity');
+    }
+
 }

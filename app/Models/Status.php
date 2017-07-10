@@ -10,4 +10,39 @@ class Status extends Model
      {
      	return $this->belongsTo('App\Models\CareTeam','status_id');
      }
+
+    public function Observation()
+    {
+    	return $this->hasMany('App\Models\Observation','status_id');
+    }
+
+    public function ObservationTypes()
+    {
+    	return $this->hasMany('App\Models\ObservationTypes','status_id');
+    }
+
+    public function Panel()
+    {
+        return $this->hasMany('App\Models\Panel','status_id');
+    }
+
+    public function PanelType()
+    {
+        return $this->hasMany('App\Models\PanelType','status_id');
+    }
+
+    public function ProcedureRequest()
+    {
+        return $this->hasMany('App\Models\ProcedureRequest','status');
+    }
+
+    public function ReferralRequest()
+    {
+        return $this->hasMany('App\Models\ReferralRequest','status');
+    }
+
+    public function Substance()
+    {
+        return $this->hasOne('App\Models\Substance','status');
+    }
 }

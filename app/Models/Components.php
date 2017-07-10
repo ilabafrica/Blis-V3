@@ -10,5 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Components extends Model
 {
-    //
+    public function Observation()
+    {
+    	return $this->belongsTo('App\Models\Observation');
+    }
 }

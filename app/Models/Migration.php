@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class codes extends Model
+class Migration extends Model
 {
     //
 }

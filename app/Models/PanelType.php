@@ -12,5 +12,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class PanelType extends Model
 {
-    //
+    public function Panel()
+    {
+    	return $this->hasMany('App\Models\Panel','panel_type_id');
+    }
+    public function Coding()
+    {
+    	return $this->belongsTo('App\Models\Codings');
+    }
+    public function Status()
+    {
+    	return $this->belongsTo('App\Models\Status');
+    }
+
 }

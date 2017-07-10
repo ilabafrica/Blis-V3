@@ -23,4 +23,23 @@ class Practitioner extends Model
      {
      	return $this->hasMany('App\Models\PractitionerQualification','practitioner_id');
      }
+
+     public function EpisodeOfCare()
+     {
+          return $this->hasMany('App\Models\EpisodeOfCare','practitioners_id');
+     }
+
+     public function User()
+     {
+          return $this->belongsTo('App\Models\User');
+     }
+     public function ProcedureRequest()
+     {
+          return $this->hasMany('App\Models\ProcedureRequest','requester');
+     }
+
+     public function ReferralRequest()
+     {
+          return $this->belongsTo('App\Models\ReferralRequest','recipient');
+     }
 }

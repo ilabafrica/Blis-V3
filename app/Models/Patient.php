@@ -23,7 +23,11 @@ class Patient extends Model
      {
     	return $this->hasMany('App\Models\Address');
      }
- 
+      
+      public function EpisodesOfCare()
+      {
+          return $this->hasMany('App\Models\EpisodesOfCare','patient_id');
+      }
      public function User()
     {
      	return $this->belongsTo('App\Models\User');
@@ -46,9 +50,15 @@ class Patient extends Model
      	return $this->hasMany('App\Models\PatientContact','patient_id');
      }
 
-     public function PatientLinks($value='')
+     public function PatientLinks()
      {
      	return $this->hasMany('App\Models\PatientLinks');
      }
+     
+     public function ReferralRequest()
+     {
+        return $this->belongsTo('App\Models\ReferralRequest','subject');
+     }
+
 
 }

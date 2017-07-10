@@ -14,5 +14,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class ComponentsTypes extends Model
 {
-    //
+    public function Coding()
+    {
+    	  return $this->belongsTo('App\Models\Coding');
+    }
+
+    public function ResultTypes()
+    {
+    	  return $this->belongsTo('App\Models\ResultTypes');
+    }
+
+    public function ReferenceRanges()
+    {
+    	  return $this->belongsTo('App\Models\ReferenceRanges');
+    }
 }

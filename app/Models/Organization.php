@@ -23,4 +23,13 @@ class Organization extends Model
     {
     	return $this->hasMany('App\Models\PatientContact','organization_id');
     }
+    public function EpisodeOfCare()
+    {
+        return $this->hasMany('App\Models\EpisodeOfCare','organization_id');
+    }
+
+    public function User()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
 }

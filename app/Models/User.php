@@ -1,40 +1,56 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class Users extends Model
 {
-    //use HasApiTokens, Notifiable;
-    use Notifiable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'email', 'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
     public function Patient()
      {
-         return $this->hasOne('App\Models\Patient', 'user_id');
+        return $this->hasOne('App\Models\Patient', 'user_id');
      }
-
-     public function ContactPoint()
+     
+    public function ContactPoint()
      {
-         return $this->hasMany('App\Models\ContactPoint','user_id');
+        return $this->hasMany('App\Models\ContactPoint','user_id');
      }
+    public function HumanName()
+    {
+    	return $this->hasOne('App\Models\HumanName','user_id');
+    }
+
+    public function OauthAccessToken()
+    {
+    	return $this->hasOne('App\Models\OauthAccessToken','user_id');
+    }
+
+    public function OauthAuthCode()
+    {
+    	return $this->hasOne('App\Models\OauthAuthCode','user_id');
+    }
+    public function OauthClient()
+    {
+    	return $this->hasOne('App\Models\OauthClient','user_id');
+    }
+
+    public function Observation()
+    {
+        return $this->hasOne('App\Models\Observation','user_id');
+    }
+
+    public function Organization()
+    {
+        return $this->hasOne('App\Models\Organization','user_id');
+    }
+
+    public function Practitioner()
+    {
+        return $this->hasOne('App\Models\Practitioner','user_id');
+    }
+
+    public function ProcedureRequest()
+    {
+        return $this->hasOne('App\Models\ProcedureRequest','performer');
+    }
 }

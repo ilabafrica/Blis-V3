@@ -16,4 +16,14 @@ class Specimen extends Model
 	const NOT_COLLECTED = 1;
 	const ACCEPTED = 2;
 	const REJECTED = 3;
+
+	public function Panel()
+	{
+		return $this->hasMany('App\Models\Panel','specimen_id');
+	}
+
+	public function ProcedureRequest()
+	{
+		return $this->hasMany('App\Models\ProcedureRequest','specimen');
+	}
 }
