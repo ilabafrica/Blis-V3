@@ -1,6 +1,6 @@
 <?php
 
-$factory->define(App\UserType::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\UserType::class, function (Faker\Generator $faker) {
 
 	return [
 		'name' => $faker->word,
@@ -8,7 +8,7 @@ $factory->define(App\UserType::class, function (Faker\Generator $faker) {
 	];
 });
 
-$factory->define(App\User::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\User::class, function (Faker\Generator $faker) {
 	static $password;
 
 	return [
@@ -30,7 +30,7 @@ $factory->define(\App\Models\CodeableConcept::class, function (Faker\Generator $
 $factory->define(\App\Models\HumanName::class, function (Faker\Generator $faker) {
 
 	return [
-		'user_id' => factory(\App\Models\Users::class)->create()->id,
+		'user_id' => factory(\App\Models\User::class)->create()->id,
 		'use' =>factory(\App\Models\CodeableConcept::class)->create()->id,
 		'text' => $faker->word
 	];
@@ -40,7 +40,7 @@ $factory->define(\App\Models\HumanName::class, function (Faker\Generator $faker)
 $factory->define(\App\Models\ContactPoint::class, function (Faker\Generator $faker) {
 
 	return [
-		'user_id' => factory(\App\Models\Users::class)->create()->id,
+		'user_id' => factory(\App\Models\User::class)->create()->id,
 		'system' => factory(\App\Models\CodeableConcept::class)->create()->id,
 		'value' => $faker->word,
 		'use' => factory(\App\Models\CodeableConcept::class)->create()->id,
@@ -66,7 +66,7 @@ $factory->define(\App\Models\Address::class, function (Faker\Generator $faker) {
 $factory->define(\App\Models\Organization::class, function (Faker\Generator $faker) {
 
 	return [
-		'user_id' => factory(\App\Models\Users::class)->create()->id,
+		'user_id' => factory(\App\Models\User::class)->create()->id,
 		'type' => factory(\App\Models\CodeableConcept::class)->create()->id,
 		'name' => $faker->word,
 		'alias' => $faker->word,
@@ -88,7 +88,7 @@ $factory->define(\App\Models\OrganizationContact::class, function (Faker\Generat
 
 $factory->define(\App\Models\Patient::class, function (Faker\Generator $faker) {
 	
-	$userId  = factory(\App\Models\Users::class)->create()->id;
+	$userId  = factory(\App\Models\User::class)->create()->id;
 
 	return [
 		'user_id' => $userId,
@@ -102,7 +102,7 @@ $factory->define(\App\Models\Patient::class, function (Faker\Generator $faker) {
 
 $factory->define(\App\Models\Practitioner::class, function (Faker\Generator $faker) {
 
-	$userId  = factory(\App\Models\Users::class)->create()->id;
+	$userId  = factory(\App\Models\User::class)->create()->id;
 
 	return [
 		'user_id' => $userId,
