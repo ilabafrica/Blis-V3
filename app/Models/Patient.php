@@ -24,38 +24,41 @@ class Patient extends Model
     	return $this->hasMany('App\Models\Address');
      }
       
-      public function EpisodesOfCare()
+    public function EpisodesOfCare()
       {
           return $this->hasMany('App\Models\EpisodesOfCare','patient_id');
       }
-     public function User()
+    public function User()
     {
      	return $this->belongsTo('App\Models\User');
      }
  
-     public function Practitioner()
+    public function Practitioner()
      {
     	return $this->hasOne('App\Models\Practitioner');
  
      }
     
-
-     public function PatientCommunications()
+    public function PractitionerCommunications()
+    {
+        return $this->hasMany('App\Models\PractitionerCommunications','patient_id');
+    }
+    public function PatientCommunications()
      {
      	return $this->hasMany('App\Models\PatientCommunications','patient_id');
      }
 
-     public function PatientContact()
+    public function PatientContact()
      {
      	return $this->hasMany('App\Models\PatientContact','patient_id');
      }
 
-     public function PatientLinks()
+    public function PatientLinks()
      {
      	return $this->hasMany('App\Models\PatientLinks');
      }
      
-     public function ReferralRequest()
+    public function ReferralRequest()
      {
         return $this->belongsTo('App\Models\ReferralRequest','subject');
      }
