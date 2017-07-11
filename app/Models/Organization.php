@@ -18,7 +18,10 @@ class Organization extends Model
     {
     	return $this->hasMany('App\Models\OrganizationContact','organization_id');
     }
-
+    public function Patient()
+    {
+        return $this->hasOne('App\Models\Patient','managing_organization');
+    }
     public function PatientContact()
     {
     	return $this->hasMany('App\Models\PatientContact','organization_id');

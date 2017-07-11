@@ -23,7 +23,23 @@ class Patient extends Model
      {
     	return $this->hasMany('App\Models\Address');
      }
-      
+    public function Coding()
+    {
+        return $this->hasOne('App\Models\Coding','patient_id');
+    }
+    public function ContactPoint()
+    {
+        return $this->hasMany('App\Models\ContactPoint','patient_id');
+    }
+
+    public function CodeableConceptMaritalStatus()
+    {
+        return $this->hasOne('App\Models\CodeableConcept','code');
+    }
+    public function CodeableConceptAnimalSpecies()
+    {
+        return $this->belongsToOne('App\Models\CodeableConcept','code');
+    }
     public function EpisodesOfCare()
       {
           return $this->hasMany('App\Models\EpisodesOfCare','patient_id');
@@ -32,7 +48,10 @@ class Patient extends Model
     {
      	return $this->belongsTo('App\Models\User');
      }
- 
+    public function HumanName()
+    {
+        return $this->hasOne('App\Models\HumanName','patient_id');
+    }
     public function Practitioner()
      {
     	return $this->hasOne('App\Models\Practitioner');
@@ -62,6 +81,9 @@ class Patient extends Model
      {
         return $this->belongsTo('App\Models\ReferralRequest','subject');
      }
-
+    public function Organization()
+    {
+        return $this->belongsTo('App\Models\Organization');
+    }
 
 }
