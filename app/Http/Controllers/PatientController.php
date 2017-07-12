@@ -13,27 +13,23 @@ class PatientController extends Controller
 	}
 
 
-    /**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request
-    * @return \Illuminate\Http\Response
-    */
+	/**
+	* Store a newly created resource in storage.
+	*
+	* @param  \Illuminate\Http\Request
+	* @return \Illuminate\Http\Response
+	*/
 	public function store(Request $request)
 	{
-        $rules=array(
+		$rules=array(
+		"identifier" => 'required',
 		"user_id" => 'required',
-		"active" => 'required',
 		"name" => 'required',
 		"gender" => 'required',
 		"birth_date" => 'required',
-		"deceased" => 'required',
 		"address" => 'required',
-		"marital_status" => 'required',
-		"multiple_birth" => 'required',
-		"animal" => 'required',
-
 		);
+
 		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
 			 return response()->json($validator);
@@ -67,41 +63,37 @@ class PatientController extends Controller
 		}
 	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  id
-     * @return \Illuminate\Http\Response
-     */public function show($id){
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show($id){
 		$patient=Patient::findorfails($id);
 		return response()->json($patient);
 	}
 
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  request
-     * @param  int  id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  request
+	 * @param  int  id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, $id)
 	{
-    
-        $rules=array(
+	
+		$rules=array(
+		"identifier" => 'required',
 		"user_id" => 'required',
-		"active" => 'required',
 		"name" => 'required',
 		"gender" => 'required',
 		"birth_date" => 'required',
-		"deceased" => 'required',
 		"address" => 'required',
-		"marital_status" => 'required',
-		"multiple_birth" => 'required',
-		"animal" => 'required',
-
 		);
-        $validator = \Validator::make($request->all(),$rules);
+		$validator = \Validator::make($request->all(),$rules);
 		 if ($validator->fails()) {
 			 return response()->json($validator,422);
 		} else {
@@ -134,12 +126,12 @@ class PatientController extends Controller
 		}
 	}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  id
-     * @return \Illuminate\Http\Response
-     */
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  id
+	 * @return \Illuminate\Http\Response
+	 */
 	public function destroy($id){
 		try{
 			$patient=Patient::findorfails($id);
