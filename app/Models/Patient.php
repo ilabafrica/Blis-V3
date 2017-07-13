@@ -58,13 +58,13 @@ class Patient extends Model
  
      }
     
-    public function PractitionerCommunications()
+    public function PractitionerCommunication()
     {
-        return $this->hasMany('App\Models\PractitionerCommunications','patient_id');
+        return $this->hasMany('App\Models\PractitionerCommunication','patient_id');
     }
-    public function PatientCommunications()
+    public function PatientCommunication()
      {
-     	return $this->hasMany('App\Models\PatientCommunications','patient_id');
+     	return $this->hasMany('App\Models\PatientCommunication','patient_id');
      }
 
     public function PatientContact()
@@ -72,9 +72,9 @@ class Patient extends Model
      	return $this->hasMany('App\Models\PatientContact','patient_id');
      }
 
-    public function PatientLinks()
+    public function PatientLink()
      {
-     	return $this->hasMany('App\Models\PatientLinks');
+     	return $this->hasMany('App\Models\PatientLink');
      }
      
     public function ReferralRequest()

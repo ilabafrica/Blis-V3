@@ -24,8 +24,8 @@ class ComponentsTypes extends Model
     	  return $this->belongsTo('App\Models\ResultTypes');
     }
 
-    public function ReferenceRanges()
+    public function ReferenceRange()
     {
-    	  return $this->belongsTo('App\Models\ReferenceRanges');
+    	  return $this->belongsTo('App\Models\ReferenceRange');
     }
 }

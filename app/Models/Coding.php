@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Coding extends Model
 {
-    public function ComponentTypes()
+    public function ComponentType()
     {
     	return $this->hasMany('App\Models\ComponentTypes','code_id');
     }
 
-    public function ObservationTypes()
+    public function ObservationType()
     {
-    	return $this->hasMany('App\Models\ObservationTypes','code_id');
+    	return $this->hasMany('App\Models\ObservationType','code_id');
     }
 
     public function PanelType()

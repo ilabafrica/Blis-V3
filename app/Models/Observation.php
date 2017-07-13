@@ -13,9 +13,9 @@ use Illuminate\Database\Eloquent\Model;
 class Observation extends Model
 {
     
-    public function Components()
+    public function Component()
     {
-    	return $this->hasMany('App\Models\Components','observation_id');
+    	return $this->hasMany('App\Models\Component','observation_id');
     }
 
     public function Status()

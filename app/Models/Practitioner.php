@@ -14,9 +14,9 @@ class Practitioner extends Model
      	
      }
 
-     public function PractitionerCommunications()
+     public function PractitionerCommunication()
      {
-     	return $this->hasMany('App\Models\PractitionerCommunications','practitioner_id');
+     	return $this->hasMany('App\Models\PractitionerCommunication','practitioner_id');
      }
 
      public function PractitionerQualification()

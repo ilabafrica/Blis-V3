@@ -16,9 +16,9 @@ class Status extends Model
     	return $this->hasMany('App\Models\Observation','status_id');
     }
 
-    public function ObservationTypes()
+    public function ObservationType()
     {
-    	return $this->hasMany('App\Models\ObservationTypes','status_id');
+    	return $this->hasMany('App\Models\ObservationType','status_id');
     }
 
     public function Panel()

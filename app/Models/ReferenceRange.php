@@ -9,8 +9,8 @@ class ReferenceRange extends Model
     //Days, months, Years on age min/age max
 
 
-    public function ComponentTypes()
+    public function ComponentType()
     {
-    	return $this->hasMany('App\Models\ComponentTypes','reference_range_id');
+    	return $this->hasMany('App\Models\ComponentType','reference_range_id');
     }
 }
