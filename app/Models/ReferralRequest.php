@@ -8,5 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class ReferralRequest extends Model
 {
-    //
+    public function Status()
+    {
+    	return $this->belongsTo('App\Models\Status');
+    }
+
 }

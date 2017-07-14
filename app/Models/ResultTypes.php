@@ -11,5 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ResultTypes extends Model
 {
-    //
+    public function ComponentType()
+    {
+    	return $this->hasMany('App\Models\ComponentType','result_type_id');
+    }
 }

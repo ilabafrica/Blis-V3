@@ -8,5 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrganizationContact extends Model
 {
-    
+    public function Organization()
+    {
+    	return $this->belongsTo('App\Models\Organization');
+    }
 }

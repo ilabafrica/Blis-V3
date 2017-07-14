@@ -9,5 +9,30 @@ use Illuminate\Database\Eloquent\Model;
 
 class Organization extends Model
 {
-    //
+    public function CareTeams()
+    {
+    	return $this->hasOne('App\Models\CareTeam','Organization_id');
+    }
+
+    public function OrganizationContact()
+    {
+    	return $this->hasMany('App\Models\OrganizationContact','organization_id');
+    }
+    public function Patient()
+    {
+        return $this->hasOne('App\Models\Patient','managing_organization');
+    }
+    public function PatientContact()
+    {
+    	return $this->hasMany('App\Models\PatientContact','organization_id');
+    }
+    public function EpisodeOfCare()
+    {
+        return $this->hasMany('App\Models\EpisodeOfCare','organization_id');
+    }
+
+    public function User()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
 }
