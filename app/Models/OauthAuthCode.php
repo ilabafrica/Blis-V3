@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class OauthAuthCode extends Model
 {
+
 	public function User()
 	{
 		return $this->belongsTo('App\Models\User');
 	}
+
 
 }

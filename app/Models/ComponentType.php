@@ -12,7 +12,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ComponentsTypes extends Model
+class ComponentType extends Model
 {
     public function Coding()
     {

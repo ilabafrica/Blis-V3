@@ -1,73 +1,72 @@
 <?php
-
 namespace Tests\Unit;
 
-use App\User;
-use App\UserType;
-use App\Models\Practitioner;
-use App\Models\Address;
-use App\Models\HumanName;
-use App\Models\ContactPoint;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-
- //A person who is directly or indirectly involved in the provisioning of healthcare.
 
 class PractitionerTest extends TestCase
 {
 	use DatabaseMigrations;
 
-    public function setup()
-    {
-        parent::Setup();
-        $this->setVariables();
-    }
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-    public function setVariables()
-    {   
+	public function setVariables(){
+    	$this->practitionerData=array(
+        
+			"user_id"=>1,
+			"gender"=>1,
+			"birth_date"=>'2017:12:12 15:30:00',			"photo"=>'Sample String',
 
-    	$userTypeId  = factory(UserType::class)->create(['name'=>'practitioner'])->id;
-        $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;
-    	$this->PractitionerData = array
-    	( 
-    		'user_id' => $userId,
-            'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
-            'address' => factory(Address::class)->create()->id,
-            'gender' =>  \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
-            'birth_date' => \Faker\Factory::create()->date(),
-            'photo' =>  \Faker\Factory::create()->url
-            );
-    	$this->PractitionerDataUpdate = array 
-    	 (
-            'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'telecom' => factory(ContactPoint::class)->create(['user_id'=>$userId])->id,
-            'address' => factory(Address::class)->create()->id,
-            'gender' =>  \Faker\Factory::create()->randomElement(['male', 'female', 'other', 'unknown']),
-            'birth_date' => \Faker\Factory::create()->date(),
-            
-    		);
-    }
-    public function testStore()
-    {
-        $this->post('/api/practitioner/', $this->PractitionerData);
-        $this->assertDatabaseHas('practitioners',$this->PractitionerData);
-    }
+        );
+    	$this->updatedpractitionerData=array(
+        
+			"user_id"=>1,
+			"gender"=>1,
+			"birth_date"=>'2016:12:12 15:30:00',			"photo"=>'Sample updated String',
 
-    public function testUpdatePractitioner()
-    {
-        //TODO
-    }
+        );
+	}
 
-    public function testDeletePractitioner()
-    {
-    	//TODO
-    }
+	public function testStorePractitioner()
+	{
+		$response=$this->json('POST', '/api/practitioner',$this->practitionerData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",[$response->original]);
+	}
 
-    public function testShowPractitioner()
-    {
-        //TODO
-    }
+	public function testListPractitioner()
+	{
+		$response=$this->json('GET', '/api/practitioner');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
+	public function testShowPractitioner()
+	{
+		$this->json('POST', '/api/practitioner',$this->practitionerData);
+		$response=$this->json('GET', '/api/practitioner/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",[$response->original]);
+	}
+
+	public function testUpdatePractitioner()
+	{
+		$this->json('POST', '/api/practitioner',$this->updatedpractitionerData);
+		$response=$this->json('PUT', '/api/practitioner');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",[$response->original]);
+	}
+
+	public function testDeletePractitioner()
+	{
+		$this->json('POST', '/api/practitioner',$this->practitionerData);
+		$response=$this->delete('/api/practitioner/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
 }

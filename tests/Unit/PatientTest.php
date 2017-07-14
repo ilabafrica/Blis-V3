@@ -1,99 +1,80 @@
 <?php
-
 namespace Tests\Unit;
 
-use App\Models\HumanName;
-use App\Models\CodeableConcept;
-use App\Models\Organization;
-use App\User;
-use App\UserType;
-use App\Models\Patient;
-use App\Models\Address;
-use Faker\Generator as Facker;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-//Demographics and other administrative information about an individual or animal receiving care or other health-related services.
-
 class PatientTest extends TestCase
 {
-    use DatabaseMigrations;
+	use DatabaseMigrations;
 
-    public function setup()
-    {
-        parent::Setup();
-        $this->setVariables();
-    }
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
 
-    public function setvariables()
-    {
-        $userTypeId  = factory(UserType::class)->create(['name'=>'patient'])->id;
-        $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;
-        $this->input= array(
-            'user_id' => $userId,
-            'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'gender' => factory(CodeableConcept::class)->create()->id,
-            'birth_date' => \Faker\Factory::create()->date(),
-            'deceased' => \Faker\Factory::create()->boolean(),
-            'address' => factory(Address::class)->create()->id,
-            'marital_status' => factory(CodeableConcept::class)->create()->id,
-            'multiple_birth' => 1,
-            'photo' => 'path/to/photo/here',
-            'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']), 
-            'general_practitioner_id' => 1,
-            'managing_organization' => factory(Organization::class)->create()->id
+	public function setVariables(){
+    	$this->patientData=array(
+        
+			"user_id"=>1,
+			"gender"=>1,
+			"birth_date"=>'2017:12:12 15:30:00',			"marital_status"=>1,
+			"photo"=>'Sample String',
+			"animal_species"=>'Sample String',
+			"animal_breed"=>'Sample String',
+			"animal_gender_status"=>'Sample String',
+
         );
+    	$this->updatedpatientData=array(
+        
+			"user_id"=>1,
+			"gender"=>1,
+			"birth_date"=>'2016:12:12 15:30:00',			"marital_status"=>1,
+			"photo"=>'Sample updated String',
+			"animal_species"=>'Sample updated String',
+			"animal_breed"=>'Sample updated String',
+			"animal_gender_status"=>'Sample updated String',
 
-      $this->PatientUpdate = array(
-             'gender' => factory(CodeableConcept::class)->create()->id,
-            'birth_date' => \Faker\Factory::create()->date(),
-            'deceased' => \Faker\Factory::create()->boolean(),
-            'address' => factory(Address::class)->create()->id,
-            'marital_status' =>factory(CodeableConcept::class)->create()->id,
-            'multiple_birth' => 1,
-            'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
-            'general_practitioner_id' => 1,
-            'managing_organization' => factory(Organization::class)->create()->id);
-    }
-    public function testStorePatient()
-    {
-        $userTypeId  = factory(UserType::class)->create(['name'=>'patient'])->id;
-        $userId  = factory(User::class)->create(['type'=>$userTypeId])->id;
-        $patientArray = [
-            'user_id' => $userId,
-            'name' => factory(HumanName::class)->create(['user_id'=>$userId])->id,
-            'gender' => factory(CodeableConcept::class)->create()->id,
-            'birth_date' => \Faker\Factory::create()->date(),
-            'deceased' => \Faker\Factory::create()->boolean(),
-            'address' => factory(Address::class)->create()->id,
-            'marital_status' => factory(CodeableConcept::class)->create()->id,
-            'multiple_birth' => 1,
-            'photo' => 'path/to/photo/here',
-            'general_practitioner_type' => \Faker\Factory::create()->randomElement(['organization', 'practitioner']),
-            'general_practitioner_id' => 1,
-            'managing_organization' => factory(Organization::class)->create()->id
-        ];
+        );
+	}
 
-        $this->post('/api/patient/', $patientArray);
+	public function testStorePatient()
+	{
+		$response=$this->json('POST', '/api/patient',$this->patientData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",[$response->original]);
+	}
 
-        $this->assertDatabaseHas('patients',$patientArray);
-    }
+	public function testListPatient()
+	{
+		$response=$this->json('GET', '/api/patient');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
-    public function testDeletePatient()
-    {
-        //TODO
-    }
+	public function testShowPatient()
+	{
+		$this->json('POST', '/api/patient',$this->patientData);
+		$response=$this->json('GET', '/api/patient/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",[$response->original]);
+	}
 
-    public  function testUpdate()
-   {
-        //TODO
-   }
+	public function testUpdatePatient()
+	{
+		$this->json('POST', '/api/patient',$this->updatedpatientData);
+		$response=$this->json('PUT', '/api/patient');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",[$response->original]);
+	}
 
-   public function testShowPatient()
-   {
-        //TODO
-   }
+	public function testDeletePatient()
+	{
+		$this->json('POST', '/api/patient',$this->patientData);
+		$response=$this->delete('/api/patient/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
 
 }

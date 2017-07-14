@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -7,118 +6,116 @@ use App\Models\Specimen;
 
 class SpecimenController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-      $specimentypes = Specimen::orderBy('id', 'ASC')->get();
-        
-        //load a raw set of specimens
+	public function index()
+	{
+		$specimen=Specimen::orderBy('id', 'ASC')->paginate(20);
+		return response()->json(Specimen);
+	}
 
-        // if(Input::has('raw')){
-        // }
-        return response()->json($specimentypes);
-    }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    * Store a newly created resource in storage.
+    *
+    * @param  \Illuminate\Http\Request
+    * @return \Illuminate\Http\Response
+    */
+	public function store(Request $request)
+	{
+        $rules=array(
+		"status" => 'required',
+		"type" => 'required',
+		"subject" => 'required',
+		"received_time" => 'required',
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $rules = array('type' => 'required|unique:specimen_types,type');
-        $validator = Validator::make(Input::all(), $rules);
+		);
+		$validator = \Validator::make($request->all(),$rules);
+		if ($validator->fails()) {
+			 return response()->json($validator);
+		} else {
+			$specimen= new Specimen;
+			$specimen->accession_identifier = $request->input('accession_identifier');
+			$specimen->status = $request->input('status');
+			$specimen->type = $request->input('type');
+			$specimen->subject = $request->input('subject');
+			$specimen->received_time = $request->input('received_time');
+			$specimen->parent = $request->input('parent');
+			$specimen->note = $request->input('note');
 
-        // process the inputs
-        if ($validator->fails()) {
-            return response()->json();
-        } else {
-            // store
-            $specimentype = new Specimen;
-            $specimentype->type = Input::get('type');
-            $specimentype->status = Input::get('status');
-            $specimentype->save();
-
-            return response()->json();  
-        }
-    }
+			try{
+				$specimen->save();
+				return response()->json($specimen);
+			}
+			catch (\Illuminate\Database\QueryException $e){
+				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
+			}
+		}
+	}
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  id
      * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $specimentype = Specimen::find($id);
-        
-    }
+     */public function show($id){
+		$specimen=Specimen::findorfails($id);
+		return response()->json($specimen);
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  request
+     * @param  int  id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        $rules = array('name' => 'required');
-        $validator = Validator::make(Input::all(), $rules);
-      
-        if ($validator->fails()) {
-            return response()->json($validator);  
-        } else {
-            // Update
-            $specimentype = Specimen::find($id);
-            $specimentype->type = Input::get('type');
-            $specimentype->status = Input::get('status');
-            $specimentype->save();
+	{
+    
+        $rules=array(
+		"status" => 'required',
+		"type" => 'required',
+		"subject" => 'required',
+		"received_time" => 'required',
 
-            // redirect
-            return response()->json($validator);
-        }
-    }
+		);
+        $validator = \Validator::make($request->all(),$rules);
+		 if ($validator->fails()) {
+			 return response()->json($validator,422);
+		} else {
+			$specimen=Specimen::findorfail($id);
+			$specimen->accession_identifier = $request->input('accession_identifier');
+			$specimen->status = $request->input('status');
+			$specimen->type = $request->input('type');
+			$specimen->subject = $request->input('subject');
+			$specimen->received_time = $request->input('received_time');
+			$specimen->parent = $request->input('parent');
+			$specimen->note = $request->input('note');
+
+			try{
+				$specimen->save();
+				return response()->json($specimen);
+			}
+			catch (\Illuminate\Database\QueryException $e){
+				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
+			}
+		}
+	}
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        $specimentype = Specimen::find($id);
-        $specimentype->delete();
-        
-    }
-
-    
+	public function destroy($id){
+		try{
+			$specimen=Specimen::findorfails($id);
+			$specimen->delete();
+			return response()->json($specimen,200);
+		}
+		catch (\Illuminate\Database\QueryException $e){
+			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
+		}
+	}
 }

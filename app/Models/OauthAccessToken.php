@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OauthAccessToken extends Model
 {
+
     public function User()
     {
     	return $this->belongsTo('App\Models\User');
@@ -15,4 +16,5 @@ class OauthAccessToken extends Model
     {
     	return $this->hasOne('App\Models\OauthRefreshToken','access_token_id');
     }
+
 }

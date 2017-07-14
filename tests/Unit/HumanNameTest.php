@@ -1,16 +1,10 @@
 <?php
-
 namespace Tests\Unit;
 
-use App\Models\HumanName;
-use App\Models\CodeableConcept;
-use App\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-//A patient may have multiple names with different uses or applicable periods. For animals, the name is a "HumanName" in the sense that is assigned and used by humans and has the same patterns
 class HumanNameTest extends TestCase
 {
 	use DatabaseMigrations;
@@ -19,54 +13,68 @@ class HumanNameTest extends TestCase
 		parent::Setup();
 		$this->setVariables();
 	}
-	/**
-	 * A basic test example.
-	 *
-	 * @return void
-	 */
-	/**Test*/
-	public function setVariables()
-	{
-		$this->HumannameData = array
-		(
-			'user_id' => factory(User::class)->create()->id,
-			'use' => \Faker\Factory::create()->randomElement(['usual', 'official', 'temp', 'nickname', 'anonymous', 'old', 'maiden']),
-			'text' => 'text_name',
-			'family' => 'family_name',
-			'given' => 'given_name',
-			'prefix' => 'name_prefix',
-			'suffix' => 'name_suffix',
-			'period' => \Faker\Factory::create()->date()
-			);
-		$this->HumannameDataUpdate = array
-		(
 
-			 'use' => factory(CodeableConcept::class)->create()->id,
-			'text' => 'text_name',
-			'family' => 'family_name',
-			'given' => 'given_name',
-			'prefix' => 'name_prefix',
-			'suffix' => 'name_suffix',
-			'period' => \Faker\Factory::create()->date()
-			);
-	}
-	public function testStoreHumannames()
-	{
-		$this->post('/api/humanname/', $this->HumannameData);
-
-		$this->assertDatabaseHas('human_names',$this->HumannameData);
-	}
-	public function testUpdateHumanename()
-	{
-		//TODO
+	public function setVariables(){
+    	$this->humannameData=array(
+        
+			"user_id"=>1,
+			"use"=>1,
+			"text"=>'Sample String',
+			"family"=>'Sample String',
+			"given"=>'Sample String',
+			"prefix"=>'Sample String',
+			"suffix"=>'Sample String',
+			"period"=>'2017:12:12 15:30:00',
+        );
+    	$this->updatedhumannameData=array(
+        
+			"user_id"=>1,
+			"use"=>1,
+			"text"=>'Sample updated String',
+			"family"=>'Sample updated String',
+			"given"=>'Sample updated String',
+			"prefix"=>'Sample updated String',
+			"suffix"=>'Sample updated String',
+			"period"=>'2016:12:12 15:30:00',
+        );
 	}
 
-	public function testHumannamesDelete()
+	public function testStoreHumanName()
 	{
-		//TODO
+		$response=$this->json('POST', '/api/humanname',$this->humannameData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",[$response->original]);
 	}
+
+	public function testListHumanName()
+	{
+		$response=$this->json('GET', '/api/humanname');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
 	public function testShowHumanName()
 	{
-		//TODO
+		$this->json('POST', '/api/humanname',$this->humannameData);
+		$response=$this->json('GET', '/api/humanname/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
 	}
+
+	public function testUpdateHumanName()
+	{
+		$this->json('POST', '/api/humanname',$this->updatedhumannameData);
+		$response=$this->json('PUT', '/api/humanname');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("subject",$response->original);
+	}
+
+	public function testDeleteHumanName()
+	{
+		$this->json('POST', '/api/humanname',$this->humannameData);
+		$response=$this->delete('/api/humanname/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		
+	}
+
 }

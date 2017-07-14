@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Coding extends Model
 {
+
     public function ComponentType()
     {
     	return $this->hasMany('App\Models\ComponentTypes','code_id');
@@ -30,4 +31,5 @@ class Coding extends Model
     {
         return $this->hasOne('App\Models\Substance','code');
     }
+
 }
