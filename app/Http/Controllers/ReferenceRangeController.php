@@ -64,7 +64,7 @@ class ReferenceRangeController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$referencerange=ReferenceRange::findorfails($id);
+		$referencerange=ReferenceRange::findorfail($id);
 		return response()->json($referencerange);
 	}
 
@@ -124,7 +124,7 @@ class ReferenceRangeController extends Controller
      */
 	public function destroy($id){
 		try{
-			$referencerange=ReferenceRange::findorfails($id);
+			$referencerange=ReferenceRange::findorfail($id);
 			$referencerange->delete();
 			return response()->json($referencerange,200);
 		}

@@ -64,7 +64,7 @@ class ObservationController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$observation=Observation::findorfails($id);
+		$observation=Observation::findorfail($id);
 		return response()->json($observation);
 	}
 
@@ -124,7 +124,7 @@ class ObservationController extends Controller
      */
 	public function destroy($id){
 		try{
-			$observation=Observation::findorfails($id);
+			$observation=Observation::findorfail($id);
 			$observation->delete();
 			return response()->json($observation,200);
 		}

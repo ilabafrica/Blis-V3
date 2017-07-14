@@ -52,7 +52,7 @@ class PanelTypeController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$paneltype=PanelType::findorfails($id);
+		$paneltype=PanelType::findorfail($id);
 		return response()->json($paneltype);
 	}
 
@@ -100,7 +100,7 @@ class PanelTypeController extends Controller
      */
 	public function destroy($id){
 		try{
-			$paneltype=PanelType::findorfails($id);
+			$paneltype=PanelType::findorfail($id);
 			$paneltype->delete();
 			return response()->json($paneltype,200);
 		}

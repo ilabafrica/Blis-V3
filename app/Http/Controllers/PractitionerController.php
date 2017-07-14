@@ -60,7 +60,7 @@ class PractitionerController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$practitioner=Practitioner::findorfails($id);
+		$practitioner=Practitioner::findorfail($id);
 		return response()->json($practitioner);
 	}
 
@@ -116,7 +116,7 @@ class PractitionerController extends Controller
      */
 	public function destroy($id){
 		try{
-			$practitioner=Practitioner::findorfails($id);
+			$practitioner=Practitioner::findorfail($id);
 			$practitioner->delete();
 			return response()->json($practitioner,200);
 		}

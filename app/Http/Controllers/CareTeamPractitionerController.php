@@ -50,7 +50,7 @@ class CareTeamPractitionerController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$careteampractitioner=CareTeamPractitioner::findorfails($id);
+		$careteampractitioner=CareTeamPractitioner::findorfail($id);
 		return response()->json($careteampractitioner);
 	}
 
@@ -96,7 +96,7 @@ class CareTeamPractitionerController extends Controller
      */
 	public function destroy($id){
 		try{
-			$careteampractitioner=CareTeamPractitioner::findorfails($id);
+			$careteampractitioner=CareTeamPractitioner::findorfail($id);
 			$careteampractitioner->delete();
 			return response()->json($careteampractitioner,200);
 		}

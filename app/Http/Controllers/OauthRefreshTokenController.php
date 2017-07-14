@@ -51,7 +51,7 @@ class OauthRefreshTokenController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$oauthrefreshtoken=OauthRefreshToken::findorfails($id);
+		$oauthrefreshtoken=OauthRefreshToken::findorfail($id);
 		return response()->json($oauthrefreshtoken);
 	}
 
@@ -98,7 +98,7 @@ class OauthRefreshTokenController extends Controller
      */
 	public function destroy($id){
 		try{
-			$oauthrefreshtoken=OauthRefreshToken::findorfails($id);
+			$oauthrefreshtoken=OauthRefreshToken::findorfail($id);
 			$oauthrefreshtoken->delete();
 			return response()->json($oauthrefreshtoken,200);
 		}

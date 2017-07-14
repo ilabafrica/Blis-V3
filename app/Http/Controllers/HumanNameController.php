@@ -57,7 +57,7 @@ class HumanNameController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$humanname=HumanName::findorfails($id);
+		$humanname=HumanName::findorfail($id);
 		return response()->json($humanname);
 	}
 
@@ -110,7 +110,7 @@ class HumanNameController extends Controller
      */
 	public function destroy($id){
 		try{
-			$humanname=HumanName::findorfails($id);
+			$humanname=HumanName::findorfail($id);
 			$humanname->delete();
 			return response()->json($humanname,200);
 		}

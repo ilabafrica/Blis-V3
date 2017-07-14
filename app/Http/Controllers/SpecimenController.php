@@ -57,7 +57,7 @@ class SpecimenController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$specimen=Specimen::findorfails($id);
+		$specimen=Specimen::findorfail($id);
 		return response()->json($specimen);
 	}
 
@@ -110,7 +110,7 @@ class SpecimenController extends Controller
      */
 	public function destroy($id){
 		try{
-			$specimen=Specimen::findorfails($id);
+			$specimen=Specimen::findorfail($id);
 			$specimen->delete();
 			return response()->json($specimen,200);
 		}

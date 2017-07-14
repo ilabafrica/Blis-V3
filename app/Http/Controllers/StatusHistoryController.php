@@ -50,7 +50,7 @@ class StatusHistoryController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$statushistory=StatusHistory::findorfails($id);
+		$statushistory=StatusHistory::findorfail($id);
 		return response()->json($statushistory);
 	}
 
@@ -96,7 +96,7 @@ class StatusHistoryController extends Controller
      */
 	public function destroy($id){
 		try{
-			$statushistory=StatusHistory::findorfails($id);
+			$statushistory=StatusHistory::findorfail($id);
 			$statushistory->delete();
 			return response()->json($statushistory,200);
 		}

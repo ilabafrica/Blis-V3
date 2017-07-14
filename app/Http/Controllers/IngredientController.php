@@ -48,7 +48,7 @@ class IngredientController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$ingredient=Ingredient::findorfails($id);
+		$ingredient=Ingredient::findorfail($id);
 		return response()->json($ingredient);
 	}
 
@@ -92,7 +92,7 @@ class IngredientController extends Controller
      */
 	public function destroy($id){
 		try{
-			$ingredient=Ingredient::findorfails($id);
+			$ingredient=Ingredient::findorfail($id);
 			$ingredient->delete();
 			return response()->json($ingredient,200);
 		}

@@ -59,7 +59,7 @@ class OrganizationController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$organization=Organization::findorfails($id);
+		$organization=Organization::findorfail($id);
 		return response()->json($organization);
 	}
 
@@ -114,7 +114,7 @@ class OrganizationController extends Controller
      */
 	public function destroy($id){
 		try{
-			$organization=Organization::findorfails($id);
+			$organization=Organization::findorfail($id);
 			$organization->delete();
 			return response()->json($organization,200);
 		}

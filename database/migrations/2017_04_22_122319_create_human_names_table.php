@@ -15,8 +15,7 @@ class CreateHumanNamesTable extends Migration
     {
         Schema::create('human_names', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned()
-                ->references('users')->on('id')->onUpdate('cascade');
+            $table->integer('created_by')->unsigned();
             $table->integer('use')->unsigned();
             $table->string('text');
             $table->string('family')->nullable();
@@ -27,8 +26,8 @@ class CreateHumanNamesTable extends Migration
             $table->timestamps();
 
             //Relationships
-            $table->foreign('use')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
-
+            $table->foreign('use')->references('id');
+            $table->foreign('created_by')->references('users');
         });
     }
 

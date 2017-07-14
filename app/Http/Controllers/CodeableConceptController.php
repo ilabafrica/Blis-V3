@@ -50,7 +50,7 @@ class CodeableConceptController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$codeableconcept=CodeableConcept::findorfails($id);
+		$codeableconcept=CodeableConcept::findorfail($id);
 		return response()->json($codeableconcept);
 	}
 
@@ -96,7 +96,7 @@ class CodeableConceptController extends Controller
      */
 	public function destroy($id){
 		try{
-			$codeableconcept=CodeableConcept::findorfails($id);
+			$codeableconcept=CodeableConcept::findorfail($id);
 			$codeableconcept->delete();
 			return response()->json($codeableconcept,200);
 		}

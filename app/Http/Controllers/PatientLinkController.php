@@ -52,7 +52,7 @@ class PatientLinkController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$patientlink=PatientLink::findorfails($id);
+		$patientlink=PatientLink::findorfail($id);
 		return response()->json($patientlink);
 	}
 
@@ -100,7 +100,7 @@ class PatientLinkController extends Controller
      */
 	public function destroy($id){
 		try{
-			$patientlink=PatientLink::findorfails($id);
+			$patientlink=PatientLink::findorfail($id);
 			$patientlink->delete();
 			return response()->json($patientlink,200);
 		}

@@ -52,7 +52,7 @@ class ProcessingController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$processing=Processing::findorfails($id);
+		$processing=Processing::findorfail($id);
 		return response()->json($processing);
 	}
 
@@ -100,7 +100,7 @@ class ProcessingController extends Controller
      */
 	public function destroy($id){
 		try{
-			$processing=Processing::findorfails($id);
+			$processing=Processing::findorfail($id);
 			$processing->delete();
 			return response()->json($processing,200);
 		}

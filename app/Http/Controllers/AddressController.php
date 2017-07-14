@@ -59,7 +59,7 @@ class AddressController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$address=Address::findorfails($id);
+		$address=Address::findorfail($id);
 		return response()->json($address);
 	}
 
@@ -114,7 +114,7 @@ class AddressController extends Controller
      */
 	public function destroy($id){
 		try{
-			$address=Address::findorfails($id);
+			$address=Address::findorfail($id);
 			$address->delete();
 			return response()->json($address,200);
 		}

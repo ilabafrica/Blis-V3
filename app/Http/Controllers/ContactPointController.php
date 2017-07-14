@@ -56,7 +56,7 @@ class ContactPointController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$contactpoint=ContactPoint::findorfails($id);
+		$contactpoint=ContactPoint::findorfail($id);
 		return response()->json($contactpoint);
 	}
 
@@ -108,7 +108,7 @@ class ContactPointController extends Controller
      */
 	public function destroy($id){
 		try{
-			$contactpoint=ContactPoint::findorfails($id);
+			$contactpoint=ContactPoint::findorfail($id);
 			$contactpoint->delete();
 			return response()->json($contactpoint,200);
 		}

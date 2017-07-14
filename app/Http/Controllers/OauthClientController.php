@@ -59,7 +59,7 @@ class OauthClientController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$oauthclient=OauthClient::findorfails($id);
+		$oauthclient=OauthClient::findorfail($id);
 		return response()->json($oauthclient);
 	}
 
@@ -114,7 +114,7 @@ class OauthClientController extends Controller
      */
 	public function destroy($id){
 		try{
-			$oauthclient=OauthClient::findorfails($id);
+			$oauthclient=OauthClient::findorfail($id);
 			$oauthclient->delete();
 			return response()->json($oauthclient,200);
 		}

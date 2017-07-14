@@ -52,7 +52,7 @@ class PractitionerQualificationController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$practitionerqualification=PractitionerQualification::findorfails($id);
+		$practitionerqualification=PractitionerQualification::findorfail($id);
 		return response()->json($practitionerqualification);
 	}
 
@@ -100,7 +100,7 @@ class PractitionerQualificationController extends Controller
      */
 	public function destroy($id){
 		try{
-			$practitionerqualification=PractitionerQualification::findorfails($id);
+			$practitionerqualification=PractitionerQualification::findorfail($id);
 			$practitionerqualification->delete();
 			return response()->json($practitionerqualification,200);
 		}

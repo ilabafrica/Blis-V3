@@ -56,7 +56,7 @@ class ComponentController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$component=Component::findorfails($id);
+		$component=Component::findorfail($id);
 		return response()->json($component);
 	}
 
@@ -108,7 +108,7 @@ class ComponentController extends Controller
      */
 	public function destroy($id){
 		try{
-			$component=Component::findorfails($id);
+			$component=Component::findorfail($id);
 			$component->delete();
 			return response()->json($component,200);
 		}

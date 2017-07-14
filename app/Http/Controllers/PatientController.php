@@ -12,7 +12,6 @@ class PatientController extends Controller
 		return response()->json($patient);
 	}
 
-
 	/**
 	* Store a newly created resource in storage.
 	*
@@ -23,7 +22,7 @@ class PatientController extends Controller
 	{
 		$rules=array(
 		"identifier" => 'required',
-		"user_id" => 'required',
+		"created_by" => 'required',
 		"name" => 'required',
 		"gender" => 'required',
 		"birth_date" => 'required',
@@ -35,7 +34,8 @@ class PatientController extends Controller
 			 return response()->json($validator);
 		} else {
 			$patient= new Patient;
-			$patient->user_id = $request->input('user_id');
+			$patient->identifier = $request->input('identifier');
+			$patient->created_by = $request->input('created_by');
 			$patient->active = $request->input('active');
 			$patient->name = $request->input('name');
 			$patient->gender = $request->input('gender');
@@ -43,13 +43,11 @@ class PatientController extends Controller
 			$patient->deceased = $request->input('deceased');
 			$patient->address = $request->input('address');
 			$patient->marital_status = $request->input('marital_status');
-			$patient->multiple_birth = $request->input('multiple_birth');
 			$patient->photo = $request->input('photo');
 			$patient->animal = $request->input('animal');
 			$patient->animal_species = $request->input('animal_species');
 			$patient->animal_breed = $request->input('animal_breed');
 			$patient->animal_gender_status = $request->input('animal_gender_status');
-			$patient->general_practitioner_type = $request->input('general_practitioner_type');
 			$patient->general_practitioner_id = $request->input('general_practitioner_id');
 			$patient->managing_organization = $request->input('managing_organization');
 
@@ -70,7 +68,7 @@ class PatientController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($id){
-		$patient=Patient::findorfails($id);
+		$patient=Patient::findorfail($id);
 		return response()->json($patient);
 	}
 
@@ -84,10 +82,9 @@ class PatientController extends Controller
 	 */
 	public function update(Request $request, $id)
 	{
-	
 		$rules=array(
 		"identifier" => 'required',
-		"user_id" => 'required',
+		"created_by" => 'required',
 		"name" => 'required',
 		"gender" => 'required',
 		"birth_date" => 'required',
@@ -98,7 +95,8 @@ class PatientController extends Controller
 			 return response()->json($validator,422);
 		} else {
 			$patient=Patient::findorfail($id);
-			$patient->user_id = $request->input('user_id');
+			$patient->identifier = $request->input('identifier');
+			$patient->created_by = $request->input('created_by');
 			$patient->active = $request->input('active');
 			$patient->name = $request->input('name');
 			$patient->gender = $request->input('gender');
@@ -106,7 +104,6 @@ class PatientController extends Controller
 			$patient->deceased = $request->input('deceased');
 			$patient->address = $request->input('address');
 			$patient->marital_status = $request->input('marital_status');
-			$patient->multiple_birth = $request->input('multiple_birth');
 			$patient->photo = $request->input('photo');
 			$patient->animal = $request->input('animal');
 			$patient->animal_species = $request->input('animal_species');
@@ -134,7 +131,7 @@ class PatientController extends Controller
 	 */
 	public function destroy($id){
 		try{
-			$patient=Patient::findorfails($id);
+			$patient=Patient::findorfail($id);
 			$patient->delete();
 			return response()->json($patient,200);
 		}

@@ -57,7 +57,7 @@ class EpisodeofCareController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$episodeofcare=EpisodeofCare::findorfails($id);
+		$episodeofcare=EpisodeofCare::findorfail($id);
 		return response()->json($episodeofcare);
 	}
 
@@ -110,7 +110,7 @@ class EpisodeofCareController extends Controller
      */
 	public function destroy($id){
 		try{
-			$episodeofcare=EpisodeofCare::findorfails($id);
+			$episodeofcare=EpisodeofCare::findorfail($id);
 			$episodeofcare->delete();
 			return response()->json($episodeofcare,200);
 		}

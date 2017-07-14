@@ -53,7 +53,7 @@ class QuantityController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$quantity=Quantity::findorfails($id);
+		$quantity=Quantity::findorfail($id);
 		return response()->json($quantity);
 	}
 
@@ -102,7 +102,7 @@ class QuantityController extends Controller
      */
 	public function destroy($id){
 		try{
-			$quantity=Quantity::findorfails($id);
+			$quantity=Quantity::findorfail($id);
 			$quantity->delete();
 			return response()->json($quantity,200);
 		}

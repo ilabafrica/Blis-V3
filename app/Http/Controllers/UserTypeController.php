@@ -50,7 +50,7 @@ class UserTypeController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$usertype=UserType::findorfails($id);
+		$usertype=UserType::findorfail($id);
 		return response()->json($usertype);
 	}
 
@@ -96,7 +96,7 @@ class UserTypeController extends Controller
      */
 	public function destroy($id){
 		try{
-			$usertype=UserType::findorfails($id);
+			$usertype=UserType::findorfail($id);
 			$usertype->delete();
 			return response()->json($usertype,200);
 		}

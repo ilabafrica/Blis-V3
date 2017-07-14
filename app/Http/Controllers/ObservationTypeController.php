@@ -56,7 +56,7 @@ class ObservationTypeController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$observationtype=ObservationType::findorfails($id);
+		$observationtype=ObservationType::findorfail($id);
 		return response()->json($observationtype);
 	}
 
@@ -108,7 +108,7 @@ class ObservationTypeController extends Controller
      */
 	public function destroy($id){
 		try{
-			$observationtype=ObservationType::findorfails($id);
+			$observationtype=ObservationType::findorfail($id);
 			$observationtype->delete();
 			return response()->json($observationtype,200);
 		}

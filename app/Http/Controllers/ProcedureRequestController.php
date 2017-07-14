@@ -86,7 +86,7 @@ class ProcedureRequestController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$procedurerequest=ProcedureRequest::findorfails($id);
+		$procedurerequest=ProcedureRequest::findorfail($id);
 		return response()->json($procedurerequest);
 	}
 
@@ -168,7 +168,7 @@ class ProcedureRequestController extends Controller
      */
 	public function destroy($id){
 		try{
-			$procedurerequest=ProcedureRequest::findorfails($id);
+			$procedurerequest=ProcedureRequest::findorfail($id);
 			$procedurerequest->delete();
 			return response()->json($procedurerequest,200);
 		}

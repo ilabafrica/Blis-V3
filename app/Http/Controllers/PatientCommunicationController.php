@@ -52,7 +52,7 @@ class PatientCommunicationController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$patientcommunication=PatientCommunication::findorfails($id);
+		$patientcommunication=PatientCommunication::findorfail($id);
 		return response()->json($patientcommunication);
 	}
 
@@ -100,7 +100,7 @@ class PatientCommunicationController extends Controller
      */
 	public function destroy($id){
 		try{
-			$patientcommunication=PatientCommunication::findorfails($id);
+			$patientcommunication=PatientCommunication::findorfail($id);
 			$patientcommunication->delete();
 			return response()->json($patientcommunication,200);
 		}

@@ -50,7 +50,7 @@ class PasswordResetController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$passwordreset=PasswordReset::findorfails($id);
+		$passwordreset=PasswordReset::findorfail($id);
 		return response()->json($passwordreset);
 	}
 
@@ -96,7 +96,7 @@ class PasswordResetController extends Controller
      */
 	public function destroy($id){
 		try{
-			$passwordreset=PasswordReset::findorfails($id);
+			$passwordreset=PasswordReset::findorfail($id);
 			$passwordreset->delete();
 			return response()->json($passwordreset,200);
 		}

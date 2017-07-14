@@ -68,7 +68,7 @@ class ReferralRequestController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$referralrequest=ReferralRequest::findorfails($id);
+		$referralrequest=ReferralRequest::findorfail($id);
 		return response()->json($referralrequest);
 	}
 
@@ -132,7 +132,7 @@ class ReferralRequestController extends Controller
      */
 	public function destroy($id){
 		try{
-			$referralrequest=ReferralRequest::findorfails($id);
+			$referralrequest=ReferralRequest::findorfail($id);
 			$referralrequest->delete();
 			return response()->json($referralrequest,200);
 		}

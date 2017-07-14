@@ -62,7 +62,7 @@ class CareTeamController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$careteam=CareTeam::findorfails($id);
+		$careteam=CareTeam::findorfail($id);
 		return response()->json($careteam);
 	}
 
@@ -120,7 +120,7 @@ class CareTeamController extends Controller
      */
 	public function destroy($id){
 		try{
-			$careteam=CareTeam::findorfails($id);
+			$careteam=CareTeam::findorfail($id);
 			$careteam->delete();
 			return response()->json($careteam,200);
 		}

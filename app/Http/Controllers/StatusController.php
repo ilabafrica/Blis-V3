@@ -48,7 +48,7 @@ class StatusController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$status=Status::findorfails($id);
+		$status=Status::findorfail($id);
 		return response()->json($status);
 	}
 
@@ -92,7 +92,7 @@ class StatusController extends Controller
      */
 	public function destroy($id){
 		try{
-			$status=Status::findorfails($id);
+			$status=Status::findorfail($id);
 			$status->delete();
 			return response()->json($status,200);
 		}

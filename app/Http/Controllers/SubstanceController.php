@@ -53,7 +53,7 @@ class SubstanceController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$substance=Substance::findorfails($id);
+		$substance=Substance::findorfail($id);
 		return response()->json($substance);
 	}
 
@@ -102,7 +102,7 @@ class SubstanceController extends Controller
      */
 	public function destroy($id){
 		try{
-			$substance=Substance::findorfails($id);
+			$substance=Substance::findorfail($id);
 			$substance->delete();
 			return response()->json($substance,200);
 		}

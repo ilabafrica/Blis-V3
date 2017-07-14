@@ -55,7 +55,7 @@ class OrganizationContactController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$organizationcontact=OrganizationContact::findorfails($id);
+		$organizationcontact=OrganizationContact::findorfail($id);
 		return response()->json($organizationcontact);
 	}
 
@@ -106,7 +106,7 @@ class OrganizationContactController extends Controller
      */
 	public function destroy($id){
 		try{
-			$organizationcontact=OrganizationContact::findorfails($id);
+			$organizationcontact=OrganizationContact::findorfail($id);
 			$organizationcontact->delete();
 			return response()->json($organizationcontact,200);
 		}

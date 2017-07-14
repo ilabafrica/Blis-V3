@@ -48,7 +48,7 @@ class OauthPersonalAccessClientController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$oauthpersonalaccessclient=OauthPersonalAccessClient::findorfails($id);
+		$oauthpersonalaccessclient=OauthPersonalAccessClient::findorfail($id);
 		return response()->json($oauthpersonalaccessclient);
 	}
 
@@ -92,7 +92,7 @@ class OauthPersonalAccessClientController extends Controller
      */
 	public function destroy($id){
 		try{
-			$oauthpersonalaccessclient=OauthPersonalAccessClient::findorfails($id);
+			$oauthpersonalaccessclient=OauthPersonalAccessClient::findorfail($id);
 			$oauthpersonalaccessclient->delete();
 			return response()->json($oauthpersonalaccessclient,200);
 		}

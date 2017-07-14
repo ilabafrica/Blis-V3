@@ -53,7 +53,7 @@ class UserController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$user=User::findorfails($id);
+		$user=User::findorfail($id);
 		return response()->json($user);
 	}
 
@@ -102,7 +102,7 @@ class UserController extends Controller
      */
 	public function destroy($id){
 		try{
-			$user=User::findorfails($id);
+			$user=User::findorfail($id);
 			$user->delete();
 			return response()->json($user,200);
 		}

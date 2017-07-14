@@ -54,7 +54,7 @@ class OauthAuthCodeController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$oauthauthcode=OauthAuthCode::findorfails($id);
+		$oauthauthcode=OauthAuthCode::findorfail($id);
 		return response()->json($oauthauthcode);
 	}
 
@@ -104,7 +104,7 @@ class OauthAuthCodeController extends Controller
      */
 	public function destroy($id){
 		try{
-			$oauthauthcode=OauthAuthCode::findorfails($id);
+			$oauthauthcode=OauthAuthCode::findorfail($id);
 			$oauthauthcode->delete();
 			return response()->json($oauthauthcode,200);
 		}

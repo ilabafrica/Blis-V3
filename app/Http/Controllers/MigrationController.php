@@ -50,7 +50,7 @@ class MigrationController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$migration=Migration::findorfails($id);
+		$migration=Migration::findorfail($id);
 		return response()->json($migration);
 	}
 
@@ -96,7 +96,7 @@ class MigrationController extends Controller
      */
 	public function destroy($id){
 		try{
-			$migration=Migration::findorfails($id);
+			$migration=Migration::findorfail($id);
 			$migration->delete();
 			return response()->json($migration,200);
 		}

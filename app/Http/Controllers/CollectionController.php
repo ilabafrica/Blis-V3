@@ -56,7 +56,7 @@ class CollectionController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$collection=Collection::findorfails($id);
+		$collection=Collection::findorfail($id);
 		return response()->json($collection);
 	}
 
@@ -108,7 +108,7 @@ class CollectionController extends Controller
      */
 	public function destroy($id){
 		try{
-			$collection=Collection::findorfails($id);
+			$collection=Collection::findorfail($id);
 			$collection->delete();
 			return response()->json($collection,200);
 		}

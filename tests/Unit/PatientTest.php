@@ -17,9 +17,14 @@ class PatientTest extends TestCase
 	public function setVariables(){
     	$this->patientData=array(
         
-			"user_id"=>1,
+			"created_by"=>1,
+			"active"=>1,
+			"identifier"=>1,
 			"gender"=>1,
-			"birth_date"=>'2017:12:12 15:30:00',			"marital_status"=>1,
+			"name" => "s",
+			"address"=>"ss",
+			"birth_date"=>'2017:12:12 15:30:00',
+			"marital_status"=>1,
 			"photo"=>'Sample String',
 			"animal_species"=>'Sample String',
 			"animal_breed"=>'Sample String',
@@ -28,9 +33,14 @@ class PatientTest extends TestCase
         );
     	$this->updatedpatientData=array(
         
-			"user_id"=>1,
+			"created_by"=>1,
+			"active"=>1,
+			"identifier"=>1,
 			"gender"=>1,
-			"birth_date"=>'2016:12:12 15:30:00',			"marital_status"=>1,
+			"name" => "b",
+			"address"=>"bb",
+			"birth_date"=>'2016:12:12 15:30:00',
+			"marital_status"=>1,
 			"photo"=>'Sample updated String',
 			"animal_species"=>'Sample updated String',
 			"animal_breed"=>'Sample updated String',
@@ -42,30 +52,29 @@ class PatientTest extends TestCase
 	public function testStorePatient()
 	{
 		$response=$this->json('POST', '/api/patient',$this->patientData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("created_by", $response->original);
 	}
 
 	public function testListPatient()
 	{
 		$response=$this->json('GET', '/api/patient');
-		$this->assertEquals(200,$response->getStatusCode());
-		
+		$response->assertStatus(200);
 	}
 
 	public function testShowPatient()
 	{
 		$this->json('POST', '/api/patient',$this->patientData);
 		$response=$this->json('GET', '/api/patient/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testUpdatePatient()
 	{
 		$this->json('POST', '/api/patient',$this->updatedpatientData);
-		$response=$this->json('PUT', '/api/patient');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response = $this->json('PUT', '/api/patient');
+		$response->assertStatus(200);
 		$this->assertArrayHasKey("subject",[$response->original]);
 	}
 

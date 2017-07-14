@@ -30,7 +30,7 @@ $factory->define(\App\Models\CodeableConcept::class, function (Faker\Generator $
 $factory->define(\App\Models\HumanName::class, function (Faker\Generator $faker) {
 
 	return [
-		'user_id' => factory(\App\Models\User::class)->create()->id,
+		'created_by' => factory(\App\Models\User::class)->create()->id,
 		'use' =>factory(\App\Models\CodeableConcept::class)->create()->id,
 		'text' => $faker->word
 	];
@@ -40,7 +40,7 @@ $factory->define(\App\Models\HumanName::class, function (Faker\Generator $faker)
 $factory->define(\App\Models\ContactPoint::class, function (Faker\Generator $faker) {
 
 	return [
-		'user_id' => factory(\App\Models\User::class)->create()->id,
+		'created_by' => factory(\App\Models\User::class)->create()->id,
 		'system' => factory(\App\Models\CodeableConcept::class)->create()->id,
 		'value' => $faker->word,
 		'use' => factory(\App\Models\CodeableConcept::class)->create()->id,
@@ -66,7 +66,7 @@ $factory->define(\App\Models\Address::class, function (Faker\Generator $faker) {
 $factory->define(\App\Models\Organization::class, function (Faker\Generator $faker) {
 
 	return [
-		'user_id' => factory(\App\Models\User::class)->create()->id,
+		'created_by' => factory(\App\Models\User::class)->create()->id,
 		'type' => factory(\App\Models\CodeableConcept::class)->create()->id,
 		'name' => $faker->word,
 		'alias' => $faker->word,
@@ -91,8 +91,8 @@ $factory->define(\App\Models\Patient::class, function (Faker\Generator $faker) {
 	$userId  = factory(\App\Models\User::class)->create()->id;
 
 	return [
-		'user_id' => $userId,
-		'name' => factory(\App\Models\HumanName::class)->create(['user_id'=>$userId])->id,
+		'created_by' => $userId,
+		'name' => factory(\App\Models\HumanName::class)->create(['created_by'=>$userId])->id,
 		'gender' => factory(\App\Models\CodeableConcept::class)->create()->id,
 		'birth_date' => \Faker\Factory::create()->date(),
 		'address' => factory(\App\Models\Address::class)->create()->id,
@@ -105,9 +105,9 @@ $factory->define(\App\Models\Practitioner::class, function (Faker\Generator $fak
 	$userId  = factory(\App\Models\User::class)->create()->id;
 
 	return [
-		'user_id' => $userId,
-		'name' => factory(\App\Models\HumanName::class)->create(['user_id'=>$userId])->id,
-		'telecom' => factory(\App\Models\ContactPoint::class)->create(['user_id'=>$userId])->id,
+		'created_by' => $userId,
+		'name' => factory(\App\Models\HumanName::class)->create(['created_by'=>$userId])->id,
+		'telecom' => factory(\App\Models\ContactPoint::class)->create(['created_by'=>$userId])->id,
 		'gender' => factory(\App\Models\CodeableConcept::class)->create()->id,
 		'birth_date' => \Faker\Factory::create()->date(),
 		'address' => factory(\App\Models\Address::class)->create()->id,

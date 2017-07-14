@@ -54,7 +54,7 @@ class OauthAccessTokenController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$oauthaccesstoken=OauthAccessToken::findorfails($id);
+		$oauthaccesstoken=OauthAccessToken::findorfail($id);
 		return response()->json($oauthaccesstoken);
 	}
 
@@ -104,7 +104,7 @@ class OauthAccessTokenController extends Controller
      */
 	public function destroy($id){
 		try{
-			$oauthaccesstoken=OauthAccessToken::findorfails($id);
+			$oauthaccesstoken=OauthAccessToken::findorfail($id);
 			$oauthaccesstoken->delete();
 			return response()->json($oauthaccesstoken,200);
 		}

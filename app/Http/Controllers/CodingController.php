@@ -56,7 +56,7 @@ class CodingController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$coding=Coding::findorfails($id);
+		$coding=Coding::findorfail($id);
 		return response()->json($coding);
 	}
 
@@ -108,7 +108,7 @@ class CodingController extends Controller
      */
 	public function destroy($id){
 		try{
-			$coding=Coding::findorfails($id);
+			$coding=Coding::findorfail($id);
 			$coding->delete();
 			return response()->json($coding,200);
 		}

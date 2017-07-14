@@ -56,7 +56,7 @@ class ContainerController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */public function show($id){
-		$container=Container::findorfails($id);
+		$container=Container::findorfail($id);
 		return response()->json($container);
 	}
 
@@ -108,7 +108,7 @@ class ContainerController extends Controller
      */
 	public function destroy($id){
 		try{
-			$container=Container::findorfails($id);
+			$container=Container::findorfail($id);
 			$container->delete();
 			return response()->json($container,200);
 		}
