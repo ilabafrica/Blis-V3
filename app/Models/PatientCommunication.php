@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PatientCommunications extends Model
+class PatientCommunication extends Model
 {
     public function Patient()
     {

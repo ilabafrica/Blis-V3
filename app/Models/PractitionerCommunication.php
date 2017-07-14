@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
-class PractitionerCommunications extends Model
+class PractitionerCommunication extends Model
 {
     public function Patient($value='')
     {

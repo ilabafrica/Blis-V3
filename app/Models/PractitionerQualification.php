@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
-class PractitionerQualifications extends Model
+class PractitionerQualification extends Model
 {
     public function Practitioner()
     {

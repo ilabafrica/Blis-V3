@@ -28,10 +28,6 @@ class EpisodeofCare extends Model
     	 return $this->hasMany('App\Models\EpisodeofCareDiagnosis','episode_of_care_id');
     }
 
-    public function EpisodeofCareDiagnosis()
-    {
-         return $this->hasMany('App\Models\EpisodeofCareDiagnosis','episode_of_care_id');
-    }
     
     public function ReferralRequest()
     {
