@@ -10,5 +10,18 @@ use Illuminate\Database\Eloquent\Model;
 */
 class ProcedureRequest extends Model
 {
-    //
+    public function Specimen()
+    {
+    	return $this->belongsTo('App\Models\Specimen');
+    }
+
+    public function Coding()
+    {
+    	return $this->belongsTo('App\Models\Coding');
+    }
+
+    public function Status()
+    {
+    	return $this->belongsTo('App\Models\Status');
+    }
 }

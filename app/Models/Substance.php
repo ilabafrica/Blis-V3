@@ -11,5 +11,13 @@ use Illuminate\Database\Eloquent\Model;
 */
 class Substance extends Model
 {
-    //
+    public function Status()
+    {
+    	return $this->belongsTo('App\Models\Status');
+    }
+
+    public function Coding()
+    {
+    	return $this->belongsTo('App\Models\Coding');
+    }
 }

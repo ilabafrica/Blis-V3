@@ -8,5 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
-   
+public function Patient()
+    {
+   	
+    	 return $this->belongsTo('App\Model\Patient');
+    }
 }

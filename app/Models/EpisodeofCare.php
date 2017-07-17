@@ -11,5 +11,31 @@ use Illuminate\Database\Eloquent\Model;
 */
 class EpisodeofCare extends Model
 {
-    //
+    public function Patient()
+    {
+    	return $this->belongsTo('App\Models\Patient');
+    }
+    public function Organization()
+    {
+    	return $this->belongsTo('App\Models\Organization');
+    }
+    public function Practitioner()
+    {
+    	return $this->belongsTo('App\Models\Practitioner');
+    }
+    public function EpisodeofCareDiagnosis()
+    {
+    	 return $this->hasMany('App\Models\EpisodeofCareDiagnosis','episode_of_care_id');
+    }
+
+    
+    public function ReferralRequest()
+    {
+         return $this->belongsTo('App\Models\ReferralRequest','based_on');
+    } 
+
+    public function StatusHistory()
+    {
+        return $this->hasMany('App\Models\StatusHistory','episode_of_care_id');
+    }
 }
