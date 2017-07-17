@@ -31,7 +31,7 @@ class PatientController extends Controller
 
 		$validator = \Validator::make($request->all(),$rules);
 		if ($validator->fails()) {
-			 return response()->json($validator);
+			 return response()->json($validator->errors(), 422);
 		} else {
 			$patient= new Patient;
 			$patient->identifier = $request->input('identifier');
@@ -68,8 +68,12 @@ class PatientController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($id){
-		$patient=Patient::findorfail($id);
-		return response()->json($patient);
+		try {
+			$patient=Patient::findorfail($id);
+			return response()->json($patient);
+		} catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+			return response()->json( ['error' => 'Record not found' ], 404);
+		}
 	}
 
 
@@ -92,7 +96,7 @@ class PatientController extends Controller
 		);
 		$validator = \Validator::make($request->all(),$rules);
 		 if ($validator->fails()) {
-			 return response()->json($validator,422);
+			 return response()->json($validator->errors(),422);
 		} else {
 			$patient=Patient::findorfail($id);
 			$patient->identifier = $request->input('identifier');
@@ -109,7 +113,6 @@ class PatientController extends Controller
 			$patient->animal_species = $request->input('animal_species');
 			$patient->animal_breed = $request->input('animal_breed');
 			$patient->animal_gender_status = $request->input('animal_gender_status');
-			$patient->general_practitioner_type = $request->input('general_practitioner_type');
 			$patient->general_practitioner_id = $request->input('general_practitioner_id');
 			$patient->managing_organization = $request->input('managing_organization');
 
@@ -137,6 +140,9 @@ class PatientController extends Controller
 		}
 		catch (\Illuminate\Database\QueryException $e){
 			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
+		} 
+		catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+			return response()->json( ['error' => 'Record not found' ], 404);
 		}
 	}
 }

@@ -34,9 +34,9 @@ class PatientTest extends TestCase
     	$this->updatedpatientData=array(
         
 			"created_by"=>1,
-			"active"=>1,
-			"identifier"=>1,
-			"gender"=>1,
+			"active"=>2,
+			"identifier"=>2,
+			"gender"=>2,
 			"name" => "b",
 			"address"=>"bb",
 			"birth_date"=>'2016:12:12 15:30:00',
@@ -68,22 +68,31 @@ class PatientTest extends TestCase
 		$response=$this->json('GET', '/api/patient/1');
 		$response->assertStatus(200);
 		$this->assertArrayHasKey("created_by",$response->original);
+		$this->assertEquals($this->patientData['photo'], $response->original->photo);
 	}
 
 	public function testUpdatePatient()
 	{
-		$this->json('POST', '/api/patient',$this->updatedpatientData);
-		$response = $this->json('PUT', '/api/patient');
+		$this->json('POST', '/api/patient',$this->patientData);
+		$response = $this->json('PUT', '/api/patient/1', $this->updatedpatientData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$this->assertArrayHasKey("created_by",$response->original);
+		$this->assertEquals($this->updatedpatientData['photo'], $response->original->photo);
 	}
 
 	public function testDeletePatient()
 	{
 		$this->json('POST', '/api/patient',$this->patientData);
 		$response=$this->delete('/api/patient/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		
+		$this->assertEquals(200, $response->getStatusCode());
+		$response=$this->json('GET', '/api/patient/1');
+		$this->assertEquals(404, $response->getStatusCode());
+	}
+
+	public function testDeletePatientFail()
+	{
+		$response=$this->delete('/api/patient/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }
