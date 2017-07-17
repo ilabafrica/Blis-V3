@@ -74,7 +74,7 @@ class CreateDiagnosticReportTables extends Migration
             $table->integer('category_id')->unsigned();
             $table->integer('panel_id')->unsigned();
             $table->integer('observation_type_id')->unsigned();
-            $table->integer('user_id')->unsigned();
+            $table->integer('created_by')->unsigned();
             $table->integer('quantity_id')->unsigned();
             $table->integer('data_absent_reason')->unsigned();// Why the result is missing - CodeableConcept
             $table->integer('interpretation')->unsigned();
@@ -88,7 +88,7 @@ class CreateDiagnosticReportTables extends Migration
             $table->foreign('status_id')->references('id')->on('codeable_concepts');
             $table->foreign('panel_id')->references('id')->on('panels');
             $table->foreign('observation_type_id')->references('id')->on('observations');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('quantity_id')->references('id')->on('quantities');
             $table->foreign('data_absent_reason')->references('id')->on('codeable_concepts');
             $table->foreign('interpretation')->references('id')->on('codeable_concepts');

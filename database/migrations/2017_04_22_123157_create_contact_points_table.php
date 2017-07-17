@@ -15,7 +15,7 @@ class CreateContactPointsTable extends Migration
     {
         Schema::create('contact_points', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned()
+            $table->integer('created_by')->unsigned()
                 ->references('users')->on('id')->onUpdate('cascade');
             $table->integer('system')->unsigned();                  
             $table->string('value');

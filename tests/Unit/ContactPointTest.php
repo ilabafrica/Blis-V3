@@ -17,7 +17,7 @@ class ContactPointTest extends TestCase
 	public function setVariables(){
     	$this->contactpointData=array(
         
-			"user_id"=>1,
+			"created_by"=>1,
 			"system"=>1,
 			"value"=>'Sample String',
 			"use"=>1,
@@ -26,7 +26,7 @@ class ContactPointTest extends TestCase
         );
     	$this->updatedcontactpointData=array(
         
-			"user_id"=>1,
+			"created_by"=>1,
 			"system"=>1,
 			"value"=>'Sample updated String',
 			"use"=>1,

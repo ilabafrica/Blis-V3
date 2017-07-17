@@ -22,7 +22,7 @@ class HumanNameController extends Controller
 	public function store(Request $request)
 	{
         $rules=array(
-		"user_id" => 'required',
+		"created_by" => 'required',
 		"use" => 'required',
 		"text" => 'required',
 
@@ -32,7 +32,7 @@ class HumanNameController extends Controller
 			 return response()->json($validator);
 		} else {
 			$humanname= new HumanName;
-			$humanname->user_id = $request->input('user_id');
+			$humanname->created_by = $request->input('created_by');
 			$humanname->use = $request->input('use');
 			$humanname->text = $request->input('text');
 			$humanname->family = $request->input('family');
@@ -73,7 +73,7 @@ class HumanNameController extends Controller
 	{
     
         $rules=array(
-		"user_id" => 'required',
+		"created_by" => 'required',
 		"use" => 'required',
 		"text" => 'required',
 
@@ -83,7 +83,7 @@ class HumanNameController extends Controller
 			 return response()->json($validator,422);
 		} else {
 			$humanname=HumanName::findorfail($id);
-			$humanname->user_id = $request->input('user_id');
+			$humanname->created_by = $request->input('created_by');
 			$humanname->use = $request->input('use');
 			$humanname->text = $request->input('text');
 			$humanname->family = $request->input('family');

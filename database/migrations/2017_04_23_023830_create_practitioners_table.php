@@ -16,7 +16,7 @@ class CreatePractitionersTable extends Migration
         Schema::create('practitioners', function (Blueprint $table) {
             $table->increments('id');
             $table->boolean('active')->default(1);
-            $table->integer('user_id')->unsigned()
+            $table->integer('created_by')->unsigned()
                 ->references('users')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('name')
                 ->references('human_names')->on('id')->onUpdate('cascade')->onDelete('cascade');

@@ -31,7 +31,7 @@ class OauthAccessTokenController extends Controller
 			 return response()->json($validator);
 		} else {
 			$oauthaccesstoken= new OauthAccessToken;
-			$oauthaccesstoken->user_id = $request->input('user_id');
+			$oauthaccesstoken->created_by = $request->input('created_by');
 			$oauthaccesstoken->client_id = $request->input('client_id');
 			$oauthaccesstoken->name = $request->input('name');
 			$oauthaccesstoken->scopes = $request->input('scopes');
@@ -79,7 +79,7 @@ class OauthAccessTokenController extends Controller
 			 return response()->json($validator,422);
 		} else {
 			$oauthaccesstoken=OauthAccessToken::findorfail($id);
-			$oauthaccesstoken->user_id = $request->input('user_id');
+			$oauthaccesstoken->created_by = $request->input('created_by');
 			$oauthaccesstoken->client_id = $request->input('client_id');
 			$oauthaccesstoken->name = $request->input('name');
 			$oauthaccesstoken->scopes = $request->input('scopes');
