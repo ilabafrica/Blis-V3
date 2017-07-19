@@ -22,7 +22,7 @@ class ContactPointController extends Controller
 	public function store(Request $request)
 	{
         $rules=array(
-		"user_id" => 'required',
+		"created_by" => 'required',
 		"system" => 'required',
 		"value" => 'required',
 		"use" => 'required',
@@ -33,7 +33,7 @@ class ContactPointController extends Controller
 			 return response()->json($validator);
 		} else {
 			$contactpoint= new ContactPoint;
-			$contactpoint->user_id = $request->input('user_id');
+			$contactpoint->created_by = $request->input('created_by');
 			$contactpoint->system = $request->input('system');
 			$contactpoint->value = $request->input('value');
 			$contactpoint->use = $request->input('use');
@@ -72,7 +72,7 @@ class ContactPointController extends Controller
 	{
     
         $rules=array(
-		"user_id" => 'required',
+		"created_by" => 'required',
 		"system" => 'required',
 		"value" => 'required',
 		"use" => 'required',
@@ -83,7 +83,7 @@ class ContactPointController extends Controller
 			 return response()->json($validator,422);
 		} else {
 			$contactpoint=ContactPoint::findorfail($id);
-			$contactpoint->user_id = $request->input('user_id');
+			$contactpoint->created_by = $request->input('created_by');
 			$contactpoint->system = $request->input('system');
 			$contactpoint->value = $request->input('value');
 			$contactpoint->use = $request->input('use');
