@@ -19,7 +19,7 @@ class SpecimeQuantitiesTest extends TestCase
     		);
     	$response=$this->post('/api/specimen_quantity',$specimenquantity);
 
-    	$this->assertEquals(200,$response->getStatusCode());
+    	$response->assertStatus(200);
     }
 
     public function testListSpecimenQuantities(){

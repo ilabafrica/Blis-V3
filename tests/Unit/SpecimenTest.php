@@ -34,14 +34,14 @@ class SpecimenTest extends TestCase
 	public function testStoreSpecimen()
 	{
 		$response=$this->json('POST', '/api/specimen',$this->specimenData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("note",$response->original);
 	}
 
 	public function testListSpecimen()
 	{
 		$response=$this->json('GET', '/api/specimen');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -49,23 +49,23 @@ class SpecimenTest extends TestCase
 	{
 		$this->json('POST', '/api/specimen',$this->specimenData);
 		$response=$this->json('GET', '/api/specimen/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("note",$response->original);
 	}
 
 	public function testUpdateSpecimen()
 	{
-		$this->json('POST', '/api/specimen',$this->updatedspecimenData);
-		$response=$this->json('PUT', '/api/specimen');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$this->json('POST', '/api/specimen',$this->specimenData);
+		$response=$this->json('PUT', '/api/specimen/1',$this->updatedspecimenData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("note",$response->original);
 	}
 
 	public function testDeleteSpecimen()
 	{
 		$this->json('POST', '/api/specimen',$this->specimenData);
 		$response=$this->delete('/api/specimen/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

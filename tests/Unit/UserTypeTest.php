@@ -32,14 +32,14 @@ class UserTypeTest extends TestCase
 	public function testStoreUserType()
 	{
 		$response=$this->json('POST', '/api/usertype',$this->usertypeData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testListUserType()
 	{
 		$response=$this->json('GET', '/api/usertype');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -47,23 +47,23 @@ class UserTypeTest extends TestCase
 	{
 		$this->json('POST', '/api/usertype',$this->usertypeData);
 		$response=$this->json('GET', '/api/usertype/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testUpdateUserType()
 	{
-		$this->json('POST', '/api/usertype',$this->updatedusertypeData);
-		$response=$this->json('PUT', '/api/usertype');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$this->json('POST', '/api/usertype',$this->usertypeData);
+		$response=$this->json('PUT', '/api/usertype/1',$this->updatedusertypeData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testDeleteUserType()
 	{
 		$this->json('POST', '/api/usertype',$this->usertypeData);
 		$response=$this->delete('/api/usertype/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

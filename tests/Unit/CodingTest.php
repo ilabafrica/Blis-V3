@@ -36,14 +36,14 @@ class CodingTest extends TestCase
 	public function testStoreCoding()
 	{
 		$response=$this->json('POST', '/api/coding',$this->codingData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("display",[$response->original]);
 	}
 
 	public function testListCoding()
 	{
 		$response=$this->json('GET', '/api/coding');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -57,17 +57,17 @@ class CodingTest extends TestCase
 
 	public function testUpdateCoding()
 	{
-		$this->json('POST', '/api/coding',$this->updatedcodingData);
-		$response=$this->json('PUT', '/api/coding');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/coding',$this->codingData);
+		$response=$this->json('PUT', '/api/coding/1',$this->updatedcodingData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testDeleteCoding()
 	{
 		$this->json('POST', '/api/coding',$this->codingData);
 		$response=$this->delete('/api/coding/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

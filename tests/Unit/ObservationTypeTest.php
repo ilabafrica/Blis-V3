@@ -36,14 +36,14 @@ class ObservationTypeTest extends TestCase
 	public function testStoreObservationType()
 	{
 		$response=$this->json('POST', '/api/observationtype',$this->observationtypeData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("code_id",$response->original);
 	}
 
 	public function testListObservationType()
 	{
 		$response=$this->json('GET', '/api/observationtype');
-		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertEquals(200);
 		
 	}
 
@@ -51,23 +51,23 @@ class ObservationTypeTest extends TestCase
 	{
 		$this->json('POST', '/api/observationtype',$this->observationtypeData);
 		$response=$this->json('GET', '/api/observationtype/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("code_id",$response->original);
 	}
 
 	public function testUpdateObservationType()
 	{
-		$this->json('POST', '/api/observationtype',$this->updatedobservationtypeData);
-		$response=$this->json('PUT', '/api/observationtype');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/observationtype',$this->observationtypeData);
+		$response=$this->json('PUT', '/api/observationtype/1',$this->updatedobservationtypeData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("code_id",$response->original);
 	}
 
 	public function testDeleteObservationType()
 	{
 		$this->json('POST', '/api/observationtype',$this->observationtypeData);
 		$response=$this->delete('/api/observationtype/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

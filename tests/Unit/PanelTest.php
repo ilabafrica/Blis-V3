@@ -40,14 +40,14 @@ class PanelTest extends TestCase
 	public function testStorePanel()
 	{
 		$response=$this->json('POST', '/api/panel',$this->panelData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("conclusion",$response->original);
 	}
 
 	public function testListPanel()
 	{
 		$response=$this->json('GET', '/api/panel');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -55,23 +55,23 @@ class PanelTest extends TestCase
 	{
 		$this->json('POST', '/api/panel',$this->panelData);
 		$response=$this->json('GET', '/api/panel/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("conclusion",$response->original);
 	}
 
 	public function testUpdatePanel()
 	{
 		$this->json('POST', '/api/panel',$this->updatedpanelData);
 		$response=$this->json('PUT', '/api/panel');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("conclusion",$response->original);
 	}
 
 	public function testDeletePanel()
 	{
 		$this->json('POST', '/api/panel',$this->panelData);
 		$response=$this->delete('/api/panel/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

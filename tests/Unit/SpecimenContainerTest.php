@@ -19,13 +19,13 @@ class SpecimenContainerTest extends TestCase
     		);
     	$response=$this->post('/api/specimencontainer',$specimencontainer);
 
-    	$this->assertEquals(200,$response->getStatusCode());
+    	$response->assertStatus(200);
     }
 
     public function testListSpecimenContainers(){
 
     	$response=$this->get('/api/specimencontainer');
-    	$this->assertEquals(200,$response->getStatusCode());
+    	$response->assertStatus(200);
     	//data
     	$data=json_decode($response->getBody());
 
@@ -51,7 +51,7 @@ class SpecimenContainerTest extends TestCase
     		
     		);
     	$response=$this->put('/api/specimencontainer/1',$specimencontainer);
-    	$this->assertEquals(200,$response->getStatusCode());
+    	$response->assertStatus(200);
     	//data
     	$data=json_decode($response->getBody());
 
@@ -61,6 +61,6 @@ class SpecimenContainerTest extends TestCase
     public function testDeleteSpecimenContainer(){
     	
     	$response=$this->delete('/api/specimencontainer/1');
-    	$this->assertEquals(200,$response->getStatusCode());
+    	$response->assertStatus(200);
     }
 }

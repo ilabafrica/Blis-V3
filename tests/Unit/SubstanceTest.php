@@ -36,14 +36,14 @@ class SubstanceTest extends TestCase
 	public function testStoreSubstance()
 	{
 		$response=$this->json('POST', '/api/substance',$this->substanceData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testListSubstance()
 	{
 		$response=$this->json('GET', '/api/substance');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -51,23 +51,23 @@ class SubstanceTest extends TestCase
 	{
 		$this->json('POST', '/api/substance',$this->substanceData);
 		$response=$this->json('GET', '/api/substance/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testUpdateSubstance()
 	{
-		$this->json('POST', '/api/substance',$this->updatedsubstanceData);
-		$response=$this->json('PUT', '/api/substance');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$this->json('POST', '/api/substance',$this->substanceData);
+		$response=$this->json('PUT', '/api/substance/1',$this->updatedsubstanceData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testDeleteSubstance()
 	{
 		$this->json('POST', '/api/substance',$this->substanceData);
 		$response=$this->delete('/api/substance/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

@@ -38,14 +38,14 @@ class ComponentTest extends TestCase
 	public function testStoreComponent()
 	{
 		$response=$this->json('POST', '/api/component',$this->componentData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("result",$response->original);
 	}
 
 	public function testListComponent()
 	{
 		$response=$this->json('GET', '/api/component');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -53,23 +53,23 @@ class ComponentTest extends TestCase
 	{
 		$this->json('POST', '/api/component',$this->componentData);
 		$response=$this->json('GET', '/api/component/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("result",$response->original);
 	}
 
 	public function testUpdateComponent()
 	{
-		$this->json('POST', '/api/component',$this->updatedcomponentData);
-		$response=$this->json('PUT', '/api/component');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/component',$this->componentData);
+		$response=$this->json('PUT', '/api/component/1',$this->updatedcomponentData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("result",$response->original);
 	}
 
 	public function testDeleteComponent()
 	{
 		$this->json('POST', '/api/component',$this->componentData);
 		$response=$this->delete('/api/component/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

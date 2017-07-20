@@ -30,14 +30,14 @@ class PractitionerQualificationTest extends TestCase
 	public function testStorePractitionerQualification()
 	{
 		$response=$this->json('POST', '/api/practitionerqualification',$this->practitionerqualificationData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("name",$response->original);
 	}
 
 	public function testListPractitionerQualification()
 	{
 		$response=$this->json('GET', '/api/practitionerqualification');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -45,23 +45,23 @@ class PractitionerQualificationTest extends TestCase
 	{
 		$this->json('POST', '/api/practitionerqualification',$this->practitionerqualificationData);
 		$response=$this->json('GET', '/api/practitionerqualification/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("name",$response->original);
 	}
 
 	public function testUpdatePractitionerQualification()
 	{
-		$this->json('POST', '/api/practitionerqualification',$this->updatedpractitionerqualificationData);
-		$response=$this->json('PUT', '/api/practitionerqualification');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$this->json('POST', '/api/practitionerqualification',$this->practitionerqualificationData);
+		$response=$this->json('PUT', '/api/practitionerqualification/1',$this->updatedpractitionerqualificationData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("name",$response->original);
 	}
 
 	public function testDeletePractitionerQualification()
 	{
 		$this->json('POST', '/api/practitionerqualification',$this->practitionerqualificationData);
 		$response=$this->delete('/api/practitionerqualification/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

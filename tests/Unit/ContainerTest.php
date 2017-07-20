@@ -36,14 +36,14 @@ class ContainerTest extends TestCase
 	public function testStoreContainer()
 	{
 		$response=$this->json('POST', '/api/container',$this->containerData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testListContainer()
 	{
 		$response=$this->json('GET', '/api/container');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -51,23 +51,23 @@ class ContainerTest extends TestCase
 	{
 		$this->json('POST', '/api/container',$this->containerData);
 		$response=$this->json('GET', '/api/container/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testUpdateContainer()
 	{
-		$this->json('POST', '/api/container',$this->updatedcontainerData);
-		$response=$this->json('PUT', '/api/container');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/container',$this->containerData);
+		$response=$this->json('PUT', '/api/container/1',$this->updatedcontainerData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testDeleteContainer()
 	{
 		$this->json('POST', '/api/container',$this->containerData);
 		$response=$this->delete('/api/container/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

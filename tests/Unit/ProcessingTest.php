@@ -32,14 +32,14 @@ class ProcessingTest extends TestCase
 	public function testStoreProcessing()
 	{
 		$response=$this->json('POST', '/api/processing',$this->processingData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testListProcessing()
 	{
 		$response=$this->json('GET', '/api/processing');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -47,23 +47,23 @@ class ProcessingTest extends TestCase
 	{
 		$this->json('POST', '/api/processing',$this->processingData);
 		$response=$this->json('GET', '/api/processing/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testUpdateProcessing()
 	{
-		$this->json('POST', '/api/processing',$this->updatedprocessingData);
-		$response=$this->json('PUT', '/api/processing');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$this->json('POST', '/api/processing',$this->processingData);
+		$response=$this->json('PUT', '/api/processing/1',$this->updatedprocessingData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testDeleteProcessing()
 	{
 		$this->json('POST', '/api/processing',$this->processingData);
 		$response=$this->delete('/api/processing/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

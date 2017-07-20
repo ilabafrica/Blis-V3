@@ -30,14 +30,14 @@ class IngredientTest extends TestCase
 	public function testStoreIngredient()
 	{
 		$response=$this->json('POST', '/api/ingredient',$this->ingredientData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("substance",$response->original);
 	}
 
 	public function testListIngredient()
 	{
 		$response=$this->json('GET', '/api/ingredient');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -45,23 +45,23 @@ class IngredientTest extends TestCase
 	{
 		$this->json('POST', '/api/ingredient',$this->ingredientData);
 		$response=$this->json('GET', '/api/ingredient/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("substance",$response->original);
 	}
 
 	public function testUpdateIngredient()
 	{
-		$this->json('POST', '/api/ingredient',$this->updatedingredientData);
-		$response=$this->json('PUT', '/api/ingredient');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/ingredient',$this->ingredientData);
+		$response=$this->json('PUT', '/api/ingredient/1',$this->updatedingredientData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("substance",$response->original);
 	}
 
 	public function testDeleteIngredient()
 	{
 		$this->json('POST', '/api/ingredient',$this->ingredientData);
 		$response=$this->delete('/api/ingredient/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

@@ -30,14 +30,14 @@ class MigrationTest extends TestCase
 	public function testStoreMigration()
 	{
 		$response=$this->json('POST', '/api/migration',$this->migrationData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("migration",$response->original);
 	}
 
 	public function testListMigration()
 	{
 		$response=$this->json('GET', '/api/migration');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -45,23 +45,23 @@ class MigrationTest extends TestCase
 	{
 		$this->json('POST', '/api/migration',$this->migrationData);
 		$response=$this->json('GET', '/api/migration/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("migration",$response->original);
 	}
 
 	public function testUpdateMigration()
 	{
-		$this->json('POST', '/api/migration',$this->updatedmigrationData);
-		$response=$this->json('PUT', '/api/migration');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/migration',$this->migrationData);
+		$response=$this->json('PUT', '/api/migration',$this->updatedmigrationData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("migration",$response->original);
 	}
 
 	public function testDeleteMigration()
 	{
 		$this->json('POST', '/api/migration',$this->migrationData);
 		$response=$this->delete('/api/migration/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

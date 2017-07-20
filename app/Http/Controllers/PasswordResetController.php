@@ -49,9 +49,15 @@ class PasswordResetController extends Controller
      *
      * @param  int  id
      * @return \Illuminate\Http\Response
-     */public function show($id){
+     */
+    public function show($id){
+    	try{
 		$passwordreset=PasswordReset::findorfail($id);
 		return response()->json($passwordreset);
+	}
+	catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+			return response()->json( ['error' => 'Record not found' ], 404);
+		}
 	}
 
 
@@ -102,6 +108,9 @@ class PasswordResetController extends Controller
 		}
 		catch (\Illuminate\Database\QueryException $e){
 			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
+		}
+		catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+			return response()->json( ['error' => 'Record not found' ], 404);
 		}
 	}
 }

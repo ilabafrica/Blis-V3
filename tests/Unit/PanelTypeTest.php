@@ -34,14 +34,14 @@ class PanelTypeTest extends TestCase
 	public function testStorePanelType()
 	{
 		$response=$this->json('POST', '/api/paneltype',$this->paneltypeData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("status_id",$response->original);
 	}
 
 	public function testListPanelType()
 	{
 		$response=$this->json('GET', '/api/paneltype');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -49,23 +49,23 @@ class PanelTypeTest extends TestCase
 	{
 		$this->json('POST', '/api/paneltype',$this->paneltypeData);
 		$response=$this->json('GET', '/api/paneltype/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("status_id",$response->original);
 	}
 
 	public function testUpdatePanelType()
 	{
-		$this->json('POST', '/api/paneltype',$this->updatedpaneltypeData);
-		$response=$this->json('PUT', '/api/paneltype');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/paneltype',$this->paneltypeData);
+		$response=$this->json('PUT', '/api/paneltype/1',$this->updatedpaneltypeData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("status_id",$response->original);
 	}
 
 	public function testDeletePanelType()
 	{
 		$this->json('POST', '/api/paneltype',$this->paneltypeData);
 		$response=$this->delete('/api/paneltype/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

@@ -55,9 +55,15 @@ class ContactPointController extends Controller
      *
      * @param  int  id
      * @return \Illuminate\Http\Response
-     */public function show($id){
+     */
+    public function show($id){
+    	try {
 		$contactpoint=ContactPoint::findorfail($id);
 		return response()->json($contactpoint);
+	}
+	catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+			return response()->json( ['error' => 'Record not found' ], 404);
+		}
 	}
 
 
@@ -114,6 +120,9 @@ class ContactPointController extends Controller
 		}
 		catch (\Illuminate\Database\QueryException $e){
 			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
+		}
+		catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+			return response()->json( ['error' => 'Record not found' ], 404);
 		}
 	}
 }

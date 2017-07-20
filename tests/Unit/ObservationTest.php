@@ -44,14 +44,14 @@ class ObservationTest extends TestCase
 	public function testStoreObservation()
 	{
 		$response=$this->json('POST', '/api/observation',$this->observationData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("comment",$response->original);
 	}
 
 	public function testListObservation()
 	{
 		$response=$this->json('GET', '/api/observation');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -59,23 +59,23 @@ class ObservationTest extends TestCase
 	{
 		$this->json('POST', '/api/observation',$this->observationData);
 		$response=$this->json('GET', '/api/observation/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("comment",$response->original);
 	}
 
 	public function testUpdateObservation()
 	{
-		$this->json('POST', '/api/observation',$this->updatedobservationData);
-		$response=$this->json('PUT', '/api/observation');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/observation',$this->observationData);
+		$response=$this->json('PUT', '/api/observation/1',$this->updatedobservationData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("comment",$response->original);
 	}
 
 	public function testDeleteObservation()
 	{
 		$this->json('POST', '/api/observation',$this->observationData);
 		$response=$this->delete('/api/observation/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

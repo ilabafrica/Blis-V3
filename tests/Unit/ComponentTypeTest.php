@@ -36,14 +36,14 @@ class ComponentTypeTest extends TestCase
 	public function testStoreComponentType()
 	{
 		$response=$this->json('POST', '/api/componenttype',$this->componenttypeData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("reference_range_id",$response->original);
 	}
 
 	public function testListComponentType()
 	{
 		$response=$this->json('GET', '/api/componenttype');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -51,23 +51,23 @@ class ComponentTypeTest extends TestCase
 	{
 		$this->json('POST', '/api/componenttype',$this->componenttypeData);
 		$response=$this->json('GET', '/api/componenttype/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("reference_range_id",$response->original);
 	}
 
 	public function testUpdateComponentType()
 	{
-		$this->json('POST', '/api/componenttype',$this->updatedcomponenttypeData);
-		$response=$this->json('PUT', '/api/componenttype');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/componenttype',$this->componenttypeData);
+		$response=$this->json('PUT', '/api/componenttype/1',$this->updatedcomponenttypeData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("reference_range_id",$response->original);
 	}
 
 	public function testDeleteComponentType()
 	{
 		$this->json('POST', '/api/componenttype',$this->componenttypeData);
 		$response=$this->delete('/api/componenttype/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

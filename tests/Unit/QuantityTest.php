@@ -38,14 +38,14 @@ class QuantityTest extends TestCase
 	public function testStoreQuantity()
 	{
 		$response=$this->json('POST', '/api/quantity',$this->quantityData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("system",$response->original);
 	}
 
 	public function testListQuantity()
 	{
 		$response=$this->json('GET', '/api/quantity');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -53,23 +53,23 @@ class QuantityTest extends TestCase
 	{
 		$this->json('POST', '/api/quantity',$this->quantityData);
 		$response=$this->json('GET', '/api/quantity/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("system",$response->original);
 	}
 
 	public function testUpdateQuantity()
 	{
-		$this->json('POST', '/api/quantity',$this->updatedquantityData);
-		$response=$this->json('PUT', '/api/quantity');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$this->json('POST', '/api/quantity',$this->quantityData);
+		$response=$this->json('PUT', '/api/quantity/1',$this->updatedquantityData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("system",$response->original);
 	}
 
 	public function testDeleteQuantity()
 	{
 		$this->json('POST', '/api/quantity',$this->quantityData);
 		$response=$this->delete('/api/quantity/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

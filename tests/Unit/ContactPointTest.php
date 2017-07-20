@@ -38,14 +38,14 @@ class ContactPointTest extends TestCase
 	public function testStoreContactPoint()
 	{
 		$response=$this->json('POST', '/api/contactpoint',$this->contactpointData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("value",$response->original);
 	}
 
 	public function testListContactPoint()
 	{
 		$response=$this->json('GET', '/api/contactpoint');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -53,23 +53,23 @@ class ContactPointTest extends TestCase
 	{
 		$this->json('POST', '/api/contactpoint',$this->contactpointData);
 		$response=$this->json('GET', '/api/contactpoint/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("value",$response->original);
 	}
 
 	public function testUpdateContactPoint()
 	{
-		$this->json('POST', '/api/contactpoint',$this->updatedcontactpointData);
-		$response=$this->json('PUT', '/api/contactpoint');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/contactpoint',$this->contactpointData);
+		$response=$this->json('PUT', '/api/contactpoint/1',$this->updatedcontactpointData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("value",$response->original);
 	}
 
 	public function testDeleteContactPoint()
 	{
 		$this->json('POST', '/api/contactpoint',$this->contactpointData);
 		$response=$this->delete('/api/contactpoint/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

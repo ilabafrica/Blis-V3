@@ -40,14 +40,14 @@ class EpisodeofCareTest extends TestCase
 	public function testStoreEpisodeofCare()
 	{
 		$response=$this->json('POST', '/api/episodeofcare',$this->episodeofcareData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("patient",$response->original);
 	}
 
 	public function testListEpisodeofCare()
 	{
 		$response=$this->json('GET', '/api/episodeofcare');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -55,23 +55,23 @@ class EpisodeofCareTest extends TestCase
 	{
 		$this->json('POST', '/api/episodeofcare',$this->episodeofcareData);
 		$response=$this->json('GET', '/api/episodeofcare/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("patient",$response->original);
 	}
 
 	public function testUpdateEpisodeofCare()
 	{
-		$this->json('POST', '/api/episodeofcare',$this->updatedepisodeofcareData);
-		$response=$this->json('PUT', '/api/episodeofcare');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/episodeofcare',$this->episodeofcareData);
+		$response=$this->json('PUT', '/api/episodeofcare/1',$this->updatedepisodeofcareData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("patient",$response->original);
 	}
 
 	public function testDeleteEpisodeofCare()
 	{
 		$this->json('POST', '/api/episodeofcare',$this->episodeofcareData);
 		$response=$this->delete('/api/episodeofcare/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

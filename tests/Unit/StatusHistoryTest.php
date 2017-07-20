@@ -32,14 +32,14 @@ class StatusHistoryTest extends TestCase
 	public function testStoreStatusHistory()
 	{
 		$response=$this->json('POST', '/api/statushistory',$this->statushistoryData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("episode_of_care_id",$response->original);
 	}
 
 	public function testListStatusHistory()
 	{
 		$response=$this->json('GET', '/api/statushistory');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -47,23 +47,23 @@ class StatusHistoryTest extends TestCase
 	{
 		$this->json('POST', '/api/statushistory',$this->statushistoryData);
 		$response=$this->json('GET', '/api/statushistory/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("episode_of_care_id",$response->original);
 	}
 
 	public function testUpdateStatusHistory()
 	{
-		$this->json('POST', '/api/statushistory',$this->updatedstatushistoryData);
-		$response=$this->json('PUT', '/api/statushistory');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$this->json('POST', '/api/statushistory',$this->statushistoryData);
+		$response=$this->json('PUT', '/api/statushistory/1',$this->updatedstatushistoryData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("episode_of_care_id",$response->original);
 	}
 
 	public function testDeleteStatusHistory()
 	{
 		$this->json('POST', '/api/statushistory',$this->statushistoryData);
 		$response=$this->delete('/api/statushistory/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 

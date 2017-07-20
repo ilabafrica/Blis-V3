@@ -19,14 +19,14 @@ class PractitionerTest extends TestCase
         
 			"user_id"=>1,
 			"gender"=>1,
-			"birth_date"=>'2017:12:12 15:30:00',			"photo"=>'Sample String',
+			"birth_date"=>'2017:12:12 15:30:00',"photo"=>'Sample String',
 
         );
     	$this->updatedpractitionerData=array(
         
 			"user_id"=>1,
 			"gender"=>1,
-			"birth_date"=>'2016:12:12 15:30:00',			"photo"=>'Sample updated String',
+			"birth_date"=>'2016:12:12 15:30:00',"photo"=>'Sample updated String',
 
         );
 	}

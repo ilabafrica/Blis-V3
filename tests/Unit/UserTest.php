@@ -32,14 +32,14 @@ class UserTest extends TestCase
 	public function testStoreUser()
 	{
 		$response=$this->json('POST', '/api/user',$this->userData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("email",$response->original);
 	}
 
 	public function testListUser()
 	{
 		$response=$this->json('GET', '/api/user');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -47,23 +47,23 @@ class UserTest extends TestCase
 	{
 		$this->json('POST', '/api/user',$this->userData);
 		$response=$this->json('GET', '/api/user/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("email",$response->original);
 	}
 
 	public function testUpdateUser()
 	{
-		$this->json('POST', '/api/user',$this->updateduserData);
-		$response=$this->json('PUT', '/api/user');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$this->json('POST', '/api/user',$this->userData);
+		$response=$this->json('PUT', '/api/user/1',$this->updateduserData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("email",$response->original);
 	}
 
 	public function testDeleteUser()
 	{
 		$this->json('POST', '/api/user',$this->userData);
 		$response=$this->delete('/api/user/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
