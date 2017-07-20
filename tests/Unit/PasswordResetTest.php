@@ -33,7 +33,7 @@ class PasswordResetTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/passwordreset',$this->passwordresetData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("token",$response->original);
+		$this->assertArrayHasKey("email",$response->original);
 	}
 
 	public function testListPasswordReset()

@@ -15,7 +15,7 @@ class ProcessingTest extends TestCase
 	}
 
 	public function setVariables(){
-    	$this->processingData=array(
+    	$this->processingData = array(
         
 			"description"=>'Sample String',
 			"procedure"=>1,
@@ -34,6 +34,7 @@ class ProcessingTest extends TestCase
 		$response=$this->json('POST', '/api/processing',$this->processingData);
 		$response->assertStatus(200);
 		$this->assertArrayHasKey("description",$response->original);
+		dd($response->original);
 	}
 
 	public function testListProcessing()

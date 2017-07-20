@@ -18,6 +18,7 @@ class PatientLinkTest extends TestCase
     	$this->patientlinkData=array(
         
 			"type"=>1,
+			
 
         );
     	$this->updatedpatientlinkData=array(
@@ -29,9 +30,9 @@ class PatientLinkTest extends TestCase
 
 	public function testStorePatientLink()
 	{
-		$response=$this->json('POST', '/api/patientlink',$this->patientlinkData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response=$this->json('POST','/api/patientlink',$this->patientlinkData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("type",$response->original);
 	}
 
 	public function testListPatientLink()
@@ -46,15 +47,15 @@ class PatientLinkTest extends TestCase
 		$this->json('POST', '/api/patientlink',$this->patientlinkData);
 		$response=$this->json('GET', '/api/patientlink/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("type",$response->original);
 	}
 
 	public function testUpdatePatientLink()
 	{
-		$this->json('POST', '/api/patientlink',$this->updatedpatientlinkData);
-		$response=$this->json('PUT', '/api/patientlink');
+		$this->json('POST', '/api/patientlink',$this->patientlinkData);
+		$response=$this->json('PUT', '/api/patientlink/1',$this->updatedpatientlinkData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("type",$response->original);
 	}
 
 	public function testDeletePatientLink()

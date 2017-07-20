@@ -61,8 +61,8 @@ class PanelTest extends TestCase
 
 	public function testUpdatePanel()
 	{
-		$this->json('POST', '/api/panel',$this->updatedpanelData);
-		$response=$this->json('PUT', '/api/panel');
+		$this->json('POST', '/api/panel',$this->panelData);
+		$response=$this->json('PUT', '/api/panel/1',$this->updatedpanelData);
 		$response->assertStatus(200);
 		$this->assertArrayHasKey("conclusion",$response->original);
 	}
