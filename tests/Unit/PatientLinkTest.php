@@ -16,13 +16,16 @@ class PatientLinkTest extends TestCase
 
 	public function setVariables(){
     	$this->patientlinkData=array(
-        
+            
+            "patient_id"=>1,
+            "other"=>1,
 			"type"=>1,
 			
 
         );
     	$this->updatedpatientlinkData=array(
-        
+            "patient_id"=>1,
+            "other"=>1,
 			"type"=>1,
 
         );
@@ -63,7 +66,15 @@ class PatientLinkTest extends TestCase
 		$this->json('POST', '/api/patientlink',$this->patientlinkData);
 		$response=$this->delete('/api/patientlink/1');
 		$this->assertEquals(200,$response->getStatusCode());
+		$response=$this->json('GET', '/api/patientlink/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeletePatientLinkFail()
+	{
+		$response=$this->delete('/api/patientlink/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

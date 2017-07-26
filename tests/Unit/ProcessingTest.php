@@ -15,16 +15,19 @@ class ProcessingTest extends TestCase
 	}
 
 	public function setVariables(){
-    	$this->processingData = array(
-        
+    	$this->processingData = array (
+            
+
 			"description"=>'Sample String',
 			"procedure"=>1,
+			"period"=>'2017:12:12 15:30:00',
 
         );
     	$this->updatedprocessingData=array(
         
 			"description"=>'Sample updated String',
 			"procedure"=>1,
+			"period"=>'2017:12:12 15:30:00',
 
         );
 	}
@@ -33,8 +36,8 @@ class ProcessingTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/processing',$this->processingData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("description",$response->original);
-		dd($response->original);
+		$this->assertArrayHasKey("procedure",$response->original);
+		
 	}
 
 	public function testListProcessing()
@@ -65,7 +68,14 @@ class ProcessingTest extends TestCase
 		$this->json('POST', '/api/processing',$this->processingData);
 		$response=$this->delete('/api/processing/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/processing/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+	public function testDeleteProcessingFail()
+	{
+		$response=$this->delete('/api/processing/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

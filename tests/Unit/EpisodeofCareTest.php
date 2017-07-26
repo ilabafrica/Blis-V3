@@ -19,8 +19,9 @@ class EpisodeofCareTest extends TestCase
         
 			"status"=>1,
 			"type"=>1,
-			"patient"=>1,
+			"patient_id"=>1,
 			"organization_id"=>1,
+			"period"=>1,
 			"practitioners_id"=>1,
 			"team_id"=>1,
 
@@ -29,8 +30,9 @@ class EpisodeofCareTest extends TestCase
         
 			"status"=>1,
 			"type"=>1,
-			"patient"=>1,
+			"patient_id"=>1,
 			"organization_id"=>1,
+			"period"=>1,
 			"practitioners_id"=>1,
 			"team_id"=>1,
 
@@ -72,7 +74,14 @@ class EpisodeofCareTest extends TestCase
 		$this->json('POST', '/api/episodeofcare',$this->episodeofcareData);
 		$response=$this->delete('/api/episodeofcare/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/episodeofcare/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+	public function testDeleteEpisodeofCareFail()
+	{
+		$response=$this->delete('/api/episodeofcare/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

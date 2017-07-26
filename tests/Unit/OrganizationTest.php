@@ -18,9 +18,13 @@ class OrganizationTest extends TestCase
     	$this->organizationData=array(
         
 			"user_id"=>1,
+			"active"=>1,
 			"type"=>1,
 			"name"=>'Sample String',
 			"alias"=>'Sample String',
+			"telecom"=>1,
+			"addres"=>123,
+			"part_of"=>1,
 			"end_point"=>'Sample String',
 
         );
@@ -28,7 +32,11 @@ class OrganizationTest extends TestCase
         
 			"user_id"=>1,
 			"type"=>1,
-			"name"=>'Sample updated String',
+			"name"=>'Sample Updated String',
+			"alias"=>'Sample Updayed String',
+			"telecom"=>1,
+			"addres"=>1234,
+			"part_of"=>1,
 			"alias"=>'Sample updated String',
 			"end_point"=>'Sample updated String',
 
@@ -60,9 +68,10 @@ class OrganizationTest extends TestCase
 	public function testUpdateOrganization()
 	{
 		$this->json('POST', '/api/organization',$this->organizationData);
-		$response=$this->json('PUT', '/api/organization/1',$this->updatedorganizationData);
+		$response = $this->json('PUT', '/api/organization/1', $this->updatedorganizationData);
 		$response->assertStatus(200);
 		$this->assertArrayHasKey("name",$response->original);
+
 	}
 
 	public function testDeleteOrganization()
@@ -70,7 +79,14 @@ class OrganizationTest extends TestCase
 		$this->json('POST', '/api/organization',$this->organizationData);
 		$response=$this->delete('/api/organization/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/organization/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+	public function testDeleteOrganizationFail()
+	{
+		$response=$this->delete('/api/organization/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

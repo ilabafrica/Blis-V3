@@ -16,13 +16,17 @@ class PatientCommunicationTest extends TestCase
 
 	public function setVariables(){
     	$this->patientcommunicationData=array(
-        
+            
+            "patient_id"=>1,
 			"language"=>1,
+			"preferred"=>'Sample',
 
         );
     	$this->updatedpatientcommunicationData=array(
         
+			"patient_id"=>1,
 			"language"=>1,
+			"preferred"=>'Sample updated',
 
         );
 	}
@@ -62,7 +66,15 @@ class PatientCommunicationTest extends TestCase
 		$this->json('POST', '/api/patientcommunication',$this->patientcommunicationData);
 		$response=$this->delete('/api/patientcommunication/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/patientcommunication/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeletePatientCommunicationFail()
+	{
+		$response=$this->delete('/api/patientcommunication/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

@@ -37,7 +37,7 @@ class CodingTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/coding',$this->codingData);
 		$response->assertStatus(200);
-		//$this->assertArrayHasKey("display",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testListCoding()
@@ -52,7 +52,7 @@ class CodingTest extends TestCase
 		$this->json('POST', '/api/coding',$this->codingData);
 		$response=$this->json('GET', '/api/coding/1');
 		$response->assertStatus(200);
-		//$this->assertArrayHasKey("display",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testUpdateCoding()
@@ -60,7 +60,9 @@ class CodingTest extends TestCase
 		$this->json('POST', '/api/coding',$this->codingData);
 		$response=$this->json('PUT', '/api/coding/1',$this->updatedcodingData);
 		$response->assertStatus(200);
-		//$this->assertArrayHasKey("display",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
+		$response=$this->json('GET', '/api/coding/1');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 	public function testDeleteCoding()
@@ -69,6 +71,12 @@ class CodingTest extends TestCase
 		$response=$this->delete('/api/coding/1');
 		$response->assertStatus(200);
 		
+	}
+
+	public function testDeleteCodingFail()
+	{
+		$response=$this->delete('/api/patient/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

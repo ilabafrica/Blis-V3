@@ -20,7 +20,7 @@ class ObservationTest extends TestCase
 			"status_id"=>1,
 			"category_id"=>1,
 			"panel_id"=>1,
-			"user_id"=>1,
+			"created_by"=>1,
 			"quantity_id"=>1,
 			"data_absent_reason"=>1,
 			"interpretation"=>1,
@@ -32,7 +32,7 @@ class ObservationTest extends TestCase
 			"status_id"=>1,
 			"category_id"=>1,
 			"panel_id"=>1,
-			"user_id"=>1,
+			"created_by"=>1,
 			"quantity_id"=>1,
 			"data_absent_reason"=>1,
 			"interpretation"=>1,
@@ -76,7 +76,15 @@ class ObservationTest extends TestCase
 		$this->json('POST', '/api/observation',$this->observationData);
 		$response=$this->delete('/api/observation/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/observation/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteObservationFail()
+	{
+		$response=$this->delete('/api/observation/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

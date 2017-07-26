@@ -64,7 +64,15 @@ class UserTypeTest extends TestCase
 		$this->json('POST', '/api/usertype',$this->usertypeData);
 		$response=$this->delete('/api/usertype/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/usertype/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteUserTypeFail()
+	{
+		$response=$this->delete('/api/patient/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

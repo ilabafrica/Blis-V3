@@ -64,7 +64,15 @@ class PasswordResetTest extends TestCase
 		$this->json('POST', '/api/passwordreset',$this->passwordresetData);
 		$response=$this->delete('/api/passwordreset/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/passwordreset/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteObservationFail()
+	{
+		$response=$this->delete('/api/passwordreset/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

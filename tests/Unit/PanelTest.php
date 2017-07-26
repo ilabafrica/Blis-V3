@@ -65,6 +65,7 @@ class PanelTest extends TestCase
 		$response=$this->json('PUT', '/api/panel/1',$this->updatedpanelData);
 		$response->assertStatus(200);
 		$this->assertArrayHasKey("conclusion",$response->original);
+
 	}
 
 	public function testDeletePanel()
@@ -72,7 +73,14 @@ class PanelTest extends TestCase
 		$this->json('POST', '/api/panel',$this->panelData);
 		$response=$this->delete('/api/panel/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/panel/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+	public function testDeletePanelFail()
+	{
+		$response=$this->delete('/api/patient/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

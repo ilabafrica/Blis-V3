@@ -19,6 +19,7 @@ class ContainerTest extends TestCase
         
 			"description"=>'Sample String',
 			"type"=>1,
+			"capacity"=>1,
 			"quantity_id"=>1,
 			"additive"=>1,
 
@@ -27,6 +28,7 @@ class ContainerTest extends TestCase
         
 			"description"=>'Sample updated String',
 			"type"=>1,
+			"capacity"=>1,
 			"quantity_id"=>1,
 			"additive"=>1,
 
@@ -68,7 +70,15 @@ class ContainerTest extends TestCase
 		$this->json('POST', '/api/container',$this->containerData);
 		$response=$this->delete('/api/container/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/container/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteContainerFail()
+	{
+		$response=$this->delete('/api/container/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

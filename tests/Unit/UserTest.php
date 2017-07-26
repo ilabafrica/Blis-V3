@@ -16,15 +16,20 @@ class UserTest extends TestCase
 
 	public function setVariables(){
     	$this->userData=array(
-        
+            
+            "type"=>1, 
 			"email"=>'Sample String',
 			"password"=>'Sample String',
+			"token"=>"12233",
 
         );
     	$this->updateduserData=array(
-        
+            
+            "type"=>1,
 			"email"=>'Sample updated String',
 			"password"=>'Sample updated String',
+			"token"=>"1223345",
+
 
         );
 	}
@@ -64,7 +69,15 @@ class UserTest extends TestCase
 		$this->json('POST', '/api/user',$this->userData);
 		$response=$this->delete('/api/user/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/user/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteUserFail()
+	{
+		$response=$this->delete('/api/user/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

@@ -16,11 +16,14 @@ class OauthPersonalAccessClientTest extends TestCase
 
 	public function setVariables(){
     	$this->oauthpersonalaccessclientData=array(
-        
+              
+              "client_id"=>1,
+
 
         );
     	$this->updatedoauthpersonalaccessclientData=array(
-        
+              
+              "client_id"=>1,
 
         );
 	}
@@ -28,14 +31,14 @@ class OauthPersonalAccessClientTest extends TestCase
 	public function testStoreOauthPersonalAccessClient()
 	{
 		$response=$this->json('POST', '/api/oauthpersonalaccessclient',$this->oauthpersonalaccessclientData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("client_id",$response->original);
 	}
 
 	public function testListOauthPersonalAccessClient()
 	{
 		$response=$this->json('GET', '/api/oauthpersonalaccessclient');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -43,16 +46,16 @@ class OauthPersonalAccessClientTest extends TestCase
 	{
 		$this->json('POST', '/api/oauthpersonalaccessclient',$this->oauthpersonalaccessclientData);
 		$response=$this->json('GET', '/api/oauthpersonalaccessclient/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("client_id",$response->original);
 	}
 
 	public function testUpdateOauthPersonalAccessClient()
 	{
 		$this->json('POST', '/api/oauthpersonalaccessclient',$this->updatedoauthpersonalaccessclientData);
 		$response=$this->json('PUT', '/api/oauthpersonalaccessclient');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("client_id",$response->original);
 	}
 
 	public function testDeleteOauthPersonalAccessClient()
@@ -60,7 +63,14 @@ class OauthPersonalAccessClientTest extends TestCase
 		$this->json('POST', '/api/oauthpersonalaccessclient',$this->oauthpersonalaccessclientData);
 		$response=$this->delete('/api/oauthpersonalaccessclient/1');
 		$this->assertEquals(200,$response->getStatusCode());
+		$response=$this->json('GET', '/api/oauthpersonalaccessclient/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+	public function testDeleteOauthPersonalAccessClientFail()
+	{
+		$response=$this->delete('/api/oauthpersonalaccessclient/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }
