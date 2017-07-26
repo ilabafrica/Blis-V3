@@ -68,7 +68,14 @@ class ObservationTypeTest extends TestCase
 		$this->json('POST', '/api/observationtype',$this->observationtypeData);
 		$response=$this->delete('/api/observationtype/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/observationtype/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
 	}
 
+    public function testDeleteObservationTypeFail()
+	{
+		$response=$this->delete('/api/observationtype/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
+	}
 }

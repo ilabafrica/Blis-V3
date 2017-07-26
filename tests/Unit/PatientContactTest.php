@@ -16,15 +16,25 @@ class PatientContactTest extends TestCase
 
 	public function setVariables(){
     	$this->patientcontactData=array(
-        
+            
+            "patient_id"=>1,
 			"relationship"=>1,
+			"name"=>1,
+			"telecome"=>1,
+			"address"=>1,
 			"gender"=>1,
+			"organization_id"=>1,
 			"period"=>'2017:12:12 15:30:00',
         );
     	$this->updatedpatientcontactData=array(
-        
+            
+            "patient_id"=>1,
 			"relationship"=>1,
+			"name"=>1,
+			"telecome"=>1,
+			"address"=>1,
 			"gender"=>1,
+			"organization_id"=>1,
 			"period"=>'2016:12:12 15:30:00',
         );
 	}
@@ -33,7 +43,7 @@ class PatientContactTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/patientcontact',$this->patientcontactData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("gender",$response->original);
+		$this->assertArrayHasKey("patient_id",$response->original);
 	}
 
 	public function testListPatientContact()
@@ -64,7 +74,15 @@ class PatientContactTest extends TestCase
 		$this->json('POST', '/api/patientcontact',$this->patientcontactData);
 		$response=$this->delete('/api/patientcontact/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/patientcontact/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeletePatientContactFail()
+	{
+		$response=$this->delete('/api/patientcontact/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

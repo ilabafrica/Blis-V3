@@ -43,7 +43,7 @@ class HumanNameTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/humanname',$this->humannameData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("text",$response->original);
+		$this->assertArrayHasKey("user_id",$response->original);
 	}
 
 	public function testListHumanName()
@@ -74,7 +74,14 @@ class HumanNameTest extends TestCase
 		$this->json('POST', '/api/humanname',$this->humannameData);
 		$response=$this->delete('/api/humanname/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/humanname/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+	public function testDeleteHumanNameFail()
+	{
+		$response=$this->delete('/api/humanname/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

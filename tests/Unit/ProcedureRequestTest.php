@@ -100,7 +100,15 @@ class ProcedureRequestTest extends TestCase
 		$this->json('POST', '/api/procedurerequest',$this->procedurerequestData);
 		$response=$this->delete('/api/procedurerequest/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/procedurerequest/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteProcedureRequestFail()
+	{
+		$response=$this->delete('/api/procedurerequest/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

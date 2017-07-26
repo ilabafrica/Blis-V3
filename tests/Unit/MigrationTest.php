@@ -18,11 +18,13 @@ class MigrationTest extends TestCase
     	$this->migrationData=array(
         
 			"migration"=>'Sample String',
+			"batch"=>'1,'
 
         );
     	$this->updatedmigrationData=array(
         
 			"migration"=>'Sample updated String',
+			"batch"=>1,
 
         );
 	}
@@ -52,7 +54,7 @@ class MigrationTest extends TestCase
 	public function testUpdateMigration()
 	{
 		$this->json('POST', '/api/migration',$this->migrationData);
-		$response=$this->json('PUT', '/api/migration',$this->updatedmigrationData);
+		$response=$this->json('PUT', '/api/migration/1',$this->updatedmigrationData);
 		$response->assertStatus(200);
 		$this->assertArrayHasKey("migration",$response->original);
 	}
@@ -62,7 +64,14 @@ class MigrationTest extends TestCase
 		$this->json('POST', '/api/migration',$this->migrationData);
 		$response=$this->delete('/api/migration/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/migration/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+	public function testDeleteMigrationFail()
+	{
+		$response=$this->delete('/api/migration/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }
