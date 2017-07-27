@@ -32,6 +32,8 @@ class OauthRefreshTokenTest extends TestCase
 	public function testStoreOauthRefreshToken()
 	{
 		$response=$this->json('POST', '/api/oauthrefreshtoken',$this->oauthrefreshtokenData);
+		//dd($response);
+
 		$response->assertStatus(200);
 		$this->assertArrayHasKey("access_token_id",$response->original);
 	}
@@ -47,7 +49,9 @@ class OauthRefreshTokenTest extends TestCase
 	{
 		$this->json('POST', '/api/oauthrefreshtoken',$this->oauthrefreshtokenData);
 		$response=$this->json('GET', '/api/oauthrefreshtoken/1');
+
 		$response->assertStatus(200);
+
 		$this->assertArrayHasKey("access_token_id",$response->original);
 	}
 
@@ -55,6 +59,8 @@ class OauthRefreshTokenTest extends TestCase
 	{
 		$this->json('POST', '/api/oauthrefreshtoken',$this->oauthrefreshtokenData);
 		$response=$this->json('PUT', '/api/oauthrefreshtoken/1',$this->updatedoauthrefreshtokenData);
+		
+
 		$response->assertStatus(200);
 		$this->assertArrayHasKey("access_token_id",$response->original);
 	}

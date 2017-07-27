@@ -23,7 +23,7 @@ class OauthPersonalAccessClientTest extends TestCase
         );
     	$this->updatedoauthpersonalaccessclientData=array(
               
-              "client_id"=>1,
+              "client_id"=>2,
 
         );
 	}
@@ -52,8 +52,8 @@ class OauthPersonalAccessClientTest extends TestCase
 
 	public function testUpdateOauthPersonalAccessClient()
 	{
-		$this->json('POST', '/api/oauthpersonalaccessclient',$this->updatedoauthpersonalaccessclientData);
-		$response=$this->json('PUT', '/api/oauthpersonalaccessclient');
+		$this->json('POST', '/api/oauthpersonalaccessclient',$this->oauthpersonalaccessclientData);
+		$response=$this->json('PUT', '/api/oauthpersonalaccessclient/1',$this->updatedoauthpersonalaccessclientData);
 		$response->assertStatus(200);
 		$this->assertArrayHasKey("client_id",$response->original);
 	}

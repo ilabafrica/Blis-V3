@@ -15,7 +15,7 @@ class ObservationTest extends TestCase
 	}
 
 	public function setVariables(){
-    	$this->observationData=array(
+    	$this->observationData= array(
         
 			"status_id"=>1,
 			"category_id"=>1,
@@ -28,7 +28,7 @@ class ObservationTest extends TestCase
 			"comment"=>'Sample String',
 			"issued"=>'2017:12:12 15:30:00',
         );
-    	$this->updatedobservationData=array(
+    	$this->updatedobservationData= array(
         
 			"status_id"=>1,
 			"category_id"=>1,

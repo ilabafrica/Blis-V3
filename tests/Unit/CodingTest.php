@@ -64,8 +64,9 @@ class CodingTest extends TestCase
 		$response->assertStatus(200);
 		$this->assertArrayHasKey("display",$response->original);
 		$response=$this->json('GET', '/api/coding/1');
-		$this->assertEquals(404, $response->getStatusCode());
+		$this->assertEquals(200, $response->getStatusCode());
 	}
+
 
 	public function testDeleteCoding()
 	{

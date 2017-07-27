@@ -20,15 +20,15 @@ class PasswordResetTest extends TestCase
         
 			"email"=>'Sample String',
 			"token"=>'Sample',
-			"created_at"=>'2017:12:12 15:30:00',
 			
+
 
         );
     	$this->updatedpasswordresetData=array(
         
 			"email"=>'Sample updated String',
 			"token"=>'Sample updated String',
-			"created_at"=>'2017:12:12 15:30:00',
+			
 
         );
 	}
@@ -52,6 +52,7 @@ class PasswordResetTest extends TestCase
 		$this->json('POST', '/api/passwordreset',$this->passwordresetData);
 		$response=$this->json('GET', '/api/passwordreset/1');
 		$response->assertStatus(200);
+
 		$this->assertArrayHasKey("email",$response->original);
 	}
 

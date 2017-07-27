@@ -17,19 +17,19 @@ class OauthAccessTokenTest extends TestCase
 	public function setVariables(){
     	$this->oauthaccesstokenData=array(
             "created_by"=>1,
-			"name"=>'Sample String',
 			"client_id"=>1,
+			"name"=>'Sample String',
 			"scopes"=>'Sample String',
-			"revoked"=>123,
+			"revoked"=>12,
 
         );
     	$this->updatedoauthaccesstokenData=array(
             
             "created_by"=>1,
-			"name"=>'Sample updated String',
 			"client_id"=>1,
+			"name"=>'Sample updated String',
 			"scopes"=>'Sample updated String',
-			"revoked"=>121,
+			"revoked"=>12,
 
         );
 	}
@@ -37,8 +37,9 @@ class OauthAccessTokenTest extends TestCase
 	public function testStoreOauthAccessToken()
 	{
 		$response=$this->json('POST', '/api/oauthaccesstoken',$this->oauthaccesstokenData);
+		//dd($response);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("created_by",$response->original);
+		$this->assertArrayHasKey("name",$response->original);
 	}
 
 	public function testListOauthAccessToken()

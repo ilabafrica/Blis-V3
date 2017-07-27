@@ -21,6 +21,7 @@ class OauthAuthCodeTest extends TestCase
             "client_id"=>1,
             "scopes"=>'Sample String',
             "revoked"=>1,
+            "expires_at"=>'2017:12:12 15:30:00',
 
         );
     	$this->updatedoauthauthcodeData=array(
@@ -29,6 +30,7 @@ class OauthAuthCodeTest extends TestCase
             "client_id"=>1,
             "scopes"=>'Sample updated String',
             "revoked"=>1,
+            "expires_at"=>'2017:12:12 16:30:00',
         );
 	}
 
@@ -36,7 +38,8 @@ class OauthAuthCodeTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/oauthauthcode',$this->oauthauthcodeData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("created_by",$response->original);
+		//dd($response);
+		$this->assertArrayHasKey("scopes",$response->original);
 	}
 
 	public function testListOauthAuthCode()
