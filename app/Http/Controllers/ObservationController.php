@@ -25,7 +25,7 @@ class ObservationController extends Controller
 		"status_id" => 'required',
 		"category_id" => 'required',
 		"panel_id" => 'required',
-		"user_id" => 'required',
+		"created_by" => 'required',
 		"quantity_id" => 'required',
 		"data_absent_reason" => 'required',
 		"interpretation" => 'required',
@@ -41,7 +41,7 @@ class ObservationController extends Controller
 			$observation->status_id = $request->input('status_id');
 			$observation->category_id = $request->input('category_id');
 			$observation->panel_id = $request->input('panel_id');
-			$observation->user_id = $request->input('user_id');
+			$observation->created_by = $request->input('created_by');
 			$observation->quantity_id = $request->input('quantity_id');
 			$observation->data_absent_reason = $request->input('data_absent_reason');
 			$observation->interpretation = $request->input('interpretation');
@@ -89,7 +89,7 @@ class ObservationController extends Controller
 		"status_id" => 'required',
 		"category_id" => 'required',
 		"panel_id" => 'required',
-		"user_id" => 'required',
+		"created_by" => 'required',
 		"quantity_id" => 'required',
 		"data_absent_reason" => 'required',
 		"interpretation" => 'required',
@@ -105,7 +105,7 @@ class ObservationController extends Controller
 			$observation->status_id = $request->input('status_id');
 			$observation->category_id = $request->input('category_id');
 			$observation->panel_id = $request->input('panel_id');
-			$observation->user_id = $request->input('user_id');
+			$observation->created_by = $request->input('created_by');
 			$observation->quantity_id = $request->input('quantity_id');
 			$observation->data_absent_reason = $request->input('data_absent_reason');
 			$observation->interpretation = $request->input('interpretation');

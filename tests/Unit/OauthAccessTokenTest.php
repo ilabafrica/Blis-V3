@@ -16,7 +16,7 @@ class OauthAccessTokenTest extends TestCase
 
 	public function setVariables(){
     	$this->oauthaccesstokenData=array(
-            "user_id"=>'Sample String',
+            "created_by"=>'Sample String',
 			"name"=>'Sample String',
 			"client_id"=>1,
 			"scopes"=>'Sample String',
@@ -25,7 +25,7 @@ class OauthAccessTokenTest extends TestCase
         );
     	$this->updatedoauthaccesstokenData=array(
             
-            "user_id"=>'Sample updated String',
+            "created_by"=>'Sample updated String',
 			"name"=>'Sample updated String',
 			"client_id"=>1,
 			"scopes"=>'Sample updated String',
@@ -38,7 +38,7 @@ class OauthAccessTokenTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/oauthaccesstoken',$this->oauthaccesstokenData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("scopes",$response->original);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testListOauthAccessToken()
@@ -53,7 +53,7 @@ class OauthAccessTokenTest extends TestCase
 		$this->json('POST', '/api/oauthaccesstoken',$this->oauthaccesstokenData);
 		$response=$this->json('GET', '/api/oauthaccesstoken/1');
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testUpdateOauthAccessToken()
@@ -61,7 +61,7 @@ class OauthAccessTokenTest extends TestCase
 		$this->json('POST', '/api/oauthaccesstoken',$this->oauthaccesstokenData);
 		$response=$this->json('PUT', '/api/oauthaccesstoken/1',$this->updatedoauthaccesstokenData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testDeleteOauthAccessToken()
@@ -69,7 +69,7 @@ class OauthAccessTokenTest extends TestCase
 		$this->json('POST', '/api/oauthaccesstoken',$this->oauthaccesstokenData);
 		$response=$this->delete('/api/oauthaccesstoken/1');
 		$response->assertStatus(200);
-		$response=$this->json('GET', '/api/patient/1');
+		$response=$this->json('GET', '/api/oauthaccesstoken/1');
 		$this->assertEquals(404, $response->getStatusCode());
 		
 	}

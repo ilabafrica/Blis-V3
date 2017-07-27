@@ -22,7 +22,7 @@ class OrganizationController extends Controller
 	public function store(Request $request)
 	{
         $rules=array(
-		"user_id" => 'required',
+		"created_by" => 'required',
 		"active" => 'required',
 		"type" => 'required',
 		"name" => 'required',
@@ -33,7 +33,7 @@ class OrganizationController extends Controller
 			 return response()->json($validator);
 		} else {
 			$organization= new Organization;
-			$organization->user_id = $request->input('user_id');
+			$organization->created_by = $request->input('created_by');
 			$organization->active = $request->input('active');
 			$organization->type = $request->input('type');
 			$organization->name = $request->input('name');
@@ -81,7 +81,7 @@ class OrganizationController extends Controller
 	{
     
         $rules=array(
-		"user_id" => 'required',
+		"created_by" => 'required',
 		"active" => 'required',
 		"type" => 'required',
 		"name" => 'required',
@@ -92,7 +92,7 @@ class OrganizationController extends Controller
 			 return response()->json($validator,422);
 		} else {
 			$organization=Organization::findorfail($id);
-			$organization->user_id = $request->input('user_id');
+			$organization->created_by = $request->input('created_by');
 			$organization->active = $request->input('active');
 			$organization->type = $request->input('type');
 			$organization->name = $request->input('name');

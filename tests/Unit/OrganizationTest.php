@@ -17,9 +17,10 @@ class OrganizationTest extends TestCase
 	public function setVariables(){
     	$this->organizationData=array(
         
-			"user_id"=>1,
-			"active"=>1,
+
+			"created_by"=>1,
 			"type"=>1,
+			"active"=>1,
 			"name"=>'Sample String',
 			"alias"=>'Sample String',
 			"telecom"=>1,
@@ -30,7 +31,8 @@ class OrganizationTest extends TestCase
         );
     	$this->updatedorganizationData=array(
         
-			"user_id"=>1,
+			"created_by"=>1,
+			"active"=>1,
 			"type"=>1,
 			"name"=>'Sample Updated String',
 			"alias"=>'Sample Updayed String',

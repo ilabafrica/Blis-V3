@@ -23,7 +23,7 @@ class PractitionerController extends Controller
 	{
         $rules=array(
 		"active" => 'required',
-		"user_id" => 'required',
+		"created_by" => 'required',
 		"name" => 'required',
 		"telecom" => 'required',
 		"gender" => 'required',
@@ -36,7 +36,7 @@ class PractitionerController extends Controller
 		} else {
 			$practitioner= new Practitioner;
 			$practitioner->active = $request->input('active');
-			$practitioner->user_id = $request->input('user_id');
+			$practitioner->created_by = $request->input('created_by');
 			$practitioner->name = $request->input('name');
 			$practitioner->telecom = $request->input('telecom');
 			$practitioner->address = $request->input('address');
@@ -83,7 +83,7 @@ class PractitionerController extends Controller
     
         $rules=array(
 		"active" => 'required',
-		"user_id" => 'required',
+		"created_by" => 'required',
 		"name" => 'required',
 		"telecom" => 'required',
 		"gender" => 'required',
@@ -96,7 +96,7 @@ class PractitionerController extends Controller
 		} else {
 			$practitioner=Practitioner::findorfail($id);
 			$practitioner->active = $request->input('active');
-			$practitioner->user_id = $request->input('user_id');
+			$practitioner->created_by = $request->input('created_by');
 			$practitioner->name = $request->input('name');
 			$practitioner->telecom = $request->input('telecom');
 			$practitioner->address = $request->input('address');

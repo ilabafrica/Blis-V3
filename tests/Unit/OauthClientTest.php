@@ -17,7 +17,7 @@ class OauthClientTest extends TestCase
 	public function setVariables(){
     	$this->oauthclientData=array(
         
-			"user_id"=>1,
+			"created_by"=>1,
 			"name"=>'Sample String',
 			"secret"=>'Sample String',
 			"redirect"=>'Sample String',
@@ -27,7 +27,7 @@ class OauthClientTest extends TestCase
         );
     	$this->updatedoauthclientData=array(
             
-            "user_id"=>1,
+            "created_by"=>1,
 			"name"=>'Sample updated String',
 			"secret"=>'Sample updated String',
 			"redirect"=>'Sample updated String',

@@ -17,7 +17,7 @@ class HumanNameTest extends TestCase
 	public function setVariables(){
     	$this->humannameData=array(
         
-			"user_id"=>1,
+			"created_by"=>1,
 			"use"=>1,
 			"text"=>'Sample String',
 			"family"=>'Sample String',
@@ -28,7 +28,7 @@ class HumanNameTest extends TestCase
         );
     	$this->updatedhumannameData=array(
         
-			"user_id"=>1,
+			"created_by"=>1,
 			"use"=>1,
 			"text"=>'Sample updated String',
 			"family"=>'Sample updated String',
@@ -43,7 +43,7 @@ class HumanNameTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/humanname',$this->humannameData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("user_id",$response->original);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testListHumanName()

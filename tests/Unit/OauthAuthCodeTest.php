@@ -17,7 +17,7 @@ class OauthAuthCodeTest extends TestCase
 	public function setVariables(){
     	$this->oauthauthcodeData=array(
             
-            "user_id"=>1,
+            "created_by"=>1,
             "client_id"=>1,
             "scopes"=>'Sample String',
             "revoked"=>1,
@@ -25,7 +25,7 @@ class OauthAuthCodeTest extends TestCase
         );
     	$this->updatedoauthauthcodeData=array(
         
-            "user_id"=>1,
+            "created_by"=>1,
             "client_id"=>1,
             "scopes"=>'Sample updated String',
             "revoked"=>1,
@@ -36,7 +36,7 @@ class OauthAuthCodeTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/oauthauthcode',$this->oauthauthcodeData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("user_id",$response->original);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testListOauthAuthCode()
@@ -51,7 +51,7 @@ class OauthAuthCodeTest extends TestCase
 		$this->json('POST', '/api/oauthauthcode',$this->oauthauthcodeData);
 		$response=$this->json('GET', '/api/oauthauthcode/1');
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("user_id",$response->original);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testUpdateOauthAuthCode()
@@ -59,7 +59,7 @@ class OauthAuthCodeTest extends TestCase
 		$this->json('POST', '/api/oauthauthcode',$this->oauthauthcodeData);
 		$response=$this->json('PUT', '/api/oauthauthcode/1',$this->updatedoauthauthcodeData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("user_id",$response->original);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testDeleteOauthAuthCode()

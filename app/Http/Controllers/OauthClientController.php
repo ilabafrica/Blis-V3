@@ -35,7 +35,7 @@ class OauthClientController extends Controller
 			 return response()->json($validator);
 		} else {
 			$oauthclient= new OauthClient;
-			$oauthclient->user_id = $request->input('user_id');
+			$oauthclient->created_by = $request->input('created_by');
 			$oauthclient->name = $request->input('name');
 			$oauthclient->secret = $request->input('secret');
 			$oauthclient->redirect = $request->input('redirect');
@@ -94,7 +94,7 @@ class OauthClientController extends Controller
 			 return response()->json($validator,422);
 		} else {
 			$oauthclient=OauthClient::findorfail($id);
-			$oauthclient->user_id = $request->input('user_id');
+			$oauthclient->created_by = $request->input('created_by');
 			$oauthclient->name = $request->input('name');
 			$oauthclient->secret = $request->input('secret');
 			$oauthclient->redirect = $request->input('redirect');

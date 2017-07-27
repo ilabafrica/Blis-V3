@@ -17,7 +17,8 @@ class PractitionerTest extends TestCase
 	public function setVariables(){
     	$this->practitionerData=array(
         
-			"user_id"=>1,
+
+			"created_by"=>1,
 			"active"=>2,
 			"name"=>'Sample',
 			"telecom"=>1,
@@ -26,10 +27,11 @@ class PractitionerTest extends TestCase
 			"birth_date"=>'2017:12:12 15:30:00',
 			"photo"=>'Sample String',
 
+
         );
     	$this->updatedpractitionerData=array(
         
-			"user_id"=>1,
+			"created_by"=>1,
 			"active"=>2,
 			"name"=>'Sample Updated',
 			"telecom"=>1,
@@ -37,6 +39,7 @@ class PractitionerTest extends TestCase
 			"gender"=>1,
 			"birth_date"=>'2016:12:12 15:30:00',
 			"photo"=>'Sample updated String',
+
 
         );
 	}

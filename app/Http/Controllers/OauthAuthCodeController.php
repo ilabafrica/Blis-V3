@@ -22,7 +22,7 @@ class OauthAuthCodeController extends Controller
 	public function store(Request $request)
 	{
         $rules=array(
-		"user_id" => 'required',
+		"created_by" => 'required',
 		"client_id" => 'required',
 		"revoked" => 'required',
 
@@ -32,7 +32,7 @@ class OauthAuthCodeController extends Controller
 			 return response()->json($validator);
 		} else {
 			$oauthauthcode= new OauthAuthCode;
-			$oauthauthcode->user_id = $request->input('user_id');
+			$oauthauthcode->created_by = $request->input('created_by');
 			$oauthauthcode->client_id = $request->input('client_id');
 			$oauthauthcode->scopes = $request->input('scopes');
 			$oauthauthcode->revoked = $request->input('revoked');
@@ -76,7 +76,7 @@ class OauthAuthCodeController extends Controller
 	{
     
         $rules=array(
-		"user_id" => 'required',
+		"created_by" => 'required',
 		"client_id" => 'required',
 		"revoked" => 'required',
 
@@ -86,7 +86,7 @@ class OauthAuthCodeController extends Controller
 			 return response()->json($validator,422);
 		} else {
 			$oauthauthcode=OauthAuthCode::findorfail($id);
-			$oauthauthcode->user_id = $request->input('user_id');
+			$oauthauthcode->created_by = $request->input('created_by');
 			$oauthauthcode->client_id = $request->input('client_id');
 			$oauthauthcode->scopes = $request->input('scopes');
 			$oauthauthcode->revoked = $request->input('revoked');
