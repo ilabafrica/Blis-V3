@@ -22,6 +22,7 @@ class OauthClientTest extends TestCase
 			"secret"=>'Sample String',
 			"redirect"=>'Sample String',
 			"personal_access_client"=>1,
+			"password_client"=>1,
 			"revoked"=>1,
 
         );
@@ -32,6 +33,7 @@ class OauthClientTest extends TestCase
 			"secret"=>'Sample updated String',
 			"redirect"=>'Sample updated String',
 			"personal_access_client"=>1,
+			"password_client"=>1,
 			"revoked"=>1,
 
         );
@@ -41,7 +43,7 @@ class OauthClientTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/oauthclient',$this->oauthclientData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("secret",$response->original);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testListOauthClient()
@@ -56,7 +58,7 @@ class OauthClientTest extends TestCase
 		$this->json('POST', '/api/oauthclient',$this->oauthclientData);
 		$response=$this->json('GET', '/api/oauthclient/1');
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testUpdateOauthClient()
@@ -64,7 +66,7 @@ class OauthClientTest extends TestCase
 		$this->json('POST', '/api/oauthclient',$this->oauthclientData);
 		$response=$this->json('PUT', '/api/oauthclient/1',$this->updatedoauthclientData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testDeleteOauthClient()

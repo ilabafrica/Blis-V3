@@ -19,9 +19,9 @@ class EpisodeofCareTest extends TestCase
         
 			"status"=>1,
 			"type"=>1,
-			"patient_id"=>1,
+			"patient_id"=>2,
 			"organization_id"=>1,
-			"period"=>1,
+			"period"=>2,
 			"practitioners_id"=>1,
 			"team_id"=>1,
 
@@ -43,7 +43,7 @@ class EpisodeofCareTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/episodeofcare',$this->episodeofcareData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("patient",$response->original);
+		$this->assertArrayHasKey("type",$response->original);
 	}
 
 	public function testListEpisodeofCare()
@@ -58,7 +58,7 @@ class EpisodeofCareTest extends TestCase
 		$this->json('POST', '/api/episodeofcare',$this->episodeofcareData);
 		$response=$this->json('GET', '/api/episodeofcare/1');
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("patient",$response->original);
+		$this->assertArrayHasKey("status",$response->original);
 	}
 
 	public function testUpdateEpisodeofCare()
@@ -66,7 +66,7 @@ class EpisodeofCareTest extends TestCase
 		$this->json('POST', '/api/episodeofcare',$this->episodeofcareData);
 		$response=$this->json('PUT', '/api/episodeofcare/1',$this->updatedepisodeofcareData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("patient",$response->original);
+		$this->assertArrayHasKey("status",$response->original);
 	}
 
 	public function testDeleteEpisodeofCare()

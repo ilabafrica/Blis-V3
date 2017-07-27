@@ -66,7 +66,15 @@ class PanelTypeTest extends TestCase
 		$this->json('POST', '/api/paneltype',$this->paneltypeData);
 		$response=$this->delete('/api/paneltype/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/paneltype/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeletePanelTypeFail()
+	{
+		$response=$this->delete('/api/paneltype/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

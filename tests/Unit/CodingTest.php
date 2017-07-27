@@ -21,6 +21,7 @@ class CodingTest extends TestCase
 			"version"=>'Sample String',
 			"code"=>'Sample String',
 			"display"=>'Sample String',
+			"userSelected"=>1,
 
         );
     	$this->updatedcodingData=array(
@@ -29,6 +30,7 @@ class CodingTest extends TestCase
 			"version"=>'Sample updated String',
 			"code"=>'Sample updated String',
 			"display"=>'Sample updated String',
+			"userSelected"=>'true',
 
         );
 	}
@@ -37,7 +39,7 @@ class CodingTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/coding',$this->codingData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("display",$response->original);
+		$this->assertArrayHasKey("userSelected",$response->original);
 	}
 
 	public function testListCoding()
@@ -70,6 +72,8 @@ class CodingTest extends TestCase
 		$this->json('POST', '/api/coding',$this->codingData);
 		$response=$this->delete('/api/coding/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/coding/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
 	}
 

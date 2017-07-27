@@ -15,16 +15,20 @@ class PasswordResetTest extends TestCase
 	}
 
 	public function setVariables(){
+    	
     	$this->passwordresetData=array(
         
 			"email"=>'Sample String',
-			"token"=>'Sample String',
+			"token"=>'Sample',
+			"created_at"=>'2017:12:12 15:30:00',
+			
 
         );
     	$this->updatedpasswordresetData=array(
         
 			"email"=>'Sample updated String',
 			"token"=>'Sample updated String',
+			"created_at"=>'2017:12:12 15:30:00',
 
         );
 	}

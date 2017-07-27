@@ -80,7 +80,15 @@ class CareTeamTest extends TestCase
 		$this->json('POST', '/api/careteam',$this->careteamData);
 		$response=$this->delete('/api/careteam/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/careteam/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteCareTeamFail()
+	{
+		$response=$this->delete('/api/careteam/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

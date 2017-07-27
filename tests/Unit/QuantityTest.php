@@ -70,7 +70,15 @@ class QuantityTest extends TestCase
 		$this->json('POST', '/api/quantity',$this->quantityData);
 		$response=$this->delete('/api/quantity/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/quantity/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteQuantityFail()
+	{
+		$response=$this->delete('/api/quantity/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

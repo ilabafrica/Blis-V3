@@ -21,6 +21,7 @@ class ObservationTypeTest extends TestCase
 			"category_id"=>1,
 			"code_id"=>1,
 			"result_type"=>1,
+			"sort_order"=>1,
 
         );
     	$this->updatedobservationtypeData=array(
@@ -29,6 +30,7 @@ class ObservationTypeTest extends TestCase
 			"category_id"=>1,
 			"code_id"=>1,
 			"result_type"=>1,
+			"sort_order"=>1,
 
         );
 	}
@@ -37,13 +39,13 @@ class ObservationTypeTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/observationtype',$this->observationtypeData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("code_id",$response->original);
+		$this->assertArrayHasKey("status_id",$response->original);
 	}
 
 	public function testListObservationType()
 	{
 		$response=$this->json('GET', '/api/observationtype');
-		$this->assertEquals(200);
+		$response->assertStatus(200);
 		
 	}
 

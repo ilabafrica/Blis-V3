@@ -19,7 +19,7 @@ class OrganizationContactTest extends TestCase
             "organization_id"=>1,
 			"purpose"=>1,
 			"name"=>1,
-			"telecome"=>1,
+			"telecom"=>1,
 			"address"=>1,
 
 
@@ -28,7 +28,7 @@ class OrganizationContactTest extends TestCase
             "organization_id"=>1,
 			"purpose"=>1,
 			"name"=>1,
-			"telecome"=>1,
+			"telecom"=>1,
 			"address"=>1,
 
         );

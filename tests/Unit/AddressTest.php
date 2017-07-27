@@ -78,7 +78,15 @@ class AddressTest extends TestCase
 		$this->json('POST', '/api/address',$this->addressData);
 		$response=$this->delete('/api/address/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/address/1');
+		$this->assertEquals(500, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteAddressFail()
+	{
+		$response=$this->delete('/api/address/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

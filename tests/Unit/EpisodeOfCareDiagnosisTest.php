@@ -68,7 +68,15 @@ class EpisodeOfCareDiagnosisTest extends TestCase
 		$this->json('POST', '/api/episodeofcarediagnosis',$this->episodeofcarediagnosisData);
 		$response=$this->delete('/api/episodeofcarediagnosis/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/episodeofcarediagnosis/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteEpisodeOfCareDiagnosisFail()
+	{
+		$response=$this->delete('/api/episodeofcarediagnosis/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

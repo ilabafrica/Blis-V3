@@ -20,6 +20,7 @@ class ObservationTest extends TestCase
 			"status_id"=>1,
 			"category_id"=>1,
 			"panel_id"=>1,
+			"observation_type_id"=>1,
 			"created_by"=>1,
 			"quantity_id"=>1,
 			"data_absent_reason"=>1,
@@ -32,12 +33,13 @@ class ObservationTest extends TestCase
 			"status_id"=>1,
 			"category_id"=>1,
 			"panel_id"=>1,
+			"observation_type_id"=>1,
 			"created_by"=>1,
 			"quantity_id"=>1,
 			"data_absent_reason"=>1,
 			"interpretation"=>1,
 			"comment"=>'Sample updated String',
-			"issued"=>'2016:12:12 15:30:00',
+			"issued"=>'2016:12:12 16:30:00',
         );
 	}
 
@@ -45,7 +47,7 @@ class ObservationTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/observation',$this->observationData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("comment",$response->original);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testListObservation()
@@ -60,7 +62,7 @@ class ObservationTest extends TestCase
 		$this->json('POST', '/api/observation',$this->observationData);
 		$response=$this->json('GET', '/api/observation/1');
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("comment",$response->original);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testUpdateObservation()
@@ -68,7 +70,7 @@ class ObservationTest extends TestCase
 		$this->json('POST', '/api/observation',$this->observationData);
 		$response=$this->json('PUT', '/api/observation/1',$this->updatedobservationData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("comment",$response->original);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testDeleteObservation()

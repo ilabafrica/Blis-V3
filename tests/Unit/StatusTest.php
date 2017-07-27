@@ -62,7 +62,15 @@ class StatusTest extends TestCase
 		$this->json('POST', '/api/status',$this->statusData);
 		$response=$this->delete('/api/status/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/status/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteStatusFail()
+	{
+		$response=$this->delete('/api/status/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

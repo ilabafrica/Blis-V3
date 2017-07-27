@@ -64,7 +64,15 @@ class CareTeamPractitionerTest extends TestCase
 		$this->json('POST', '/api/careteampractitioner',$this->careteampractitionerData);
 		$response=$this->delete('/api/careteampractitioner/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/careteampractitioner/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteCareTeamPractitionerFail()
+	{
+		$response=$this->delete('/api/careteampractitioner/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

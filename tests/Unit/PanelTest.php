@@ -21,8 +21,9 @@ class PanelTest extends TestCase
 			"performed_by"=>1,
 			"specimen_id"=>1,
 			"conclusion"=>'Sample String',
-			"coded_diagnosis"=>1,
+			"coded_diagnosis_id"=>1,
 			"status_id"=>1,
+			"sort_order"=>1,
 
         );
     	$this->updatedpanelData=array(
@@ -31,8 +32,9 @@ class PanelTest extends TestCase
 			"performed_by"=>1,
 			"specimen_id"=>1,
 			"conclusion"=>'Sample updated String',
-			"coded_diagnosis"=>1,
+			"coded_diagnosis_id"=>1,
 			"status_id"=>1,
+			"sort_order"=>1,
 
         );
 	}

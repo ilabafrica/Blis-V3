@@ -70,7 +70,15 @@ class ComponentTest extends TestCase
 		$this->json('POST', '/api/component',$this->componentData);
 		$response=$this->delete('/api/component/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/component/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteComponentFail()
+	{
+		$response=$this->delete('/api/component/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

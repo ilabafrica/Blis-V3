@@ -70,7 +70,15 @@ class ContactPointTest extends TestCase
 		$this->json('POST', '/api/contactpoint',$this->contactpointData);
 		$response=$this->delete('/api/contactpoint/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/contactpoint/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteContactPointFail()
+	{
+		$response=$this->delete('/api/patient/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

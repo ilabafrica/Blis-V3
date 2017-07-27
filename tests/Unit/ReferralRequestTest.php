@@ -90,7 +90,15 @@ class ReferralRequestTest extends TestCase
 		$this->json('POST', '/api/referralrequest',$this->referralrequestData);
 		$response=$this->delete('/api/referralrequest/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/referralrequest/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteReferralRequestFail()
+	{
+		$response=$this->delete('/api/referralrequest/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

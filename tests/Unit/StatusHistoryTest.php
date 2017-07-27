@@ -64,7 +64,15 @@ class StatusHistoryTest extends TestCase
 		$this->json('POST', '/api/statushistory',$this->statushistoryData);
 		$response=$this->delete('/api/statushistory/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/statushistory/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteStatusHistoryFail()
+	{
+		$response=$this->delete('/api/statushistory/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

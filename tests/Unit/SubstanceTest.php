@@ -68,7 +68,15 @@ class SubstanceTest extends TestCase
 		$this->json('POST', '/api/substance',$this->substanceData);
 		$response=$this->delete('/api/substance/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/substance/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteSubstanceFail()
+	{
+		$response=$this->delete('/api/substance/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

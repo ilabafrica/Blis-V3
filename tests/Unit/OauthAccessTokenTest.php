@@ -16,20 +16,20 @@ class OauthAccessTokenTest extends TestCase
 
 	public function setVariables(){
     	$this->oauthaccesstokenData=array(
-            "created_by"=>'Sample String',
+            "created_by"=>1,
 			"name"=>'Sample String',
 			"client_id"=>1,
 			"scopes"=>'Sample String',
-			"revoked"=>'1,'
+			"revoked"=>123,
 
         );
     	$this->updatedoauthaccesstokenData=array(
             
-            "created_by"=>'Sample updated String',
+            "created_by"=>1,
 			"name"=>'Sample updated String',
 			"client_id"=>1,
 			"scopes"=>'Sample updated String',
-			"revoked"=>'1',
+			"revoked"=>121,
 
         );
 	}

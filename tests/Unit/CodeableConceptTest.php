@@ -64,7 +64,15 @@ class CodeableConceptTest extends TestCase
 		$this->json('POST', '/api/codeableconcept',$this->codeableconceptData);
 		$response=$this->delete('/api/codeableconcept/1');
 		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/codeableconcept/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteCodeableConceptFail()
+	{
+		$response=$this->delete('/api/codeableconcept/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

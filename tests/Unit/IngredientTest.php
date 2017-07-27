@@ -62,7 +62,14 @@ class IngredientTest extends TestCase
 		$this->json('POST', '/api/ingredient',$this->ingredientData);
 		$response=$this->delete('/api/ingredient/1');
 		$response->assertStatus(200);
-		
+		$response=$this->json('GET', '/api/ingredient/1');
+		$this->assertEquals(404, $response->getStatusCode());
+	}
+
+	public function testDeleteIngredientFail()
+	{
+		$response=$this->delete('/api/ingredient/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

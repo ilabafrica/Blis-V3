@@ -19,11 +19,13 @@ class OauthRefreshTokenTest extends TestCase
         
          "access_token_id"=>'Sample String',
          "revoked"=>1,
+         "expires_at"=>'2017:12:12 15:30:00',
         );
     	$this->updatedoauthrefreshtokenData=array(
         
         "access_token_id"=>'Sample updated String',
          "revoked"=>1,
+         "expires_at"=>'2017:12:12 16:30:00',
         );
 	}
 
@@ -31,7 +33,7 @@ class OauthRefreshTokenTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/oauthrefreshtoken',$this->oauthrefreshtokenData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("revoked",$response->original);
+		$this->assertArrayHasKey("access_token_id",$response->original);
 	}
 
 	public function testListOauthRefreshToken()
