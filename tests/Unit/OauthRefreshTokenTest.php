@@ -32,7 +32,7 @@ class OauthRefreshTokenTest extends TestCase
 	public function testStoreOauthRefreshToken()
 	{
 		$response=$this->json('POST', '/api/oauthrefreshtoken',$this->oauthrefreshtokenData);
-		//dd($response);
+		
 
 		$response->assertStatus(200);
 		$this->assertArrayHasKey("access_token_id",$response->original);

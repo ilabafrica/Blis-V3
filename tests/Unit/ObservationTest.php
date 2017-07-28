@@ -17,14 +17,14 @@ class ObservationTest extends TestCase
 	public function setVariables(){
     	$this->observationData= array(
         
-			"status_id"=>1,
-			"category_id"=>1,
-			"panel_id"=>1,
-			"observation_type_id"=>1,
-			"created_by"=>1,
-			"quantity_id"=>1,
-			"data_absent_reason"=>1,
-			"interpretation"=>1,
+			"status_id"=>2,
+			"category_id"=>2,
+			"panel_id"=>2,
+			"observation_type_id"=>2,
+			"created_by"=>2,
+			"quantity_id"=>2,
+			"data_absent_reason"=>2,
+			"interpretation"=>2,
 			"comment"=>'Sample String',
 			"issued"=>'2017:12:12 15:30:00',
         );
@@ -47,7 +47,7 @@ class ObservationTest extends TestCase
 	{
 		$response=$this->json('POST', '/api/observation',$this->observationData);
 		$response->assertStatus(200);
-		$this->assertArrayHasKey("created_by",$response->original);
+		$this->assertArrayHasKey("status_id",$response->original);
 	}
 
 	public function testListObservation()
