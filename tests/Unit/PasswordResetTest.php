@@ -15,16 +15,20 @@ class PasswordResetTest extends TestCase
 	}
 
 	public function setVariables(){
+    	
     	$this->passwordresetData=array(
         
 			"email"=>'Sample String',
-			"token"=>'Sample String',
+			"token"=>'Sample',
+			
+
 
         );
     	$this->updatedpasswordresetData=array(
         
 			"email"=>'Sample updated String',
 			"token"=>'Sample updated String',
+			
 
         );
 	}
@@ -32,14 +36,14 @@ class PasswordResetTest extends TestCase
 	public function testStorePasswordReset()
 	{
 		$response=$this->json('POST', '/api/passwordreset',$this->passwordresetData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("email",$response->original);
 	}
 
 	public function testListPasswordReset()
 	{
 		$response=$this->json('GET', '/api/passwordreset');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -47,24 +51,33 @@ class PasswordResetTest extends TestCase
 	{
 		$this->json('POST', '/api/passwordreset',$this->passwordresetData);
 		$response=$this->json('GET', '/api/passwordreset/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+
+		$this->assertArrayHasKey("email",$response->original);
 	}
 
 	public function testUpdatePasswordReset()
 	{
-		$this->json('POST', '/api/passwordreset',$this->updatedpasswordresetData);
-		$response=$this->json('PUT', '/api/passwordreset');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/passwordreset',$this->passwordresetData);
+		$response=$this->json('PUT', '/api/passwordreset/1',$this->updatedpasswordresetData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("email",$response->original);
 	}
 
 	public function testDeletePasswordReset()
 	{
 		$this->json('POST', '/api/passwordreset',$this->passwordresetData);
 		$response=$this->delete('/api/passwordreset/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/passwordreset/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteObservationFail()
+	{
+		$response=$this->delete('/api/passwordreset/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

@@ -13,7 +13,7 @@ class Quantity extends Model
 
     public function Container()
     {
-    	return $this->hasMany('App\Models\Container','quantity_id');
+    	return $this->hasMany('App\Models\SpecimenContainer','quantity_id');
     }
 
     public function Observation()

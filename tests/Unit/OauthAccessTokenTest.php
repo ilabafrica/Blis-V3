@@ -16,13 +16,25 @@ class OauthAccessTokenTest extends TestCase
 
 	public function setVariables(){
     	$this->oauthaccesstokenData=array(
-        
+    		
+            "created_by"=>1,
+			"client_id"=>1,
 			"name"=>'Sample String',
+			"scopes"=>'Sample String',
+			"revoked"=>'true',
+			"expires_at"=>'2017:12:12 15:30:00',
+
 
         );
     	$this->updatedoauthaccesstokenData=array(
-        
+            
+            "created_by"=>1,
+			"client_id"=>1,
 			"name"=>'Sample updated String',
+			"scopes"=>'Sample updated String',
+			"revoked"=>'true',
+			"expires_at"=>'2017:12:12 15:30:00',
+
 
         );
 	}
@@ -30,14 +42,14 @@ class OauthAccessTokenTest extends TestCase
 	public function testStoreOauthAccessToken()
 	{
 		$response=$this->json('POST', '/api/oauthaccesstoken',$this->oauthaccesstokenData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("name",$response->original);
 	}
 
 	public function testListOauthAccessToken()
 	{
 		$response=$this->json('GET', '/api/oauthaccesstoken');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -45,24 +57,32 @@ class OauthAccessTokenTest extends TestCase
 	{
 		$this->json('POST', '/api/oauthaccesstoken',$this->oauthaccesstokenData);
 		$response=$this->json('GET', '/api/oauthaccesstoken/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testUpdateOauthAccessToken()
 	{
-		$this->json('POST', '/api/oauthaccesstoken',$this->updatedoauthaccesstokenData);
-		$response=$this->json('PUT', '/api/oauthaccesstoken');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/oauthaccesstoken',$this->oauthaccesstokenData);
+		$response=$this->json('PUT', '/api/oauthaccesstoken/1',$this->updatedoauthaccesstokenData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testDeleteOauthAccessToken()
 	{
 		$this->json('POST', '/api/oauthaccesstoken',$this->oauthaccesstokenData);
 		$response=$this->delete('/api/oauthaccesstoken/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/oauthaccesstoken/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
 	}
 
+	public function testDeleteOauthAccessTokenFail()
+	{
+		$response=$this->delete('/api/oauthaccesstoken/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
+	}
+   
 }

@@ -120,7 +120,7 @@ $factory->define(App\Models\StatusHistory::class, function (Faker\Generator $fak
     ];
 });
 
-$factory->define(App\Models\Codes::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\Coding::class, function (Faker\Generator $faker) {
 
     return [
     ];

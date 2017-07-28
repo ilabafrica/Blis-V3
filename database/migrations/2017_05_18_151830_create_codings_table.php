@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCodingTable extends Migration
+class CreateCodingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class CreateCodingTable extends Migration
      */
     public function up()
     {
-        Schema::create('coding', function (Blueprint $table) {
+        Schema::create('codings', function (Blueprint $table) {
             $table->increments('id');
             $table->string('uri');// Identity of the terminology system
             $table->string('version'); // Version of the system - if relevant
@@ -35,6 +35,6 @@ class CreateCodingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('codes');
+        Schema::dropIfExists('codings');
     }
 }

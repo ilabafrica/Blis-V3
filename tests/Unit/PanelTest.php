@@ -23,6 +23,7 @@ class PanelTest extends TestCase
 			"conclusion"=>'Sample String',
 			"coded_diagnosis"=>1,
 			"status_id"=>1,
+			"sort_order"=>1,
 
         );
     	$this->updatedpanelData=array(
@@ -33,6 +34,7 @@ class PanelTest extends TestCase
 			"conclusion"=>'Sample updated String',
 			"coded_diagnosis"=>1,
 			"status_id"=>1,
+			"sort_order"=>1,
 
         );
 	}
@@ -40,14 +42,14 @@ class PanelTest extends TestCase
 	public function testStorePanel()
 	{
 		$response=$this->json('POST', '/api/panel',$this->panelData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("conclusion",$response->original);
 	}
 
 	public function testListPanel()
 	{
 		$response=$this->json('GET', '/api/panel');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -55,24 +57,32 @@ class PanelTest extends TestCase
 	{
 		$this->json('POST', '/api/panel',$this->panelData);
 		$response=$this->json('GET', '/api/panel/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("conclusion",$response->original);
 	}
 
 	public function testUpdatePanel()
 	{
-		$this->json('POST', '/api/panel',$this->updatedpanelData);
-		$response=$this->json('PUT', '/api/panel');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/panel',$this->panelData);
+		$response=$this->json('PUT', '/api/panel/1',$this->updatedpanelData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("conclusion",$response->original);
+
 	}
 
 	public function testDeletePanel()
 	{
 		$this->json('POST', '/api/panel',$this->panelData);
 		$response=$this->delete('/api/panel/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/panel/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+	public function testDeletePanelFail()
+	{
+		$response=$this->delete('/api/patient/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

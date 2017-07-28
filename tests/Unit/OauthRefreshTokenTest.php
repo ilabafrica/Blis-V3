@@ -17,25 +17,29 @@ class OauthRefreshTokenTest extends TestCase
 	public function setVariables(){
     	$this->oauthrefreshtokenData=array(
         
-
+         "access_token_id"=>'Sample String',
+         "revoked"=>1,
+         "expires_at"=>'2017:12:12 15:30:00',
         );
     	$this->updatedoauthrefreshtokenData=array(
         
-
+         "access_token_id"=>'Sample updated String',
+         "revoked"=>1,
+         "expires_at"=>'2017:12:12 16:30:00',
         );
 	}
 
 	public function testStoreOauthRefreshToken()
 	{
 		$response=$this->json('POST', '/api/oauthrefreshtoken',$this->oauthrefreshtokenData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("access_token_id",$response->original);
 	}
 
 	public function testListOauthRefreshToken()
 	{
 		$response=$this->json('GET', '/api/oauthrefreshtoken');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -43,24 +47,36 @@ class OauthRefreshTokenTest extends TestCase
 	{
 		$this->json('POST', '/api/oauthrefreshtoken',$this->oauthrefreshtokenData);
 		$response=$this->json('GET', '/api/oauthrefreshtoken/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+
+		$response->assertStatus(200);
+
+		$this->assertArrayHasKey("access_token_id",$response->original);
 	}
 
 	public function testUpdateOauthRefreshToken()
 	{
-		$this->json('POST', '/api/oauthrefreshtoken',$this->updatedoauthrefreshtokenData);
-		$response=$this->json('PUT', '/api/oauthrefreshtoken');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/oauthrefreshtoken',$this->oauthrefreshtokenData);
+		$response=$this->json('PUT', '/api/oauthrefreshtoken/1',$this->updatedoauthrefreshtokenData);
+		
+
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("access_token_id",$response->original);
 	}
 
 	public function testDeleteOauthRefreshToken()
 	{
 		$this->json('POST', '/api/oauthrefreshtoken',$this->oauthrefreshtokenData);
 		$response=$this->delete('/api/oauthrefreshtoken/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/oauthrefreshtoken/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteOauthRefreshTokenFail()
+	{
+		$response=$this->delete('/api/oauthrefreshtoken/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

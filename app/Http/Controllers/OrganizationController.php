@@ -58,9 +58,15 @@ class OrganizationController extends Controller
      *
      * @param  int  id
      * @return \Illuminate\Http\Response
-     */public function show($id){
+     */
+    public function show($id){
+    	try{
 		$organization=Organization::findorfail($id);
 		return response()->json($organization);
+	}
+	catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+			return response()->json( ['error' => 'Record not found' ], 404);
+		}
 	}
 
 
@@ -120,6 +126,9 @@ class OrganizationController extends Controller
 		}
 		catch (\Illuminate\Database\QueryException $e){
 			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
+		}
+		catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+			return response()->json( ['error' => 'Record not found' ], 404);
 		}
 	}
 }

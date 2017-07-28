@@ -58,14 +58,14 @@ class ReferralRequestTest extends TestCase
 	public function testStoreReferralRequest()
 	{
 		$response=$this->json('POST', '/api/referralrequest',$this->referralrequestData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testListReferralRequest()
 	{
 		$response=$this->json('GET', '/api/referralrequest');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -73,24 +73,32 @@ class ReferralRequestTest extends TestCase
 	{
 		$this->json('POST', '/api/referralrequest',$this->referralrequestData);
 		$response=$this->json('GET', '/api/referralrequest/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testUpdateReferralRequest()
 	{
-		$this->json('POST', '/api/referralrequest',$this->updatedreferralrequestData);
-		$response=$this->json('PUT', '/api/referralrequest');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$this->json('POST', '/api/referralrequest',$this->referralrequestData);
+		$response=$this->json('PUT', '/api/referralrequest/1',$this->updatedreferralrequestData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testDeleteReferralRequest()
 	{
 		$this->json('POST', '/api/referralrequest',$this->referralrequestData);
 		$response=$this->delete('/api/referralrequest/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/referralrequest/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteReferralRequestFail()
+	{
+		$response=$this->delete('/api/referralrequest/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

@@ -37,7 +37,7 @@ $factory->define(App\Models\Observation::class, function (Faker\Generator $faker
 		'category_id' => $faker->randomNumber(),
 		'panel_id' => factory(\App\Models\PanelType::class)->create()->id,
 		'observation_type_id' => factory(\App\Models\ObservationType::class)->create()->id,
-		'user_id' => factory(\App\User::class)->create()->id,
+		'created_by' => factory(\App\User::class)->create()->id,
 		'quantity_id' => $faker->randomNumber(),
 		'data_absent_reason' => $faker->randomNumber(),
 		'interpretation' => $faker->randomNumber(),

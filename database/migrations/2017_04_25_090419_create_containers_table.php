@@ -13,6 +13,7 @@ class CreateContainersTable extends Migration
      */
     public function up()
     {
+
         Schema::create('containers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description');
@@ -30,7 +31,7 @@ class CreateContainersTable extends Migration
             
         });
     }
-
+ 
     /**
      * Reverse the migrations.
      *

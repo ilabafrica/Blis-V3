@@ -16,14 +16,28 @@ class ReferenceRangeTest extends TestCase
 
 	public function setVariables(){
     	$this->referencerangeData=array(
-        
+            
+            "low_normal"=>1,
+            "high_normal"=>2,
+            "low_critical"=>1,
+            "high_critical"=>2,
+            "age_min"=>3,
+            "age_max"=>5,
 			"age_type"=>1,
+			"applies_to"=>1,
 			"text"=>'Sample String',
 
         );
     	$this->updatedreferencerangeData=array(
         
+			"low_normal"=>1,
+            "high_normal"=>2,
+            "low_critical"=>1,
+            "high_critical"=>2,
+            "age_min"=>3,
+            "age_max"=>5,
 			"age_type"=>1,
+			"applies_to"=>1,
 			"text"=>'Sample updated String',
 
         );
@@ -32,14 +46,14 @@ class ReferenceRangeTest extends TestCase
 	public function testStoreReferenceRange()
 	{
 		$response=$this->json('POST', '/api/referencerange',$this->referencerangeData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("text",$response->original);
 	}
 
 	public function testListReferenceRange()
 	{
 		$response=$this->json('GET', '/api/referencerange');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -47,24 +61,31 @@ class ReferenceRangeTest extends TestCase
 	{
 		$this->json('POST', '/api/referencerange',$this->referencerangeData);
 		$response=$this->json('GET', '/api/referencerange/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("text",$response->original);
 	}
 
 	public function testUpdateReferenceRange()
 	{
-		$this->json('POST', '/api/referencerange',$this->updatedreferencerangeData);
-		$response=$this->json('PUT', '/api/referencerange');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$this->json('POST', '/api/referencerange',$this->referencerangeData);
+		$response=$this->json('PUT', '/api/referencerange/1',$this->updatedreferencerangeData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("text",$response->original);
 	}
 
 	public function testDeleteReferenceRange()
 	{
 		$this->json('POST', '/api/referencerange',$this->referencerangeData);
 		$response=$this->delete('/api/referencerange/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/referencerange/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+	public function testDeleteReferenceRangeFail()
+	{
+		$response=$this->delete('/api/referencerange/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

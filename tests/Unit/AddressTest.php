@@ -46,39 +46,43 @@ class AddressTest extends TestCase
 	public function testStoreAddress()
 	{
 		$response=$this->json('POST', '/api/address',$this->addressData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("district",$response->original);
 	}
-
 	public function testListAddress()
 	{
 		$response=$this->json('GET', '/api/address');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
-
 	public function testShowAddress()
 	{
 		$this->json('POST', '/api/address',$this->addressData);
 		$response=$this->json('GET', '/api/address/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		
 	}
-
 	public function testUpdateAddress()
 	{
-		$this->json('POST', '/api/address',$this->updatedaddressData);
-		$response=$this->json('PUT', '/api/address');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/address',$this->addressData);
+		$response=$this->json('PUT', '/api/address/1',$this->updatedaddressData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("district",$response->original);
 	}
-
 	public function testDeleteAddress()
 	{
 		$this->json('POST', '/api/address',$this->addressData);
 		$response=$this->delete('/api/address/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/address/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
 	}
+	public function testDeleteAddressFail()
+	{
+		$response=$this->delete('/api/address/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
+	}
+
 
 }

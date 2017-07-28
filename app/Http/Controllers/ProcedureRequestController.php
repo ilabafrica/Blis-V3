@@ -85,9 +85,15 @@ class ProcedureRequestController extends Controller
      *
      * @param  int  id
      * @return \Illuminate\Http\Response
-     */public function show($id){
+     */
+    public function show($id){
+    	try{
 		$procedurerequest=ProcedureRequest::findorfail($id);
 		return response()->json($procedurerequest);
+	}
+	catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+			return response()->json( ['error' => 'Record not found' ], 404);
+		}
 	}
 
 
@@ -174,6 +180,9 @@ class ProcedureRequestController extends Controller
 		}
 		catch (\Illuminate\Database\QueryException $e){
 			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
+		}
+		catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+			return response()->json( ['error' => 'Record not found' ], 404);
 		}
 	}
 }
