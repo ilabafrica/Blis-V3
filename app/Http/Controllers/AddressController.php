@@ -58,14 +58,14 @@ class AddressController extends Controller
      *
      * @param  int  id
      * @return \Illuminate\Http\Response
-     */public function show($id){
+     */
+    public function show($id){
     try {
-		$address=Address::findorfail($id);
-		return response()->json($address);
-	} catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e)
-	  {
-		return responce()->json(['error' => 'Record not found'],404);
-	}
+			$address=Address::findorfail($id);
+			return response()->json($address);
+		} catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+			return response()->json( ['error' => 'Record not found' ], 404);
+		}
 
 	}
 

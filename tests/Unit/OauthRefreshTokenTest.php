@@ -23,7 +23,7 @@ class OauthRefreshTokenTest extends TestCase
         );
     	$this->updatedoauthrefreshtokenData=array(
         
-        "access_token_id"=>'Sample updated String',
+         "access_token_id"=>'Sample updated String',
          "revoked"=>1,
          "expires_at"=>'2017:12:12 16:30:00',
         );
@@ -32,8 +32,6 @@ class OauthRefreshTokenTest extends TestCase
 	public function testStoreOauthRefreshToken()
 	{
 		$response=$this->json('POST', '/api/oauthrefreshtoken',$this->oauthrefreshtokenData);
-		
-
 		$response->assertStatus(200);
 		$this->assertArrayHasKey("access_token_id",$response->original);
 	}

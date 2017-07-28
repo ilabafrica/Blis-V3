@@ -49,14 +49,12 @@ class AddressTest extends TestCase
 		$response->assertStatus(200);
 		$this->assertArrayHasKey("district",$response->original);
 	}
-
 	public function testListAddress()
 	{
 		$response=$this->json('GET', '/api/address');
 		$response->assertStatus(200);
 		
 	}
-
 	public function testShowAddress()
 	{
 		$this->json('POST', '/api/address',$this->addressData);
@@ -64,7 +62,6 @@ class AddressTest extends TestCase
 		$response->assertStatus(200);
 		
 	}
-
 	public function testUpdateAddress()
 	{
 		$this->json('POST', '/api/address',$this->addressData);
@@ -72,21 +69,20 @@ class AddressTest extends TestCase
 		$response->assertStatus(200);
 		$this->assertArrayHasKey("district",$response->original);
 	}
-
 	public function testDeleteAddress()
 	{
 		$this->json('POST', '/api/address',$this->addressData);
 		$response=$this->delete('/api/address/1');
 		$response->assertStatus(200);
 		$response=$this->json('GET', '/api/address/1');
-		$this->assertEquals(500, $response->getStatusCode());
+		$this->assertEquals(404, $response->getStatusCode());
 		
 	}
-
 	public function testDeleteAddressFail()
 	{
 		$response=$this->delete('/api/address/9999999999');
 		$this->assertEquals(404, $response->getStatusCode());
 	}
+
 
 }
