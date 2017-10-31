@@ -22,7 +22,6 @@ class CreateProcessingsTable extends Migration
 
             //Relationships
             $table->foreign('procedure')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
-
         });
     }
 

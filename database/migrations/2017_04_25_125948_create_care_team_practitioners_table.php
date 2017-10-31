@@ -22,7 +22,6 @@ class CreateCareTeamPractitionersTable extends Migration
             //Relationships
             $table->foreign('team_id')->references('id')->on('care_teams')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('practioner_id')->references('id')->on('practitioners')->onUpdate('cascade')->onDelete('cascade');
-            
         });
     }
 

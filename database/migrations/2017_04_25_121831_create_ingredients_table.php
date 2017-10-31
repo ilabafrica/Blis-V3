@@ -21,7 +21,6 @@ class CreateIngredientsTable extends Migration
 
             //Relationships
             $table->foreign('substance')->references('id')->on('substances')->onUpdate('cascade')->onDelete('cascade');
-            
         });
     }
 

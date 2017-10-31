@@ -1,46 +1,47 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Status;
+use Illuminate\Http\Request;
 
 class StatusController extends Controller
 {
-	public function index()
-	{
-		$status = Status::orderBy('id', 'ASC')->paginate(20);
-		return response()->json($status);
-	}
+    public function index()
+    {
+        $status = Status::orderBy('id', 'ASC')->paginate(20);
 
+        return response()->json($status);
+    }
 
     /**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request
-    * @return \Illuminate\Http\Response
-    */
-	public function store(Request $request)
-	{
-        $rules=array(
-		"name" => 'required',
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $rules = [
+        'name' => 'required',
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			 return response()->json($validator);
-		} else {
-			$status= new Status;
-			$status->name = $request->input('name');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator);
+        } else {
+            $status = new Status;
+            $status->name = $request->input('name');
 
-			try{
-				$status->save();
-				return response()->json($status);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $status->save();
+
+                return response()->json($status);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
     /**
      * Display the specified resource.
@@ -48,16 +49,16 @@ class StatusController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */
-    public function show($id){
-    	try{
-		$status=Status::findorfail($id);
-		return response()->json($status);
-	}
-	catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-			return response()->json( ['error' => 'Record not found' ], 404);
-		}
-	}
+    public function show($id)
+    {
+        try {
+            $status = Status::findorfail($id);
 
+            return response()->json($status);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    }
 
     /**
      * Update the specified resource in storage.
@@ -67,28 +68,27 @@ class StatusController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-	{
-    
-        $rules=array(
-		"name" => 'required',
+    {
+        $rules = [
+        'name' => 'required',
 
-		);
-        $validator = \Validator::make($request->all(),$rules);
-		 if ($validator->fails()) {
-			 return response()->json($validator,422);
-		} else {
-			$status=Status::findorfail($id);
-			$status->name = $request->input('name');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            $status = Status::findorfail($id);
+            $status->name = $request->input('name');
 
-			try{
-				$status->save();
-				return response()->json($status);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $status->save();
+
+                return response()->json($status);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -96,17 +96,17 @@ class StatusController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */
-	public function destroy($id){
-		try{
-			$status=Status::findorfail($id);
-			$status->delete();
-			return response()->json($status,200);
-		}
-		catch (\Illuminate\Database\QueryException $e){
-			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-		}
-		catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-			return response()->json( ['error' => 'Record not found' ], 404);
-		}
-	}
+    public function destroy($id)
+    {
+        try {
+            $status = Status::findorfail($id);
+            $status->delete();
+
+            return response()->json($status, 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    }
 }

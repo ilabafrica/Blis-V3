@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -6,43 +7,43 @@ use App\Models\PasswordReset;
 
 class PasswordResetController extends Controller
 {
-	public function index()
-	{
-		$passwordreset = PasswordReset::orderBy('id', 'ASC')->paginate(20);
-		return response()->json($passwordreset);
-	}
+    public function index()
+    {
+        $passwordreset = PasswordReset::orderBy('id', 'ASC')->paginate(20);
 
+        return response()->json($passwordreset);
+    }
 
     /**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request
-    * @return \Illuminate\Http\Response
-    */
-	public function store(Request $request)
-	{
-        $rules=array(
-		"email" => 'required',
-		"token" => 'required',
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $rules = [
+        'email' => 'required',
+        'token' => 'required',
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			 return response()->json($validator);
-		} else {
-			$passwordreset= new PasswordReset;
-			$passwordreset->email = $request->input('email');
-			$passwordreset->token = $request->input('token');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator);
+        } else {
+            $passwordreset = new PasswordReset;
+            $passwordreset->email = $request->input('email');
+            $passwordreset->token = $request->input('token');
 
-			try{
-				$passwordreset->save();
-				return response()->json($passwordreset);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $passwordreset->save();
+
+                return response()->json($passwordreset);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
     /**
      * Display the specified resource.
@@ -50,16 +51,16 @@ class PasswordResetController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */
-    public function show($id){
-    	try{
-		$passwordreset=PasswordReset::findorfail($id);
-		return response()->json($passwordreset);
-	}
-	catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-			return response()->json( ['error' => 'Record not found' ], 404);
-		}
-	}
+    public function show($id)
+    {
+        try {
+            $passwordreset = PasswordReset::findorfail($id);
 
+            return response()->json($passwordreset);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    }
 
     /**
      * Update the specified resource in storage.
@@ -69,30 +70,29 @@ class PasswordResetController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-	{
-    
-        $rules=array(
-		"email" => 'required',
-		"token" => 'required',
+    {
+        $rules = [
+        'email' => 'required',
+        'token' => 'required',
 
-		);
-        $validator = \Validator::make($request->all(),$rules);
-		 if ($validator->fails()) {
-			 return response()->json($validator,422);
-		} else {
-			$passwordreset=PasswordReset::findorfail($id);
-			$passwordreset->email = $request->input('email');
-			$passwordreset->token = $request->input('token');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            $passwordreset = PasswordReset::findorfail($id);
+            $passwordreset->email = $request->input('email');
+            $passwordreset->token = $request->input('token');
 
-			try{
-				$passwordreset->save();
-				return response()->json($passwordreset);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $passwordreset->save();
+
+                return response()->json($passwordreset);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -100,17 +100,17 @@ class PasswordResetController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */
-	public function destroy($id){
-		try{
-			$passwordreset=PasswordReset::findorfail($id);
-			$passwordreset->delete();
-			return response()->json($passwordreset,200);
-		}
-		catch (\Illuminate\Database\QueryException $e){
-			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-		}
-		catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-			return response()->json( ['error' => 'Record not found' ], 404);
-		}
-	}
+    public function destroy($id)
+    {
+        try {
+            $passwordreset = PasswordReset::findorfail($id);
+            $passwordreset->delete();
+
+            return response()->json($passwordreset, 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    }
 }

@@ -16,16 +16,16 @@ class ComponentType extends Model
 {
     public function Coding()
     {
-    	  return $this->belongsTo('App\Models\Coding');
+        return $this->belongsTo('App\Models\Coding');
     }
 
     public function ResultTypes()
     {
-    	  return $this->belongsTo('App\Models\ResultTypes');
+        return $this->belongsTo('App\Models\ResultTypes');
     }
 
     public function ReferenceRange()
     {
-    	  return $this->belongsTo('App\Models\ReferenceRange');
+        return $this->belongsTo('App\Models\ReferenceRange');
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -6,43 +7,43 @@ use App\Models\StatusHistory;
 
 class StatusHistoryController extends Controller
 {
-	public function index()
-	{
-		$statushistory = StatusHistory::orderBy('id', 'ASC')->paginate(20);
-		return response()->json($statushistory);
-	}
+    public function index()
+    {
+        $statushistory = StatusHistory::orderBy('id', 'ASC')->paginate(20);
 
+        return response()->json($statushistory);
+    }
 
     /**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request
-    * @return \Illuminate\Http\Response
-    */
-	public function store(Request $request)
-	{
-        $rules=array(
-		"code" => 'required',
-		"episode_of_care_id" => 'required',
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $rules = [
+        'code' => 'required',
+        'episode_of_care_id' => 'required',
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			 return response()->json($validator);
-		} else {
-			$statushistory= new StatusHistory;
-			$statushistory->code = $request->input('code');
-			$statushistory->episode_of_care_id = $request->input('episode_of_care_id');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator);
+        } else {
+            $statushistory = new StatusHistory;
+            $statushistory->code = $request->input('code');
+            $statushistory->episode_of_care_id = $request->input('episode_of_care_id');
 
-			try{
-				$statushistory->save();
-				return response()->json($statushistory);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $statushistory->save();
+
+                return response()->json($statushistory);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
     /**
      * Display the specified resource.
@@ -50,16 +51,16 @@ class StatusHistoryController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */
-    public function show($id){
-    	try{
-		$statushistory=StatusHistory::findorfail($id);
-		return response()->json($statushistory);
-	}
-	catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-			return response()->json( ['error' => 'Record not found' ], 404);
-		}
-	}
+    public function show($id)
+    {
+        try {
+            $statushistory = StatusHistory::findorfail($id);
 
+            return response()->json($statushistory);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    }
 
     /**
      * Update the specified resource in storage.
@@ -69,30 +70,29 @@ class StatusHistoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-	{
-    
-        $rules=array(
-		"code" => 'required',
-		"episode_of_care_id" => 'required',
+    {
+        $rules = [
+        'code' => 'required',
+        'episode_of_care_id' => 'required',
 
-		);
-        $validator = \Validator::make($request->all(),$rules);
-		 if ($validator->fails()) {
-			 return response()->json($validator,422);
-		} else {
-			$statushistory=StatusHistory::findorfail($id);
-			$statushistory->code = $request->input('code');
-			$statushistory->episode_of_care_id = $request->input('episode_of_care_id');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            $statushistory = StatusHistory::findorfail($id);
+            $statushistory->code = $request->input('code');
+            $statushistory->episode_of_care_id = $request->input('episode_of_care_id');
 
-			try{
-				$statushistory->save();
-				return response()->json($statushistory);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $statushistory->save();
+
+                return response()->json($statushistory);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -100,17 +100,17 @@ class StatusHistoryController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */
-	public function destroy($id){
-		try{
-			$statushistory=StatusHistory::findorfail($id);
-			$statushistory->delete();
-			return response()->json($statushistory,200);
-		}
-		catch (\Illuminate\Database\QueryException $e){
-			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-		}
-		catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-			return response()->json( ['error' => 'Record not found' ], 404);
-		}
-	}
+    public function destroy($id)
+    {
+        try {
+            $statushistory = StatusHistory::findorfail($id);
+            $statushistory->delete();
+
+            return response()->json($statushistory, 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    }
 }

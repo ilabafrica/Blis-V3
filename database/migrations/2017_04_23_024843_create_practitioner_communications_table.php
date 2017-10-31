@@ -19,7 +19,7 @@ class CreatePractitionerCommunicationsTable extends Migration
                 ->references('practitioners')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('patient_id')
                 ->references('patients')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('language')->unsigned();                  
+            $table->integer('language')->unsigned();
             $table->boolean('preferred')->default(1);
             $table->timestamps();
 

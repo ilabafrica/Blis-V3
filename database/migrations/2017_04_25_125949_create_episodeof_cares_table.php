@@ -24,7 +24,6 @@ class CreateEpisodeofCaresTable extends Migration
             $table->integer('team_id')->unsigned()->nullable();
             $table->timestamps();
 
-
             //Relationships
             $table->foreign('status')->references('id')->on('statuses')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('type')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
@@ -32,12 +31,10 @@ class CreateEpisodeofCaresTable extends Migration
             $table->foreign('organization_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('practitioners_id')->references('id')->on('practitioners')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('team_id')->references('id')->on('care_teams')->onUpdate('cascade')->onDelete('cascade');
-            
         });
 
-        Schema::table('care_teams', function(Blueprint $table){
+        Schema::table('care_teams', function (Blueprint $table) {
             $table->foreign('context')->references('id')->on('episodeof_cares')->onUpdate('cascade')->onDelete('cascade');
-            
         });
     }
 

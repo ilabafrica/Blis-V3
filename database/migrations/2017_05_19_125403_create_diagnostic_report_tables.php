@@ -17,7 +17,7 @@ class CreateDiagnosticReportTables extends Migration
         Schema::create('panel_types', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('code_id')->unsigned(); //R!  Name/Code for this diagnostic report(panel)
-            $table->integer('status_id')->unsigned();;//Status (string or id)
+            $table->integer('status_id')->unsigned(); //Status (string or id)
             $table->integer('category_id')->unsigned(); // Service category (Heamatology, chemistry)
 
             //Several timestamps pending/ also responsible actors for various activites
@@ -32,13 +32,13 @@ class CreateDiagnosticReportTables extends Migration
         Schema::create('panels', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('panel_type_id')->unsigned();
-            $table->integer('performed_by')->unsigned();//User who performed this report
+            $table->integer('performed_by')->unsigned(); //User who performed this report
             $table->integer('specimen_id')->unsigned(); // Specimens this report is based on
             $table->string('conclusion'); // Clinical Interpretation of test results
             $table->integer('coded_diagnosis')->unsigned(); // Codes for the conclusion
-            $table->integer('status_id')->unsigned();//Active\Inactive
+            $table->integer('status_id')->unsigned(); //Active\Inactive
             $table->integer('sort_order');
-                    
+
             //Several timestamps pending/ also responsible actors for various activites
             $table->timestamps();
             $table->softDeletes();
@@ -76,7 +76,7 @@ class CreateDiagnosticReportTables extends Migration
             $table->integer('observation_type_id')->unsigned();
             $table->integer('created_by')->unsigned();
             $table->integer('quantity_id')->unsigned();
-            $table->integer('data_absent_reason')->unsigned();// Why the result is missing - CodeableConcept
+            $table->integer('data_absent_reason')->unsigned(); // Why the result is missing - CodeableConcept
             $table->integer('interpretation')->unsigned();
             $table->string('comment');
             $table->date('issued');
@@ -134,7 +134,7 @@ class CreateDiagnosticReportTables extends Migration
             $table->integer('code_id')->unsigned();
             $table->integer('result_type_id')->unsigned();
             $table->integer('reference_range_id')->unsigned();
-            $table->integer('parent_id')->unsigned();//For sub-components
+            $table->integer('parent_id')->unsigned(); //For sub-components
 
             $table->timestamps();
             $table->softDeletes();

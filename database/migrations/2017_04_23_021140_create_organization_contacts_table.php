@@ -17,7 +17,7 @@ class CreateOrganizationContactsTable extends Migration
             $table->increments('id');
             $table->integer('organization_id')
                 ->references('organizations')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('purpose')->unsigned();                  
+            $table->integer('purpose')->unsigned();
             $table->integer('name')
                 ->references('human_names')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('telecom')
@@ -25,7 +25,7 @@ class CreateOrganizationContactsTable extends Migration
             $table->integer('address')->nullable()
                 ->references('addresses')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
-            
+
             //Relationships
             $table->foreign('purpose')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
         });

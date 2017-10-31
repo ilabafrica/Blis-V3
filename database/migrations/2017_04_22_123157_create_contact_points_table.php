@@ -17,9 +17,9 @@ class CreateContactPointsTable extends Migration
             $table->increments('id');
             $table->integer('created_by')->unsigned()
                 ->references('users')->on('id')->onUpdate('cascade');
-            $table->integer('system')->unsigned();                  
+            $table->integer('system')->unsigned();
             $table->string('value');
-            $table->integer('use')->unsigned();                  
+            $table->integer('use')->unsigned();
             $table->integer('rank')->unsigned()->nullable();
             $table->date('period')->nullable();
             $table->timestamps();

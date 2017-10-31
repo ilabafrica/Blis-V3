@@ -19,7 +19,7 @@ class CreatePatientLinksTable extends Migration
                 ->references('patients')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('other')
                 ->references('patients')->on('id')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('type')->unsigned();                  
+            $table->integer('type')->unsigned();
             $table->timestamps();
 
             //Relationships

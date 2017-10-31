@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class PatientContact extends Model
 {
-   public function Patient()
+    public function Patient()
     {
-    	return $this->belongsTo('App\Models\Patient');
-    } 
+        return $this->belongsTo('App\Models\Patient');
+    }
 
     public function Organization()
     {
-    	return $this->belongsTo('App\Models\Organization');
+        return $this->belongsTo('App\Models\Organization');
     }
 }

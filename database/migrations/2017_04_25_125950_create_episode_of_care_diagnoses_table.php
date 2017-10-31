@@ -23,7 +23,6 @@ class CreateEpisodeOfCareDiagnosesTable extends Migration
 
             //Relationships
             $table->foreign('episode_of_care_id')->references('id')->on('episodeof_cares')->onUpdate('cascade')->onDelete('cascade');
-            
         });
     }
 

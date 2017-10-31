@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ContactPoint extends Model
 {
-    public function User ()
+    public function User()
     {
-    	return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User');
     }
 }

@@ -39,7 +39,7 @@ class CreateProcedureRequestsTable extends Migration
             $table->integer('specimen')->unsigned()->nullable();
             $table->integer('body_site')->unsigned();
             $table->string('note')->nullable();
-            $table->string('relevant_history')->nullable(); 
+            $table->string('relevant_history')->nullable();
             $table->timestamps();
 
             //Relationships
@@ -55,7 +55,6 @@ class CreateProcedureRequestsTable extends Migration
             $table->foreign('body_site')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('specimen')->references('id')->on('specimens')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('status')->references('id')->on('statuses')->onUpdate('cascade')->onDelete('cascade');
-            
         });
     }
 

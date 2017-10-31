@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -6,61 +7,61 @@ use App\Models\ReferralRequest;
 
 class ReferralRequestController extends Controller
 {
-	public function index()
-	{
-		$referralrequest = ReferralRequest::orderBy('id', 'ASC')->paginate(20);
-		return response()->json($referralrequest);
-	}
+    public function index()
+    {
+        $referralrequest = ReferralRequest::orderBy('id', 'ASC')->paginate(20);
 
+        return response()->json($referralrequest);
+    }
 
     /**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request
-    * @return \Illuminate\Http\Response
-    */
-	public function store(Request $request)
-	{
-        $rules=array(
-		"status" => 'required',
-		"type" => 'required',
-		"requester" => 'required',
-		"specialty" => 'required',
-		"recipient" => 'required',
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $rules = [
+        'status' => 'required',
+        'type' => 'required',
+        'requester' => 'required',
+        'specialty' => 'required',
+        'recipient' => 'required',
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			 return response()->json($validator);
-		} else {
-			$referralrequest= new ReferralRequest;
-			$referralrequest->based_on = $request->input('based_on');
-			$referralrequest->replaces = $request->input('replaces');
-			$referralrequest->group_identifier = $request->input('group_identifier');
-			$referralrequest->status = $request->input('status');
-			$referralrequest->type = $request->input('type');
-			$referralrequest->priority = $request->input('priority');
-			$referralrequest->service_requested = $request->input('service_requested');
-			$referralrequest->subject = $request->input('subject');
-			$referralrequest->occurence = $request->input('occurence');
-			$referralrequest->requester = $request->input('requester');
-			$referralrequest->specialty = $request->input('specialty');
-			$referralrequest->recipient = $request->input('recipient');
-			$referralrequest->reason_code = $request->input('reason_code');
-			$referralrequest->reason_reference = $request->input('reason_reference');
-			$referralrequest->supporting_info = $request->input('supporting_info');
-			$referralrequest->description = $request->input('description');
-			$referralrequest->note = $request->input('note');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator);
+        } else {
+            $referralrequest = new ReferralRequest;
+            $referralrequest->based_on = $request->input('based_on');
+            $referralrequest->replaces = $request->input('replaces');
+            $referralrequest->group_identifier = $request->input('group_identifier');
+            $referralrequest->status = $request->input('status');
+            $referralrequest->type = $request->input('type');
+            $referralrequest->priority = $request->input('priority');
+            $referralrequest->service_requested = $request->input('service_requested');
+            $referralrequest->subject = $request->input('subject');
+            $referralrequest->occurence = $request->input('occurence');
+            $referralrequest->requester = $request->input('requester');
+            $referralrequest->specialty = $request->input('specialty');
+            $referralrequest->recipient = $request->input('recipient');
+            $referralrequest->reason_code = $request->input('reason_code');
+            $referralrequest->reason_reference = $request->input('reason_reference');
+            $referralrequest->supporting_info = $request->input('supporting_info');
+            $referralrequest->description = $request->input('description');
+            $referralrequest->note = $request->input('note');
 
-			try{
-				$referralrequest->save();
-				return response()->json($referralrequest);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $referralrequest->save();
+
+                return response()->json($referralrequest);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
     /**
      * Display the specified resource.
@@ -68,16 +69,16 @@ class ReferralRequestController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */
-    public function show($id){
-    	try{
-		$referralrequest=ReferralRequest::findorfail($id);
-		return response()->json($referralrequest);
-	}
-	catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-			return response()->json( ['error' => 'Record not found' ], 404);
-		}
-	}
+    public function show($id)
+    {
+        try {
+            $referralrequest = ReferralRequest::findorfail($id);
 
+            return response()->json($referralrequest);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    }
 
     /**
      * Update the specified resource in storage.
@@ -87,48 +88,47 @@ class ReferralRequestController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-	{
-    
-        $rules=array(
-		"status" => 'required',
-		"type" => 'required',
-		"requester" => 'required',
-		"specialty" => 'required',
-		"recipient" => 'required',
+    {
+        $rules = [
+        'status' => 'required',
+        'type' => 'required',
+        'requester' => 'required',
+        'specialty' => 'required',
+        'recipient' => 'required',
 
-		);
-        $validator = \Validator::make($request->all(),$rules);
-		 if ($validator->fails()) {
-			 return response()->json($validator,422);
-		} else {
-			$referralrequest=ReferralRequest::findorfail($id);
-			$referralrequest->based_on = $request->input('based_on');
-			$referralrequest->replaces = $request->input('replaces');
-			$referralrequest->group_identifier = $request->input('group_identifier');
-			$referralrequest->status = $request->input('status');
-			$referralrequest->type = $request->input('type');
-			$referralrequest->priority = $request->input('priority');
-			$referralrequest->service_requested = $request->input('service_requested');
-			$referralrequest->subject = $request->input('subject');
-			$referralrequest->occurence = $request->input('occurence');
-			$referralrequest->requester = $request->input('requester');
-			$referralrequest->specialty = $request->input('specialty');
-			$referralrequest->recipient = $request->input('recipient');
-			$referralrequest->reason_code = $request->input('reason_code');
-			$referralrequest->reason_reference = $request->input('reason_reference');
-			$referralrequest->supporting_info = $request->input('supporting_info');
-			$referralrequest->description = $request->input('description');
-			$referralrequest->note = $request->input('note');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            $referralrequest = ReferralRequest::findorfail($id);
+            $referralrequest->based_on = $request->input('based_on');
+            $referralrequest->replaces = $request->input('replaces');
+            $referralrequest->group_identifier = $request->input('group_identifier');
+            $referralrequest->status = $request->input('status');
+            $referralrequest->type = $request->input('type');
+            $referralrequest->priority = $request->input('priority');
+            $referralrequest->service_requested = $request->input('service_requested');
+            $referralrequest->subject = $request->input('subject');
+            $referralrequest->occurence = $request->input('occurence');
+            $referralrequest->requester = $request->input('requester');
+            $referralrequest->specialty = $request->input('specialty');
+            $referralrequest->recipient = $request->input('recipient');
+            $referralrequest->reason_code = $request->input('reason_code');
+            $referralrequest->reason_reference = $request->input('reason_reference');
+            $referralrequest->supporting_info = $request->input('supporting_info');
+            $referralrequest->description = $request->input('description');
+            $referralrequest->note = $request->input('note');
 
-			try{
-				$referralrequest->save();
-				return response()->json($referralrequest);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $referralrequest->save();
+
+                return response()->json($referralrequest);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -136,17 +136,17 @@ class ReferralRequestController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */
-	public function destroy($id){
-		try{
-			$referralrequest=ReferralRequest::findorfail($id);
-			$referralrequest->delete();
-			return response()->json($referralrequest,200);
-		}
-		catch (\Illuminate\Database\QueryException $e){
-			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-		}
-		catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-			return response()->json( ['error' => 'Record not found' ], 404);
-		}
-	}
+    public function destroy($id)
+    {
+        try {
+            $referralrequest = ReferralRequest::findorfail($id);
+            $referralrequest->delete();
+
+            return response()->json($referralrequest, 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    }
 }
