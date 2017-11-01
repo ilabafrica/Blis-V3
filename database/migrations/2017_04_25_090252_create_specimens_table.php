@@ -25,7 +25,7 @@ class CreateSpecimensTable extends Migration
             $table->timestamps();
 
             //Relationships
-            
+
             $table->foreign('type')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
         });
     }

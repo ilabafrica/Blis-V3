@@ -22,7 +22,6 @@ class CreateStatusHistoriesTable extends Migration
             //Relationships
             $table->foreign('code')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('episode_of_care_id')->references('id')->on('episodeof_cares')->onUpdate('cascade')->onDelete('cascade');
-            
         });
     }
 

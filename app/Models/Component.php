@@ -1,6 +1,6 @@
 <?php
 
-//Instance of components 
+//Instance of components
 
 //https://www.hl7.org/fhir/observation-definitions.html#Observation.component
 
@@ -12,6 +12,6 @@ class Component extends Model
 {
     public function Observation()
     {
-    	return $this->belongsTo('App\Models\Observation');
+        return $this->belongsTo('App\Models\Observation');
     }
 }
