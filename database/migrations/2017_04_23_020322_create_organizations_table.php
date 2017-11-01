@@ -18,7 +18,7 @@ class CreateOrganizationsTable extends Migration
             $table->integer('created_by')->unsigned()
                 ->references('users')->on('id')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('active')->default(1);
-            $table->integer('type')->unsigned();                  
+            $table->integer('type')->unsigned();
             $table->string('name');
             $table->string('alias')->nullable();
             $table->integer('telecom')->nullable()

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -6,58 +7,64 @@ use App\Models\PractitionerCommunication;
 
 class PractitionerCommunicationController extends Controller
 {
-	public function index()
-	{
-		$practitionercommunication = PractitionerCommunication::orderBy('id', 'ASC')->paginate(20);
-		return response()->json($practitionercommunication);
-	}
+    public function index()
+    {
+        $practitionercommunication = PractitionerCommunication::orderBy('id', 'ASC')->paginate(20);
 
+        return response()->json($practitionercommunication);
+    }
 
     /**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request
-    * @return \Illuminate\Http\Response
-    */
-	public function store(Request $request)
-	{
-        $rules=array(
-		"practitioner_id" => 'required',
-		"patient_id" => 'required',
-		"language" => 'required',
-		"preferred" => 'required',
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $rules = [
+        'practitioner_id' => 'required',
+        'patient_id' => 'required',
+        'language' => 'required',
+        'preferred' => 'required',
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			 return response()->json($validator);
-		} else {
-			$practitionercommunication= new PractitionerCommunication;
-			$practitionercommunication->practitioner_id = $request->input('practitioner_id');
-			$practitionercommunication->patient_id = $request->input('patient_id');
-			$practitionercommunication->language = $request->input('language');
-			$practitionercommunication->preferred = $request->input('preferred');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator);
+        } else {
+            $practitionercommunication = new PractitionerCommunication;
+            $practitionercommunication->practitioner_id = $request->input('practitioner_id');
+            $practitionercommunication->patient_id = $request->input('patient_id');
+            $practitionercommunication->language = $request->input('language');
+            $practitionercommunication->preferred = $request->input('preferred');
 
-			try{
-				$practitionercommunication->save();
-				return response()->json($practitionercommunication);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $practitionercommunication->save();
+
+                return response()->json($practitionercommunication);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
     /**
      * Display the specified resource.
      *
      * @param  int  id
      * @return \Illuminate\Http\Response
-     */public function show($id){
-		$practitionercommunication=PractitionerCommunication::findorfail($id);
-		return response()->json($practitionercommunication);
-	}
+     */
+    public function show($id)
+    {
+        try {
+            $practitionercommunication = PractitionerCommunication::findorfail($id);
 
+            return response()->json($practitionercommunication);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    }
 
     /**
      * Update the specified resource in storage.
@@ -67,34 +74,33 @@ class PractitionerCommunicationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-	{
-    
-        $rules=array(
-		"practitioner_id" => 'required',
-		"patient_id" => 'required',
-		"language" => 'required',
-		"preferred" => 'required',
+    {
+        $rules = [
+        'practitioner_id' => 'required',
+        'patient_id' => 'required',
+        'language' => 'required',
+        'preferred' => 'required',
 
-		);
-        $validator = \Validator::make($request->all(),$rules);
-		 if ($validator->fails()) {
-			 return response()->json($validator,422);
-		} else {
-			$practitionercommunication=PractitionerCommunication::findorfail($id);
-			$practitionercommunication->practitioner_id = $request->input('practitioner_id');
-			$practitionercommunication->patient_id = $request->input('patient_id');
-			$practitionercommunication->language = $request->input('language');
-			$practitionercommunication->preferred = $request->input('preferred');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            $practitionercommunication = PractitionerCommunication::findorfail($id);
+            $practitionercommunication->practitioner_id = $request->input('practitioner_id');
+            $practitionercommunication->patient_id = $request->input('patient_id');
+            $practitionercommunication->language = $request->input('language');
+            $practitionercommunication->preferred = $request->input('preferred');
 
-			try{
-				$practitionercommunication->save();
-				return response()->json($practitionercommunication);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $practitionercommunication->save();
+
+                return response()->json($practitionercommunication);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -102,14 +108,17 @@ class PractitionerCommunicationController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */
-	public function destroy($id){
-		try{
-			$practitionercommunication=PractitionerCommunication::findorfail($id);
-			$practitionercommunication->delete();
-			return response()->json($practitionercommunication,200);
-		}
-		catch (\Illuminate\Database\QueryException $e){
-			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-		}
-	}
+    public function destroy($id)
+    {
+        try {
+            $practitionercommunication = PractitionerCommunication::findorfail($id);
+            $practitionercommunication->delete();
+
+            return response()->json($practitionercommunication, 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    }
 }

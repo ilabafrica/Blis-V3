@@ -32,8 +32,8 @@ class CodeableConceptTest extends TestCase
 	public function testStoreCodeableConcept()
 	{
 		$response=$this->json('POST', '/api/codeableconcept',$this->codeableconceptData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("code",$response->original);
 	}
 
 	public function testListCodeableConcept()
@@ -47,24 +47,32 @@ class CodeableConceptTest extends TestCase
 	{
 		$this->json('POST', '/api/codeableconcept',$this->codeableconceptData);
 		$response=$this->json('GET', '/api/codeableconcept/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("code",$response->original);
 	}
 
 	public function testUpdateCodeableConcept()
 	{
-		$this->json('POST', '/api/codeableconcept',$this->updatedcodeableconceptData);
-		$response=$this->json('PUT', '/api/codeableconcept');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/codeableconcept',$this->codeableconceptData);
+		$response=$this->json('PUT', '/api/codeableconcept/1',$this->updatedcodeableconceptData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("code",$response->original);
 	}
 
 	public function testDeleteCodeableConcept()
 	{
 		$this->json('POST', '/api/codeableconcept',$this->codeableconceptData);
 		$response=$this->delete('/api/codeableconcept/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/codeableconcept/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteCodeableConceptFail()
+	{
+		$response=$this->delete('/api/codeableconcept/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

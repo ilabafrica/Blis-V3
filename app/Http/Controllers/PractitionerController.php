@@ -1,69 +1,76 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Practitioner;
+use Illuminate\Http\Request;
 
 class PractitionerController extends Controller
 {
-	public function index()
-	{
-		$practitioner = Practitioner::orderBy('id', 'ASC')->paginate(20);
-		return response()->json($practitioner);
-	}
+    public function index()
+    {
+        $practitioner = Practitioner::orderBy('id', 'ASC')->paginate(20);
 
+        return response()->json($practitioner);
+    }
 
     /**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request
-    * @return \Illuminate\Http\Response
-    */
-	public function store(Request $request)
-	{
-        $rules=array(
-		"active" => 'required',
-		"created_by" => 'required',
-		"name" => 'required',
-		"telecom" => 'required',
-		"gender" => 'required',
-		"birth_date" => 'required',
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $rules = [
+        'active' => 'required',
+        'created_by' => 'required',
+        'name' => 'required',
+        'telecom' => 'required',
+        'gender' => 'required',
+        'birth_date' => 'required',
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			 return response()->json($validator);
-		} else {
-			$practitioner= new Practitioner;
-			$practitioner->active = $request->input('active');
-			$practitioner->created_by = $request->input('created_by');
-			$practitioner->name = $request->input('name');
-			$practitioner->telecom = $request->input('telecom');
-			$practitioner->address = $request->input('address');
-			$practitioner->gender = $request->input('gender');
-			$practitioner->birth_date = $request->input('birth_date');
-			$practitioner->photo = $request->input('photo');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator);
+        } else {
+            $practitioner = new Practitioner;
+            $practitioner->active = $request->input('active');
+            $practitioner->created_by = $request->input('created_by');
+            $practitioner->name = $request->input('name');
+            $practitioner->telecom = $request->input('telecom');
+            $practitioner->address = $request->input('address');
+            $practitioner->gender = $request->input('gender');
+            $practitioner->birth_date = $request->input('birth_date');
+            $practitioner->photo = $request->input('photo');
 
-			try{
-				$practitioner->save();
-				return response()->json($practitioner);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $practitioner->save();
+
+                return response()->json($practitioner);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
     /**
      * Display the specified resource.
      *
      * @param  int  id
      * @return \Illuminate\Http\Response
-     */public function show($id){
-		$practitioner=Practitioner::findorfail($id);
-		return response()->json($practitioner);
-	}
+     */
+    public function show($id)
+    {
+        try {
+            $practitioner = Practitioner::findorfail($id);
 
+            return response()->json($practitioner);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    }
 
     /**
      * Update the specified resource in storage.
@@ -73,40 +80,39 @@ class PractitionerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-	{
-    
-        $rules=array(
-		"active" => 'required',
-		"created_by" => 'required',
-		"name" => 'required',
-		"telecom" => 'required',
-		"gender" => 'required',
-		"birth_date" => 'required',
+    {
+        $rules = [
+        'active' => 'required',
+        'created_by' => 'required',
+        'name' => 'required',
+        'telecom' => 'required',
+        'gender' => 'required',
+        'birth_date' => 'required',
 
-		);
-        $validator = \Validator::make($request->all(),$rules);
-		 if ($validator->fails()) {
-			 return response()->json($validator,422);
-		} else {
-			$practitioner=Practitioner::findorfail($id);
-			$practitioner->active = $request->input('active');
-			$practitioner->created_by = $request->input('created_by');
-			$practitioner->name = $request->input('name');
-			$practitioner->telecom = $request->input('telecom');
-			$practitioner->address = $request->input('address');
-			$practitioner->gender = $request->input('gender');
-			$practitioner->birth_date = $request->input('birth_date');
-			$practitioner->photo = $request->input('photo');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            $practitioner = Practitioner::findorfail($id);
+            $practitioner->active = $request->input('active');
+            $practitioner->created_by = $request->input('created_by');
+            $practitioner->name = $request->input('name');
+            $practitioner->telecom = $request->input('telecom');
+            $practitioner->address = $request->input('address');
+            $practitioner->gender = $request->input('gender');
+            $practitioner->birth_date = $request->input('birth_date');
+            $practitioner->photo = $request->input('photo');
 
-			try{
-				$practitioner->save();
-				return response()->json($practitioner);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $practitioner->save();
+
+                return response()->json($practitioner);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -114,14 +120,17 @@ class PractitionerController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */
-	public function destroy($id){
-		try{
-			$practitioner=Practitioner::findorfail($id);
-			$practitioner->delete();
-			return response()->json($practitioner,200);
-		}
-		catch (\Illuminate\Database\QueryException $e){
-			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-		}
-	}
+    public function destroy($id)
+    {
+        try {
+            $practitioner = Practitioner::findorfail($id);
+            $practitioner->delete();
+
+            return response()->json($practitioner, 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    }
 }

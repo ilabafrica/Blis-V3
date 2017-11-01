@@ -8,59 +8,74 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class SpecimenContainerTest extends TestCase
 {
-    public function testStoreSpecimenContainer(){
+    use DatabaseMigrations;
 
-    	$specimencontainer=array(
-    		'description'=>"sample x",
-    		'type'=>1,
-    		'capacity'=>"20",
-    		'quantity_id'=>1,
-    		'additive'=>1
-    		);
-    	$response=$this->post('/api/specimencontainer',$specimencontainer);
 
-    	$this->assertEquals(200,$response->getStatusCode());
+    public function setup()
+    {
+        parent::Setup();
+        $this->setVariables();
     }
 
-    public function testListSpecimenContainers(){
+    public function setVariables()
+    {
+        $this->specimencontainerData=array(
+            "description"=>'Sample String',
+            "type"=>1,
+            "capacity"=>20,
+            "quantity_id"=>1,
+            "additive"=>1,
+            );
+        $this->updatedspecimencontainerData=array(
+            "description"=>'Sample updated String',
+            "type"=>1,
+            "capacity"=>200,
+            "quantity_id"=>1,
+            "additive"=>1,
+            
+            );
+    }
+    public function testStoreSpecimenContainer(){
 
-    	$response=$this->get('/api/specimencontainer');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
-
-    	$this->assertArrayHasKey('description', $data);
+    	
+    	$response=$this->json('POST','/api/container',$this->specimencontainerData);
+    	$response->assertStatus(200);
+        $this->assertArrayHasKey("capacity", $response->original);
     }
 
     public function testListSpecimenContainer(){
 
-    	$response=$this->get('/api/specimencontainer/1');
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
+    	$response=$this->json('GET','/api/container');
+    	$response->assertStatus(200);
+    	
+    }
 
-    	$this->assertHasKey('description', $data);
+    public function testShowSpecimenContainer(){
+        $this->json('POST','/api/container',$this->specimencontainerData);
+    	$response=$this->json('GET','/api/container/1');
+    	$response->assertStatus(200);
+    	$this->assertArrayHasKey("description", $response->original);
     }
 
     public function testUpdateSpecimenContainer(){
 
-    	$specimencontainer=array(
-    		'description'=>"Sample y",
-    		'type'=>1,
-    		'capacity'=>"200"
-    		
-    		);
-    	$response=$this->put('/api/specimencontainer/1',$specimencontainer);
-    	$this->assertEquals(200,$response->getStatusCode());
-    	//data
-    	$data=json_decode($response->getBody());
-
-    	$this->assertHasKey('description', $data);
+    	$this->json('POST','/api/container',$this->specimencontainerData);
+    	$response=$this->json('PUT','/api/container/1',$this->updatedspecimencontainerData);
+    	$response->assertStatus(200);
+      	$this->assertArrayHasKey('description', $response->original);
     }
 
     public function testDeleteSpecimenContainer(){
-    	
-    	$response=$this->delete('/api/specimencontainer/1');
+    	$this->json('POST','/api/container',$this->specimencontainerData);
+    	$response=$this->delete('/api/container/1');
     	$this->assertEquals(200,$response->getStatusCode());
+
+        $response=$this->json('GET','/api/container/1');
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+    public function testDeleteSpecimenContainerFail()
+    {
+        $response=$this->delete('/api/container/9999999999');
+        $this->assertEquals(404, $response->getStatusCode());
     }
 }

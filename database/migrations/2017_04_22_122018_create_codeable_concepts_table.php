@@ -11,7 +11,7 @@ class CreateCodeableConceptsTable extends Migration
      *
      * @return void
      */
-    public function up() 
+    public function up()
     {
         Schema::create('codeable_concepts', function (Blueprint $table) {
             $table->increments('id');
@@ -20,11 +20,10 @@ class CreateCodeableConceptsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('patients', function(Blueprint $table){
+        Schema::table('patients', function (Blueprint $table) {
             //Relationships
             $table->foreign('gender')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
-             $table->foreign('marital_status')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
-
+            $table->foreign('marital_status')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

@@ -1,62 +1,69 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Quantity;
+use Illuminate\Http\Request;
 
 class QuantityController extends Controller
 {
-	public function index()
-	{
-		$quantity = Quantity::orderBy('id', 'ASC')->paginate(20);
-		return response()->json($quantity);
-	}
+    public function index()
+    {
+        $quantity = Quantity::orderBy('id', 'ASC')->paginate(20);
 
+        return response()->json($quantity);
+    }
 
     /**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request
-    * @return \Illuminate\Http\Response
-    */
-	public function store(Request $request)
-	{
-        $rules=array(
-		"value" => 'required',
-		"unit" => 'required',
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $rules = [
+        'value' => 'required',
+        'unit' => 'required',
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			 return response()->json($validator);
-		} else {
-			$quantity= new Quantity;
-			$quantity->value = $request->input('value');
-			$quantity->comparator = $request->input('comparator');
-			$quantity->unit = $request->input('unit');
-			$quantity->system = $request->input('system');
-			$quantity->code = $request->input('code');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator);
+        } else {
+            $quantity = new Quantity;
+            $quantity->value = $request->input('value');
+            $quantity->comparator = $request->input('comparator');
+            $quantity->unit = $request->input('unit');
+            $quantity->system = $request->input('system');
+            $quantity->code = $request->input('code');
 
-			try{
-				$quantity->save();
-				return response()->json($quantity);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $quantity->save();
+
+                return response()->json($quantity);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
     /**
      * Display the specified resource.
      *
      * @param  int  id
      * @return \Illuminate\Http\Response
-     */public function show($id){
-		$quantity=Quantity::findorfail($id);
-		return response()->json($quantity);
-	}
+     */
+    public function show($id)
+    {
+        try {
+            $quantity = Quantity::findorfail($id);
 
+            return response()->json($quantity);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    }
 
     /**
      * Update the specified resource in storage.
@@ -66,33 +73,32 @@ class QuantityController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-	{
-    
-        $rules=array(
-		"value" => 'required',
-		"unit" => 'required',
+    {
+        $rules = [
+        'value' => 'required',
+        'unit' => 'required',
 
-		);
-        $validator = \Validator::make($request->all(),$rules);
-		 if ($validator->fails()) {
-			 return response()->json($validator,422);
-		} else {
-			$quantity=Quantity::findorfail($id);
-			$quantity->value = $request->input('value');
-			$quantity->comparator = $request->input('comparator');
-			$quantity->unit = $request->input('unit');
-			$quantity->system = $request->input('system');
-			$quantity->code = $request->input('code');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            $quantity = Quantity::findorfail($id);
+            $quantity->value = $request->input('value');
+            $quantity->comparator = $request->input('comparator');
+            $quantity->unit = $request->input('unit');
+            $quantity->system = $request->input('system');
+            $quantity->code = $request->input('code');
 
-			try{
-				$quantity->save();
-				return response()->json($quantity);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $quantity->save();
+
+                return response()->json($quantity);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -100,14 +106,17 @@ class QuantityController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */
-	public function destroy($id){
-		try{
-			$quantity=Quantity::findorfail($id);
-			$quantity->delete();
-			return response()->json($quantity,200);
-		}
-		catch (\Illuminate\Database\QueryException $e){
-			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-		}
-	}
+    public function destroy($id)
+    {
+        try {
+            $quantity = Quantity::findorfail($id);
+            $quantity->delete();
+
+            return response()->json($quantity, 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+    }
 }

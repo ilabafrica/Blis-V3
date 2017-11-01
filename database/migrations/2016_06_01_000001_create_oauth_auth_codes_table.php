@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateIngredientsTable extends Migration
+class CreateOauthAuthCodesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateIngredientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ingredients', function (Blueprint $table) {
+        Schema::create('oauth_auth_codes', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('quantity')->nullable();
-            $table->integer('substance')->unsigned()->nullable();
+            $table->integer('created_by');
+            $table->integer('client_id');
+            $table->text('scopes')->nullable();
+            $table->boolean('revoked');
+            $table->dateTime('expires_at')->nullable();
             $table->timestamps();
-
-            //Relationships
-            $table->foreign('substance')->references('id')->on('substances')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
@@ -31,6 +31,6 @@ class CreateIngredientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ingredients');
+        Schema::drop('oauth_auth_codes');
     }
 }

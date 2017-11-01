@@ -1,6 +1,6 @@
 <?php
 /*
- 
+
 Instance of Panel
 
 Resource link https://www.hl7.org/fhir/diagnosticreport.html
@@ -14,22 +14,21 @@ class Panel extends Model
 {
     public function Observation()
     {
-    	return $this->hasMany('App\Models\Observation','panel_id');
+        return $this->hasMany('App\Models\Observation', 'panel_id');
     }
 
     public function PanelType()
     {
-    	return $this->belongsTo('App\Models\PanelType');
+        return $this->belongsTo('App\Models\PanelType');
     }
+
     public function Specimen()
     {
-    	return $this->belongsTo('App\Models\Specimen');
+        return $this->belongsTo('App\Models\Specimen');
     }
 
     public function Status()
     {
         return $this->belongsTo('App\Models\Status');
     }
-
 }
-

@@ -6,10 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class OauthClient extends Model
 {
-
     public function User()
     {
-    	return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User');
     }
-
 }

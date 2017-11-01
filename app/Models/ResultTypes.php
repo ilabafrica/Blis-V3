@@ -5,6 +5,7 @@
 *
 * https://www.hl7.org/fhir/observation-definitions.html#Observation.component.value_x_
 */
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,6 @@ class ResultTypes extends Model
 {
     public function ComponentType()
     {
-    	return $this->hasMany('App\Models\ComponentType','result_type_id');
+        return $this->hasMany('App\Models\ComponentType', 'result_type_id');
     }
 }

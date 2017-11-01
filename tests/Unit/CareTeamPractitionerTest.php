@@ -32,14 +32,14 @@ class CareTeamPractitionerTest extends TestCase
 	public function testStoreCareTeamPractitioner()
 	{
 		$response=$this->json('POST', '/api/careteampractitioner',$this->careteampractitionerData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("practioner_id",$response->original);
 	}
 
 	public function testListCareTeamPractitioner()
 	{
 		$response=$this->json('GET', '/api/careteampractitioner');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -47,24 +47,32 @@ class CareTeamPractitionerTest extends TestCase
 	{
 		$this->json('POST', '/api/careteampractitioner',$this->careteampractitionerData);
 		$response=$this->json('GET', '/api/careteampractitioner/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("practioner_id",$response->original);
 	}
 
 	public function testUpdateCareTeamPractitioner()
 	{
 		$this->json('POST', '/api/careteampractitioner',$this->updatedcareteampractitionerData);
-		$response=$this->json('PUT', '/api/careteampractitioner');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response=$this->json('PUT', '/api/careteampractitioner/1',$this->updatedcareteampractitionerData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("practioner_id",$response->original);
 	}
 
 	public function testDeleteCareTeamPractitioner()
 	{
 		$this->json('POST', '/api/careteampractitioner',$this->careteampractitionerData);
 		$response=$this->delete('/api/careteampractitioner/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/careteampractitioner/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteCareTeamPractitionerFail()
+	{
+		$response=$this->delete('/api/careteampractitioner/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

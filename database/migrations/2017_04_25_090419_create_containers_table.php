@@ -25,9 +25,8 @@ class CreateContainersTable extends Migration
             //relationships
             $table->foreign('quantity_id')->references('id')->on('quantities')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('additive')->references('id')->on('substances')->onUpdate('cascade')->onDelete('cascade');
-            
+
             $table->foreign('type')->references('id')->on('codeable_concepts')->onUpdate('cascade')->onDelete('cascade');
-            
         });
     }
 

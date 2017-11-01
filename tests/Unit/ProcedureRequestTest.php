@@ -20,13 +20,18 @@ class ProcedureRequestTest extends TestCase
 			"definition_id"=>1,
 			"based_on"=>'Sample String',
 			"replaces"=>'Sample String',
+			"requisition"=>1,
 			"status"=>1,
 			"intent"=>1,
 			"priority"=>1,
+			"do_not_perform"=>1,
 			"category"=>1,
 			"code"=>1,
 			"subject"=>'Sample String',
 			"context"=>1,
+			"occurence"=>'2017:12:12 15:30:00',
+			"asneeded"=>1,
+			"authored_on"=>'2017:12:12 15:30:00',
 			"requester"=>1,
 			"performer_type"=>1,
 			"performer"=>1,
@@ -44,13 +49,18 @@ class ProcedureRequestTest extends TestCase
 			"definition_id"=>1,
 			"based_on"=>'Sample updated String',
 			"replaces"=>'Sample updated String',
+			"requisition"=>1,
 			"status"=>1,
 			"intent"=>1,
 			"priority"=>1,
+			"do_not_perform"=>1,
 			"category"=>1,
 			"code"=>1,
 			"subject"=>'Sample updated String',
 			"context"=>1,
+			"occurence"=>'2017:12:12 16:30:00',
+			"asneeded"=>1,
+			"authored_on"=>'2017:12:12 16:30:00',
 			"requester"=>1,
 			"performer_type"=>1,
 			"performer"=>1,
@@ -68,14 +78,14 @@ class ProcedureRequestTest extends TestCase
 	public function testStoreProcedureRequest()
 	{
 		$response=$this->json('POST', '/api/procedurerequest',$this->procedurerequestData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("subject",$response->original);
 	}
 
 	public function testListProcedureRequest()
 	{
 		$response=$this->json('GET', '/api/procedurerequest');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -83,24 +93,32 @@ class ProcedureRequestTest extends TestCase
 	{
 		$this->json('POST', '/api/procedurerequest',$this->procedurerequestData);
 		$response=$this->json('GET', '/api/procedurerequest/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("subject",$response->original);
 	}
 
 	public function testUpdateProcedureRequest()
 	{
-		$this->json('POST', '/api/procedurerequest',$this->updatedprocedurerequestData);
-		$response=$this->json('PUT', '/api/procedurerequest');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$this->json('POST', '/api/procedurerequest',$this->procedurerequestData);
+		$response=$this->json('PUT', '/api/procedurerequest/1',$this->updatedprocedurerequestData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("subject",$response->original);
 	}
 
 	public function testDeleteProcedureRequest()
 	{
 		$this->json('POST', '/api/procedurerequest',$this->procedurerequestData);
 		$response=$this->delete('/api/procedurerequest/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/procedurerequest/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteProcedureRequestFail()
+	{
+		$response=$this->delete('/api/procedurerequest/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

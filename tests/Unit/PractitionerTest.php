@@ -17,16 +17,29 @@ class PractitionerTest extends TestCase
 	public function setVariables(){
     	$this->practitionerData=array(
         
+
 			"created_by"=>1,
+			"active"=>2,
+			"name"=>'Sample',
+			"telecom"=>1,
+			"address"=>1234,
 			"gender"=>1,
-			"birth_date"=>'2017:12:12 15:30:00',"photo"=>'Sample String',
+			"birth_date"=>'2017:12:12 15:30:00',
+			"photo"=>'Sample String',
+
 
         );
     	$this->updatedpractitionerData=array(
         
-			"user_id"=>1,
+			"created_by"=>1,
+			"active"=>2,
+			"name"=>'Sample Updated',
+			"telecom"=>1,
+			"address"=>12345,
 			"gender"=>1,
-			"birth_date"=>'2016:12:12 15:30:00',"photo"=>'Sample updated String',
+			"birth_date"=>'2016:12:12 15:30:00',
+			"photo"=>'Sample updated String',
+
 
         );
 	}
@@ -34,14 +47,14 @@ class PractitionerTest extends TestCase
 	public function testStorePractitioner()
 	{
 		$response=$this->json('POST', '/api/practitioner',$this->practitionerData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("telecom",$response->original);
 	}
 
 	public function testListPractitioner()
 	{
 		$response=$this->json('GET', '/api/practitioner');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -49,24 +62,33 @@ class PractitionerTest extends TestCase
 	{
 		$this->json('POST', '/api/practitioner',$this->practitionerData);
 		$response=$this->json('GET', '/api/practitioner/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("birth_date",$response->original);
+		$this->assertEquals($this->practitionerData['photo'], $response->original->photo);
 	}
 
 	public function testUpdatePractitioner()
 	{
-		$this->json('POST', '/api/practitioner',$this->updatedpractitionerData);
-		$response=$this->json('PUT', '/api/practitioner');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$this->json('POST', '/api/practitioner',$this->practitionerData);
+		$response=$this->json('PUT', '/api/practitioner/1',$this->updatedpractitionerData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("birth_date",$response->original);
+		$this->assertEquals($this->updatedpractitionerData['photo'], $response->original->photo);
 	}
 
 	public function testDeletePractitioner()
 	{
 		$this->json('POST', '/api/practitioner',$this->practitionerData);
 		$response=$this->delete('/api/practitioner/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/practitioner/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+	public function testDeletePatientFail()
+	{
+		$response=$this->delete('/api/practitioner/9999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

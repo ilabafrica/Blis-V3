@@ -16,13 +16,17 @@ class PatientCommunicationTest extends TestCase
 
 	public function setVariables(){
     	$this->patientcommunicationData=array(
-        
+            
+            "patient_id"=>1,
 			"language"=>1,
+			"preferred"=>'Sample',
 
         );
     	$this->updatedpatientcommunicationData=array(
         
+			"patient_id"=>1,
 			"language"=>1,
+			"preferred"=>'Sample updated',
 
         );
 	}
@@ -30,14 +34,14 @@ class PatientCommunicationTest extends TestCase
 	public function testStorePatientCommunication()
 	{
 		$response=$this->json('POST', '/api/patientcommunication',$this->patientcommunicationData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("language",$response->original);
 	}
 
 	public function testListPatientCommunication()
 	{
 		$response=$this->json('GET', '/api/patientcommunication');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -45,24 +49,32 @@ class PatientCommunicationTest extends TestCase
 	{
 		$this->json('POST', '/api/patientcommunication',$this->patientcommunicationData);
 		$response=$this->json('GET', '/api/patientcommunication/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("language",$response->original);
 	}
 
 	public function testUpdatePatientCommunication()
 	{
-		$this->json('POST', '/api/patientcommunication',$this->updatedpatientcommunicationData);
-		$response=$this->json('PUT', '/api/patientcommunication');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/patientcommunication',$this->patientcommunicationData);
+		$response=$this->json('PUT', '/api/patientcommunication/1',$this->updatedpatientcommunicationData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("language",$response->original);
 	}
 
 	public function testDeletePatientCommunication()
 	{
 		$this->json('POST', '/api/patientcommunication',$this->patientcommunicationData);
 		$response=$this->delete('/api/patientcommunication/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/patientcommunication/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeletePatientCommunicationFail()
+	{
+		$response=$this->delete('/api/patientcommunication/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

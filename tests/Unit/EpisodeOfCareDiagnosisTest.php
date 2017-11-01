@@ -36,14 +36,14 @@ class EpisodeOfCareDiagnosisTest extends TestCase
 	public function testStoreEpisodeOfCareDiagnosis()
 	{
 		$response=$this->json('POST', '/api/episodeofcarediagnosis',$this->episodeofcarediagnosisData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("role",$response->original);
 	}
 
 	public function testListEpisodeOfCareDiagnosis()
 	{
 		$response=$this->json('GET', '/api/episodeofcarediagnosis');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
 		
 	}
 
@@ -51,24 +51,32 @@ class EpisodeOfCareDiagnosisTest extends TestCase
 	{
 		$this->json('POST', '/api/episodeofcarediagnosis',$this->episodeofcarediagnosisData);
 		$response=$this->json('GET', '/api/episodeofcarediagnosis/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("role",$response->original);
 	}
 
 	public function testUpdateEpisodeOfCareDiagnosis()
 	{
-		$this->json('POST', '/api/episodeofcarediagnosis',$this->updatedepisodeofcarediagnosisData);
-		$response=$this->json('PUT', '/api/episodeofcarediagnosis');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->json('POST', '/api/episodeofcarediagnosis',$this->episodeofcarediagnosisData);
+		$response=$this->json('PUT', '/api/episodeofcarediagnosis/1',$this->updatedepisodeofcarediagnosisData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("role",$response->original);
 	}
 
 	public function testDeleteEpisodeOfCareDiagnosis()
 	{
 		$this->json('POST', '/api/episodeofcarediagnosis',$this->episodeofcarediagnosisData);
 		$response=$this->delete('/api/episodeofcarediagnosis/1');
-		$this->assertEquals(200,$response->getStatusCode());
+		$response->assertStatus(200);
+		$response=$this->json('GET', '/api/episodeofcarediagnosis/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeleteEpisodeOfCareDiagnosisFail()
+	{
+		$response=$this->delete('/api/episodeofcarediagnosis/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

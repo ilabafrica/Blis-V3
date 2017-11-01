@@ -16,12 +16,16 @@ class PatientLinkTest extends TestCase
 
 	public function setVariables(){
     	$this->patientlinkData=array(
-        
+            
+            "patient_id"=>1,
+            "other"=>1,
 			"type"=>1,
+			
 
         );
     	$this->updatedpatientlinkData=array(
-        
+            "patient_id"=>1,
+            "other"=>1,
 			"type"=>1,
 
         );
@@ -29,9 +33,9 @@ class PatientLinkTest extends TestCase
 
 	public function testStorePatientLink()
 	{
-		$response=$this->json('POST', '/api/patientlink',$this->patientlinkData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",[$response->original]);
+		$response=$this->json('POST','/api/patientlink',$this->patientlinkData);
+		$response->assertStatus(200);
+		$this->assertArrayHasKey("type",$response->original);
 	}
 
 	public function testListPatientLink()
@@ -46,15 +50,15 @@ class PatientLinkTest extends TestCase
 		$this->json('POST', '/api/patientlink',$this->patientlinkData);
 		$response=$this->json('GET', '/api/patientlink/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("type",$response->original);
 	}
 
 	public function testUpdatePatientLink()
 	{
-		$this->json('POST', '/api/patientlink',$this->updatedpatientlinkData);
-		$response=$this->json('PUT', '/api/patientlink');
+		$this->json('POST', '/api/patientlink',$this->patientlinkData);
+		$response=$this->json('PUT', '/api/patientlink/1',$this->updatedpatientlinkData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("subject",$response->original);
+		$this->assertArrayHasKey("type",$response->original);
 	}
 
 	public function testDeletePatientLink()
@@ -62,7 +66,15 @@ class PatientLinkTest extends TestCase
 		$this->json('POST', '/api/patientlink',$this->patientlinkData);
 		$response=$this->delete('/api/patientlink/1');
 		$this->assertEquals(200,$response->getStatusCode());
+		$response=$this->json('GET', '/api/patientlink/1');
+		$this->assertEquals(404, $response->getStatusCode());
 		
+	}
+
+	public function testDeletePatientLinkFail()
+	{
+		$response=$this->delete('/api/patientlink/9999999999');
+		$this->assertEquals(404, $response->getStatusCode());
 	}
 
 }

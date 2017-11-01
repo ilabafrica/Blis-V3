@@ -22,7 +22,6 @@ class CreateCollectionsTable extends Migration
             $table->integer('body_site')->unsigned();
             $table->timestamps();
 
-
             //relationships
             $table->foreign('collector')->references('id')->on('practitioners')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('quantity_id')->references('id')->on('quantities')->onUpdate('cascade')->onDelete('cascade');
