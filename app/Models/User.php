@@ -3,56 +3,60 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Passport\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Model
 {
-    public function Patient()
+    use Notifiable;
+    use HasApiTokens, Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'email', 'password',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    public function patient()
     {
         return $this->hasOne('App\Models\Patient', 'created_by');
     }
 
-    public function ContactPoint()
+    public function telecom()
     {
-        return $this->hasMany('App\Models\ContactPoint', 'created_by');
+        return $this->hasMany('App\Models\Telecom', 'created_by');
     }
 
-    public function HumanName()
+    public function name()
     {
-        return $this->hasOne('App\Models\HumanName', 'created_by');
+        return $this->hasOne('App\Models\Name', 'created_by');
     }
 
-    public function OauthAccessToken()
+    public function oauthAccessToken()
     {
         return $this->hasOne('App\Models\OauthAccessToken', 'created_by');
     }
 
-    public function OauthAuthCode()
+    public function oauthAuthCode()
     {
         return $this->hasOne('App\Models\OauthAuthCode', 'created_by');
     }
 
-    public function OauthClient()
+    public function oauthClient()
     {
         return $this->hasOne('App\Models\OauthClient', 'created_by');
-    }
-
-    public function Observation()
-    {
-        return $this->hasOne('App\Models\Observation', 'created_by');
-    }
-
-    public function Organization()
-    {
-        return $this->hasOne('App\Models\Organization', 'created_by');
-    }
-
-    public function Practitioner()
-    {
-        return $this->hasOne('App\Models\Practitioner', 'created_by');
-    }
-
-    public function ProcedureRequest()
-    {
-        return $this->hasOne('App\Models\ProcedureRequest', 'performer');
     }
 }

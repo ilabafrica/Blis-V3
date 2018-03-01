@@ -14,16 +14,18 @@ class Specimen extends Model
      * Specimen status constants.
      */
     const NOT_COLLECTED = 1;
-    const ACCEPTED = 2;
+    const RECEIVED = 2;
     const REJECTED = 3;
 
-    public function Panel()
+    public $timestamps = false;
+
+    public function test()
     {
-        return $this->hasMany('App\Models\Panel', 'specimen_id');
+        return $this->hasMany('App\Models\Test');
     }
 
-    public function ProcedureRequest()
+    public function testTypes()
     {
-        return $this->hasMany('App\Models\ProcedureRequest', 'specimen');
+        return $this->hasMany('App\Models\TestType');
     }
 }

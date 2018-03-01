@@ -9,8 +9,5 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Collection extends Model
 {
-    public function Quantity()
-    {
-        return $this->belongsTo('App\Models\Quantity');
-    }
+	public $timestamps = false;
 }

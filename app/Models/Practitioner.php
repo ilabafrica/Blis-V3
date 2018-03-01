@@ -8,38 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Practitioner extends Model
 {
-    public function Patient()
+    public function patient()
     {
-        return $this->hasMany('App\Patient', 'general_practitioner_id');
+        return $this->hasMany('App\Patient');
     }
 
-    public function PractitionerCommunication()
-    {
-        return $this->hasMany('App\Models\PractitionerCommunication', 'practitioner_id');
-    }
-
-    public function PractitionerQualification()
-    {
-        return $this->hasMany('App\Models\PractitionerQualification', 'practitioner_id');
-    }
-
-    public function EpisodeOfCare()
-    {
-        return $this->hasMany('App\Models\EpisodeOfCare', 'practitioners_id');
-    }
-
-    public function User()
+    public function user()
     {
         return $this->belongsTo('App\Models\User');
-    }
-
-    public function ProcedureRequest()
-    {
-        return $this->hasMany('App\Models\ProcedureRequest', 'requester');
-    }
-
-    public function ReferralRequest()
-    {
-        return $this->belongsTo('App\Models\ReferralRequest', 'recipient');
     }
 }

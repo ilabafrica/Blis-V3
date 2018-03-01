@@ -1,5 +1,11 @@
 <?php
 namespace Tests\Unit;
+/**
+ * (c) @iLabAfrica
+ * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead	 - Emmanuel Kweyu.
+ * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
+ */
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -15,64 +21,50 @@ class CodeableConceptTest extends TestCase
 	}
 
 	public function setVariables(){
-    	$this->codeableconceptData=array(
-        
+		$this->codeableConceptData=array(
 			"code"=>'Sample String',
-			"description"=>'Sample String',
-
-        );
-    	$this->updatedcodeableconceptData=array(
-        
+			"text"=>'Sample String',
+		);
+		$this->updatedCodeableConceptData=array(
 			"code"=>'Sample updated String',
-			"description"=>'Sample updated String',
-
-        );
+			"text"=>'Sample updated String',
+		);
 	}
 
 	public function testStoreCodeableConcept()
 	{
-		$response=$this->json('POST', '/api/codeableconcept',$this->codeableconceptData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("code",$response->original);
+		$response=$this->json('POST', '/api/codeableconcept',$this->codeableConceptData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("text",$response->original);
 	}
 
 	public function testListCodeableConcept()
 	{
 		$response=$this->json('GET', '/api/codeableconcept');
 		$this->assertEquals(200,$response->getStatusCode());
-		
 	}
 
 	public function testShowCodeableConcept()
 	{
-		$this->json('POST', '/api/codeableconcept',$this->codeableconceptData);
+		$this->json('POST', '/api/codeableconcept',$this->codeableConceptData);
 		$response=$this->json('GET', '/api/codeableconcept/1');
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("code",$response->original);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("text",$response->original);
 	}
 
 	public function testUpdateCodeableConcept()
 	{
-		$this->json('POST', '/api/codeableconcept',$this->codeableconceptData);
-		$response=$this->json('PUT', '/api/codeableconcept/1',$this->updatedcodeableconceptData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("code",$response->original);
+		$this->json('POST', '/api/codeableconcept',$this->codeableConceptData);
+		$response=$this->json('PUT', '/api/codeableconcept/1',$this->updatedCodeableConceptData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("text",$response->original);
 	}
 
 	public function testDeleteCodeableConcept()
 	{
-		$this->json('POST', '/api/codeableconcept',$this->codeableconceptData);
+		$this->json('POST', '/api/codeableconcept',$this->codeableConceptData);
 		$response=$this->delete('/api/codeableconcept/1');
-		$response->assertStatus(200);
-		$response=$this->json('GET', '/api/codeableconcept/1');
-		$this->assertEquals(404, $response->getStatusCode());
-		
-	}
-
-	public function testDeleteCodeableConceptFail()
-	{
-		$response=$this->delete('/api/codeableconcept/9999999999');
-		$this->assertEquals(404, $response->getStatusCode());
+		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 }

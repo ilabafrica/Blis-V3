@@ -1,5 +1,11 @@
 <?php
 namespace Tests\Unit;
+/**
+ * (c) @iLabAfrica
+ * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead	 - Emmanuel Kweyu.
+ * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
+ */
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -15,73 +21,62 @@ class SpecimenTest extends TestCase
 	}
 
 	public function setVariables(){
-    	$this->specimenData=array(
-        
-			"accessionIdentifier"=>'BG1212',
-            "status"=>1, //Codeable Concept Code e.g unsatisfactory
-            "type"=>112, //Codeable Concept Code e.g Serum
-            "subject"=>1, //patient ID
-            "received_time"=>'2017:12:12 15:30:00',
-            "parent"=>1, //Specimen id from which the specimen originated
-            "note"=>'It is satisfactory', //comment
-
-        );
-    	$this->updatedspecimenData=array(
-        
-			"accessionIdentifier"=>'BG1212',
-            "status"=>1, //Codeable Concept Code e.g unsatisfactory
-            "type"=>12,
-            "subject"=>1, //Codeable Concept Code e.g Serum
-            "received_time"=>'2017:12:12 16:30:00',
-            "parent"=>1, //Specimen id from which the specimen originated
-            "note" => 'It is very satisfactory',
-
-        );
+		$this->specimenData=array(
+			"identifier"=>'Sample String',
+			"accession_identifier"=>'Sample String',
+			"specimen_type_id"=>1,
+			"parent_id"=>1,
+			"specimen_status_id"=>1,
+			"received_by"=>1,
+			"time_collected"=>'Sample String',
+			"received_time"=>'Sample String',
+		);
+		$this->updatedSpecimenData=array(
+			"identifier"=>'Sample updated String',
+			"accession_identifier"=>'Sample updated String',
+			"specimen_type_id"=>1,
+			"parent_id"=>1,
+			"specimen_status_id"=>1,
+			"received_by"=>1,
+			"time_collected"=>'Sample updated String',
+			"received_time"=>'Sample updated String',
+		);
 	}
 
 	public function testStoreSpecimen()
 	{
 		$response=$this->json('POST', '/api/specimen',$this->specimenData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("note",$response->original);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("received_time",$response->original);
 	}
 
 	public function testListSpecimen()
 	{
 		$response=$this->json('GET', '/api/specimen');
-		$response->assertStatus(200);
-		
+		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowSpecimen()
 	{
 		$this->json('POST', '/api/specimen',$this->specimenData);
 		$response=$this->json('GET', '/api/specimen/1');
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("note",$response->original);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("received_time",$response->original);
 	}
 
 	public function testUpdateSpecimen()
 	{
 		$this->json('POST', '/api/specimen',$this->specimenData);
-		$response=$this->json('PUT', '/api/specimen/1',$this->updatedspecimenData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("note",$response->original);
+		$response=$this->json('PUT', '/api/specimen/1',$this->updatedSpecimenData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("received_time",$response->original);
 	}
 
 	public function testDeleteSpecimen()
 	{
 		$this->json('POST', '/api/specimen',$this->specimenData);
 		$response=$this->delete('/api/specimen/1');
-		$response->assertStatus(200);
-		$response = $this->json('GET','/api/specimen/1');
-        $this->assertEquals(404, $response->getStatusCode());
-		
+		$this->assertEquals(200,$response->getStatusCode());
 	}
-	public function testDeleteSpecimenFail()
-    {
-        $response =$this->delete('/api/specimen/999999999');
-        $this->assertEquals(404, $response->getStatusCode());
-    }
 
 }

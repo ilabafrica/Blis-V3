@@ -1,0 +1,76 @@
+<?php
+namespace Tests\Unit;
+/**
+ * (c) @iLabAfrica
+ * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead	 - Emmanuel Kweyu.
+ * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
+ */
+
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
+class AntibioticSusceptibilityTest extends TestCase
+{
+	use DatabaseMigrations;
+
+	public function setup(){
+		parent::Setup();
+		$this->setVariables();
+	}
+
+	public function setVariables(){
+		$this->antibioticSusceptibilityData=array(
+			"user_id"=>1,
+			"antibiotic_id"=>1,
+			"result_id"=>1,
+			"susceptibility_range_id"=>1,
+			"zone_diameter"=>1,
+		);
+		$this->updatedAntibioticSusceptibilityData=array(
+			"user_id"=>1,
+			"antibiotic_id"=>1,
+			"result_id"=>1,
+			"susceptibility_range_id"=>1,
+			"zone_diameter"=>1,
+		);
+	}
+
+	public function testStoreAntibioticSusceptibility()
+	{
+		$response=$this->json('POST', '/api/antibioticsusceptibility',$this->antibioticSusceptibilityData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("zone_diameter",$response->original);
+	}
+
+	public function testListAntibioticSusceptibility()
+	{
+		$response=$this->json('GET', '/api/antibioticsusceptibility');
+		$this->assertEquals(200,$response->getStatusCode());
+	}
+
+	public function testShowAntibioticSusceptibility()
+	{
+		$this->json('POST', '/api/antibioticsusceptibility',$this->antibioticSusceptibilityData);
+		$response=$this->json('GET', '/api/antibioticsusceptibility/1');
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("zone_diameter",$response->original);
+	}
+
+	public function testUpdateAntibioticSusceptibility()
+	{
+		$this->json('POST', '/api/antibioticsusceptibility',$this->antibioticSusceptibilityData);
+		$response=$this->json('PUT', '/api/antibioticsusceptibility/1',$this->updatedAntibioticSusceptibilityData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("zone_diameter",$response->original);
+	}
+
+	public function testDeleteAntibioticSusceptibility()
+	{
+		$this->json('POST', '/api/antibioticsusceptibility',$this->antibioticSusceptibilityData);
+		$response=$this->delete('/api/antibioticsusceptibility/1');
+		$this->assertEquals(200,$response->getStatusCode());
+	}
+
+}
