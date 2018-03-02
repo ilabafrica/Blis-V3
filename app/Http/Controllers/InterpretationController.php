@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Http\Controllers;
-/**
+
+/*
  * (c) @iLabAfrica
  * BLIS      - a port of the Basic Laboratory Information System (BLIS) to Laravel.
  * Team Lead     - Emmanuel Kweyu.
@@ -13,98 +15,100 @@ use App\Models\Interpretation;
 
 class InterpretationController extends Controller
 {
-	public function index()
-	{
-		$interpretation=Interpretation::orderBy('id', 'ASC')->paginate(20);
-		return response()->json($interpretation);
-	}
+    public function index()
+    {
+        $interpretation = Interpretation::orderBy('id', 'ASC')->paginate(20);
 
+        return response()->json($interpretation);
+    }
 
-	/**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request
-    * @return \Illuminate\Http\Response
-    */
-	public function store(Request $request)
-	{
-		$rules = array(
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $rules = [
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			return response()->json($validator);
-		} else {
-			$interpretation= new Interpretation;
-			$interpretation->code = $request->input('code');
-			$interpretation->name = $request->input('name');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator);
+        } else {
+            $interpretation = new Interpretation;
+            $interpretation->code = $request->input('code');
+            $interpretation->name = $request->input('name');
 
-			try{
-				$interpretation->save();
-				return response()->json($interpretation);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $interpretation->save();
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id){
-		$interpretation=Interpretation::findOrFail($id);
-		return response()->json($interpretation);
-	}
+                return response()->json($interpretation);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $interpretation = Interpretation::findOrFail($id);
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  request
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id)
-	{
-		$rules=array(
+        return response()->json($interpretation);
+    }
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			return response()->json($validator,422);
-		} else {
-			$interpretation=Interpretation::findOrFail($id);
-			$interpretation->code = $request->input('code');
-			$interpretation->name = $request->input('name');
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  request
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $rules = [
 
-			try{
-				$interpretation->save();
-				return response()->json($interpretation);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            $interpretation = Interpretation::findOrFail($id);
+            $interpretation->code = $request->input('code');
+            $interpretation->name = $request->input('name');
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id){
-		try{
-			$interpretation=Interpretation::findOrFail($id);
-			$interpretation->delete();
-			return response()->json($interpretation,200);
-		}
-		catch (\Illuminate\Database\QueryException $e){
-			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-		}
-	}
+            try {
+                $interpretation->save();
+
+                return response()->json($interpretation);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        try {
+            $interpretation = Interpretation::findOrFail($id);
+            $interpretation->delete();
+
+            return response()->json($interpretation, 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
 }

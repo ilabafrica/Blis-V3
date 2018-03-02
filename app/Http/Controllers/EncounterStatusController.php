@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Http\Controllers;
-/**
+
+/*
  * (c) @iLabAfrica
  * BLIS      - a port of the Basic Laboratory Information System (BLIS) to Laravel.
  * Team Lead     - Emmanuel Kweyu.
@@ -13,98 +15,100 @@ use App\Models\EncounterStatus;
 
 class EncounterStatusController extends Controller
 {
-	public function index()
-	{
-		$encounterStatus=EncounterStatus::orderBy('id', 'ASC')->paginate(20);
-		return response()->json($encounterStatus);
-	}
+    public function index()
+    {
+        $encounterStatus = EncounterStatus::orderBy('id', 'ASC')->paginate(20);
 
+        return response()->json($encounterStatus);
+    }
 
-	/**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request
-    * @return \Illuminate\Http\Response
-    */
-	public function store(Request $request)
-	{
-		$rules = array(
-			"name" => 'required',
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $rules = [
+            'name' => 'required',
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			return response()->json($validator);
-		} else {
-			$encounterStatus= new EncounterStatus;
-			$encounterStatus->name = $request->input('name');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator);
+        } else {
+            $encounterStatus = new EncounterStatus;
+            $encounterStatus->name = $request->input('name');
 
-			try{
-				$encounterStatus->save();
-				return response()->json($encounterStatus);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $encounterStatus->save();
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id){
-		$encounterStatus=EncounterStatus::findOrFail($id);
-		return response()->json($encounterStatus);
-	}
+                return response()->json($encounterStatus);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $encounterStatus = EncounterStatus::findOrFail($id);
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  request
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id)
-	{
-		$rules=array(
-			"name" => 'required',
+        return response()->json($encounterStatus);
+    }
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			return response()->json($validator,422);
-		} else {
-			$encounterStatus=EncounterStatus::findOrFail($id);
-			$encounterStatus->name = $request->input('name');
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  request
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $rules = [
+            'name' => 'required',
 
-			try{
-				$encounterStatus->save();
-				return response()->json($encounterStatus);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            $encounterStatus = EncounterStatus::findOrFail($id);
+            $encounterStatus->name = $request->input('name');
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id){
-		try{
-			$encounterStatus=EncounterStatus::findOrFail($id);
-			$encounterStatus->delete();
-			return response()->json($encounterStatus,200);
-		}
-		catch (\Illuminate\Database\QueryException $e){
-			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-		}
-	}
+            try {
+                $encounterStatus->save();
+
+                return response()->json($encounterStatus);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        try {
+            $encounterStatus = EncounterStatus::findOrFail($id);
+            $encounterStatus->delete();
+
+            return response()->json($encounterStatus, 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
 }

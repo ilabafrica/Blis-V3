@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Models;
-/**
+
+/*
  * (c) @iLabAfrica
  * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
  * Team Lead	 - Emmanuel Kweyu.
@@ -12,5 +14,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class MeasureRange extends Model
 {
-	public $timestamps = false;
+    public $timestamps = false;
 }
