@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Http\Controllers;
-/**
+
+/*
  * (c) @iLabAfrica
  * BLIS      - a port of the Basic Laboratory Information System (BLIS) to Laravel.
  * Team Lead     - Emmanuel Kweyu.
@@ -8,107 +10,109 @@ namespace App\Http\Controllers;
  * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
  */
 
-use Illuminate\Http\Request;
 use App\Models\Gender;
+use Illuminate\Http\Request;
 
 class GenderController extends Controller
 {
-	public function index()
-	{
-		$gender=Gender::orderBy('id', 'ASC')->paginate(20);
-		return response()->json($gender);
-	}
+    public function index()
+    {
+        $gender = Gender::orderBy('id', 'ASC')->paginate(20);
 
+        return response()->json($gender);
+    }
 
-	/**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request
-    * @return \Illuminate\Http\Response
-    */
-	public function store(Request $request)
-	{
-		$rules = array(
-			"code" => 'required',
-			"display" => 'required',
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $rules = [
+            'code' => 'required',
+            'display' => 'required',
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			return response()->json($validator);
-		} else {
-			$gender= new Gender;
-			$gender->code = $request->input('code');
-			$gender->display = $request->input('display');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator);
+        } else {
+            $gender = new Gender;
+            $gender->code = $request->input('code');
+            $gender->display = $request->input('display');
 
-			try{
-				$gender->save();
-				return response()->json($gender);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $gender->save();
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id){
-		$gender=Gender::findOrFail($id);
-		return response()->json($gender);
-	}
+                return response()->json($gender);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $gender = Gender::findOrFail($id);
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  request
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id)
-	{
-		$rules=array(
-			"code" => 'required',
-			"display" => 'required',
+        return response()->json($gender);
+    }
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			return response()->json($validator,422);
-		} else {
-			$gender=Gender::findOrFail($id);
-			$gender->code = $request->input('code');
-			$gender->display = $request->input('display');
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  request
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $rules = [
+            'code' => 'required',
+            'display' => 'required',
 
-			try{
-				$gender->save();
-				return response()->json($gender);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            $gender = Gender::findOrFail($id);
+            $gender->code = $request->input('code');
+            $gender->display = $request->input('display');
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id){
-		try{
-			$gender=Gender::findOrFail($id);
-			$gender->delete();
-			return response()->json($gender,200);
-		}
-		catch (\Illuminate\Database\QueryException $e){
-			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-		}
-	}
+            try {
+                $gender->save();
+
+                return response()->json($gender);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        try {
+            $gender = Gender::findOrFail($id);
+            $gender->delete();
+
+            return response()->json($gender, 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
 }

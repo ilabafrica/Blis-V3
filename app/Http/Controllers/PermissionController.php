@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Http\Controllers;
-/**
+
+/*
  * (c) @iLabAfrica
  * BLIS      - a port of the Basic Laboratory Information System (BLIS) to Laravel.
  * Team Lead     - Emmanuel Kweyu.
@@ -8,107 +10,109 @@ namespace App\Http\Controllers;
  * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
  */
 
-use Illuminate\Http\Request;
 use App\Models\Permission;
+use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
-	public function index()
-	{
-		$permission=Permission::orderBy('id', 'ASC')->paginate(20);
-		return response()->json($permission);
-	}
+    public function index()
+    {
+        $permission = Permission::orderBy('id', 'ASC')->paginate(20);
 
+        return response()->json($permission);
+    }
 
-	/**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request
-    * @return \Illuminate\Http\Response
-    */
-	public function store(Request $request)
-	{
-		$rules = array(
-			"name" => 'required',
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $rules = [
+            'name' => 'required',
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			return response()->json($validator);
-		} else {
-			$permission= new Permission;
-			$permission->name = $request->input('name');
-			$permission->display_name = $request->input('display_name');
-			$permission->description = $request->input('description');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator);
+        } else {
+            $permission = new Permission;
+            $permission->name = $request->input('name');
+            $permission->display_name = $request->input('display_name');
+            $permission->description = $request->input('description');
 
-			try{
-				$permission->save();
-				return response()->json($permission);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $permission->save();
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id){
-		$permission=Permission::findOrFail($id);
-		return response()->json($permission);
-	}
+                return response()->json($permission);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $permission = Permission::findOrFail($id);
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  request
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id)
-	{
-		$rules=array(
-			"name" => 'required',
+        return response()->json($permission);
+    }
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			return response()->json($validator,422);
-		} else {
-			$permission=Permission::findOrFail($id);
-			$permission->name = $request->input('name');
-			$permission->display_name = $request->input('display_name');
-			$permission->description = $request->input('description');
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  request
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $rules = [
+            'name' => 'required',
 
-			try{
-				$permission->save();
-				return response()->json($permission);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            $permission = Permission::findOrFail($id);
+            $permission->name = $request->input('name');
+            $permission->display_name = $request->input('display_name');
+            $permission->description = $request->input('description');
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id){
-		try{
-			$permission=Permission::findOrFail($id);
-			$permission->delete();
-			return response()->json($permission,200);
-		}
-		catch (\Illuminate\Database\QueryException $e){
-			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-		}
-	}
+            try {
+                $permission->save();
+
+                return response()->json($permission);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        try {
+            $permission = Permission::findOrFail($id);
+            $permission->delete();
+
+            return response()->json($permission, 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
 }

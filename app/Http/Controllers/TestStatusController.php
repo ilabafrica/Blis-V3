@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Http\Controllers;
-/**
+
+/*
  * (c) @iLabAfrica
  * BLIS      - a port of the Basic Laboratory Information System (BLIS) to Laravel.
  * Team Lead     - Emmanuel Kweyu.
@@ -8,107 +10,109 @@ namespace App\Http\Controllers;
  * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
  */
 
-use Illuminate\Http\Request;
 use App\Models\TestStatus;
+use Illuminate\Http\Request;
 
 class TestStatusController extends Controller
 {
-	public function index()
-	{
-		$testStatus=TestStatus::orderBy('id', 'ASC')->paginate(20);
-		return response()->json($testStatus);
-	}
+    public function index()
+    {
+        $testStatus = TestStatus::orderBy('id', 'ASC')->paginate(20);
 
+        return response()->json($testStatus);
+    }
 
-	/**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request
-    * @return \Illuminate\Http\Response
-    */
-	public function store(Request $request)
-	{
-		$rules = array(
-			"name" => 'required',
-			"test_phase_id" => 'required',
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $rules = [
+            'name' => 'required',
+            'test_phase_id' => 'required',
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			return response()->json($validator);
-		} else {
-			$testStatus= new TestStatus;
-			$testStatus->name = $request->input('name');
-			$testStatus->test_phase_id = $request->input('test_phase_id');
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator);
+        } else {
+            $testStatus = new TestStatus;
+            $testStatus->name = $request->input('name');
+            $testStatus->test_phase_id = $request->input('test_phase_id');
 
-			try{
-				$testStatus->save();
-				return response()->json($testStatus);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+            try {
+                $testStatus->save();
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id){
-		$testStatus=TestStatus::findOrFail($id);
-		return response()->json($testStatus);
-	}
+                return response()->json($testStatus);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $testStatus = TestStatus::findOrFail($id);
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  request
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id)
-	{
-		$rules=array(
-			"name" => 'required',
-			"test_phase_id" => 'required',
+        return response()->json($testStatus);
+    }
 
-		);
-		$validator = \Validator::make($request->all(),$rules);
-		if ($validator->fails()) {
-			return response()->json($validator,422);
-		} else {
-			$testStatus=TestStatus::findOrFail($id);
-			$testStatus->name = $request->input('name');
-			$testStatus->test_phase_id = $request->input('test_phase_id');
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  request
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $rules = [
+            'name' => 'required',
+            'test_phase_id' => 'required',
 
-			try{
-				$testStatus->save();
-				return response()->json($testStatus);
-			}
-			catch (\Illuminate\Database\QueryException $e){
-				return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-			}
-		}
-	}
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            $testStatus = TestStatus::findOrFail($id);
+            $testStatus->name = $request->input('name');
+            $testStatus->test_phase_id = $request->input('test_phase_id');
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id){
-		try{
-			$testStatus=TestStatus::findOrFail($id);
-			$testStatus->delete();
-			return response()->json($testStatus,200);
-		}
-		catch (\Illuminate\Database\QueryException $e){
-			return response()->json(array('status' => 'error', 'message' => $e->getMessage()));
-		}
-	}
+            try {
+                $testStatus->save();
+
+                return response()->json($testStatus);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        try {
+            $testStatus = TestStatus::findOrFail($id);
+            $testStatus->delete();
+
+            return response()->json($testStatus, 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
 }

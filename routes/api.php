@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('address', 'AddressController');
 Route::resource('adhoccategory', 'AdhocCategoryController');
 Route::resource('adhocoption', 'AdhocOptionController');
-Route::resource('rejectionreason','RejectionReasonController');
+Route::resource('rejectionreason', 'RejectionReasonController');
 Route::resource('specimenrejection', 'SpecimenRejectionController');
 Route::resource('antibioticsusceptibility', 'AntibioticSusceptibilityController');
 Route::resource('antibiotic', 'AntibioticController');

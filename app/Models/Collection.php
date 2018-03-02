@@ -9,5 +9,5 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Collection extends Model
 {
-	public $timestamps = false;
+    public $timestamps = false;
 }

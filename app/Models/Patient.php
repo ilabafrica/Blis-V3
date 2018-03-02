@@ -24,7 +24,6 @@ class Patient extends Model
         return $this->hasMany('App\Models\Address');
     }
 
-
     public function maritalStatus()
     {
         return $this->hasOne('App\Models\CodeableConcept', 'code');
