@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers;
 
+/*
+ * (c) @iLabAfrica
+ * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead	 - Emmanuel Kweyu.
+ * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
+ */
+
 use App\Models\Practitioner;
 use Illuminate\Http\Request;
 
@@ -23,14 +30,12 @@ class PractitionerController extends Controller
     public function store(Request $request)
     {
         $rules = [
-        'active' => 'required',
-        'created_by' => 'required',
-        'name' => 'required',
-        'telecom' => 'required',
-        'gender' => 'required',
-        'birth_date' => 'required',
-
+            'active' => 'required',
+            'created_by' => 'required',
+            'name' => 'required',
+            'gender_id' => 'required',
         ];
+
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator);
@@ -41,9 +46,10 @@ class PractitionerController extends Controller
             $practitioner->name = $request->input('name');
             $practitioner->telecom = $request->input('telecom');
             $practitioner->address = $request->input('address');
-            $practitioner->gender = $request->input('gender');
+            $practitioner->gender_id = $request->input('gender_id');
             $practitioner->birth_date = $request->input('birth_date');
             $practitioner->photo = $request->input('photo');
+            $practitioner->qualification = $request->input('qualification');
 
             try {
                 $practitioner->save();
@@ -63,13 +69,9 @@ class PractitionerController extends Controller
      */
     public function show($id)
     {
-        try {
-            $practitioner = Practitioner::findorfail($id);
+        $practitioner = Practitioner::findOrFail($id);
 
-            return response()->json($practitioner);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
-        }
+        return response()->json($practitioner);
     }
 
     /**
@@ -82,27 +84,26 @@ class PractitionerController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-        'active' => 'required',
-        'created_by' => 'required',
-        'name' => 'required',
-        'telecom' => 'required',
-        'gender' => 'required',
-        'birth_date' => 'required',
-
+            'active' => 'required',
+            'created_by' => 'required',
+            'name' => 'required',
+            'gender_id' => 'required',
         ];
+
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $practitioner = Practitioner::findorfail($id);
+            $practitioner = Practitioner::findOrFail($id);
             $practitioner->active = $request->input('active');
             $practitioner->created_by = $request->input('created_by');
             $practitioner->name = $request->input('name');
             $practitioner->telecom = $request->input('telecom');
             $practitioner->address = $request->input('address');
-            $practitioner->gender = $request->input('gender');
+            $practitioner->gender_id = $request->input('gender_id');
             $practitioner->birth_date = $request->input('birth_date');
             $practitioner->photo = $request->input('photo');
+            $practitioner->qualification = $request->input('qualification');
 
             try {
                 $practitioner->save();
@@ -123,14 +124,12 @@ class PractitionerController extends Controller
     public function destroy($id)
     {
         try {
-            $practitioner = Practitioner::findorfail($id);
+            $practitioner = Practitioner::findOrFail($id);
             $practitioner->delete();
 
             return response()->json($practitioner, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
         }
     }
 }

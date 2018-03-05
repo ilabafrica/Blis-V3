@@ -2,6 +2,14 @@
 
 namespace App\Http\Controllers;
 
+/*
+ * (c) @iLabAfrica
+ * BLIS      - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead     - Emmanuel Kweyu.
+ * Devs      - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma.
+ * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
+ */
+
 use App\Models\Collection;
 use Illuminate\Http\Request;
 
@@ -23,11 +31,8 @@ class CollectionController extends Controller
     public function store(Request $request)
     {
         $rules = [
-        'collector' => 'required',
-        'collection_time' => 'required',
-        'quantity_id' => 'required',
-        'method' => 'required',
-        'body_site' => 'required',
+            'collector_id' => 'required',
+            'collection_date_time' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -35,11 +40,8 @@ class CollectionController extends Controller
             return response()->json($validator);
         } else {
             $collection = new Collection;
-            $collection->collector = $request->input('collector');
-            $collection->collection_time = $request->input('collection_time');
-            $collection->quantity_id = $request->input('quantity_id');
-            $collection->method = $request->input('method');
-            $collection->body_site = $request->input('body_site');
+            $collection->collector_id = $request->input('collector_id');
+            $collection->collection_date_time = $request->input('collection_date_time');
 
             try {
                 $collection->save();
@@ -59,13 +61,9 @@ class CollectionController extends Controller
      */
     public function show($id)
     {
-        try {
-            $collection = Collection::findorfail($id);
+        $collection = Collection::findOrFail($id);
 
-            return response()->json($collection);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
-        }
+        return response()->json($collection);
     }
 
     /**
@@ -78,23 +76,17 @@ class CollectionController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-        'collector' => 'required',
-        'collection_time' => 'required',
-        'quantity_id' => 'required',
-        'method' => 'required',
-        'body_site' => 'required',
+            'collector_id' => 'required',
+            'collection_date_time' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $collection = Collection::findorfail($id);
-            $collection->collector = $request->input('collector');
-            $collection->collection_time = $request->input('collection_time');
-            $collection->quantity_id = $request->input('quantity_id');
-            $collection->method = $request->input('method');
-            $collection->body_site = $request->input('body_site');
+            $collection = Collection::findOrFail($id);
+            $collection->collector_id = $request->input('collector_id');
+            $collection->collection_date_time = $request->input('collection_date_time');
 
             try {
                 $collection->save();
@@ -115,14 +107,12 @@ class CollectionController extends Controller
     public function destroy($id)
     {
         try {
-            $collection = Collection::findorfail($id);
+            $collection = Collection::findOrFail($id);
             $collection->delete();
 
             return response()->json($collection, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
         }
     }
 }

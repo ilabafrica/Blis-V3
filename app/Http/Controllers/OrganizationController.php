@@ -2,6 +2,14 @@
 
 namespace App\Http\Controllers;
 
+/*
+ * (c) @iLabAfrica
+ * BLIS      - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead     - Emmanuel Kweyu.
+ * Devs      - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma.
+ * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
+ */
+
 use App\Models\Organization;
 use Illuminate\Http\Request;
 
@@ -23,10 +31,10 @@ class OrganizationController extends Controller
     public function store(Request $request)
     {
         $rules = [
-        'created_by' => 'required',
-        'active' => 'required',
-        'type' => 'required',
-        'name' => 'required',
+            'created_by' => 'required',
+            'active' => 'required',
+            'organization_type_id' => 'required',
+            'name' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -34,15 +42,14 @@ class OrganizationController extends Controller
             return response()->json($validator);
         } else {
             $organization = new Organization;
+            $organization->identifier = $request->input('identifier');
             $organization->created_by = $request->input('created_by');
             $organization->active = $request->input('active');
-            $organization->type = $request->input('type');
+            $organization->organization_type_id = $request->input('organization_type_id');
             $organization->name = $request->input('name');
             $organization->alias = $request->input('alias');
             $organization->telecom = $request->input('telecom');
             $organization->address = $request->input('address');
-            $organization->part_of = $request->input('part_of');
-            $organization->end_point = $request->input('end_point');
 
             try {
                 $organization->save();
@@ -62,13 +69,9 @@ class OrganizationController extends Controller
      */
     public function show($id)
     {
-        try {
-            $organization = Organization::findorfail($id);
+        $organization = Organization::findOrFail($id);
 
-            return response()->json($organization);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
-        }
+        return response()->json($organization);
     }
 
     /**
@@ -81,26 +84,25 @@ class OrganizationController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-        'created_by' => 'required',
-        'active' => 'required',
-        'type' => 'required',
-        'name' => 'required',
+            'created_by' => 'required',
+            'active' => 'required',
+            'organization_type_id' => 'required',
+            'name' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $organization = Organization::findorfail($id);
+            $organization = Organization::findOrFail($id);
+            $organization->identifier = $request->input('identifier');
             $organization->created_by = $request->input('created_by');
             $organization->active = $request->input('active');
-            $organization->type = $request->input('type');
+            $organization->organization_type_id = $request->input('organization_type_id');
             $organization->name = $request->input('name');
             $organization->alias = $request->input('alias');
             $organization->telecom = $request->input('telecom');
             $organization->address = $request->input('address');
-            $organization->part_of = $request->input('part_of');
-            $organization->end_point = $request->input('end_point');
 
             try {
                 $organization->save();
@@ -121,14 +123,12 @@ class OrganizationController extends Controller
     public function destroy($id)
     {
         try {
-            $organization = Organization::findorfail($id);
+            $organization = Organization::findOrFail($id);
             $organization->delete();
 
             return response()->json($organization, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
         }
     }
 }

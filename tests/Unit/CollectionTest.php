@@ -1,5 +1,11 @@
 <?php
 namespace Tests\Unit;
+/**
+ * (c) @iLabAfrica
+ * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead	 - Emmanuel Kweyu.
+ * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
+ */
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -15,69 +21,50 @@ class CollectionTest extends TestCase
 	}
 
 	public function setVariables(){
-    	$this->collectionData=array(
-        
-			"collector"=>1,
-			"collection_time"=>'2017:12:12 15:30:00',
-			"quantity_id"=>1,
-			"method"=>1,
-			"body_site"=>1,
-
-        );
-    	$this->updatedcollectionData=array(
-        
-			"collector"=>1,
-			"collection_time"=>'2017:12:12 16:30:00',
-			"quantity_id"=>1,
-			"method"=>1,
-			"body_site"=>1,
-
-        );
+		$this->collectionData=array(
+			"collector_id"=>1,
+			"collection_date_time"=>'Sample String',
+		);
+		$this->updatedCollectionData=array(
+			"collector_id"=>1,
+			"collection_date_time"=>'Sample updated String',
+		);
 	}
 
 	public function testStoreCollection()
 	{
 		$response=$this->json('POST', '/api/collection',$this->collectionData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("method",$response->original);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("collection_date_time",$response->original);
 	}
 
 	public function testListCollection()
 	{
 		$response=$this->json('GET', '/api/collection');
-		$response->assertStatus(200);
-		
+		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowCollection()
 	{
 		$this->json('POST', '/api/collection',$this->collectionData);
 		$response=$this->json('GET', '/api/collection/1');
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("method",$response->original);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("collection_date_time",$response->original);
 	}
 
 	public function testUpdateCollection()
 	{
 		$this->json('POST', '/api/collection',$this->collectionData);
-		$response=$this->json('PUT', '/api/collection/1',$this->updatedcollectionData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("method",$response->original);
+		$response=$this->json('PUT', '/api/collection/1',$this->updatedCollectionData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("collection_date_time",$response->original);
 	}
 
 	public function testDeleteCollection()
 	{
 		$this->json('POST', '/api/collection',$this->collectionData);
 		$response=$this->delete('/api/collection/1');
-		$response->assertStatus(200);
-		$response=$this->json('GET', '/api/collection/1');
-		$this->assertEquals(404, $response->getStatusCode());
-		
-	}
-	public function testDeleteCollectionFail()
-	{
-		$response=$this->delete('/api/collection/9999999999');
-		$this->assertEquals(404, $response->getStatusCode());
+		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 }

@@ -2,6 +2,14 @@
 
 namespace App\Http\Controllers;
 
+/*
+ * (c) @iLabAfrica
+ * BLIS      - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead     - Emmanuel Kweyu.
+ * Devs      - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma.
+ * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
+ */
+
 use Illuminate\Http\Request;
 use App\Models\CodeableConcept;
 
@@ -9,9 +17,9 @@ class CodeableConceptController extends Controller
 {
     public function index()
     {
-        $codeableconcept = CodeableConcept::orderBy('id', 'ASC')->paginate(20);
+        $codeableConcept = CodeableConcept::orderBy('id', 'ASC')->paginate(20);
 
-        return response()->json($codeableconcept);
+        return response()->json($codeableConcept);
     }
 
     /**
@@ -23,22 +31,22 @@ class CodeableConceptController extends Controller
     public function store(Request $request)
     {
         $rules = [
-        'code' => 'required',
-        'description' => 'required',
+            'code' => 'required',
+            'text' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator);
         } else {
-            $codeableconcept = new CodeableConcept;
-            $codeableconcept->code = $request->input('code');
-            $codeableconcept->description = $request->input('description');
+            $codeableConcept = new CodeableConcept;
+            $codeableConcept->code = $request->input('code');
+            $codeableConcept->text = $request->input('text');
 
             try {
-                $codeableconcept->save();
+                $codeableConcept->save();
 
-                return response()->json($codeableconcept);
+                return response()->json($codeableConcept);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -53,13 +61,9 @@ class CodeableConceptController extends Controller
      */
     public function show($id)
     {
-        try {
-            $codeableconcept = CodeableConcept::findorfail($id);
+        $codeableConcept = CodeableConcept::findOrFail($id);
 
-            return response()->json($codeableconcept);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
-        }
+        return response()->json($codeableConcept);
     }
 
     /**
@@ -72,22 +76,22 @@ class CodeableConceptController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-        'code' => 'required',
-        'description' => 'required',
+            'code' => 'required',
+            'text' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $codeableconcept = CodeableConcept::findorfail($id);
-            $codeableconcept->code = $request->input('code');
-            $codeableconcept->description = $request->input('description');
+            $codeableConcept = CodeableConcept::findOrFail($id);
+            $codeableConcept->code = $request->input('code');
+            $codeableConcept->text = $request->input('text');
 
             try {
-                $codeableconcept->save();
+                $codeableConcept->save();
 
-                return response()->json($codeableconcept);
+                return response()->json($codeableConcept);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -103,14 +107,12 @@ class CodeableConceptController extends Controller
     public function destroy($id)
     {
         try {
-            $codeableconcept = CodeableConcept::findorfail($id);
-            $codeableconcept->delete();
+            $codeableConcept = CodeableConcept::findOrFail($id);
+            $codeableConcept->delete();
 
-            return response()->json($codeableconcept, 200);
+            return response()->json($codeableConcept, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
         }
     }
 }

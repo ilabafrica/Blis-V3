@@ -1,5 +1,11 @@
 <?php
 namespace Tests\Unit;
+/**
+ * (c) @iLabAfrica
+ * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead	 - Emmanuel Kweyu.
+ * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
+ */
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -15,10 +21,8 @@ class AddressTest extends TestCase
 	}
 
 	public function setVariables(){
-    	$this->addressData=array(
-        
-			"use"=>1,
-			"type"=>1,
+		$this->addressData=array(
+			"patient_id"=>1,
 			"text"=>'Sample String',
 			"line"=>'Sample String',
 			"city"=>'Sample String',
@@ -26,12 +30,10 @@ class AddressTest extends TestCase
 			"state"=>'Sample String',
 			"postal_code"=>'Sample String',
 			"country"=>'Sample String',
-			"period"=>'2017:12:12 15:30:00',
-        );
-    	$this->updatedaddressData=array(
-        
-			"use"=>1,
-			"type"=>1,
+			"period"=>'Sample String',
+		);
+		$this->updatedAddressData=array(
+			"patient_id"=>1,
 			"text"=>'Sample updated String',
 			"line"=>'Sample updated String',
 			"city"=>'Sample updated String',
@@ -39,50 +41,44 @@ class AddressTest extends TestCase
 			"state"=>'Sample updated String',
 			"postal_code"=>'Sample updated String',
 			"country"=>'Sample updated String',
-			"period"=>'2016:12:12 15:30:00',
-        );
+			"period"=>'Sample updated String',
+		);
 	}
 
 	public function testStoreAddress()
 	{
 		$response=$this->json('POST', '/api/address',$this->addressData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("district",$response->original);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("period",$response->original);
 	}
+
 	public function testListAddress()
 	{
 		$response=$this->json('GET', '/api/address');
-		$response->assertStatus(200);
-		
+		$this->assertEquals(200,$response->getStatusCode());
 	}
+
 	public function testShowAddress()
 	{
 		$this->json('POST', '/api/address',$this->addressData);
 		$response=$this->json('GET', '/api/address/1');
-		$response->assertStatus(200);
-		
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("period",$response->original);
 	}
+
 	public function testUpdateAddress()
 	{
 		$this->json('POST', '/api/address',$this->addressData);
-		$response=$this->json('PUT', '/api/address/1',$this->updatedaddressData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("district",$response->original);
+		$response=$this->json('PUT', '/api/address/1',$this->updatedAddressData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("period",$response->original);
 	}
+
 	public function testDeleteAddress()
 	{
 		$this->json('POST', '/api/address',$this->addressData);
 		$response=$this->delete('/api/address/1');
-		$response->assertStatus(200);
-		$response=$this->json('GET', '/api/address/1');
-		$this->assertEquals(404, $response->getStatusCode());
-		
+		$this->assertEquals(200,$response->getStatusCode());
 	}
-	public function testDeleteAddressFail()
-	{
-		$response=$this->delete('/api/address/9999999999');
-		$this->assertEquals(404, $response->getStatusCode());
-	}
-
 
 }

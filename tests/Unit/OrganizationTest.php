@@ -1,5 +1,11 @@
 <?php
 namespace Tests\Unit;
+/**
+ * (c) @iLabAfrica
+ * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead	 - Emmanuel Kweyu.
+ * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
+ */
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -15,80 +21,62 @@ class OrganizationTest extends TestCase
 	}
 
 	public function setVariables(){
-    	$this->organizationData=array(
-        
-
+		$this->organizationData=array(
+			"identifier"=>'Sample String',
 			"created_by"=>1,
-			"type"=>1,
-			"active"=>1,
+			"active"=>'Sample String',
+			"organization_type_id"=>1,
 			"name"=>'Sample String',
 			"alias"=>'Sample String',
-			"telecom"=>1,
-			"addres"=>123,
-			"part_of"=>1,
-			"end_point"=>'Sample String',
-
-        );
-    	$this->updatedorganizationData=array(
-        
+			"telecom"=>'Sample String',
+			"address"=>'Sample String',
+		);
+		$this->updatedOrganizationData=array(
+			"identifier"=>'Sample updated String',
 			"created_by"=>1,
-			"active"=>1,
-			"type"=>1,
-			"name"=>'Sample Updated String',
-			"alias"=>'Sample Updayed String',
-			"telecom"=>1,
-			"addres"=>1234,
-			"part_of"=>1,
+			"active"=>'Sample updated String',
+			"organization_type_id"=>1,
+			"name"=>'Sample updated String',
 			"alias"=>'Sample updated String',
-			"end_point"=>'Sample updated String',
-
-        );
+			"telecom"=>'Sample updated String',
+			"address"=>'Sample updated String',
+		);
 	}
 
 	public function testStoreOrganization()
 	{
 		$response=$this->json('POST', '/api/organization',$this->organizationData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("address",$response->original);
 	}
 
 	public function testListOrganization()
 	{
 		$response=$this->json('GET', '/api/organization');
-		$response->assertStatus(200);
-		
+		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowOrganization()
 	{
 		$this->json('POST', '/api/organization',$this->organizationData);
 		$response=$this->json('GET', '/api/organization/1');
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("address",$response->original);
 	}
 
 	public function testUpdateOrganization()
 	{
 		$this->json('POST', '/api/organization',$this->organizationData);
-		$response = $this->json('PUT', '/api/organization/1', $this->updatedorganizationData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("name",$response->original);
-
+		$response=$this->json('PUT', '/api/organization/1',$this->updatedOrganizationData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("address",$response->original);
 	}
 
 	public function testDeleteOrganization()
 	{
 		$this->json('POST', '/api/organization',$this->organizationData);
 		$response=$this->delete('/api/organization/1');
-		$response->assertStatus(200);
-		$response=$this->json('GET', '/api/organization/1');
-		$this->assertEquals(404, $response->getStatusCode());
-		
-	}
-	public function testDeleteOrganizationFail()
-	{
-		$response=$this->delete('/api/organization/9999999999');
-		$this->assertEquals(404, $response->getStatusCode());
+		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 }

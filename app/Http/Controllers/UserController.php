@@ -2,6 +2,14 @@
 
 namespace App\Http\Controllers;
 
+/*
+ * (c) @iLabAfrica
+ * BLIS      - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead     - Emmanuel Kweyu.
+ * Devs      - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma.
+ * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
+ */
+
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -23,9 +31,9 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $rules = [
-        'type' => 'required',
-        'email' => 'required',
-        'password' => 'required',
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -33,7 +41,8 @@ class UserController extends Controller
             return response()->json($validator);
         } else {
             $user = new User;
-            $user->type = $request->input('type');
+            $user->name = $request->input('name');
+            $user->username = $request->input('username');
             $user->email = $request->input('email');
             $user->password = $request->input('password');
             $user->remember_token = $request->input('remember_token');
@@ -56,13 +65,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        try {
-            $user = User::findorfail($id);
+        $user = User::findOrFail($id);
 
-            return response()->json($user);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
-        }
+        return response()->json($user);
     }
 
     /**
@@ -75,17 +80,18 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-        'type' => 'required',
-        'email' => 'required',
-        'password' => 'required',
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $user = User::findorfail($id);
-            $user->type = $request->input('type');
+            $user = User::findOrFail($id);
+            $user->name = $request->input('name');
+            $user->username = $request->input('username');
             $user->email = $request->input('email');
             $user->password = $request->input('password');
             $user->remember_token = $request->input('remember_token');
@@ -109,14 +115,12 @@ class UserController extends Controller
     public function destroy($id)
     {
         try {
-            $user = User::findorfail($id);
+            $user = User::findOrFail($id);
             $user->delete();
 
             return response()->json($user, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
         }
     }
 }

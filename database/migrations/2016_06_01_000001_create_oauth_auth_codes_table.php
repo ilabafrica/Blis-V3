@@ -15,7 +15,6 @@ class CreateOauthAuthCodesTable extends Migration
     {
         Schema::create('oauth_auth_codes', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('created_by');
             $table->integer('client_id');
             $table->text('scopes')->nullable();
             $table->boolean('revoked');

@@ -1,5 +1,11 @@
 <?php
 namespace Tests\Unit;
+/**
+ * (c) @iLabAfrica
+ * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead	 - Emmanuel Kweyu.
+ * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
+ */
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -15,84 +21,82 @@ class PatientTest extends TestCase
 	}
 
 	public function setVariables(){
-    	$this->patientData=array(
-        
-			"created_by"=>1,
-			"active"=>1,
-			"identifier"=>1,
-			"gender"=>1,
-			"name" => "s",
-			"address"=>"ss",
+		$this->patientData=array(
+			"identifier"=>'Sample String',
+			"active"=>'Sample String',
+			"name_id"=>1,
+			"telecom_id"=>1,
+			"gender_id"=>1,
 			"birth_date"=>'2017:12:12 15:30:00',
+			"deceased"=>'Sample String',
+			"deceased_date_time"=>'2017:12:12 15:30:00',
+			"address_id"=>1,
 			"marital_status"=>1,
 			"photo"=>'Sample String',
-			"animal_species"=>'Sample String',
-			"animal_breed"=>'Sample String',
-			"animal_gender_status"=>'Sample String',
-
-        );
-    	$this->updatedpatientData=array(
-        
+			"animal"=>'Sample String',
+			"species_id"=>1,
+			"breed_id"=>1,
+			"gender_status"=>'Sample String',
+			"practitioner_id"=>1,
+			"organization_id"=>1,
 			"created_by"=>1,
-			"active"=>2,
-			"identifier"=>2,
-			"gender"=>2,
-			"name" => "b",
-			"address"=>"bb",
+		);
+		$this->updatedPatientData=array(
+			"identifier"=>'Sample updated String',
+			"active"=>'Sample updated String',
+			"name_id"=>1,
+			"telecom_id"=>1,
+			"gender_id"=>1,
 			"birth_date"=>'2016:12:12 15:30:00',
+			"deceased"=>'Sample updated String',
+			"deceased_date_time"=>'2016:12:12 15:30:00',
+			"address_id"=>1,
 			"marital_status"=>1,
 			"photo"=>'Sample updated String',
-			"animal_species"=>'Sample updated String',
-			"animal_breed"=>'Sample updated String',
-			"animal_gender_status"=>'Sample updated String',
-
-        );
+			"animal"=>'Sample updated String',
+			"species_id"=>1,
+			"breed_id"=>1,
+			"gender_status"=>'Sample updated String',
+			"practitioner_id"=>1,
+			"organization_id"=>1,
+			"created_by"=>1,
+		);
 	}
 
 	public function testStorePatient()
 	{
 		$response=$this->json('POST', '/api/patient',$this->patientData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("created_by", $response->original);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testListPatient()
 	{
 		$response=$this->json('GET', '/api/patient');
-		$response->assertStatus(200);
+		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowPatient()
 	{
 		$this->json('POST', '/api/patient',$this->patientData);
 		$response=$this->json('GET', '/api/patient/1');
-		$response->assertStatus(200);
+		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("created_by",$response->original);
-		$this->assertEquals($this->patientData['photo'], $response->original->photo);
 	}
 
 	public function testUpdatePatient()
 	{
 		$this->json('POST', '/api/patient',$this->patientData);
-		$response = $this->json('PUT', '/api/patient/1', $this->updatedpatientData);
-		$response->assertStatus(200);
+		$response=$this->json('PUT', '/api/patient/1',$this->updatedPatientData);
+		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("created_by",$response->original);
-		$this->assertEquals($this->updatedpatientData['photo'], $response->original->photo);
 	}
 
 	public function testDeletePatient()
 	{
 		$this->json('POST', '/api/patient',$this->patientData);
 		$response=$this->delete('/api/patient/1');
-		$this->assertEquals(200, $response->getStatusCode());
-		$response=$this->json('GET', '/api/patient/1');
-		$this->assertEquals(404, $response->getStatusCode());
-	}
-
-	public function testDeletePatientFail()
-	{
-		$response=$this->delete('/api/patient/9999999999');
-		$this->assertEquals(404, $response->getStatusCode());
+		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 }
