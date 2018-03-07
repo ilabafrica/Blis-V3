@@ -122,7 +122,6 @@ $factory->define(App\Models\EpisodeofCare::class, function (Faker\Generator $fak
     ];
 });
 
-
 $factory->define(App\Models\Collection::class, function (Faker\Generator $faker) {
     return [
         'collector' => $faker->randomNumber(),
