@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class SusceptibilityBreakPointTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->susceptibilityBreakPointData=array(
 			"antibiotic_id"=>1,
@@ -41,36 +37,36 @@ class SusceptibilityBreakPointTest extends TestCase
 
 	public function testStoreSusceptibilityBreakPoint()
 	{
-		$response=$this->json('POST', '/api/susceptibilitybreakpoint',$this->susceptibilityBreakPointData);
+		$response=$this->post('/api/susceptibilitybreakpoint',$this->susceptibilityBreakPointData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("sensitive_min",$response->original);
 	}
 
 	public function testListSusceptibilityBreakPoint()
 	{
-		$response=$this->json('GET', '/api/susceptibilitybreakpoint');
+		$response=$this->get('/api/susceptibilitybreakpoint');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowSusceptibilityBreakPoint()
 	{
-		$this->json('POST', '/api/susceptibilitybreakpoint',$this->susceptibilityBreakPointData);
-		$response=$this->json('GET', '/api/susceptibilitybreakpoint/1');
+		$response=$this->post('/api/susceptibilitybreakpoint',$this->susceptibilityBreakPointData);
+		$response=$this->get('/api/susceptibilitybreakpoint/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("sensitive_min",$response->original);
 	}
 
 	public function testUpdateSusceptibilityBreakPoint()
 	{
-		$this->json('POST', '/api/susceptibilitybreakpoint',$this->susceptibilityBreakPointData);
-		$response=$this->json('PUT', '/api/susceptibilitybreakpoint/1',$this->updatedSusceptibilityBreakPointData);
+		$response=$this->post('/api/susceptibilitybreakpoint',$this->susceptibilityBreakPointData);
+		$response=$this->put('/api/susceptibilitybreakpoint/1',$this->updatedSusceptibilityBreakPointData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("sensitive_min",$response->original);
 	}
 
 	public function testDeleteSusceptibilityBreakPoint()
 	{
-		$this->json('POST', '/api/susceptibilitybreakpoint',$this->susceptibilityBreakPointData);
+		$response=$this->post('/api/susceptibilitybreakpoint',$this->susceptibilityBreakPointData);
 		$response=$this->delete('/api/susceptibilitybreakpoint/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

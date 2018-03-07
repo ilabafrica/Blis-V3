@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
 use Laravel\Passport\HasApiTokens;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable
 {
     use Notifiable;
     use HasApiTokens, Notifiable;
@@ -42,20 +42,5 @@ class User extends Model
     public function name()
     {
         return $this->hasOne('App\Models\Name', 'created_by');
-    }
-
-    public function oauthAccessToken()
-    {
-        return $this->hasOne('App\Models\OauthAccessToken', 'created_by');
-    }
-
-    public function oauthAuthCode()
-    {
-        return $this->hasOne('App\Models\OauthAuthCode', 'created_by');
-    }
-
-    public function oauthClient()
-    {
-        return $this->hasOne('App\Models\OauthClient', 'created_by');
     }
 }

@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class NameTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->nameData=array(
 			"use"=>'Sample String',
@@ -41,36 +37,36 @@ class NameTest extends TestCase
 
 	public function testStoreName()
 	{
-		$response=$this->json('POST', '/api/name',$this->nameData);
+		$response=$this->post('/api/name',$this->nameData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("suffix",$response->original);
 	}
 
 	public function testListName()
 	{
-		$response=$this->json('GET', '/api/name');
+		$response=$this->get('/api/name');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowName()
 	{
-		$this->json('POST', '/api/name',$this->nameData);
-		$response=$this->json('GET', '/api/name/1');
+		$response=$this->post('/api/name',$this->nameData);
+		$response=$this->get('/api/name/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("suffix",$response->original);
 	}
 
 	public function testUpdateName()
 	{
-		$this->json('POST', '/api/name',$this->nameData);
-		$response=$this->json('PUT', '/api/name/1',$this->updatedNameData);
+		$response=$this->post('/api/name',$this->nameData);
+		$response=$this->put('/api/name/1',$this->updatedNameData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("suffix",$response->original);
 	}
 
 	public function testDeleteName()
 	{
-		$this->json('POST', '/api/name',$this->nameData);
+		$response=$this->post('/api/name',$this->nameData);
 		$response=$this->delete('/api/name/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

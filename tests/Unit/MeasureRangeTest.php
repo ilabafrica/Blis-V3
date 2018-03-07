@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class MeasureRangeTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->measureRangeData=array(
 			"code"=>'Sample String',
@@ -53,36 +49,36 @@ class MeasureRangeTest extends TestCase
 
 	public function testStoreMeasureRange()
 	{
-		$response=$this->json('POST', '/api/measurerange',$this->measureRangeData);
+		$response=$this->post('/api/measurerange',$this->measureRangeData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("interpretation_id",$response->original);
 	}
 
 	public function testListMeasureRange()
 	{
-		$response=$this->json('GET', '/api/measurerange');
+		$response=$this->get('/api/measurerange');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowMeasureRange()
 	{
-		$this->json('POST', '/api/measurerange',$this->measureRangeData);
-		$response=$this->json('GET', '/api/measurerange/1');
+		$response=$this->post('/api/measurerange',$this->measureRangeData);
+		$response=$this->get('/api/measurerange/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("interpretation_id",$response->original);
 	}
 
 	public function testUpdateMeasureRange()
 	{
-		$this->json('POST', '/api/measurerange',$this->measureRangeData);
-		$response=$this->json('PUT', '/api/measurerange/1',$this->updatedMeasureRangeData);
+		$response=$this->post('/api/measurerange',$this->measureRangeData);
+		$response=$this->put('/api/measurerange/1',$this->updatedMeasureRangeData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("interpretation_id",$response->original);
 	}
 
 	public function testDeleteMeasureRange()
 	{
-		$this->json('POST', '/api/measurerange',$this->measureRangeData);
+		$response=$this->post('/api/measurerange',$this->measureRangeData);
 		$response=$this->delete('/api/measurerange/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

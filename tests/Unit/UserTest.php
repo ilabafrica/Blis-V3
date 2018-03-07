@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class UserTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->userData=array(
 			"name"=>'Sample String',
@@ -39,36 +35,36 @@ class UserTest extends TestCase
 
 	public function testStoreUser()
 	{
-		$response=$this->json('POST', '/api/user',$this->userData);
+		$response=$this->post('/api/user',$this->userData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("remember_token",$response->original);
 	}
 
 	public function testListUser()
 	{
-		$response=$this->json('GET', '/api/user');
+		$response=$this->get('/api/user');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowUser()
 	{
-		$this->json('POST', '/api/user',$this->userData);
-		$response=$this->json('GET', '/api/user/1');
+		$response=$this->post('/api/user',$this->userData);
+		$response=$this->get('/api/user/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("remember_token",$response->original);
 	}
 
 	public function testUpdateUser()
 	{
-		$this->json('POST', '/api/user',$this->userData);
-		$response=$this->json('PUT', '/api/user/1',$this->updatedUserData);
+		$response=$this->post('/api/user',$this->userData);
+		$response=$this->put('/api/user/1',$this->updatedUserData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("remember_token",$response->original);
 	}
 
 	public function testDeleteUser()
 	{
-		$this->json('POST', '/api/user',$this->userData);
+		$response=$this->post('/api/user',$this->userData);
 		$response=$this->delete('/api/user/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

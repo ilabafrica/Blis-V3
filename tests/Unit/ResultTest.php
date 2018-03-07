@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ResultTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->resultData=array(
 			"test_id"=>1,
@@ -39,36 +35,36 @@ class ResultTest extends TestCase
 
 	public function testStoreResult()
 	{
-		$response=$this->json('POST', '/api/result',$this->resultData);
+		$response=$this->post('/api/result',$this->resultData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("time_entered",$response->original);
 	}
 
 	public function testListResult()
 	{
-		$response=$this->json('GET', '/api/result');
+		$response=$this->get('/api/result');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowResult()
 	{
-		$this->json('POST', '/api/result',$this->resultData);
-		$response=$this->json('GET', '/api/result/1');
+		$response=$this->post('/api/result',$this->resultData);
+		$response=$this->get('/api/result/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("time_entered",$response->original);
 	}
 
 	public function testUpdateResult()
 	{
-		$this->json('POST', '/api/result',$this->resultData);
-		$response=$this->json('PUT', '/api/result/1',$this->updatedResultData);
+		$response=$this->post('/api/result',$this->resultData);
+		$response=$this->put('/api/result/1',$this->updatedResultData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("time_entered",$response->original);
 	}
 
 	public function testDeleteResult()
 	{
-		$this->json('POST', '/api/result',$this->resultData);
+		$response=$this->post('/api/result',$this->resultData);
 		$response=$this->delete('/api/result/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

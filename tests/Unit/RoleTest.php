@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class RoleTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->roleData=array(
 			"name"=>'Sample String',
@@ -35,36 +31,36 @@ class RoleTest extends TestCase
 
 	public function testStoreRole()
 	{
-		$response=$this->json('POST', '/api/role',$this->roleData);
+		$response=$this->post('/api/role',$this->roleData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testListRole()
 	{
-		$response=$this->json('GET', '/api/role');
+		$response=$this->get('/api/role');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowRole()
 	{
-		$this->json('POST', '/api/role',$this->roleData);
-		$response=$this->json('GET', '/api/role/1');
+		$response=$this->post('/api/role',$this->roleData);
+		$response=$this->get('/api/role/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testUpdateRole()
 	{
-		$this->json('POST', '/api/role',$this->roleData);
-		$response=$this->json('PUT', '/api/role/1',$this->updatedRoleData);
+		$response=$this->post('/api/role',$this->roleData);
+		$response=$this->put('/api/role/1',$this->updatedRoleData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("description",$response->original);
 	}
 
 	public function testDeleteRole()
 	{
-		$this->json('POST', '/api/role',$this->roleData);
+		$response=$this->post('/api/role',$this->roleData);
 		$response=$this->delete('/api/role/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

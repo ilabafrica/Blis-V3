@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PatientTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->patientData=array(
 			"identifier"=>'Sample String',
@@ -65,36 +61,36 @@ class PatientTest extends TestCase
 
 	public function testStorePatient()
 	{
-		$response=$this->json('POST', '/api/patient',$this->patientData);
+		$response=$this->post('/api/patient',$this->patientData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testListPatient()
 	{
-		$response=$this->json('GET', '/api/patient');
+		$response=$this->get('/api/patient');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowPatient()
 	{
-		$this->json('POST', '/api/patient',$this->patientData);
-		$response=$this->json('GET', '/api/patient/1');
+		$response=$this->post('/api/patient',$this->patientData);
+		$response=$this->get('/api/patient/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testUpdatePatient()
 	{
-		$this->json('POST', '/api/patient',$this->patientData);
-		$response=$this->json('PUT', '/api/patient/1',$this->updatedPatientData);
+		$response=$this->post('/api/patient',$this->patientData);
+		$response=$this->put('/api/patient/1',$this->updatedPatientData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testDeletePatient()
 	{
-		$this->json('POST', '/api/patient',$this->patientData);
+		$response=$this->post('/api/patient',$this->patientData);
 		$response=$this->delete('/api/patient/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

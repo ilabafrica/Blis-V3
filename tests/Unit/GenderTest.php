@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class GenderTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->genderData=array(
 			"code"=>'Sample String',
@@ -33,36 +29,36 @@ class GenderTest extends TestCase
 
 	public function testStoreGender()
 	{
-		$response=$this->json('POST', '/api/gender',$this->genderData);
+		$response=$this->post('/api/gender',$this->genderData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testListGender()
 	{
-		$response=$this->json('GET', '/api/gender');
+		$response=$this->get('/api/gender');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowGender()
 	{
-		$this->json('POST', '/api/gender',$this->genderData);
-		$response=$this->json('GET', '/api/gender/1');
+		$response=$this->post('/api/gender',$this->genderData);
+		$response=$this->get('/api/gender/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testUpdateGender()
 	{
-		$this->json('POST', '/api/gender',$this->genderData);
-		$response=$this->json('PUT', '/api/gender/1',$this->updatedGenderData);
+		$response=$this->post('/api/gender',$this->genderData);
+		$response=$this->put('/api/gender/1',$this->updatedGenderData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testDeleteGender()
 	{
-		$this->json('POST', '/api/gender',$this->genderData);
+		$response=$this->post('/api/gender',$this->genderData);
 		$response=$this->delete('/api/gender/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

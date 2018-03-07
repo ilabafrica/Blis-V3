@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TestTypeTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->testTypeData=array(
 			"name"=>'Sample String',
@@ -37,36 +33,36 @@ class TestTypeTest extends TestCase
 
 	public function testStoreTestType()
 	{
-		$response=$this->json('POST', '/api/testtype',$this->testTypeData);
+		$response=$this->post('/api/testtype',$this->testTypeData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("targetTAT",$response->original);
 	}
 
 	public function testListTestType()
 	{
-		$response=$this->json('GET', '/api/testtype');
+		$response=$this->get('/api/testtype');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowTestType()
 	{
-		$this->json('POST', '/api/testtype',$this->testTypeData);
-		$response=$this->json('GET', '/api/testtype/1');
+		$response=$this->post('/api/testtype',$this->testTypeData);
+		$response=$this->get('/api/testtype/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("targetTAT",$response->original);
 	}
 
 	public function testUpdateTestType()
 	{
-		$this->json('POST', '/api/testtype',$this->testTypeData);
-		$response=$this->json('PUT', '/api/testtype/1',$this->updatedTestTypeData);
+		$response=$this->post('/api/testtype',$this->testTypeData);
+		$response=$this->put('/api/testtype/1',$this->updatedTestTypeData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("targetTAT",$response->original);
 	}
 
 	public function testDeleteTestType()
 	{
-		$this->json('POST', '/api/testtype',$this->testTypeData);
+		$response=$this->post('/api/testtype',$this->testTypeData);
 		$response=$this->delete('/api/testtype/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class SpecimenRejectionTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->specimenRejectionData=array(
 			"specimen_id"=>1,
@@ -43,36 +39,36 @@ class SpecimenRejectionTest extends TestCase
 
 	public function testStoreSpecimenRejection()
 	{
-		$response=$this->json('POST', '/api/specimenrejection',$this->specimenRejectionData);
+		$response=$this->post('/api/specimenrejection',$this->specimenRejectionData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("time_rejected",$response->original);
 	}
 
 	public function testListSpecimenRejection()
 	{
-		$response=$this->json('GET', '/api/specimenrejection');
+		$response=$this->get('/api/specimenrejection');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowSpecimenRejection()
 	{
-		$this->json('POST', '/api/specimenrejection',$this->specimenRejectionData);
-		$response=$this->json('GET', '/api/specimenrejection/1');
+		$response=$this->post('/api/specimenrejection',$this->specimenRejectionData);
+		$response=$this->get('/api/specimenrejection/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("time_rejected",$response->original);
 	}
 
 	public function testUpdateSpecimenRejection()
 	{
-		$this->json('POST', '/api/specimenrejection',$this->specimenRejectionData);
-		$response=$this->json('PUT', '/api/specimenrejection/1',$this->updatedSpecimenRejectionData);
+		$response=$this->post('/api/specimenrejection',$this->specimenRejectionData);
+		$response=$this->put('/api/specimenrejection/1',$this->updatedSpecimenRejectionData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("time_rejected",$response->original);
 	}
 
 	public function testDeleteSpecimenRejection()
 	{
-		$this->json('POST', '/api/specimenrejection',$this->specimenRejectionData);
+		$response=$this->post('/api/specimenrejection',$this->specimenRejectionData);
 		$response=$this->delete('/api/specimenrejection/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

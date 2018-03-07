@@ -15,6 +15,6 @@ class Organization extends Model
 
     public function User()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\User');
     }
 }

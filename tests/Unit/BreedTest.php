@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class BreedTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->breedData=array(
 			"species_id"=>1,
@@ -35,36 +31,36 @@ class BreedTest extends TestCase
 
 	public function testStoreBreed()
 	{
-		$response=$this->json('POST', '/api/breed',$this->breedData);
+		$response=$this->post('/api/breed',$this->breedData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testListBreed()
 	{
-		$response=$this->json('GET', '/api/breed');
+		$response=$this->get('/api/breed');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowBreed()
 	{
-		$this->json('POST', '/api/breed',$this->breedData);
-		$response=$this->json('GET', '/api/breed/1');
+		$response=$this->post('/api/breed',$this->breedData);
+		$response=$this->get('/api/breed/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testUpdateBreed()
 	{
-		$this->json('POST', '/api/breed',$this->breedData);
-		$response=$this->json('PUT', '/api/breed/1',$this->updatedBreedData);
+		$response=$this->post('/api/breed',$this->breedData);
+		$response=$this->put('/api/breed/1',$this->updatedBreedData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testDeleteBreed()
 	{
-		$this->json('POST', '/api/breed',$this->breedData);
+		$response=$this->post('/api/breed',$this->breedData);
 		$response=$this->delete('/api/breed/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
