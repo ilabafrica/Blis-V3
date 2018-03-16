@@ -2,24 +2,22 @@
 
 namespace App\Http\Controllers;
 
-/*
+/**
  * (c) @iLabAfrica
- * BLIS      - a port of the Basic Laboratory Information System (BLIS) to Laravel.
- * Team Lead     - Emmanuel Kweyu.
- * Devs      - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma.
- * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
+ * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead	 - Emmanuel Kweyu.
+ * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
 use Illuminate\Http\Request;
-use App\Models\CodeableConcept;
+use App\Models\TestMapping;
 
-class CodeableConceptController extends Controller
+class TestMappingController extends Controller
 {
     public function index()
     {
-        $codeableConcept = CodeableConcept::orderBy('id', 'ASC')->paginate(20);
-
-        return response()->json($codeableConcept);
+        $testMapping = TestMapping::orderBy('id', 'ASC')->paginate(20);
+        return response()->json($testMapping);
     }
 
     /**
@@ -30,23 +28,23 @@ class CodeableConceptController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'code' => 'required',
-            'text' => 'required',
+        $rules = array(
+            "test_type_id" => "required",
+            "specimen_type_id" => "required",
+        );
 
-        ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator);
         } else {
-            $codeableConcept = new CodeableConcept;
-            $codeableConcept->code = $request->input('code');
-            $codeableConcept->text = $request->input('text');
+            $testMapping = new TestMapping;
+            $testMapping->code_id = $request->input('code_id');
+            $testMapping->test_type_id = $request->input('test_type_id');
+            $testMapping->specimen_type_id = $request->input('specimen_type_id');
 
             try {
-                $codeableConcept->save();
-
-                return response()->json($codeableConcept);
+                $testMapping->save();
+                return response()->json($testMapping);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -61,9 +59,8 @@ class CodeableConceptController extends Controller
      */
     public function show($id)
     {
-        $codeableConcept = CodeableConcept::findOrFail($id);
-
-        return response()->json($codeableConcept);
+        $testMapping = TestMapping::findOrFail($id);
+        return response()->json($testMapping);
     }
 
     /**
@@ -75,23 +72,23 @@ class CodeableConceptController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = [
-            'code' => 'required',
-            'text' => 'required',
+        $rules = array(
+            "test_type_id" => "required",
+            "specimen_type_id" => "required",
+        );
 
-        ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $codeableConcept = CodeableConcept::findOrFail($id);
-            $codeableConcept->code = $request->input('code');
-            $codeableConcept->text = $request->input('text');
+            $testMapping = TestMapping::findOrFail($id);
+            $testMapping->code_id = $request->input('code_id');
+            $testMapping->test_type_id = $request->input('test_type_id');
+            $testMapping->specimen_type_id = $request->input('specimen_type_id');
 
             try {
-                $codeableConcept->save();
-
-                return response()->json($codeableConcept);
+                $testMapping->save();
+                return response()->json($testMapping);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -107,10 +104,9 @@ class CodeableConceptController extends Controller
     public function destroy($id)
     {
         try {
-            $codeableConcept = CodeableConcept::findOrFail($id);
-            $codeableConcept->delete();
-
-            return response()->json($codeableConcept, 200);
+            $testMapping = TestMapping::findOrFail($id);
+            $testMapping->delete();
+            return response()->json($testMapping, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }

@@ -19,6 +19,7 @@ class MeasureRangeTest extends TestCase
 	public function setVariables(){
 		$this->measureRangeData=array(
 			"code"=>'Sample String',
+			"code_id"=>1,
 			"system"=>'Sample String',
 			"measure_id"=>1,
 			"age_min"=>'Sample String',
@@ -28,11 +29,12 @@ class MeasureRangeTest extends TestCase
 			"high"=>'Sample String',
 			"low_critical"=>'Sample String',
 			"high_critical"=>'Sample String',
-			"alphanumeric_range"=>'Sample String',
+			"display"=>'Sample String',
 			"interpretation_id"=>1,
 		);
 		$this->updatedMeasureRangeData=array(
 			"code"=>'Sample updated String',
+			"code_id"=>1,
 			"system"=>'Sample updated String',
 			"measure_id"=>1,
 			"age_min"=>'Sample updated String',
@@ -42,7 +44,7 @@ class MeasureRangeTest extends TestCase
 			"high"=>'Sample updated String',
 			"low_critical"=>'Sample updated String',
 			"high_critical"=>'Sample updated String',
-			"alphanumeric_range"=>'Sample updated String',
+			"display"=>'Sample updated String',
 			"interpretation_id"=>1,
 		);
 	}

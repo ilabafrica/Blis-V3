@@ -13,7 +13,7 @@ class GeneralSeeder extends Seeder
     {
         //User table
         factory(App\User::class)->create(['username' => 'admin@blis.local',
-            'email' => 'admin@blis.local', ]);
+            'email' => 'admin@blis.local',]);
         factory(App\User::class, 100)->create();
 
         //Patients table
@@ -21,5 +21,10 @@ class GeneralSeeder extends Seeder
 
         // todo: only for installation not, test seeding, slows seeding down
         // \Artisan::call('passport:install');
+
     }
 }
+
+
+
+
