@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TelecomTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->telecomData=array(
 			"patient_id"=>1,
@@ -39,36 +35,36 @@ class TelecomTest extends TestCase
 
 	public function testStoreTelecom()
 	{
-		$response=$this->json('POST', '/api/telecom',$this->telecomData);
+		$response=$this->post('/api/telecom',$this->telecomData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("rank",$response->original);
 	}
 
 	public function testListTelecom()
 	{
-		$response=$this->json('GET', '/api/telecom');
+		$response=$this->get('/api/telecom');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowTelecom()
 	{
-		$this->json('POST', '/api/telecom',$this->telecomData);
-		$response=$this->json('GET', '/api/telecom/1');
+		$response=$this->post('/api/telecom',$this->telecomData);
+		$response=$this->get('/api/telecom/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("rank",$response->original);
 	}
 
 	public function testUpdateTelecom()
 	{
-		$this->json('POST', '/api/telecom',$this->telecomData);
-		$response=$this->json('PUT', '/api/telecom/1',$this->updatedTelecomData);
+		$response=$this->post('/api/telecom',$this->telecomData);
+		$response=$this->put('/api/telecom/1',$this->updatedTelecomData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("rank",$response->original);
 	}
 
 	public function testDeleteTelecom()
 	{
-		$this->json('POST', '/api/telecom',$this->telecomData);
+		$response=$this->post('/api/telecom',$this->telecomData);
 		$response=$this->delete('/api/telecom/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

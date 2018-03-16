@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class SusceptibilityRangeTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->susceptibilityRangeData=array(
 			"code"=>'Sample String',
@@ -33,36 +29,36 @@ class SusceptibilityRangeTest extends TestCase
 
 	public function testStoreSusceptibilityRange()
 	{
-		$response=$this->json('POST', '/api/susceptibilityrange',$this->susceptibilityRangeData);
+		$response=$this->post('/api/susceptibilityrange',$this->susceptibilityRangeData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("name",$response->original);
 	}
 
 	public function testListSusceptibilityRange()
 	{
-		$response=$this->json('GET', '/api/susceptibilityrange');
+		$response=$this->get('/api/susceptibilityrange');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowSusceptibilityRange()
 	{
-		$this->json('POST', '/api/susceptibilityrange',$this->susceptibilityRangeData);
-		$response=$this->json('GET', '/api/susceptibilityrange/1');
+		$response=$this->post('/api/susceptibilityrange',$this->susceptibilityRangeData);
+		$response=$this->get('/api/susceptibilityrange/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("name",$response->original);
 	}
 
 	public function testUpdateSusceptibilityRange()
 	{
-		$this->json('POST', '/api/susceptibilityrange',$this->susceptibilityRangeData);
-		$response=$this->json('PUT', '/api/susceptibilityrange/1',$this->updatedSusceptibilityRangeData);
+		$response=$this->post('/api/susceptibilityrange',$this->susceptibilityRangeData);
+		$response=$this->put('/api/susceptibilityrange/1',$this->updatedSusceptibilityRangeData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("name",$response->original);
 	}
 
 	public function testDeleteSusceptibilityRange()
 	{
-		$this->json('POST', '/api/susceptibilityrange',$this->susceptibilityRangeData);
+		$response=$this->post('/api/susceptibilityrange',$this->susceptibilityRangeData);
 		$response=$this->delete('/api/susceptibilityrange/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

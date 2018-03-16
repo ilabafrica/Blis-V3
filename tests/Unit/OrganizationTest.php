@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class OrganizationTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->organizationData=array(
 			"identifier"=>'Sample String',
@@ -45,36 +41,36 @@ class OrganizationTest extends TestCase
 
 	public function testStoreOrganization()
 	{
-		$response=$this->json('POST', '/api/organization',$this->organizationData);
+		$response=$this->post('/api/organization',$this->organizationData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("address",$response->original);
 	}
 
 	public function testListOrganization()
 	{
-		$response=$this->json('GET', '/api/organization');
+		$response=$this->get('/api/organization');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowOrganization()
 	{
-		$this->json('POST', '/api/organization',$this->organizationData);
-		$response=$this->json('GET', '/api/organization/1');
+		$response=$this->post('/api/organization',$this->organizationData);
+		$response=$this->get('/api/organization/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("address",$response->original);
 	}
 
 	public function testUpdateOrganization()
 	{
-		$this->json('POST', '/api/organization',$this->organizationData);
-		$response=$this->json('PUT', '/api/organization/1',$this->updatedOrganizationData);
+		$response=$this->post('/api/organization',$this->organizationData);
+		$response=$this->put('/api/organization/1',$this->updatedOrganizationData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("address",$response->original);
 	}
 
 	public function testDeleteOrganization()
 	{
-		$this->json('POST', '/api/organization',$this->organizationData);
+		$response=$this->post('/api/organization',$this->organizationData);
 		$response=$this->delete('/api/organization/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

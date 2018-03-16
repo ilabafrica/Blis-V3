@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class MaritalStatusTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->maritalStatusData=array(
 			"code"=>'Sample String',
@@ -35,36 +31,36 @@ class MaritalStatusTest extends TestCase
 
 	public function testStoreMaritalStatus()
 	{
-		$response=$this->json('POST', '/api/maritalstatus',$this->maritalStatusData);
+		$response=$this->post('/api/maritalstatus',$this->maritalStatusData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("definition",$response->original);
 	}
 
 	public function testListMaritalStatus()
 	{
-		$response=$this->json('GET', '/api/maritalstatus');
+		$response=$this->get('/api/maritalstatus');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowMaritalStatus()
 	{
-		$this->json('POST', '/api/maritalstatus',$this->maritalStatusData);
-		$response=$this->json('GET', '/api/maritalstatus/1');
+		$response=$this->post('/api/maritalstatus',$this->maritalStatusData);
+		$response=$this->get('/api/maritalstatus/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("definition",$response->original);
 	}
 
 	public function testUpdateMaritalStatus()
 	{
-		$this->json('POST', '/api/maritalstatus',$this->maritalStatusData);
-		$response=$this->json('PUT', '/api/maritalstatus/1',$this->updatedMaritalStatusData);
+		$response=$this->post('/api/maritalstatus',$this->maritalStatusData);
+		$response=$this->put('/api/maritalstatus/1',$this->updatedMaritalStatusData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("definition",$response->original);
 	}
 
 	public function testDeleteMaritalStatus()
 	{
-		$this->json('POST', '/api/maritalstatus',$this->maritalStatusData);
+		$response=$this->post('/api/maritalstatus',$this->maritalStatusData);
 		$response=$this->delete('/api/maritalstatus/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

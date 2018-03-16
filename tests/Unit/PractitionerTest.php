@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PractitionerTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->practitionerData=array(
 			"active"=>'Sample String',
@@ -47,36 +43,36 @@ class PractitionerTest extends TestCase
 
 	public function testStorePractitioner()
 	{
-		$response=$this->json('POST', '/api/practitioner',$this->practitionerData);
+		$response=$this->post('/api/practitioner',$this->practitionerData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("qualification",$response->original);
 	}
 
 	public function testListPractitioner()
 	{
-		$response=$this->json('GET', '/api/practitioner');
+		$response=$this->get('/api/practitioner');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowPractitioner()
 	{
-		$this->json('POST', '/api/practitioner',$this->practitionerData);
-		$response=$this->json('GET', '/api/practitioner/1');
+		$response=$this->post('/api/practitioner',$this->practitionerData);
+		$response=$this->get('/api/practitioner/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("qualification",$response->original);
 	}
 
 	public function testUpdatePractitioner()
 	{
-		$this->json('POST', '/api/practitioner',$this->practitionerData);
-		$response=$this->json('PUT', '/api/practitioner/1',$this->updatedPractitionerData);
+		$response=$this->post('/api/practitioner',$this->practitionerData);
+		$response=$this->put('/api/practitioner/1',$this->updatedPractitionerData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("qualification",$response->original);
 	}
 
 	public function testDeletePractitioner()
 	{
-		$this->json('POST', '/api/practitioner',$this->practitionerData);
+		$response=$this->post('/api/practitioner',$this->practitionerData);
 		$response=$this->delete('/api/practitioner/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

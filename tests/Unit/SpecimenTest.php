@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class SpecimenTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->specimenData=array(
 			"identifier"=>'Sample String',
@@ -45,36 +41,36 @@ class SpecimenTest extends TestCase
 
 	public function testStoreSpecimen()
 	{
-		$response=$this->json('POST', '/api/specimen',$this->specimenData);
+		$response=$this->post('/api/specimen',$this->specimenData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("received_time",$response->original);
 	}
 
 	public function testListSpecimen()
 	{
-		$response=$this->json('GET', '/api/specimen');
+		$response=$this->get('/api/specimen');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowSpecimen()
 	{
-		$this->json('POST', '/api/specimen',$this->specimenData);
-		$response=$this->json('GET', '/api/specimen/1');
+		$response=$this->post('/api/specimen',$this->specimenData);
+		$response=$this->get('/api/specimen/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("received_time",$response->original);
 	}
 
 	public function testUpdateSpecimen()
 	{
-		$this->json('POST', '/api/specimen',$this->specimenData);
-		$response=$this->json('PUT', '/api/specimen/1',$this->updatedSpecimenData);
+		$response=$this->post('/api/specimen',$this->specimenData);
+		$response=$this->put('/api/specimen/1',$this->updatedSpecimenData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("received_time",$response->original);
 	}
 
 	public function testDeleteSpecimen()
 	{
-		$this->json('POST', '/api/specimen',$this->specimenData);
+		$response=$this->post('/api/specimen',$this->specimenData);
 		$response=$this->delete('/api/specimen/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

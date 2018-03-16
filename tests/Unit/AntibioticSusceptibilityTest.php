@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class AntibioticSusceptibilityTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->antibioticSusceptibilityData=array(
 			"user_id"=>1,
@@ -39,36 +35,36 @@ class AntibioticSusceptibilityTest extends TestCase
 
 	public function testStoreAntibioticSusceptibility()
 	{
-		$response=$this->json('POST', '/api/antibioticsusceptibility',$this->antibioticSusceptibilityData);
+		$response=$this->post('/api/antibioticsusceptibility',$this->antibioticSusceptibilityData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("zone_diameter",$response->original);
 	}
 
 	public function testListAntibioticSusceptibility()
 	{
-		$response=$this->json('GET', '/api/antibioticsusceptibility');
+		$response=$this->get('/api/antibioticsusceptibility');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowAntibioticSusceptibility()
 	{
-		$this->json('POST', '/api/antibioticsusceptibility',$this->antibioticSusceptibilityData);
-		$response=$this->json('GET', '/api/antibioticsusceptibility/1');
+		$response=$this->post('/api/antibioticsusceptibility',$this->antibioticSusceptibilityData);
+		$response=$this->get('/api/antibioticsusceptibility/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("zone_diameter",$response->original);
 	}
 
 	public function testUpdateAntibioticSusceptibility()
 	{
-		$this->json('POST', '/api/antibioticsusceptibility',$this->antibioticSusceptibilityData);
-		$response=$this->json('PUT', '/api/antibioticsusceptibility/1',$this->updatedAntibioticSusceptibilityData);
+		$response=$this->post('/api/antibioticsusceptibility',$this->antibioticSusceptibilityData);
+		$response=$this->put('/api/antibioticsusceptibility/1',$this->updatedAntibioticSusceptibilityData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("zone_diameter",$response->original);
 	}
 
 	public function testDeleteAntibioticSusceptibility()
 	{
-		$this->json('POST', '/api/antibioticsusceptibility',$this->antibioticSusceptibilityData);
+		$response=$this->post('/api/antibioticsusceptibility',$this->antibioticSusceptibilityData);
 		$response=$this->delete('/api/antibioticsusceptibility/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

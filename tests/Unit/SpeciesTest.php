@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class SpeciesTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->speciesData=array(
 			"code"=>'Sample String',
@@ -33,36 +29,36 @@ class SpeciesTest extends TestCase
 
 	public function testStoreSpecies()
 	{
-		$response=$this->json('POST', '/api/species',$this->speciesData);
+		$response=$this->post('/api/species',$this->speciesData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testListSpecies()
 	{
-		$response=$this->json('GET', '/api/species');
+		$response=$this->get('/api/species');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowSpecies()
 	{
-		$this->json('POST', '/api/species',$this->speciesData);
-		$response=$this->json('GET', '/api/species/1');
+		$response=$this->post('/api/species',$this->speciesData);
+		$response=$this->get('/api/species/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testUpdateSpecies()
 	{
-		$this->json('POST', '/api/species',$this->speciesData);
-		$response=$this->json('PUT', '/api/species/1',$this->updatedSpeciesData);
+		$response=$this->post('/api/species',$this->speciesData);
+		$response=$this->put('/api/species/1',$this->updatedSpeciesData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testDeleteSpecies()
 	{
-		$this->json('POST', '/api/species',$this->speciesData);
+		$response=$this->post('/api/species',$this->speciesData);
 		$response=$this->delete('/api/species/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

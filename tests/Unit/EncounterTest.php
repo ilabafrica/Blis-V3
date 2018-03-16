@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class EncounterTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->encounterData=array(
 			"identifier"=>'Sample String',
@@ -41,36 +37,36 @@ class EncounterTest extends TestCase
 
 	public function testStoreEncounter()
 	{
-		$response=$this->json('POST', '/api/encounter',$this->encounterData);
+		$response=$this->post('/api/encounter',$this->encounterData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("bed_no",$response->original);
 	}
 
 	public function testListEncounter()
 	{
-		$response=$this->json('GET', '/api/encounter');
+		$response=$this->get('/api/encounter');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowEncounter()
 	{
-		$this->json('POST', '/api/encounter',$this->encounterData);
-		$response=$this->json('GET', '/api/encounter/1');
+		$response=$this->post('/api/encounter',$this->encounterData);
+		$response=$this->get('/api/encounter/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("bed_no",$response->original);
 	}
 
 	public function testUpdateEncounter()
 	{
-		$this->json('POST', '/api/encounter',$this->encounterData);
-		$response=$this->json('PUT', '/api/encounter/1',$this->updatedEncounterData);
+		$response=$this->post('/api/encounter',$this->encounterData);
+		$response=$this->put('/api/encounter/1',$this->updatedEncounterData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("bed_no",$response->original);
 	}
 
 	public function testDeleteEncounter()
 	{
-		$this->json('POST', '/api/encounter',$this->encounterData);
+		$response=$this->post('/api/encounter',$this->encounterData);
 		$response=$this->delete('/api/encounter/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

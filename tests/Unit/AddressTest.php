@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class AddressTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->addressData=array(
 			"patient_id"=>1,
@@ -47,36 +43,36 @@ class AddressTest extends TestCase
 
 	public function testStoreAddress()
 	{
-		$response=$this->json('POST', '/api/address',$this->addressData);
+		$response=$this->post('/api/address',$this->addressData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("period",$response->original);
 	}
 
 	public function testListAddress()
 	{
-		$response=$this->json('GET', '/api/address');
+		$response=$this->get('/api/address');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowAddress()
 	{
-		$this->json('POST', '/api/address',$this->addressData);
-		$response=$this->json('GET', '/api/address/1');
+		$response=$this->post('/api/address',$this->addressData);
+		$response=$this->get('/api/address/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("period",$response->original);
 	}
 
 	public function testUpdateAddress()
 	{
-		$this->json('POST', '/api/address',$this->addressData);
-		$response=$this->json('PUT', '/api/address/1',$this->updatedAddressData);
+		$response=$this->post('/api/address',$this->addressData);
+		$response=$this->put('/api/address/1',$this->updatedAddressData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("period",$response->original);
 	}
 
 	public function testDeleteAddress()
 	{
-		$this->json('POST', '/api/address',$this->addressData);
+		$response=$this->post('/api/address',$this->addressData);
 		$response=$this->delete('/api/address/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

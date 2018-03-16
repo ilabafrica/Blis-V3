@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class InterpretationTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->interpretationData=array(
 			"code"=>'Sample String',
@@ -33,36 +29,36 @@ class InterpretationTest extends TestCase
 
 	public function testStoreInterpretation()
 	{
-		$response=$this->json('POST', '/api/interpretation',$this->interpretationData);
+		$response=$this->post('/api/interpretation',$this->interpretationData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("name",$response->original);
 	}
 
 	public function testListInterpretation()
 	{
-		$response=$this->json('GET', '/api/interpretation');
+		$response=$this->get('/api/interpretation');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowInterpretation()
 	{
-		$this->json('POST', '/api/interpretation',$this->interpretationData);
-		$response=$this->json('GET', '/api/interpretation/1');
+		$response=$this->post('/api/interpretation',$this->interpretationData);
+		$response=$this->get('/api/interpretation/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("name",$response->original);
 	}
 
 	public function testUpdateInterpretation()
 	{
-		$this->json('POST', '/api/interpretation',$this->interpretationData);
-		$response=$this->json('PUT', '/api/interpretation/1',$this->updatedInterpretationData);
+		$response=$this->post('/api/interpretation',$this->interpretationData);
+		$response=$this->put('/api/interpretation/1',$this->updatedInterpretationData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("name",$response->original);
 	}
 
 	public function testDeleteInterpretation()
 	{
-		$this->json('POST', '/api/interpretation',$this->interpretationData);
+		$response=$this->post('/api/interpretation',$this->interpretationData);
 		$response=$this->delete('/api/interpretation/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

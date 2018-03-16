@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ReferralTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->referralData=array(
 			"time_dispatch"=>'Sample String',
@@ -47,36 +43,36 @@ class ReferralTest extends TestCase
 
 	public function testStoreReferral()
 	{
-		$response=$this->json('POST', '/api/referral',$this->referralData);
+		$response=$this->post('/api/referral',$this->referralData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("user_id",$response->original);
 	}
 
 	public function testListReferral()
 	{
-		$response=$this->json('GET', '/api/referral');
+		$response=$this->get('/api/referral');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowReferral()
 	{
-		$this->json('POST', '/api/referral',$this->referralData);
-		$response=$this->json('GET', '/api/referral/1');
+		$response=$this->post('/api/referral',$this->referralData);
+		$response=$this->get('/api/referral/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("user_id",$response->original);
 	}
 
 	public function testUpdateReferral()
 	{
-		$this->json('POST', '/api/referral',$this->referralData);
-		$response=$this->json('PUT', '/api/referral/1',$this->updatedReferralData);
+		$response=$this->post('/api/referral',$this->referralData);
+		$response=$this->put('/api/referral/1',$this->updatedReferralData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("user_id",$response->original);
 	}
 
 	public function testDeleteReferral()
 	{
-		$this->json('POST', '/api/referral',$this->referralData);
+		$response=$this->post('/api/referral',$this->referralData);
 		$response=$this->delete('/api/referral/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

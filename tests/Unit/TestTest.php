@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TestTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->testData=array(
 			"encounter_id"=>1,
@@ -55,36 +51,36 @@ class TestTest extends TestCase
 
 	public function testStoreTest()
 	{
-		$response=$this->json('POST', '/api/test',$this->testData);
+		$response=$this->post('/api/test',$this->testData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("time_sent",$response->original);
 	}
 
 	public function testListTest()
 	{
-		$response=$this->json('GET', '/api/test');
+		$response=$this->get('/api/test');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowTest()
 	{
-		$this->json('POST', '/api/test',$this->testData);
-		$response=$this->json('GET', '/api/test/1');
+		$response=$this->post('/api/test',$this->testData);
+		$response=$this->get('/api/test/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("time_sent",$response->original);
 	}
 
 	public function testUpdateTest()
 	{
-		$this->json('POST', '/api/test',$this->testData);
-		$response=$this->json('PUT', '/api/test/1',$this->updatedTestData);
+		$response=$this->post('/api/test',$this->testData);
+		$response=$this->put('/api/test/1',$this->updatedTestData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("time_sent",$response->original);
 	}
 
 	public function testDeleteTest()
 	{
-		$this->json('POST', '/api/test',$this->testData);
+		$response=$this->post('/api/test',$this->testData);
 		$response=$this->delete('/api/test/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}

@@ -7,19 +7,15 @@ namespace Tests\Unit;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class MeasureTypeTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
 		$this->measureTypeData=array(
 			"code"=>'Sample String',
@@ -33,36 +29,36 @@ class MeasureTypeTest extends TestCase
 
 	public function testStoreMeasureType()
 	{
-		$response=$this->json('POST', '/api/measuretype',$this->measureTypeData);
+		$response=$this->post('/api/measuretype',$this->measureTypeData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("name",$response->original);
 	}
 
 	public function testListMeasureType()
 	{
-		$response=$this->json('GET', '/api/measuretype');
+		$response=$this->get('/api/measuretype');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowMeasureType()
 	{
-		$this->json('POST', '/api/measuretype',$this->measureTypeData);
-		$response=$this->json('GET', '/api/measuretype/1');
+		$response=$this->post('/api/measuretype',$this->measureTypeData);
+		$response=$this->get('/api/measuretype/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("name",$response->original);
 	}
 
 	public function testUpdateMeasureType()
 	{
-		$this->json('POST', '/api/measuretype',$this->measureTypeData);
-		$response=$this->json('PUT', '/api/measuretype/1',$this->updatedMeasureTypeData);
+		$response=$this->post('/api/measuretype',$this->measureTypeData);
+		$response=$this->put('/api/measuretype/1',$this->updatedMeasureTypeData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("name",$response->original);
 	}
 
 	public function testDeleteMeasureType()
 	{
-		$this->json('POST', '/api/measuretype',$this->measureTypeData);
+		$response=$this->post('/api/measuretype',$this->measureTypeData);
 		$response=$this->delete('/api/measuretype/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
