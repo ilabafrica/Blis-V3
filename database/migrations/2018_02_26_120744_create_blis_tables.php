@@ -14,14 +14,30 @@ class CreateBlisTables extends Migration
     public function up()
     {
         /*
-         * @system https://www.hl7.org
-         * @code Code defined by a terminology system
-         * @text Plain text representation of the concept
+         * @system Multiple
+         * @name Code System Name: LOINC|FHIR|CLSI|ISO
+         * @link Url to online resource
+         * @description additional information
          */
-        Schema::create('codeable_concepts', function (Blueprint $table) {
+        Schema::create('code_systems', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
+            $table->string('link');
+            $table->string('description');
+            $table->timestamps();
+        });
+
+        /*
+         * @system Multiple
+         * @code male|female|234|etc
+         * @display UI text of the code
+         */
+        Schema::create('codes', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('code_system_id');
             $table->string('code');
-            $table->string('text');
+            $table->string('display');
+            $table->string('description');
             $table->timestamps();
         });
 
@@ -268,12 +284,13 @@ class CreateBlisTables extends Migration
         /*
          * @system multiple sources
          * @code numerous
-         * @alphanumeric +|++|+++|Positive|E.Coli|Gram Positive
+         * @alphanumeric +|++|+++|Positive|E.Coli|Gram Positive(i.e. include gram stains and organisms)
          * @interpretation_id for the alphanumeric and cultureAndSensitivity
          */
         Schema::create('measure_ranges', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code')->nullable();
+            $table->integer('code_id')->unsigned()->nullable();
             $table->string('system')->nullable();
             $table->integer('measure_id')->unsigned();
             $table->decimal('age_min')->nullable();
@@ -283,14 +300,13 @@ class CreateBlisTables extends Migration
             $table->decimal('high', 7, 3)->nullable();
             $table->decimal('low_critical', 7, 3)->nullable();
             $table->decimal('high_critical', 7, 3)->nullable();
-            $table->string('alphanumeric_range');
+            $table->string('display');
             $table->integer('interpretation_id')->unsigned()->nullable();
 
             $table->softDeletes();
             $table->foreign('gender_id')->references('id')->on('genders');
             $table->foreign('measure_id')->references('id')->on('measures');
-            $table->foreign('interpretation_id')
-                ->references('id')->on('interpretations');
+            $table->foreign('interpretation_id')->references('id')->on('interpretations');
         });
 
         /*
@@ -324,7 +340,7 @@ class CreateBlisTables extends Migration
         /*
          * @system blis.v3 defined
          */
-        Schema::create('testtype_measures', function (Blueprint $table) {
+        Schema::create('test_type_measures', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('test_type_id')->unsigned();
             $table->integer('measure_id')->unsigned();
@@ -337,13 +353,13 @@ class CreateBlisTables extends Migration
         /*
          * @system blis.v3 defined
          */
-        Schema::create('test_type_specimen_types', function (Blueprint $table) {
+        Schema::create('test_mappings', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('code_id')->unsigned()->nullable();
             $table->integer('test_type_id')->unsigned();
             $table->integer('specimen_type_id')->unsigned();
+            $table->timestamps();
 
-            $table->foreign('test_type_id')->references('id')->on('test_types');
-            $table->foreign('specimen_type_id')->references('id')->on('specimen_types');
             $table->unique(['test_type_id', 'specimen_type_id']);
         });
 
@@ -394,7 +410,8 @@ class CreateBlisTables extends Migration
         });
 
         /*
-         * @system blis.v3 defined
+         * @system fhir
+         * @name inpatient|outpatient|ambulatory|emergency
          */
         Schema::create('encounter_classes', function (Blueprint $table) {
             $table->increments('id');
@@ -674,8 +691,8 @@ class CreateBlisTables extends Migration
         Schema::dropIfExists('specimen_statuses');
         Schema::dropIfExists('test_statuses');
         Schema::dropIfExists('test_phases');
-        Schema::dropIfExists('test_type_specimen_types');
-        Schema::dropIfExists('testtype_measures');
+        Schema::dropIfExists('test_mappings');
+        Schema::dropIfExists('test_type_measures');
         Schema::dropIfExists('test_types');
         Schema::dropIfExists('susceptibility_ranges');
         Schema::dropIfExists('measure_ranges');
@@ -694,6 +711,7 @@ class CreateBlisTables extends Migration
         Schema::dropIfExists('addresses');
         Schema::dropIfExists('telecoms');
         Schema::dropIfExists('names');
-        Schema::dropIfExists('codeable_concepts');
+        Schema::dropIfExists('codes');
+        Schema::dropIfExists('code_systems');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-/*
+/**
  * (c) @iLabAfrica
  * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
  * Team Lead	 - Emmanuel Kweyu.
@@ -17,7 +17,6 @@ class MeasureRangeController extends Controller
     public function index()
     {
         $measureRange = MeasureRange::orderBy('id', 'ASC')->paginate(20);
-
         return response()->json($measureRange);
     }
 
@@ -29,11 +28,11 @@ class MeasureRangeController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'measure_id' => 'required',
-            'gender_id' => 'required',
-            'alphanumeric_range' => 'required',
-        ];
+        $rules = array(
+            "measure_id" => "required",
+            "gender_id" => "required",
+            "display" => "required",
+        );
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -41,6 +40,7 @@ class MeasureRangeController extends Controller
         } else {
             $measureRange = new MeasureRange;
             $measureRange->code = $request->input('code');
+            $measureRange->code_id = $request->input('code_id');
             $measureRange->system = $request->input('system');
             $measureRange->measure_id = $request->input('measure_id');
             $measureRange->age_min = $request->input('age_min');
@@ -50,12 +50,11 @@ class MeasureRangeController extends Controller
             $measureRange->high = $request->input('high');
             $measureRange->low_critical = $request->input('low_critical');
             $measureRange->high_critical = $request->input('high_critical');
-            $measureRange->alphanumeric_range = $request->input('alphanumeric_range');
+            $measureRange->display = $request->input('display');
             $measureRange->interpretation_id = $request->input('interpretation_id');
 
             try {
                 $measureRange->save();
-
                 return response()->json($measureRange);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -72,7 +71,6 @@ class MeasureRangeController extends Controller
     public function show($id)
     {
         $measureRange = MeasureRange::findOrFail($id);
-
         return response()->json($measureRange);
     }
 
@@ -85,11 +83,11 @@ class MeasureRangeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = [
-            'measure_id' => 'required',
-            'gender_id' => 'required',
-            'alphanumeric_range' => 'required',
-        ];
+        $rules = array(
+            "measure_id" => "required",
+            "gender_id" => "required",
+            "display" => "required",
+        );
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -97,6 +95,7 @@ class MeasureRangeController extends Controller
         } else {
             $measureRange = MeasureRange::findOrFail($id);
             $measureRange->code = $request->input('code');
+            $measureRange->code_id = $request->input('code_id');
             $measureRange->system = $request->input('system');
             $measureRange->measure_id = $request->input('measure_id');
             $measureRange->age_min = $request->input('age_min');
@@ -106,12 +105,11 @@ class MeasureRangeController extends Controller
             $measureRange->high = $request->input('high');
             $measureRange->low_critical = $request->input('low_critical');
             $measureRange->high_critical = $request->input('high_critical');
-            $measureRange->alphanumeric_range = $request->input('alphanumeric_range');
+            $measureRange->display = $request->input('display');
             $measureRange->interpretation_id = $request->input('interpretation_id');
 
             try {
                 $measureRange->save();
-
                 return response()->json($measureRange);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -130,7 +128,6 @@ class MeasureRangeController extends Controller
         try {
             $measureRange = MeasureRange::findOrFail($id);
             $measureRange->delete();
-
             return response()->json($measureRange, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
