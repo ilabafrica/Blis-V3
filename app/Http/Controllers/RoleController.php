@@ -17,7 +17,7 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $role = Role::orderBy('id', 'ASC')->paginate(20);
+        $role = Role::all();
 
         return response()->json($role);
     }

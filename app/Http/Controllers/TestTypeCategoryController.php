@@ -17,7 +17,7 @@ class TestTypeCategoryController extends Controller
 {
     public function index()
     {
-        $testTypeCategory = TestTypeCategory::orderBy('id', 'ASC')->paginate(20);
+        $testTypeCategory = TestTypeCategory::orderBy('id', 'ASC')->get();
 
         return response()->json($testTypeCategory);
     }

@@ -13,51 +13,116 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(['middleware' => 'auth:api'], function () {
-	Route::resource('address', 'AddressController');
-	Route::resource('adhoccategory', 'AdhocCategoryController');
-	Route::resource('adhocoption', 'AdhocOptionController');
-	Route::resource('code', 'CodeController');
-	Route::resource('rejectionreason', 'RejectionReasonController');
-	Route::resource('specimenrejection', 'SpecimenRejectionController');
-	Route::resource('antibioticsusceptibility', 'AntibioticSusceptibilityController');
-	Route::resource('antibiotic', 'AntibioticController');
-	Route::resource('breed', 'BreedController');
-	Route::resource('codeableconcept', 'CodeableConceptController');
-	Route::resource('collection', 'CollectionController');
-	Route::resource('counter', 'CounterController');
-	Route::resource('encounterclass', 'EncounterClassController');
-	Route::resource('encounterstatus', 'EncounterStatusController');
-	Route::resource('encounter', 'EncounterController');
-	Route::resource('gender', 'GenderController');
-	Route::resource('interpretation', 'InterpretationController');
-	Route::resource('location', 'LocationController');
-	Route::resource('maritalstatus', 'MaritalStatusController');
-	Route::resource('measurerange', 'MeasureRangeController');
-	Route::resource('measuretype', 'MeasureTypeController');
-	Route::resource('measure', 'MeasureController');
-	Route::resource('name', 'NameController');
-	Route::resource('organization', 'OrganizationController');
-	Route::resource('patient', 'PatientController');
-	Route::resource('permission', 'PermissionController');
-	Route::resource('practitioner', 'PractitionerController');
-	Route::resource('referralreason', 'ReferralReasonController');
-	Route::resource('referral', 'ReferralController');
-	Route::resource('rejectionreason', 'RejectionReasonController');
-	Route::resource('result', 'ResultController');
-	Route::resource('role', 'RoleController');
-	Route::resource('species', 'SpeciesController');
-	Route::resource('specimenstatus', 'SpecimenStatusController');
-	Route::resource('specimentype', 'SpecimenTypeController');
-	Route::resource('specimen', 'SpecimenController');
-	Route::resource('susceptibilitybreakpoint', 'SusceptibilityBreakPointController');
-	Route::resource('susceptibilityrange', 'SusceptibilityRangeController');
-	Route::resource('telecom', 'TelecomController');
-	Route::resource('testmapping', 'TestMappingController');
-	Route::resource('testphase', 'TestPhaseController');
-	Route::resource('teststatus', 'TestStatusController');
-	Route::resource('testtypecategory', 'TestTypeCategoryController');
-	Route::resource('testtype', 'TestTypeController');
-	Route::resource('test', 'TestController');
-	Route::resource('user', 'UserController');
+Route::post('/register', 'Auth\APIController@register');
+Route::post('/login', 'Auth\APIController@login');
+
+Route::middleware('auth:api')->group(function () {
+    Route::post('/logout', 'Auth\APIController@logout');
+    Route::get('/get-user', 'Auth\APIController@getUser');
 });
+
+Route::group(['middleware' => 'auth:api'], function () {
+	// Access Control|Accounts|Permissions|Roles|Assign Permissions|Assign Roles
+	Route::group(['middleware' => ['permission:manage_users']], function() {
+		Route::resource('address', 'AddressController');
+		Route::resource('user', 'UserController');
+		Route::resource('permissionrole', 'PermissionRoleController');
+		Route::post('permissionrole/delete', ['uses' => 'PermissionRoleController@delete']);
+		Route::resource('permission', 'PermissionController');
+		Route::resource('roleuser', 'RoleUserController');
+		Route::post('roleuser/delete', ['uses' => 'RoleUserController@delete']);
+		Route::resource('role', 'RoleController');
+	});
+
+	// Health Units|Instrument|Reports|Barcode
+	Route::group(['middleware' => ['permission:manage_configurations']], function() {
+		Route::resource('adhoccategory', 'AdhocCategoryController');
+		Route::resource('adhocoption', 'AdhocOptionController');
+		Route::resource('code', 'CodeController');
+		Route::resource('counter', 'CounterController');
+	});
+
+	// Lab Sections|Specimen Types|Specimen Rejection|Test Types|Drugs|Organisms
+	Route::group(['middleware' => ['permission:manage_test_catalog']], function() {
+		Route::resource('susceptibilitybreakpoint', 'SusceptibilityBreakPointController');
+		Route::resource('susceptibilityrange', 'SusceptibilityRangeController');
+		Route::resource('testmapping', 'TestMappingController');
+		Route::resource('testphase', 'TestPhaseController');
+		Route::resource('teststatus', 'TestStatusController');
+		Route::resource('testtypecategory', 'TestTypeCategoryController');
+		Route::resource('testtype', 'TestTypeController');
+		Route::resource('rejectionreason', 'RejectionReasonController');
+		Route::resource('interpretation', 'InterpretationController');
+		Route::resource('measurerange', 'MeasureRangeController');
+		Route::resource('measuretype', 'MeasureTypeController');
+		Route::resource('measure', 'MeasureController');
+		Route::resource('referralreason', 'ReferralReasonController');
+		Route::resource('rejectionreason', 'RejectionReasonController');
+		Route::resource('specimenstatus', 'SpecimenStatusController');
+		Route::resource('specimentype', 'SpecimenTypeController');
+	});
+
+	// Registration
+	Route::group(['middleware' => ['permission:manage_patients|view_patient_names']], function() {
+		Route::resource('breed', 'BreedController');
+		Route::resource('encounterclass', 'EncounterClassController');
+		Route::resource('encounterstatus', 'EncounterStatusController');
+		Route::resource('encounter', 'EncounterController');
+		Route::resource('gender', 'GenderController');
+		Route::resource('location', 'LocationController');
+		Route::resource('maritalstatus', 'MaritalStatusController');
+		Route::resource('name', 'NameController');
+		Route::resource('organization', 'OrganizationController');
+		Route::resource('patient', 'PatientController');
+		Route::resource('practitioner', 'PractitionerController');
+		Route::resource('species', 'SpeciesController');
+		Route::resource('telecom', 'TelecomController');
+	});
+
+	// Routine and Reference Testing
+	Route::group(['middleware' => ['permission:accept_test_specimen|'.
+		'reject_test_specimen|'.
+		'change_test_specimen|'.
+		'start_test|'.
+		'enter_test_results|'.
+		'edit_test_results|'.
+		'verify_test_results|'.
+		'refer_test_specimens|'.
+		'manage_quality_control']
+	], function() {
+		Route::resource('specimenrejection', 'SpecimenRejectionController');
+		Route::resource('antibioticsusceptibility', 'AntibioticSusceptibilityController');
+		Route::resource('antibiotic', 'AntibioticController');
+		Route::resource('collection', 'CollectionController');
+		Route::resource('referral', 'ReferralController');
+		Route::resource('result', 'ResultController');
+		Route::resource('specimen', 'SpecimenController');
+		Route::resource('test', 'TestController');
+		Route::resource('qualitycontrolresult', 'QualityControlResultController');
+		Route::resource('qualitycontroltest', 'QualityControlTestController');
+		Route::resource('qualitycontrolmeasurerange', 'QualityControlMeasureRangeController');
+		Route::resource('qualitycontrolmeasure', 'QualityControlMeasureController');
+		Route::resource('qualitycontrol', 'QualityControlController');
+		Route::resource('lot', 'LotController');
+		Route::resource('instrument', 'InstrumentController');
+	});
+
+	// Stock Card|Stock Book|Commodities|Supliers|Metrics
+	Route::group(['middleware' => ['permission:manage_inventory']], function() {
+	});
+
+	// Inventory|Maintenance Log|Breakdown|Suplier
+	Route::group(['middleware' => ['permission:manage_equipment']], function() {
+	});
+
+	// Summary Log|Incidents|Report
+	Route::group(['middleware' => ['permission:manage_biosafty_biosecurity']], function() {
+	});
+});
+
+Route::get('report', ["uses" => "ReportController@index"]);
+// these below are just for testing how ever
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
+

@@ -10,8 +10,16 @@ namespace App\Models;
  * More Devs	 - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
  */
 
-use Illuminate\Database\Eloquent\Model;
+use Zizaco\Entrust\EntrustRole;
 
-class Role extends Model
+class Role extends EntrustRole
 {
+    /**
+     * Function for getting the admin role, currently the first user
+     *
+     */
+    public static function getAdminRole()
+    {
+        return Role::find(1);
+    }
 }
