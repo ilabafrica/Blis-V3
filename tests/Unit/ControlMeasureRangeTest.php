@@ -12,18 +12,18 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class QualityControlMeasureRangeTest extends TestCase
+class ControlMeasureRangeTest extends TestCase
 {
 	use SetUp;
 	use DatabaseMigrations;
 	public function setVariables(){
-		$this->qualityControlMeasureRangeData=array(
+		$this->controlMeasureRangeData=array(
 			"upper_range"=>'Sample String',
 			"lower_range"=>'Sample String',
 			"alphanumeric"=>'Sample String',
 			"control_measure_id"=>1,
 		);
-		$this->updatedQualityControlMeasureRangeData=array(
+		$this->updatedControlMeasureRangeData=array(
 			"upper_range"=>'Sample updated String',
 			"lower_range"=>'Sample updated String',
 			"alphanumeric"=>'Sample updated String',
@@ -31,39 +31,39 @@ class QualityControlMeasureRangeTest extends TestCase
 		);
 	}
 
-	public function testStoreQualityControlMeasureRange()
+	public function testStoreControlMeasureRange()
 	{
-		$response=$this->post('/api/qualitycontrolmeasurerange',$this->qualityControlMeasureRangeData);
+		$response=$this->post('/api/controlmeasurerange',$this->controlMeasureRangeData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("control_measure_id",$response->original);
 	}
 
-	public function testListQualityControlMeasureRange()
+	public function testListControlMeasureRange()
 	{
-		$response=$this->get('/api/qualitycontrolmeasurerange');
+		$response=$this->get('/api/controlmeasurerange');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
-	public function testShowQualityControlMeasureRange()
+	public function testShowControlMeasureRange()
 	{
-		$response=$this->post('/api/qualitycontrolmeasurerange',$this->qualityControlMeasureRangeData);
-		$response=$this->get('/api/qualitycontrolmeasurerange/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("control_measure_id",$response->original);
-	}
-
-	public function testUpdateQualityControlMeasureRange()
-	{
-		$response=$this->post('/api/qualitycontrolmeasurerange',$this->qualityControlMeasureRangeData);
-		$response=$this->put('/api/qualitycontrolmeasurerange/1',$this->updatedQualityControlMeasureRangeData);
+		$response=$this->post('/api/controlmeasurerange',$this->controlMeasureRangeData);
+		$response=$this->get('/api/controlmeasurerange/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("control_measure_id",$response->original);
 	}
 
-	public function testDeleteQualityControlMeasureRange()
+	public function testUpdateControlMeasureRange()
 	{
-		$response=$this->post('/api/qualitycontrolmeasurerange',$this->qualityControlMeasureRangeData);
-		$response=$this->delete('/api/qualitycontrolmeasurerange/1');
+		$response=$this->post('/api/controlmeasurerange',$this->controlMeasureRangeData);
+		$response=$this->put('/api/controlmeasurerange/1',$this->updatedControlMeasureRangeData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("control_measure_id",$response->original);
+	}
+
+	public function testDeleteControlMeasureRange()
+	{
+		$response=$this->post('/api/controlmeasurerange',$this->controlMeasureRangeData);
+		$response=$this->delete('/api/controlmeasurerange/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 

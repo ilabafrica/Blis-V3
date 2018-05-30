@@ -9,11 +9,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class QualityControlMeasureRange extends Model
+class ControlMeasureRange extends Model
 {
-	public function qualityControlMeasure()
+	public function controlMeasure()
 	{
-		return $this->belongsTo('QualityControlMeasure');
+		return $this->belongsTo('controlMeasure');
 	}
 
 	/**

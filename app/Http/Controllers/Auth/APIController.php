@@ -31,7 +31,6 @@ class APIController extends Controller
                 'status' => 422
             ], 422);
         }
-
         // If a user with the email was found - check if the specified password
         // belongs to this user
         if (!\Hash::check(request('password'), $user->password)) {
@@ -45,7 +44,6 @@ class APIController extends Controller
         $data = [
             'grant_type' => 'password',
             'client_id' => '2',
-// todo: make this configurable in .env if possible(HAS TO BE, MAKE IT POSSIBLE)
             'client_secret' => 'kSbrg253fdAZfSrm9ncza2h1JLXImUTL0y7mFyQF',
             'username' => request('username'),
             'password' => request('password'),
@@ -55,7 +53,6 @@ class APIController extends Controller
 
         $response = app()->handle($request);
 
-        // Check if the request was successful
         if ($response->getStatusCode() != 200) {
             return response()->json([
                 'message' => 'Wrong email or password',

@@ -98,11 +98,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 		Route::resource('result', 'ResultController');
 		Route::resource('specimen', 'SpecimenController');
 		Route::resource('test', 'TestController');
-		Route::resource('qualitycontrolresult', 'QualityControlResultController');
-		Route::resource('qualitycontroltest', 'QualityControlTestController');
-		Route::resource('qualitycontrolmeasurerange', 'QualityControlMeasureRangeController');
-		Route::resource('qualitycontrolmeasure', 'QualityControlMeasureController');
-		Route::resource('qualitycontrol', 'QualityControlController');
+		Route::resource('controlresult', 'ControlResultController');
+		Route::resource('controltest', 'ControlTestController');
+		Route::resource('controlmeasurerange', 'ControlMeasureRangeController');
+		Route::resource('controlmeasure', 'ControlMeasureController');
+		Route::resource('controltype', 'ControlTypeController');
 		Route::resource('lot', 'LotController');
 		Route::resource('instrument', 'InstrumentController');
 	});

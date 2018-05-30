@@ -28,11 +28,11 @@ class LotController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array(
+        $rules = [
             'number' => 'required',
             'expiry' => 'required',
             'instrument_id' => 'required',
-        );
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {

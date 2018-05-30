@@ -9,22 +9,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class QualityControl extends Model
+class ControlType extends Model
 {
 	/**
 	 * ConrolMeasures relationship
 	 */
-	public function qualityControlMeasures()
+	public function controlMeasures()
 	{
-	  return $this->hasMany('QualityControlMeasure');
+	  return $this->hasMany('ControlMeasure');
 	}
 
 	/**
 	* relationship between a control and its results
 	*/
-	public function qualityControlTests()
+	public function controlTests()
 	{
-		return $this->hasMany('QualityControlTest');
+		return $this->hasMany('ControlTest');
 	}
 
 	/**

@@ -9,16 +9,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class QualityControlResult extends Model
+class ControlResult extends Model
 {
 	/**
 	* Relationship between result and measure
 	*
 	* @return relationship
 	*/
-	public function qualityControlMeasures()
+	public function controlMeasures()
 	{
-		return $this->belongsTo('QualityControlMeasure');
+		return $this->belongsTo('ControlMeasure');
 	}
 
 	/**
@@ -26,8 +26,8 @@ class QualityControlResult extends Model
 	*
 	* @return relationship
 	*/
-	public function QualityControlTest()
+	public function controlTest()
 	{
-		return $this->belongsTo('QualityControlTest');
+		return $this->belongsTo('ControlTest');
 	}
 }

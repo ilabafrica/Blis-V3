@@ -10,14 +10,14 @@ namespace App\Http\Controllers;
  */
 
 use Illuminate\Http\Request;
-use App\Models\QualityControlMeasureRange;
+use App\Models\ControlMeasureRange;
 
-class QualityControlMeasureRangeController extends Controller
+class ControlMeasureRangeController extends Controller
 {
     public function index()
     {
-        $qualityControlMeasureRange = QualityControlMeasureRange::orderBy('id', 'ASC')->paginate(20);
-        return response()->json($qualityControlMeasureRange);
+        $controlMeasureRange = ControlMeasureRange::orderBy('id', 'ASC')->paginate(20);
+        return response()->json($controlMeasureRange);
     }
 
     /**
@@ -28,23 +28,23 @@ class QualityControlMeasureRangeController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array(
+        $rules = [
             'control_measure_id' => 'required',
-        );
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator);
         } else {
-            $qualityControlMeasureRange = new QualityControlMeasureRange;
-            $qualityControlMeasureRange->upper_range = $request->input('upper_range');
-            $qualityControlMeasureRange->lower_range = $request->input('lower_range');
-            $qualityControlMeasureRange->alphanumeric = $request->input('alphanumeric');
-            $qualityControlMeasureRange->control_measure_id = $request->input('control_measure_id');
+            $controlMeasureRange = new ControlMeasureRange;
+            $controlMeasureRange->upper_range = $request->input('upper_range');
+            $controlMeasureRange->lower_range = $request->input('lower_range');
+            $controlMeasureRange->alphanumeric = $request->input('alphanumeric');
+            $controlMeasureRange->control_measure_id = $request->input('control_measure_id');
 
             try {
-                $qualityControlMeasureRange->save();
-                return response()->json($qualityControlMeasureRange);
+                $controlMeasureRange->save();
+                return response()->json($controlMeasureRange);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -59,8 +59,8 @@ class QualityControlMeasureRangeController extends Controller
      */
     public function show($id)
     {
-        $qualityControlMeasureRange = QualityControlMeasureRange::findOrFail($id);
-        return response()->json($qualityControlMeasureRange);
+        $controlMeasureRange = ControlMeasureRange::findOrFail($id);
+        return response()->json($controlMeasureRange);
     }
 
     /**
@@ -80,15 +80,15 @@ class QualityControlMeasureRangeController extends Controller
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $qualityControlMeasureRange = QualityControlMeasureRange::findOrFail($id);
-            $qualityControlMeasureRange->upper_range = $request->input('upper_range');
-            $qualityControlMeasureRange->lower_range = $request->input('lower_range');
-            $qualityControlMeasureRange->alphanumeric = $request->input('alphanumeric');
-            $qualityControlMeasureRange->control_measure_id = $request->input('control_measure_id');
+            $controlMeasureRange = ControlMeasureRange::findOrFail($id);
+            $controlMeasureRange->upper_range = $request->input('upper_range');
+            $controlMeasureRange->lower_range = $request->input('lower_range');
+            $controlMeasureRange->alphanumeric = $request->input('alphanumeric');
+            $controlMeasureRange->control_measure_id = $request->input('control_measure_id');
 
             try {
-                $qualityControlMeasureRange->save();
-                return response()->json($qualityControlMeasureRange);
+                $controlMeasureRange->save();
+                return response()->json($controlMeasureRange);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -104,9 +104,9 @@ class QualityControlMeasureRangeController extends Controller
     public function destroy($id)
     {
         try {
-            $qualityControlMeasureRange = QualityControlMeasureRange::findOrFail($id);
-            $qualityControlMeasureRange->delete();
-            return response()->json($qualityControlMeasureRange, 200);
+            $controlMeasureRange = ControlMeasureRange::findOrFail($id);
+            $controlMeasureRange->delete();
+            return response()->json($controlMeasureRange, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }

@@ -24,6 +24,7 @@ class SpecimenTest extends TestCase
 			"parent_id"=>1,
 			"specimen_status_id"=>1,
 			"received_by"=>1,
+			"collected_by"=>1,
 			"time_collected"=>'Sample String',
 			"received_time"=>'Sample String',
 		);
@@ -34,6 +35,7 @@ class SpecimenTest extends TestCase
 			"parent_id"=>1,
 			"specimen_status_id"=>1,
 			"received_by"=>1,
+			"collected_by"=>1,
 			"time_collected"=>'Sample updated String',
 			"received_time"=>'Sample updated String',
 		);

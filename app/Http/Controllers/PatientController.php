@@ -9,15 +9,14 @@ namespace App\Http\Controllers;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
-use App\Models\Patient;
 use Illuminate\Http\Request;
+use App\Models\Patient;
 
 class PatientController extends Controller
 {
     public function index()
     {
         $patient = Patient::orderBy('id', 'ASC')->paginate(20);
-
         return response()->json($patient);
     }
 
@@ -46,7 +45,6 @@ class PatientController extends Controller
             $patient->identifier = $request->input('identifier');
             $patient->active = $request->input('active');
             $patient->name_id = $request->input('name_id');
-            $patient->telecom_id = $request->input('telecom_id');
             $patient->gender_id = $request->input('gender_id');
             $patient->birth_date = $request->input('birth_date');
             $patient->deceased = $request->input('deceased');
@@ -64,7 +62,6 @@ class PatientController extends Controller
 
             try {
                 $patient->save();
-
                 return response()->json($patient);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -81,7 +78,6 @@ class PatientController extends Controller
     public function show($id)
     {
         $patient = Patient::findOrFail($id);
-
         return response()->json($patient);
     }
 
@@ -94,14 +90,14 @@ class PatientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = [
+        $rules = array(
             'identifier' => 'required',
             'active' => 'required',
             'name_id' => 'required',
             'gender_id' => 'required',
             'birth_date' => 'required',
             'created_by' => 'required',
-        ];
+        );
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -111,7 +107,6 @@ class PatientController extends Controller
             $patient->identifier = $request->input('identifier');
             $patient->active = $request->input('active');
             $patient->name_id = $request->input('name_id');
-            $patient->telecom_id = $request->input('telecom_id');
             $patient->gender_id = $request->input('gender_id');
             $patient->birth_date = $request->input('birth_date');
             $patient->deceased = $request->input('deceased');
@@ -129,7 +124,6 @@ class PatientController extends Controller
 
             try {
                 $patient->save();
-
                 return response()->json($patient);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -148,7 +142,6 @@ class PatientController extends Controller
         try {
             $patient = Patient::findOrFail($id);
             $patient->delete();
-
             return response()->json($patient, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
