@@ -1,9 +1,15 @@
 <template>
-    <div>Dashboard</div>
+  <div v-if='isAuthenticated && isProfileLoaded'>
+    Dashboard
+  </div>
 </template>
 
 <script>
-export default {
+  import { mapGetters, mapState } from 'vuex'
 
-}
+  export default {
+    computed: {
+      ...mapGetters(['isAuthenticated', 'isProfileLoaded']),
+    },
+  }
 </script>

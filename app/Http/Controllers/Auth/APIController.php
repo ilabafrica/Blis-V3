@@ -26,15 +26,18 @@ class APIController extends Controller
         $user = User::whereEmail(request('username'))->first();
 
         if (!$user) {
+
             return response()->json([
                 'message' => 'Wrong email or password',
                 'status' => 422
             ], 422);
         }
-
-        // If a user with the email was found - check if the specified password
-        // belongs to this user
+        /*
+         If a user with the email was found - check if the specified password
+         belongs to this user
+        */
         if (!\Hash::check(request('password'), $user->password)) {
+
             return response()->json([
                 'message' => 'Wrong email or password',
                 'status' => 422
@@ -44,9 +47,8 @@ class APIController extends Controller
         // Send an internal API request to get an access token
         $data = [
             'grant_type' => 'password',
-            'client_id' => '2',
-// todo: make this configurable in .env if possible(HAS TO BE, MAKE IT POSSIBLE)
-            'client_secret' => 'kSbrg253fdAZfSrm9ncza2h1JLXImUTL0y7mFyQF',
+            'client_id' => env('PASSWORD_CLIENT_ID'),
+            'client_secret' => env('PASSWORD_CLIENT_SECRET'),
             'username' => request('username'),
             'password' => request('password'),
         ];
@@ -55,7 +57,6 @@ class APIController extends Controller
 
         $response = app()->handle($request);
 
-        // Check if the request was successful
         if ($response->getStatusCode() != 200) {
             return response()->json([
                 'message' => 'Wrong email or password',

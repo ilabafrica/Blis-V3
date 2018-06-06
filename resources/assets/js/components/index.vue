@@ -1,10 +1,9 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-if='isAuthenticated' v-model="drawer" fixed app>
-      <sidebar>
-      </sidebar>
+    <v-navigation-drawer v-if='isAuthenticated && isProfileLoaded' v-model="drawer" fixed app>
+      <sidebar></sidebar>
     </v-navigation-drawer>
-    <v-toolbar v-if="isAuthenticated" color="primary" dark fixed app>
+    <v-toolbar v-if="isAuthenticated && isProfileLoaded" color="primary" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Application</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -19,10 +18,11 @@
     </v-toolbar>
     <v-content>
       <v-container fluid>
-          <router-view></router-view>
+        <loading v-if='authLoading'></loading>
+        <router-view></router-view>
       </v-container>
     </v-content>
-    <v-footer v-if='isAuthenticated' color="primary" app>
+    <v-footer v-if='isAuthenticated && isProfileLoaded' color="primary" app>
       <span class="white--text">&copy; 2017</span>
     </v-footer>
   </v-app>
@@ -33,6 +33,7 @@
   import { AUTH_LOGOUT } from '../store/actions/auth'
   import { USER_REQUEST } from '../store/actions/user'
   Vue.component('sidebar', require('./sidebar'));
+  Vue.component('loading', require('./loading'));
 
   export default {
     created: function () {

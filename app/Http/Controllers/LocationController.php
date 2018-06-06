@@ -17,9 +17,9 @@ class LocationController extends Controller
 {
     public function index()
     {
-        $location = Location::orderBy('id', 'ASC')->paginate(20);
+        $locations = Location::paginate(10);
 
-        return response()->json($location);
+        return response()->json($locations);
     }
 
     /**
@@ -107,9 +107,8 @@ class LocationController extends Controller
     public function destroy($id)
     {
         try {
-            $location = Location::findOrFail($id);
+            $location = Location::find($id);
             $location->delete();
-
             return response()->json($location, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

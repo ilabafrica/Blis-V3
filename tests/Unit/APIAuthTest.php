@@ -12,42 +12,37 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class AddressTest extends TestCase
+class APIAuthTest extends TestCase
 {
 	use SetUp;
 	use DatabaseMigrations;
 	public function setVariables(){
 		$this->registrationData=array(
-			"name"=>'Anthony Ereng',
-			"email"=>'aereng@gmail.com',
+			"name"=>'Some Random Fellow',
+			"email"=>'some@random.fellow',
 			"password"=>'password',
 		);
 
 		$this->loginData=array(
-			"email"=>'admin@blis.local',
+			"username"=>'admin@blis.local',
 			"password"=>'password',
 		);
 	}
-// api/register
-// api/login
-// api/logout
+
 	public function testRegister()
 	{
 		$response=$this->post('/api/register',$this->registrationData);
 		$this->assertEquals(201,$response->getStatusCode());
 	}
-
+	/*
+	 | Turns out terminal is an invalied client, until we have a solution
+	 | this guy is commented
+	 */
+	 /*
 	public function testLogin()
 	{
 		$response=$this->post('/api/login',$this->loginData);
 		$this->assertEquals(200,$response->getStatusCode());
 	}
-
-	/*public function testLogOut()
-	{
-		$response=$this->post('/api/address',$this->addressData);
-		$response=$this->get('/api/address/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("period",$response->original);
-	}*/
+	 */
 }

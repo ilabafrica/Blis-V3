@@ -10,14 +10,14 @@ namespace App\Http\Controllers;
  */
 
 use Illuminate\Http\Request;
-use App\Models\QualityControlResult;
+use App\Models\ControlType;
 
-class QualityControlResultController extends Controller
+class ControlTypeController extends Controller
 {
     public function index()
     {
-        $qualityControlResult = QualityControlResult::orderBy('id', 'ASC')->paginate(20);
-        return response()->json($qualityControlResult);
+        $controlType = ControlType::orderBy('id', 'ASC')->paginate(20);
+        return response()->json($controlType);
     }
 
     /**
@@ -28,24 +28,23 @@ class QualityControlResultController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array(
-            'results' => 'required',
-            'control_measure_id' => 'required',
-            'control_test_id' => 'required',
-        );
+        $rules = [
+            'name' => 'required',
+            'instrument_id' => 'required',
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator);
         } else {
-            $qualityControlResult = new QualityControlResult;
-            $qualityControlResult->results = $request->input('results');
-            $qualityControlResult->control_measure_id = $request->input('control_measure_id');
-            $qualityControlResult->control_test_id = $request->input('control_test_id');
+            $controlType = new ControlType;
+            $controlType->name = $request->input('name');
+            $controlType->description = $request->input('description');
+            $controlType->instrument_id = $request->input('instrument_id');
 
             try {
-                $qualityControlResult->save();
-                return response()->json($qualityControlResult);
+                $controlType->save();
+                return response()->json($controlType);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -60,8 +59,8 @@ class QualityControlResultController extends Controller
      */
     public function show($id)
     {
-        $qualityControlResult = QualityControlResult::findOrFail($id);
-        return response()->json($qualityControlResult);
+        $controlType = ControlType::findOrFail($id);
+        return response()->json($controlType);
     }
 
     /**
@@ -74,23 +73,22 @@ class QualityControlResultController extends Controller
     public function update(Request $request, $id)
     {
         $rules = array(
-            'results' => 'required',
-            'control_measure_id' => 'required',
-            'control_test_id' => 'required',
+            'name' => 'required',
+            'instrument_id' => 'required',
         );
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $qualityControlResult = QualityControlResult::findOrFail($id);
-            $qualityControlResult->results = $request->input('results');
-            $qualityControlResult->control_measure_id = $request->input('control_measure_id');
-            $qualityControlResult->control_test_id = $request->input('control_test_id');
+            $controlType = ControlType::findOrFail($id);
+            $controlType->name = $request->input('name');
+            $controlType->description = $request->input('description');
+            $controlType->instrument_id = $request->input('instrument_id');
 
             try {
-                $qualityControlResult->save();
-                return response()->json($qualityControlResult);
+                $controlType->save();
+                return response()->json($controlType);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -106,9 +104,9 @@ class QualityControlResultController extends Controller
     public function destroy($id)
     {
         try {
-            $qualityControlResult = QualityControlResult::findOrFail($id);
-            $qualityControlResult->delete();
-            return response()->json($qualityControlResult, 200);
+            $controlType = ControlType::findOrFail($id);
+            $controlType->delete();
+            return response()->json($controlType, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }

@@ -23,7 +23,8 @@
       <v-list-tile slot="activator">
         <v-list-tile-title>Lab Configuration</v-list-tile-title>
       </v-list-tile>
-      <v-list-tile v-for="(lab_configuration, i) in lab_configurations" :key="i" @click="">
+      <v-list-tile v-for="(lab_configuration, i) in lab_configurations" :key="i"
+        :to="{path:lab_configuration.path}">
         <v-list-tile-action>
           <v-icon v-text="lab_configuration.icon"></v-icon>
         </v-list-tile-action>
@@ -34,7 +35,8 @@
       <v-list-tile slot="activator">
         <v-list-tile-title>Test Catalog</v-list-tile-title>
       </v-list-tile>
-      <v-list-tile v-for="(test_catalog, i) in test_catalogs" :key="i" @click="">
+      <v-list-tile v-for="(test_catalog, i) in test_catalogs" :key="i"
+        :to="{path:test_catalog.path}">
         <v-list-tile-action>
           <v-icon v-text="test_catalog.icon"></v-icon>
         </v-list-tile-action>
@@ -45,7 +47,8 @@
       <v-list-tile slot="activator">
         <v-list-tile-title>Access Control</v-list-tile-title>
       </v-list-tile>
-      <v-list-tile v-for="(access_control, i) in access_controls" :key="i" @click="">
+      <v-list-tile v-for="(access_control, i) in access_controls" :key="i"
+        :to="{path:access_control.path}">
         <v-list-tile-action>
           <v-icon v-text="access_control.icon"></v-icon>
         </v-list-tile-action>
@@ -56,7 +59,7 @@
       <v-list-tile slot="activator">
         <v-list-tile-title>Tests</v-list-tile-title>
       </v-list-tile>
-      <v-list-tile v-for="(test, i) in tests" :key="i" @click="">
+      <v-list-tile v-for="(test, i) in tests" :key="i" :to="{path:test.path}">
         <v-list-tile-action>
           <v-icon v-text="test.icon"></v-icon>
         </v-list-tile-action>
@@ -71,7 +74,7 @@
     data: () => ({
       lab_configurations: [
         {
-          path: '/',
+          path: '/labconfiguration/healthunit',
           label: 'Health Units',
           icon: 'settings'
         },
@@ -171,9 +174,3 @@
   }
 </script>
 
-<!-- 
-
-
-
-
- -->

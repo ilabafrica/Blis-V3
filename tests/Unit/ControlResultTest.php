@@ -12,56 +12,56 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class QualityControlResultTest extends TestCase
+class ControlResultTest extends TestCase
 {
 	use SetUp;
 	use DatabaseMigrations;
 	public function setVariables(){
-		$this->qualityControlResultData=array(
+		$this->controlResultData=array(
 			"results"=>'Sample String',
 			"control_measure_id"=>1,
 			"control_test_id"=>1,
 		);
-		$this->updatedQualityControlResultData=array(
+		$this->updatedControlResultData=array(
 			"results"=>'Sample updated String',
 			"control_measure_id"=>1,
 			"control_test_id"=>1,
 		);
 	}
 
-	public function testStoreQualityControlResult()
+	public function testStoreControlResult()
 	{
-		$response=$this->post('/api/qualitycontrolresult',$this->qualityControlResultData);
+		$response=$this->post('/api/controlresult',$this->controlResultData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("control_test_id",$response->original);
 	}
 
-	public function testListQualityControlResult()
+	public function testListControlResult()
 	{
-		$response=$this->get('/api/qualitycontrolresult');
+		$response=$this->get('/api/controlresult');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
-	public function testShowQualityControlResult()
+	public function testShowControlResult()
 	{
-		$response=$this->post('/api/qualitycontrolresult',$this->qualityControlResultData);
-		$response=$this->get('/api/qualitycontrolresult/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("control_test_id",$response->original);
-	}
-
-	public function testUpdateQualityControlResult()
-	{
-		$response=$this->post('/api/qualitycontrolresult',$this->qualityControlResultData);
-		$response=$this->put('/api/qualitycontrolresult/1',$this->updatedQualityControlResultData);
+		$response=$this->post('/api/controlresult',$this->controlResultData);
+		$response=$this->get('/api/controlresult/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("control_test_id",$response->original);
 	}
 
-	public function testDeleteQualityControlResult()
+	public function testUpdateControlResult()
 	{
-		$response=$this->post('/api/qualitycontrolresult',$this->qualityControlResultData);
-		$response=$this->delete('/api/qualitycontrolresult/1');
+		$response=$this->post('/api/controlresult',$this->controlResultData);
+		$response=$this->put('/api/controlresult/1',$this->updatedControlResultData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("control_test_id",$response->original);
+	}
+
+	public function testDeleteControlResult()
+	{
+		$response=$this->post('/api/controlresult',$this->controlResultData);
+		$response=$this->delete('/api/controlresult/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 

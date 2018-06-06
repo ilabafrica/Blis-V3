@@ -4,21 +4,19 @@ namespace App\Http\Controllers;
 
 /*
  * (c) @iLabAfrica
- * BLIS      - a port of the Basic Laboratory Information System (BLIS) to Laravel.
- * Team Lead     - Emmanuel Kweyu.
- * Devs      - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma.
- * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
+ * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead	 - Emmanuel Kweyu.
+ * Devs			 - Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
-use App\Models\Specimen;
 use Illuminate\Http\Request;
+use App\Models\Specimen;
 
 class SpecimenController extends Controller
 {
     public function index()
     {
         $specimen = Specimen::orderBy('id', 'ASC')->paginate(20);
-
         return response()->json($specimen);
     }
 
@@ -36,8 +34,9 @@ class SpecimenController extends Controller
             'parent_id' => 'required',
             'specimen_status_id' => 'required',
             'received_by' => 'required',
-
+            'collected_by' => 'required',
         ];
+
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator);
@@ -49,6 +48,7 @@ class SpecimenController extends Controller
             $specimen->parent_id = $request->input('parent_id');
             $specimen->specimen_status_id = $request->input('specimen_status_id');
             $specimen->received_by = $request->input('received_by');
+            $specimen->collected_by = $request->input('collected_by');
             $specimen->time_collected = $request->input('time_collected');
             $specimen->received_time = $request->input('received_time');
 
@@ -90,8 +90,9 @@ class SpecimenController extends Controller
             'parent_id' => 'required',
             'specimen_status_id' => 'required',
             'received_by' => 'required',
-
+            'collected_by' => 'required',
         ];
+
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator, 422);
@@ -103,12 +104,12 @@ class SpecimenController extends Controller
             $specimen->parent_id = $request->input('parent_id');
             $specimen->specimen_status_id = $request->input('specimen_status_id');
             $specimen->received_by = $request->input('received_by');
+            $specimen->collected_by = $request->input('collected_by');
             $specimen->time_collected = $request->input('time_collected');
             $specimen->received_time = $request->input('received_time');
 
             try {
                 $specimen->save();
-
                 return response()->json($specimen);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

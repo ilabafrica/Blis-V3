@@ -10,14 +10,14 @@ namespace App\Http\Controllers;
  */
 
 use Illuminate\Http\Request;
-use App\Models\QualityControlMeasure;
+use App\Models\ControlMeasure;
 
-class QualityControlMeasureController extends Controller
+class ControlMeasureController extends Controller
 {
     public function index()
     {
-        $qualityControlMeasure = QualityControlMeasure::orderBy('id', 'ASC')->paginate(20);
-        return response()->json($qualityControlMeasure);
+        $controlMeasure = ControlMeasure::orderBy('id', 'ASC')->paginate(20);
+        return response()->json($controlMeasure);
     }
 
     /**
@@ -28,26 +28,26 @@ class QualityControlMeasureController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array(
+        $rules = [
             'name' => 'required',
             'unit' => 'required',
-            'control_id' => 'required',
-            'control_measure_type_id' => 'required',
-        );
+            'control_type_id' => 'required',
+            'measure_type_id' => 'required',
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator);
         } else {
-            $qualityControlMeasure = new QualityControlMeasure;
-            $qualityControlMeasure->name = $request->input('name');
-            $qualityControlMeasure->unit = $request->input('unit');
-            $qualityControlMeasure->control_id = $request->input('control_id');
-            $qualityControlMeasure->control_measure_type_id = $request->input('control_measure_type_id');
+            $controlMeasure = new ControlMeasure;
+            $controlMeasure->name = $request->input('name');
+            $controlMeasure->unit = $request->input('unit');
+            $controlMeasure->control_type_id = $request->input('control_type_id');
+            $controlMeasure->measure_type_id = $request->input('measure_type_id');
 
             try {
-                $qualityControlMeasure->save();
-                return response()->json($qualityControlMeasure);
+                $controlMeasure->save();
+                return response()->json($controlMeasure);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -62,8 +62,8 @@ class QualityControlMeasureController extends Controller
      */
     public function show($id)
     {
-        $qualityControlMeasure = QualityControlMeasure::findOrFail($id);
-        return response()->json($qualityControlMeasure);
+        $controlMeasure = ControlMeasure::findOrFail($id);
+        return response()->json($controlMeasure);
     }
 
     /**
@@ -78,23 +78,23 @@ class QualityControlMeasureController extends Controller
         $rules = array(
             'name' => 'required',
             'unit' => 'required',
-            'control_id' => 'required',
-            'control_measure_type_id' => 'required',
+            'control_type_id' => 'required',
+            'measure_type_id' => 'required',
         );
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $qualityControlMeasure = QualityControlMeasure::findOrFail($id);
-            $qualityControlMeasure->name = $request->input('name');
-            $qualityControlMeasure->unit = $request->input('unit');
-            $qualityControlMeasure->control_id = $request->input('control_id');
-            $qualityControlMeasure->control_measure_type_id = $request->input('control_measure_type_id');
+            $controlMeasure = ControlMeasure::findOrFail($id);
+            $controlMeasure->name = $request->input('name');
+            $controlMeasure->unit = $request->input('unit');
+            $controlMeasure->control_type_id = $request->input('control_type_id');
+            $controlMeasure->measure_type_id = $request->input('measure_type_id');
 
             try {
-                $qualityControlMeasure->save();
-                return response()->json($qualityControlMeasure);
+                $controlMeasure->save();
+                return response()->json($controlMeasure);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -110,9 +110,9 @@ class QualityControlMeasureController extends Controller
     public function destroy($id)
     {
         try {
-            $qualityControlMeasure = QualityControlMeasure::findOrFail($id);
-            $qualityControlMeasure->delete();
-            return response()->json($qualityControlMeasure, 200);
+            $controlMeasure = ControlMeasure::findOrFail($id);
+            $controlMeasure->delete();
+            return response()->json($controlMeasure, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }

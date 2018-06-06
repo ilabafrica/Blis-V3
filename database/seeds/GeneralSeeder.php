@@ -25,10 +25,11 @@ class GeneralSeeder extends Seeder
             'email' => 'admin@blis.local',
             'password' =>  bcrypt('password'),
         ]);
-        factory(App\User::class, 100)->create();
+        factory(App\User::class, 20)->create();
+        factory(App\Models\Location::class, 100)->create();
 
         //Patients table
-        factory(App\Models\Patient::class, 100)->create();
+        factory(App\Models\Patient::class, 20)->create();
 
 
         $this->command->info('users seeded');

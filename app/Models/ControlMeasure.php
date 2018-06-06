@@ -9,7 +9,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class QualityControlMeasure extends Model
+class ControlMeasure extends Model
 {
 	//
 }

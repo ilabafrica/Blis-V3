@@ -400,11 +400,11 @@ class CreateBlisTables extends Migration
         });
         /*
          * @system blis.v3 defined
-         * @example wards|clinics
+         * @example wards|clinics|healthunits
          */
         Schema::create('locations', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('identifier', 45);
+            $table->string('identifier', 45)->nullable();
             $table->string('name', 100);
         });
 
@@ -509,6 +509,8 @@ class CreateBlisTables extends Migration
             $table->index('received_by');
             $table->foreign('specimen_type_id')->references('id')->on('specimen_types');
             $table->foreign('specimen_status_id')->references('id')->on('specimen_statuses');
+            $table->foreign('received_by')->references('id')->on('users');
+            $table->foreign('collected_by')->references('id')->on('users');
         });
 
         /*

@@ -12,6 +12,12 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\Models\Location::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
 $factory->define(\App\Models\Gender::class, function (Faker\Generator $faker) {
     return [
         'code' => 'male',
@@ -105,23 +111,6 @@ $factory->define(App\Models\StatusHistory::class, function (Faker\Generator $fak
     ];
 });
 
-$factory->define(App\Models\Coding::class, function (Faker\Generator $faker) {
-    return [
-    ];
-});
-
-$factory->define(App\Models\EpisodeofCare::class, function (Faker\Generator $faker) {
-    return [
-        'status' => $faker->randomNumber(),
-        'type' => $faker->randomNumber(),
-        'patient' => $faker->randomNumber(),
-        'organization_id' => $faker->randomNumber(),
-        'period' => $faker->randomNumber(),
-        'practitioners_id' => $faker->randomNumber(),
-        'team_id' => $faker->randomNumber(),
-    ];
-});
-
 
 $factory->define(App\Models\Collection::class, function (Faker\Generator $faker) {
     return [
@@ -133,17 +122,7 @@ $factory->define(App\Models\Collection::class, function (Faker\Generator $faker)
     ];
 });
 
-$factory->define(App\Models\PatientContact::class, function (Faker\Generator $faker) {
-    return [
-        'patient_id' => $faker->randomNumber(),
-        'relationship' => $faker->randomNumber(),
-        'name' => $faker->name,
-        'telecom' => $faker->randomNumber(),
-        'gender' => $faker->randomNumber(),
-        'organization_id' => $faker->randomNumber(),
-        'period' => $faker->date(),
-    ];
-});
+
 
 $factory->define(App\Models\Specimen::class, function (Faker\Generator $faker) {
     return [
@@ -157,26 +136,5 @@ $factory->define(App\Models\Specimen::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Models\Substance::class, function (Faker\Generator $faker) {
-    return [
-        'status' => $faker->randomNumber(),
-        'category' => $faker->randomNumber(),
-        'code' => $faker->randomNumber(),
-        'description' => $faker->word,
-    ];
-});
-$factory->define(App\Models\CareTeam::class, function (Faker\Generator $faker) {
-    return [
-        'identifiers' => $faker->word,
-        'status_id' => $faker->randomNumber(),
-        'category' => $faker->randomNumber(),
-        'name' => $faker->name,
-        'subject' => $faker->randomNumber(),
-        'context' => $faker->randomNumber(),
-        'period' => $faker->randomNumber(),
-        'reason_code' => $faker->randomNumber(),
-        'reason_reference' => $faker->word,
-        'organization_id' => $faker->randomNumber(),
-        'comment' => $faker->word,
-    ];
-});
+
+

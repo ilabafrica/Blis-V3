@@ -10,14 +10,14 @@ namespace App\Http\Controllers;
  */
 
 use Illuminate\Http\Request;
-use App\Models\QualityControl;
+use App\Models\ControlResult;
 
-class QualityControlController extends Controller
+class ControlResultController extends Controller
 {
     public function index()
     {
-        $qualityControl = QualityControl::orderBy('id', 'ASC')->paginate(20);
-        return response()->json($qualityControl);
+        $controlResult = ControlResult::orderBy('id', 'ASC')->paginate(20);
+        return response()->json($controlResult);
     }
 
     /**
@@ -28,23 +28,24 @@ class QualityControlController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array(
-            'name' => 'required',
-            'lot_id' => 'required',
-        );
+        $rules = [
+            'results' => 'required',
+            'control_measure_id' => 'required',
+            'control_test_id' => 'required',
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator);
         } else {
-            $qualityControl = new QualityControl;
-            $qualityControl->name = $request->input('name');
-            $qualityControl->description = $request->input('description');
-            $qualityControl->lot_id = $request->input('lot_id');
+            $controlResult = new ControlResult;
+            $controlResult->results = $request->input('results');
+            $controlResult->control_measure_id = $request->input('control_measure_id');
+            $controlResult->control_test_id = $request->input('control_test_id');
 
             try {
-                $qualityControl->save();
-                return response()->json($qualityControl);
+                $controlResult->save();
+                return response()->json($controlResult);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -59,8 +60,8 @@ class QualityControlController extends Controller
      */
     public function show($id)
     {
-        $qualityControl = QualityControl::findOrFail($id);
-        return response()->json($qualityControl);
+        $controlResult = ControlResult::findOrFail($id);
+        return response()->json($controlResult);
     }
 
     /**
@@ -73,22 +74,23 @@ class QualityControlController extends Controller
     public function update(Request $request, $id)
     {
         $rules = array(
-            'name' => 'required',
-            'lot_id' => 'required',
+            'results' => 'required',
+            'control_measure_id' => 'required',
+            'control_test_id' => 'required',
         );
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $qualityControl = QualityControl::findOrFail($id);
-            $qualityControl->name = $request->input('name');
-            $qualityControl->description = $request->input('description');
-            $qualityControl->lot_id = $request->input('lot_id');
+            $controlResult = ControlResult::findOrFail($id);
+            $controlResult->results = $request->input('results');
+            $controlResult->control_measure_id = $request->input('control_measure_id');
+            $controlResult->control_test_id = $request->input('control_test_id');
 
             try {
-                $qualityControl->save();
-                return response()->json($qualityControl);
+                $controlResult->save();
+                return response()->json($controlResult);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -104,9 +106,9 @@ class QualityControlController extends Controller
     public function destroy($id)
     {
         try {
-            $qualityControl = QualityControl::findOrFail($id);
-            $qualityControl->delete();
-            return response()->json($qualityControl, 200);
+            $controlResult = ControlResult::findOrFail($id);
+            $controlResult->delete();
+            return response()->json($controlResult, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
