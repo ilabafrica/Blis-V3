@@ -46,7 +46,7 @@
     </v-data-table>
     <div class="text-xs-center">
       <v-pagination
-        :length="pagination.total/10"
+        :length="length"
         :total-visible="pagination.visible"
         v-model="pagination.page"
         @input="initialize"
@@ -60,6 +60,7 @@
   export default {
     data: () => ({
       dialog: false,
+      delete: false,
       pagination: {
         page: 1,
         per_page: 0,
@@ -86,7 +87,10 @@
     computed: {
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-      }
+      },
+      length: function() {
+        return Math.ceil(this.pagination.total / 10);
+      },
     },
 
     watch: {
@@ -103,7 +107,7 @@
 
       initialize () {
 
-        apiCall({url: '/api/location?page=' + this.pagination.page, method: 'GET' })
+        apiCall({url: '/api/location/?page=' + this.pagination.page, method: 'GET' })
         .then(resp => {
           console.log(resp.data)
           this.locations = resp.data;
@@ -122,17 +126,19 @@
 
       deleteItem (item) {
 
-        this.locations.splice(index, 1)
+        confirm('Are you sure you want to delete this item?') && (this.delete = true)
 
-        const index = this.locations.indexOf(item)
-
-        apiCall({url: '/api/location'+item.id, method: 'DELETE' })
-        .then(resp => {
-          console.log(resp.data)
-        })
-        .catch(error => {
-          console.log(error.response)
-        })
+        if (this.delete) {
+          this.locations.splice(index, 1)
+          const index = this.locations.indexOf(item)
+          apiCall({url: '/api/location/'+item.id, method: 'DELETE' })
+          .then(resp => {
+            console.log(resp.data)
+          })
+          .catch(error => {
+            console.log(error.response)
+          })
+        }
 
       },
 
@@ -151,7 +157,7 @@
 
           Object.assign(this.locations[this.editedIndex], this.editedItem)
 
-          apiCall({url: '/api/location'+item.id, data: this.editedItem, method: 'PUT' })
+          apiCall({url: '/api/location/'+item.id, data: this.editedItem, method: 'PUT' })
           .then(resp => {
             console.log(resp.data)
           })
@@ -164,7 +170,7 @@
 
           this.locations.push(this.editedItem)
 
-          apiCall({url: '/api/location', data: this.editedItem, method: 'POST' })
+          apiCall({url: '/api/location/', data: this.editedItem, method: 'POST' })
           .then(resp => {
             console.log(resp.data)
           })

@@ -23,7 +23,7 @@
       </v-container>
     </v-content>
     <v-footer v-if='isAuthenticated && isProfileLoaded' color="primary" app>
-      <span class="white--text">&copy; 2017</span>
+      <span class="white--text">@iLabAfrica &copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
