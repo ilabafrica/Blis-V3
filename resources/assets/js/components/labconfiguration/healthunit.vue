@@ -25,6 +25,19 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-card-title>
+      Health Units
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="search"
+        label="Search"
+        single-line
+        v-on:keyup.enter="initialize"
+        hide-details>
+      </v-text-field>
+    </v-card-title>
     <v-data-table
       :headers="headers"
       :items="locations"
@@ -61,6 +74,8 @@
     data: () => ({
       dialog: false,
       delete: false,
+      search: '',
+      query: '',
       pagination: {
         page: 1,
         per_page: 0,
@@ -68,7 +83,7 @@
         visible: 10
       },
       headers: [
-        { text: 'Name', align: 'left', sortable: false, value: 'name' },
+        { text: 'Name', value: 'name' },
         { text: 'Code', value: 'identifier' },
         { text: 'Actions', value: 'name', sortable: false }
       ],
@@ -107,7 +122,12 @@
 
       initialize () {
 
-        apiCall({url: '/api/location/?page=' + this.pagination.page, method: 'GET' })
+        this.query = 'page='+ this.pagination.page;
+        if (this.search != '') {
+            this.query = this.query+'&search='+this.search;
+        }
+
+        apiCall({url: '/api/location/?' + this.query, method: 'GET' })
         .then(resp => {
           console.log(resp.data)
           this.locations = resp.data;
@@ -129,11 +149,12 @@
         confirm('Are you sure you want to delete this item?') && (this.delete = true)
 
         if (this.delete) {
-          this.locations.splice(index, 1)
           const index = this.locations.indexOf(item)
+          this.locations.splice(index, 1)
           apiCall({url: '/api/location/'+item.id, method: 'DELETE' })
           .then(resp => {
             console.log(resp.data)
+            console.log(resp)
           })
           .catch(error => {
             console.log(error.response)

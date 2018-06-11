@@ -1,5 +1,15 @@
 <template>
   <v-app id="inspire">
+    <v-alert
+      v-model="alert"
+      outline
+      align-right
+      icon="warning"
+      transition="scale-transition"
+      color="error"
+      dismissible>
+      {{message}}
+    </v-alert>
     <v-content>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
@@ -29,16 +39,22 @@
   import {AUTH_REQUEST} from '../store/actions/auth'
   export default {
     data() {
-        return {
-            username: '',
-            password: '',
-        };
+      return {
+        alert: false,
+        message: '',
+        username: '',
+        password: '',
+      };
     },
     methods: {
       login () {
         const { username, password } = this
-        this.$store.dispatch(AUTH_REQUEST, { username, password }).then(() => {
+        this.$store.dispatch(AUTH_REQUEST, { username, password })
+        .then((response) => {
           this.$router.push('/')
+        }).catch((response) => {
+          this.message = 'Wrong email or password';
+          this.alert = true;
         });
       }
     },
