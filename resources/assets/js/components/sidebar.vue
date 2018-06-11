@@ -31,7 +31,7 @@
         <v-list-tile-title v-text="lab_configuration.label"></v-list-tile-title>
       </v-list-tile>
     </v-list-group>
-    <v-list-group prepend-icon="account_circle" value="true">
+    <v-list-group prepend-icon="assignment" value="true">
       <v-list-tile slot="activator">
         <v-list-tile-title>Test Catalog</v-list-tile-title>
       </v-list-tile>
@@ -43,7 +43,7 @@
         <v-list-tile-title v-text="test_catalog.label"></v-list-tile-title>
       </v-list-tile>
     </v-list-group>
-    <v-list-group prepend-icon="account_circle" value="true">
+    <v-list-group prepend-icon="security" value="true">
       <v-list-tile slot="activator">
         <v-list-tile-title>Access Control</v-list-tile-title>
       </v-list-tile>
@@ -55,7 +55,7 @@
         <v-list-tile-title v-text="access_control.label"></v-list-tile-title>
       </v-list-tile>
     </v-list-group>
-    <v-list-group prepend-icon="account_circle" value="true">
+    <v-list-group prepend-icon="vertical_split" value="true">
       <v-list-tile slot="activator">
         <v-list-tile-title>Tests</v-list-tile-title>
       </v-list-tile>
@@ -76,98 +76,98 @@
         {
           path: '/labconfiguration/healthunit',
           label: 'Health Units',
-          icon: 'settings'
+          icon: 'add_circle'
         },
         {
           path: '/',
           label: 'Barcode Settings',
-          icon: 'settings'
+          icon: 'build'
         },
         {
           path: '/',
           label: 'Interfaced Equipment',
-          icon: 'settings'
+          icon: 'devices'
         },
       ],
       test_catalogs: [
         {
           path: '/',
           label: 'Lab Sections',
-          icon: 'settings'
+          icon: 'dashboard'
         },
         {
           path: '/',
           label: 'Specimen Types',
-          icon: 'settings'
+          icon: 'assignment_turned_in'
         },
         {
           path: '/',
           label: 'Specimen Rejection',
-          icon: 'settings'
+          icon: 'assignment_late'
         },
         {
           path: '/',
           label: 'Test Types',
-          icon: 'settings'
+          icon: 'extension'
         },
         {
           path: '/',
           label: 'Drugs',
-          icon: 'settings'
+          icon: 'opacity'
         },
         {
           path: '/',
           label: 'Organisms',
-          icon: 'settings'
+          icon: 'bug_report'
         },
       ],
       access_controls: [
         {
           path: '/',
           label: 'User Accounts',
-          icon: 'settings'
+          icon: 'people'
         },
         {
           path: '/',
           label: 'Permission',
-          icon: 'settings'
+          icon: 'how_to_reg'
         },
         {
           path: '/',
           label: 'Role',
-          icon: 'settings'
+          icon: 'ballot'
         },
         {
           path: '/',
           label: 'Assign Roles',
-          icon: 'settings'
+          icon: 'verified_user'
         },
       ],
       tests: [
         {
           path: '/',
           label: 'Completed Tests',
-          icon: 'settings'
+          icon: 'done_all'
         },
         {
           path: '/',
           label: 'Samples Not Recieved',
-          icon: 'settings'
+          icon: 'report_problem'
         },
         {
           path: '/',
           label: 'Pending Tests',
-          icon: 'settings'
+          icon: 'hourglass_empty'
         },
         {
           path: '/',
           label: 'Tests Started',
-          icon: 'settings'
+          icon: 'sync'
         },
         {
           path: '/',
           label: 'Verified Tests',
-          icon: 'settings'
+          icon: 'check_box'
         },
       ]
     })
