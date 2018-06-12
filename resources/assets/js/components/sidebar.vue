@@ -123,7 +123,7 @@
       ],
       access_controls: [
         {
-          path: '/',
+          path: '/accesscontrol/useraccounts',
           label: 'User Accounts',
           icon: 'people'
         },

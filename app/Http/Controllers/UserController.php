@@ -17,7 +17,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $user = User::all();
+        $user = User::paginate(10);
 
         return response()->json($user);
     }
@@ -114,12 +114,16 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        \Log::info('id');
+        \Log::info($id);
         try {
             $user = User::findOrFail($id);
             $user->delete();
+        \Log::info('success');
 
             return response()->json($user, 200);
         } catch (\Illuminate\Database\QueryException $e) {
+        \Log::info('failed');
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }

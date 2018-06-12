@@ -46,5 +46,12 @@ export default new Router({
       component: require('../components/labconfiguration/healthunit'),
       beforeEnter: ifAuthenticated,
     },
+    // Access Control
+    {
+      path: '/accesscontrol/useraccounts',
+      name: 'UserAccounts',
+      component: require('../components/accesscontrol/useraccounts'),
+      beforeEnter: ifAuthenticated,
+    },
   ],
 })
