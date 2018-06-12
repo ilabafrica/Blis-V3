@@ -6,27 +6,27 @@ const apiCall = ({url, data, method}) => new Promise((resolve, reject) => {
       if (method == 'GET') {
         axios.get(url).then((response) => {
           resolve(response.data)
-        }).catch((response) => {
-          reject(new Error(response))
+        }).catch((error) => {
+          reject(new Error(error))
         })
       } else if (method == 'POST'){
         axios.post(url,data).then((response) => {
           resolve(response.data)
-        }).catch((response) => {
-          reject(new Error(response))
+        }).catch((error) => {
+          reject(new Error(error))
         });
       } else if (method == 'PUT'){
         axios.put(url,data).then((response) => {
           resolve(response.data)
-        }).catch((response) => {
-          reject(new Error(response))
+        }).catch((error) => {
+          reject(new Error(error))
         });
       } else if (method == 'DELETE'){
         axios({ method: 'delete', url: url,data: null})
         .then((response) => {
           resolve(response.data)
-        }).catch((response) => {
-          reject(new Error(response))
+        }).catch((error) => {
+          reject(new Error(error))
         });
       }
     } catch (err) {

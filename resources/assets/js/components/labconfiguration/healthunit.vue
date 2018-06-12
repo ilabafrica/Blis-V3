@@ -6,14 +6,23 @@
         <v-card-title>
           <span class="headline">{{ formTitle }}</span>
         </v-card-title>
+        <v-form ref="form" v-model="valid" lazy-validation>
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
+                <v-text-field
+                  v-model="editedItem.name"
+                  :rules="[v => !!v || 'Name is Required']"
+                  label="Name">
+                </v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editedItem.identifier" label="Code"></v-text-field>
+                <v-text-field
+                  v-model="editedItem.identifier"
+                  :rules="[v => !!v || 'Code is Required']"
+                  label="Code">
+                </v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
@@ -21,8 +30,9 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="save">Save</v-btn>
+          <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="save">Save</v-btn>
         </v-card-actions>
+        </v-form>
       </v-card>
     </v-dialog>
 
@@ -72,6 +82,7 @@
   import apiCall from '../../utils/api'
   export default {
     data: () => ({
+      valid: true,
       dialog: false,
       delete: false,
       search: '',
@@ -101,8 +112,15 @@
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        if (this.editedIndex === -1) {
+          this.resetDialogRefs();
+          return 'New Item'
+        }else{
+
+          return 'Edit Item'
+        }
       },
+
       length: function() {
         return Math.ceil(this.pagination.total / 10);
       },
@@ -127,9 +145,9 @@
             this.query = this.query+'&search='+this.search;
         }
 
-        apiCall({url: '/api/location/?' + this.query, method: 'GET' })
+        apiCall({url: '/api/location?' + this.query, method: 'GET' })
         .then(resp => {
-          console.log(resp.data)
+          console.log(resp)
           this.locations = resp.data;
           this.pagination.total = resp.total;
         })
@@ -153,7 +171,6 @@
           this.locations.splice(index, 1)
           apiCall({url: '/api/location/'+item.id, method: 'DELETE' })
           .then(resp => {
-            console.log(resp.data)
             console.log(resp)
           })
           .catch(error => {
@@ -165,10 +182,11 @@
 
       close () {
         this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
+      },
+
+      resetDialogRefs() {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
       },
 
       save () {
@@ -176,11 +194,11 @@
         // update
         if (this.editedIndex > -1) {
 
-          Object.assign(this.locations[this.editedIndex], this.editedItem)
-
-          apiCall({url: '/api/location/'+item.id, data: this.editedItem, method: 'PUT' })
+          apiCall({url: '/api/location/'+this.editedItem.id, data: this.editedItem, method: 'PUT' })
           .then(resp => {
-            console.log(resp.data)
+            Object.assign(this.locations[this.editedIndex], this.editedItem)
+            console.log(resp)
+            this.resetDialogRefs();
           })
           .catch(error => {
             console.log(error.response)
@@ -189,11 +207,11 @@
         // store
         } else {
 
-          this.locations.push(this.editedItem)
-
-          apiCall({url: '/api/location/', data: this.editedItem, method: 'POST' })
+          apiCall({url: '/api/location', data: this.editedItem, method: 'POST' })
           .then(resp => {
-            console.log(resp.data)
+            this.locations.push(this.editedItem)
+            console.log(resp)
+            this.resetDialogRefs();
           })
           .catch(error => {
             console.log(error.response)

@@ -39,13 +39,11 @@ class LocationController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'identifier' => 'required',
             'name' => 'required',
-
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json(['message'=>'Please check all fields and try again'],422);
         } else {
             $location = new Location;
             $location->identifier = $request->input('identifier');
@@ -84,13 +82,12 @@ class LocationController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'identifier' => 'required',
             'name' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator, 422);
+            return response()->json(['message'=>'Please check all fields and try again'],422);
         } else {
             $location = Location::findOrFail($id);
             $location->identifier = $request->input('identifier');

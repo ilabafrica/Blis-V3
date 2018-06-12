@@ -35,8 +35,8 @@ class APIAuthTest extends TestCase
 		$this->assertEquals(201,$response->getStatusCode());
 	}
 	/*
-	 | Turns out terminal is an invalied client, until we have a solution
-	 | this guy is commented
+	 | Turns out terminal is an invalid client, until we have a solution
+	 | this guy stands commented
 	 */
 	 /*
 	public function testLogin()
