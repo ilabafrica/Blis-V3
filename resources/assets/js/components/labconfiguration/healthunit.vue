@@ -48,6 +48,7 @@
         hide-details>
       </v-text-field>
     </v-card-title>
+
     <v-data-table
       :headers="headers"
       :items="locations"
@@ -85,6 +86,7 @@
       valid: true,
       dialog: false,
       delete: false,
+      saving: false,
       search: '',
       query: '',
       pagination: {
@@ -113,7 +115,7 @@
     computed: {
       formTitle () {
         if (this.editedIndex === -1) {
-          this.resetDialogRefs();
+          this.resetDialogReferences();
           return 'New Item'
         }else{
 
@@ -182,15 +184,21 @@
 
       close () {
         this.dialog = false
+
+        // if not saving reset dialog references to datatables
+        if (!this.saving) {
+          this.resetDialogReferences();
+        }
       },
 
-      resetDialogRefs() {
+      resetDialogReferences() {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       },
 
       save () {
 
+        this.saving = true;
         // update
         if (this.editedIndex > -1) {
 
@@ -198,7 +206,8 @@
           .then(resp => {
             Object.assign(this.locations[this.editedIndex], this.editedItem)
             console.log(resp)
-            this.resetDialogRefs();
+            this.resetDialogReferences();
+            this.saving = false;
           })
           .catch(error => {
             console.log(error.response)
@@ -211,7 +220,8 @@
           .then(resp => {
             this.locations.push(this.editedItem)
             console.log(resp)
-            this.resetDialogRefs();
+            this.resetDialogReferences();
+            this.saving = false;
           })
           .catch(error => {
             console.log(error.response)
