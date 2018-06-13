@@ -15,9 +15,17 @@ use Illuminate\Http\Request;
 
 class LocationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $locations = Location::paginate(10);
+        if ($request->query('search')) {
+            $search = $request->query('search');
+            $locations = Location::where('name', 'LIKE', "%{$search}%")
+                ->paginate(10);
+
+        }else{
+
+            $locations = Location::paginate(10);
+        }
 
         return response()->json($locations);
     }
@@ -31,13 +39,11 @@ class LocationController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'identifier' => 'required',
             'name' => 'required',
-
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json(['message'=>'Please check all fields and try again'],422);
         } else {
             $location = new Location;
             $location->identifier = $request->input('identifier');
@@ -76,13 +82,12 @@ class LocationController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'identifier' => 'required',
             'name' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator, 422);
+            return response()->json(['message'=>'Please check all fields and try again'],422);
         } else {
             $location = Location::findOrFail($id);
             $location->identifier = $request->input('identifier');
@@ -107,9 +112,7 @@ class LocationController extends Controller
     public function destroy($id)
     {
         try {
-            $location = Location::find($id);
-            $location->delete();
-            return response()->json($location, 200);
+            return response()->json(Location::destroy($id), 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }

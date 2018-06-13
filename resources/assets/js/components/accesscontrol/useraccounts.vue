@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-dialog v-model="dialog" max-width="500px">
-      <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
+      <v-btn slot="activator" color="primary" dark class="mb-2">New User</v-btn>
       <v-card>
         <v-card-title>
           <span class="headline">{{ formTitle }}</span>
@@ -10,18 +10,25 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm12 md12>
+                <v-text-field
+                  v-model="editedItem.username"
+                  :rules="[v = !!v || 'Username is Required']"
+                  label="Username">    
+                </v-text-field>
+              </v-flex>
+              <v-flex xs12 sm12 md12>
                 <v-text-field
                   v-model="editedItem.name"
                   :rules="[v => !!v || 'Name is Required']"
                   label="Name">
                 </v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md4>
+              <v-flex xs12 sm12 md12>
                 <v-text-field
-                  v-model="editedItem.identifier"
-                  :rules="[v => !!v || 'Code is Required']"
-                  label="Code">
+                  v-model="editedItem.email"
+                  :rules="[v => !!v || 'Email is Required']"
+                  label="Email Address">
                 </v-text-field>
               </v-flex>
             </v-layout>
@@ -32,42 +39,30 @@
           <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
           <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="save">Save</v-btn>
         </v-card-actions>
-        </v-form>
+      </v-form>
       </v-card>
     </v-dialog>
-
-    <v-card-title>
-      Health Units
-      <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="search"
-        label="Search"
-        single-line
-        v-on:keyup.enter="initialize"
-        hide-details>
-      </v-text-field>
-    </v-card-title>
-    <v-data-table
-      :headers="headers"
-      :items="locations"
-      hide-actions
-      class="elevation-1"
-    >
-      <template slot="items" slot-scope="props">
-        <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.identifier }}</td>
-        <td class="justify-center layout px-0">
-          <v-btn icon class="mx-0" @click="editItem(props.item)">
-            <v-icon color="teal">edit</v-icon>
-          </v-btn>
-          <v-btn icon class="mx-0" @click="deleteItem(props.item)">
-            <v-icon color="pink">delete</v-icon>
-          </v-btn>
-        </td>
-      </template>
-    </v-data-table>
-    <div class="text-xs-center">
+  <v-data-table
+    :headers="headers"
+    :items="user"
+    hide-actions
+    class="elevation-1"
+  >
+    <template slot="items" slot-scope="props">
+      <td>{{ props.item.username }}</td>
+      <td class="text-xs-left">{{ props.item.name }}</td>
+      <td class="text-xs-left">{{ props.item.email }}</td>
+      <td class="justify-left layout px-0">
+        <v-btn icon class="mx-0" @click="editItem(props.item)">
+           <v-icon color="teal">edit</v-icon>
+        </v-btn>
+        <v-btn icon class="mx-0" @click="deleteItem(props.item)">
+           <v-icon color="pink">delete</v-icon>
+        </v-btn>
+      </td>
+    </template>
+  </v-data-table>
+  <div class="text-xs-center">
       <v-pagination
         :length="length"
         :total-visible="pagination.visible"
@@ -85,8 +80,6 @@
       valid: true,
       dialog: false,
       delete: false,
-      search: '',
-      query: '',
       pagination: {
         page: 1,
         per_page: 0,
@@ -94,33 +87,37 @@
         visible: 10
       },
       headers: [
+        { text: 'Username', align: 'left', value: 'username' },
         { text: 'Name', value: 'name' },
-        { text: 'Code', value: 'identifier' },
-        { text: 'Actions', value: 'name', sortable: false }
+        { text: 'Email Address', value: 'email' },
+        { text: 'Actions', sortable: false, value: 'action' }
       ],
-      locations: [],
+      user: [],
       editedIndex: -1,
       editedItem: {
+        username: '',
         name: '',
-        identifier: '',
+        email: ''
       },
       defaultItem: {
+        username: '',
         name: '',
-        identifier: '',
+        email: ''
       }
     }),
+    created () {
+      this.initialize()
+    },
 
     computed: {
-      formTitle () {
-        if (this.editedIndex === -1) {
+      formTitle() {
+        if(this.editedIndex === -1){
           this.resetDialogRefs();
-          return 'New Item'
+          return 'New User'
         }else{
-
-          return 'Edit Item'
+          return 'Edit User'
         }
       },
-
       length: function() {
         return Math.ceil(this.pagination.total / 10);
       },
@@ -132,46 +129,32 @@
       }
     },
 
-    created () {
-      this.initialize()
-    },
-
     methods: {
-
       initialize () {
-
-        this.query = 'page='+ this.pagination.page;
-        if (this.search != '') {
-            this.query = this.query+'&search='+this.search;
-        }
-
-        apiCall({url: '/api/location?' + this.query, method: 'GET' })
+        apiCall({url: '/api/user?page=' + this.pagination.page, method: 'GET' })
         .then(resp => {
-          console.log(resp)
-          this.locations = resp.data;
+          console.log(resp.data)
+          this.user = resp.data;
           this.pagination.total = resp.total;
         })
         .catch(error => {
           console.log(error.response)
         })
       },
-
       editItem (item) {
-        this.editedIndex = this.locations.indexOf(item)
+        this.editedIndex = this.user.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
 
       deleteItem (item) {
-
-        confirm('Are you sure you want to delete this item?') && (this.delete = true)
-
+        confirm('Are you sure you want to delete this user?') && (this.delete = true)
         if (this.delete) {
-          const index = this.locations.indexOf(item)
-          this.locations.splice(index, 1)
-          apiCall({url: '/api/location/'+item.id, method: 'DELETE' })
+          const index = this.user.indexOf(item)
+          this.user.splice(index, 1)
+          apiCall({url: '/api/user/'+item.id, method: 'DELETE' })
           .then(resp => {
-            console.log(resp)
+            console.log(resp.data)
           })
           .catch(error => {
             console.log(error.response)
@@ -190,26 +173,26 @@
       },
 
       save () {
-
         // update
         if (this.editedIndex > -1) {
-
-          apiCall({url: '/api/location/'+this.editedItem.id, data: this.editedItem, method: 'PUT' })
+          apiCall({url: '/api/user/'+this.editedItem.id, data: this.editedItem, method: 'PUT' })
           .then(resp => {
-            Object.assign(this.locations[this.editedIndex], this.editedItem)
+            Object.assign(this.user[this.editedIndex], this.editedItem)
             console.log(resp)
+            console.log('success')
             this.resetDialogRefs();
           })
           .catch(error => {
+            console.log('fail')
             console.log(error.response)
           })
 
         // store
         } else {
 
-          apiCall({url: '/api/location', data: this.editedItem, method: 'POST' })
+          apiCall({url: '/api/user/', data: this.editedItem, method: 'POST' })
           .then(resp => {
-            this.locations.push(this.editedItem)
+            this.user.push(this.editedItem)
             console.log(resp)
             this.resetDialogRefs();
           })
@@ -218,8 +201,7 @@
           })
         }
         this.close()
-
       }
-    }
+    },
   }
 </script>
