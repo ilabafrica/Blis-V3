@@ -112,7 +112,7 @@
     computed: {
       formTitle() {
         if(this.editedIndex === -1){
-          this.resetDialogRefs();
+          this.resetDialogReferences();
           return 'New User'
         }else{
           return 'Edit User'
@@ -165,36 +165,43 @@
 
       close () {
         this.dialog = false
+
+        // if not saving reset dialog references to datatables
+        if (!this.saving) {
+          this.resetDialogReferences();
+        }
       },
 
-      resetDialogRefs() {
+      resetDialogReferences() {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       },
 
       save () {
+
+        this.saving = true;
         // update
         if (this.editedIndex > -1) {
           apiCall({url: '/api/user/'+this.editedItem.id, data: this.editedItem, method: 'PUT' })
           .then(resp => {
             Object.assign(this.user[this.editedIndex], this.editedItem)
             console.log(resp)
-            console.log('success')
-            this.resetDialogRefs();
+            this.resetDialogReferences();
+            this.saving = false;
           })
           .catch(error => {
-            console.log('fail')
             console.log(error.response)
           })
 
         // store
         } else {
 
-          apiCall({url: '/api/user/', data: this.editedItem, method: 'POST' })
+          apiCall({url: '/api/user', data: this.editedItem, method: 'POST' })
           .then(resp => {
             this.user.push(this.editedItem)
             console.log(resp)
-            this.resetDialogRefs();
+            this.resetDialogReferences();
+            this.saving = false;
           })
           .catch(error => {
             console.log(error.response)

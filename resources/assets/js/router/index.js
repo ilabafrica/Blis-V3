@@ -53,5 +53,17 @@ export default new Router({
       component: require('../components/accesscontrol/useraccounts'),
       beforeEnter: ifAuthenticated,
     },
+    {
+      path: '/accesscontrol/permissions',
+      name: 'Permissions',
+      component: require('../components/accesscontrol/permissions'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/accesscontrol/roles',
+      name: 'Roles',
+      component: require('../components/accesscontrol/roles'),
+      beforeEnter: ifAuthenticated,
+    },
   ],
 })

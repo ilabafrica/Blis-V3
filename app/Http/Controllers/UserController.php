@@ -50,10 +50,8 @@ class UserController extends Controller
 
             try {
                 $user->save();
-                \Log::info('success');
                 return response()->json($user);
             } catch (\Illuminate\Database\QueryException $e) {
-                \Log::info('failed');
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
         }

@@ -16,7 +16,11 @@ use Illuminate\Http\Request;
 class PermissionRoleController extends Controller
 {
     public function index()
-    {
+    {   
+        $permissions = Permission::all();
+        $roles       = Role::all();
+        //$rolesPermissions = ['permissions' => $permissions, 'roles' => $roles];
+        
         $rolesPermissions = Role::with('perms')->paginate(20);
         return response()->json($rolesPermissions);
     }

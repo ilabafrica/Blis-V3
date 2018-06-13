@@ -128,13 +128,13 @@
           icon: 'people'
         },
         {
-          path: '/',
-          label: 'Permission',
+          path: '/accesscontrol/permissions',
+          label: 'Permissions',
           icon: 'how_to_reg'
         },
         {
-          path: '/',
-          label: 'Role',
+          path: '/accesscontrol/roles',
+          label: 'Roles',
           icon: 'ballot'
         },
         {
