@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-/**
+/*
  * (c) @iLabAfrica
  * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
  * Team Lead	 - Emmanuel Kweyu.
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
-use Illuminate\Http\Request;
 use App\Models\Code;
+use Illuminate\Http\Request;
 
 class CodeController extends Controller
 {
     public function index()
     {
         $code = Code::orderBy('id', 'ASC')->paginate(20);
+
         return response()->json($code);
     }
 
@@ -28,12 +29,12 @@ class CodeController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array(
-            "code_system_id" => "required",
-            "code" => "required",
-            "display" => "required",
-            "description" => "required",
-        );
+        $rules = [
+            'code_system_id' => 'required',
+            'code' => 'required',
+            'display' => 'required',
+            'description' => 'required',
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -47,6 +48,7 @@ class CodeController extends Controller
 
             try {
                 $code->save();
+
                 return response()->json($code);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -63,6 +65,7 @@ class CodeController extends Controller
     public function show($id)
     {
         $code = Code::findOrFail($id);
+
         return response()->json($code);
     }
 
@@ -75,12 +78,12 @@ class CodeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = array(
-            "code_system_id" => "required",
-            "code" => "required",
-            "display" => "required",
-            "description" => "required",
-        );
+        $rules = [
+            'code_system_id' => 'required',
+            'code' => 'required',
+            'display' => 'required',
+            'description' => 'required',
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -94,6 +97,7 @@ class CodeController extends Controller
 
             try {
                 $code->save();
+
                 return response()->json($code);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -112,6 +116,7 @@ class CodeController extends Controller
         try {
             $code = Code::findOrFail($id);
             $code->delete();
+
             return response()->json($code, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

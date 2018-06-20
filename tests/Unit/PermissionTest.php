@@ -33,7 +33,7 @@ class PermissionTest extends TestCase
 	{
 		$response=$this->post('/api/permission',$this->permissionData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("description",$response->original);
+		$this->assertArrayHasKey("display_name",$response->original);
 	}
 
 	public function testListPermission()
@@ -47,7 +47,7 @@ class PermissionTest extends TestCase
 		$response=$this->post('/api/permission',$this->permissionData);
 		$response=$this->get('/api/permission/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("description",$response->original);
+		$this->assertArrayHasKey("display_name",$response->original);
 	}
 
 	public function testUpdatePermission()
@@ -55,7 +55,7 @@ class PermissionTest extends TestCase
 		$response=$this->post('/api/permission',$this->permissionData);
 		$response=$this->put('/api/permission/1',$this->updatedPermissionData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("description",$response->original);
+		$this->assertArrayHasKey("display_name",$response->original);
 	}
 
 	public function testDeletePermission()

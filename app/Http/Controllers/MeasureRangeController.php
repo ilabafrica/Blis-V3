@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-/**
+/*
  * (c) @iLabAfrica
  * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
  * Team Lead	 - Emmanuel Kweyu.
@@ -17,6 +17,7 @@ class MeasureRangeController extends Controller
     public function index()
     {
         $measureRange = MeasureRange::orderBy('id', 'ASC')->paginate(20);
+
         return response()->json($measureRange);
     }
 
@@ -28,11 +29,11 @@ class MeasureRangeController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array(
-            "measure_id" => "required",
-            "gender_id" => "required",
-            "display" => "required",
-        );
+        $rules = [
+            'measure_id' => 'required',
+            'gender_id' => 'required',
+            'display' => 'required',
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -55,6 +56,7 @@ class MeasureRangeController extends Controller
 
             try {
                 $measureRange->save();
+
                 return response()->json($measureRange);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -71,6 +73,7 @@ class MeasureRangeController extends Controller
     public function show($id)
     {
         $measureRange = MeasureRange::findOrFail($id);
+
         return response()->json($measureRange);
     }
 
@@ -83,11 +86,11 @@ class MeasureRangeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = array(
-            "measure_id" => "required",
-            "gender_id" => "required",
-            "display" => "required",
-        );
+        $rules = [
+            'measure_id' => 'required',
+            'gender_id' => 'required',
+            'display' => 'required',
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -110,6 +113,7 @@ class MeasureRangeController extends Controller
 
             try {
                 $measureRange->save();
+
                 return response()->json($measureRange);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -128,6 +132,7 @@ class MeasureRangeController extends Controller
         try {
             $measureRange = MeasureRange::findOrFail($id);
             $measureRange->delete();
+
             return response()->json($measureRange, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
