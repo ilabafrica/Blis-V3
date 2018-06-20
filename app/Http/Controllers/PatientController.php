@@ -44,7 +44,6 @@ class PatientController extends Controller
     {
         $rules = [
             'identifier' => 'required',
-            //'active' => 'required',
             'birth_date' => 'required',
         ];
 
@@ -79,21 +78,6 @@ class PatientController extends Controller
             $patient->gender_id = $gender->id;
             $patient->birth_date = $request->input('birth_date');
             $patient->created_by = Auth::user()->id;
-            //$patient->active = $request->input('active');
-            //$patient->name_id = $request->input('name_id');
-            //$patient->gender_id = $request->input('gender_id');
-            
-            //$patient->deceased = $request->input('deceased');
-            //$patient->deceased_date_time = $request->input('deceased_date_time');
-            //$patient->address_id = $request->input('address_id');
-            //patient->marital_status = $request->input('marital_status');
-            //$patient->photo = $request->input('photo');
-            //$patient->animal = $request->input('animal');
-            //$patient->species_id = $request->input('species_id');
-            //$patient->breed_id = $request->input('breed_id');
-            //$patient->gender_status = $request->input('gender_status');
-            //$patient->practitioner_id = $request->input('practitioner_id');
-            //$patient->organization_id = $request->input('organization_id');
             
 
             try {
@@ -101,8 +85,7 @@ class PatientController extends Controller
             }catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
-            $updatedpatients = Patient::with('name', 'gender')->orderBy('id', 'ASC')->paginate(20);
-            return response()->json($updatedpatients);
+            return response()->json($patient);
         }
     }
 

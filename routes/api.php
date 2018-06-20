@@ -26,45 +26,44 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('address', 'AddressController');
         Route::resource('user', 'UserController');
         Route::resource('permission', 'PermissionController');
-
-	// Health Units|Instrument|Reports|Barcode
-	Route::group(['middleware' => ['permission:manage_configurations']], function() {
-		Route::resource('adhoccategory', 'AdhocCategoryController');
-		Route::resource('adhocoption', 'AdhocOptionController');
-		Route::resource('code', 'CodeController');
-		Route::resource('counter', 'CounterController');
-		Route::resource('facility', 'FacilityController');
-	});
-
-	// Lab Sections|Specimen Types|Specimen Rejection|Test Types|Drugs|Organisms
-	Route::group(['middleware' => ['permission:manage_test_catalog']], function() {
-		Route::resource('susceptibilitybreakpoint', 'SusceptibilityBreakPointController');
-		Route::resource('susceptibilityrange', 'SusceptibilityRangeController');
-		Route::resource('testmapping', 'TestMappingController');
-		Route::resource('testphase', 'TestPhaseController');
-		Route::resource('teststatus', 'TestStatusController');
-		Route::resource('testtypecategory', 'TestTypeCategoryController');
-		Route::resource('testtype', 'TestTypeController');
-		Route::resource('rejectionreason', 'RejectionReasonController');
-		Route::resource('interpretation', 'InterpretationController');
-		Route::resource('measurerange', 'MeasureRangeController');
-		Route::resource('measuretype', 'MeasureTypeController');
-		Route::resource('measure', 'MeasureController');
-		Route::resource('referralreason', 'ReferralReasonController');
-		Route::resource('rejectionreason', 'RejectionReasonController');
-		Route::resource('specimenstatus', 'SpecimenStatusController');
-		Route::resource('specimentype', 'SpecimenTypeController');
-		Route::resource('drug', 'DrugController');
-	});
-
+        Route::resource('role', 'RoleController');
+        Route::resource('roleuser', 'RoleUserController');
+        Route::post('roleuser/delete', ['uses' => 'RoleUserController@delete']);
         Route::get('permissionrole/attach', 'PermissionRoleController@attach');
         Route::get('permissionrole/detach', 'PermissionRoleController@detach');
         Route::get('permissionrole', 'PermissionRoleController@index');
-
-        Route::resource('roleuser', 'RoleUserController');
-        Route::post('roleuser/delete', ['uses' => 'RoleUserController@delete']);
-        Route::resource('role', 'RoleController');
     });
+
+    // Health Units|Instrument|Reports|Barcode
+    Route::group(['middleware' => ['permission:manage_configurations']], function() {
+        Route::resource('adhoccategory', 'AdhocCategoryController');
+        Route::resource('adhocoption', 'AdhocOptionController');
+        Route::resource('code', 'CodeController');
+        Route::resource('counter', 'CounterController');
+        Route::resource('facility', 'FacilityController');
+    });
+
+    // Lab Sections|Specimen Types|Specimen Rejection|Test Types|Drugs|Organisms
+    Route::group(['middleware' => ['permission:manage_test_catalog']], function() {
+        Route::resource('susceptibilitybreakpoint', 'SusceptibilityBreakPointController');
+        Route::resource('susceptibilityrange', 'SusceptibilityRangeController');
+        Route::resource('testmapping', 'TestMappingController');
+        Route::resource('testphase', 'TestPhaseController');
+        Route::resource('teststatus', 'TestStatusController');
+        Route::resource('testtypecategory', 'TestTypeCategoryController');
+        Route::resource('testtype', 'TestTypeController');
+        Route::resource('rejectionreason', 'RejectionReasonController');
+        Route::resource('interpretation', 'InterpretationController');
+        Route::resource('measurerange', 'MeasureRangeController');
+        Route::resource('measuretype', 'MeasureTypeController');
+        Route::resource('measure', 'MeasureController');
+        Route::resource('referralreason', 'ReferralReasonController');
+        Route::resource('rejectionreason', 'RejectionReasonController');
+        Route::resource('specimenstatus', 'SpecimenStatusController');
+        Route::resource('specimentype', 'SpecimenTypeController');
+        Route::resource('drug', 'DrugController');
+    });
+
 
     // Health Units|Instrument|Reports|Barcode
     Route::group(['middleware' => ['permission:manage_configurations']], function () {
@@ -72,6 +71,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('adhocoption', 'AdhocOptionController');
         Route::resource('code', 'CodeController');
         Route::resource('counter', 'CounterController');
+        Route::resource('location', 'LocationController');
     });
 
     // Lab Sections|Specimen Types|Specimen Rejection|Test Types|Drugs|Organisms
@@ -101,7 +101,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('encounterstatus', 'EncounterStatusController');
         Route::resource('encounter', 'EncounterController');
         Route::resource('gender', 'GenderController');
-        Route::resource('location', 'LocationController');
         Route::resource('maritalstatus', 'MaritalStatusController');
         Route::resource('name', 'NameController');
         Route::resource('organization', 'OrganizationController');
@@ -147,19 +146,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['middleware' => ['permission:manage_equipment']], function () {
     });
 
-
-Route::get('report', ["uses" => "ReportController@index"]);
-// these below are just for testing how ever
-/*Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-*/
+    // todo: tobe be secured ... out in the open
+    Route::get('report', ['uses' => 'ReportController@index']);
 
     // Summary Log|Incidents|Report
     Route::group(['middleware' => ['permission:manage_biosafty_biosecurity']], function () {
     });
 });
-
-// todo: tobe be secured ... out in the open
-Route::get('report', ['uses' => 'ReportController@index']);
-
