@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-/**
+/*
  * (c) @iLabAfrica
  * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
  * Team Lead	 - Emmanuel Kweyu.
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
-use Illuminate\Http\Request;
 use App\Models\TestMapping;
+use Illuminate\Http\Request;
 
 class TestMappingController extends Controller
 {
     public function index()
     {
         $testMapping = TestMapping::orderBy('id', 'ASC')->paginate(20);
+
         return response()->json($testMapping);
     }
 
@@ -28,10 +29,10 @@ class TestMappingController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array(
-            "test_type_id" => "required",
-            "specimen_type_id" => "required",
-        );
+        $rules = [
+            'test_type_id' => 'required',
+            'specimen_type_id' => 'required',
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -44,6 +45,7 @@ class TestMappingController extends Controller
 
             try {
                 $testMapping->save();
+
                 return response()->json($testMapping);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -60,6 +62,7 @@ class TestMappingController extends Controller
     public function show($id)
     {
         $testMapping = TestMapping::findOrFail($id);
+
         return response()->json($testMapping);
     }
 
@@ -72,10 +75,10 @@ class TestMappingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = array(
-            "test_type_id" => "required",
-            "specimen_type_id" => "required",
-        );
+        $rules = [
+            'test_type_id' => 'required',
+            'specimen_type_id' => 'required',
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -88,6 +91,7 @@ class TestMappingController extends Controller
 
             try {
                 $testMapping->save();
+
                 return response()->json($testMapping);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -106,6 +110,7 @@ class TestMappingController extends Controller
         try {
             $testMapping = TestMapping::findOrFail($id);
             $testMapping->delete();
+
             return response()->json($testMapping, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

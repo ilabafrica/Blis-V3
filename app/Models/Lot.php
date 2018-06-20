@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Models;
-/**
+
+/*
  * (c) @iLabAfrica
  * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
  * Team Lead	 - Emmanuel Kweyu.
@@ -11,7 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lot extends Model
 {
-	public function instrument(){
-		return $this->belongsTo('Instrument');
-	}
+    public function instrument()
+    {
+        return $this->belongsTo('Instrument');
+    }
 }

@@ -22,12 +22,11 @@ class PermissionController extends Controller
             $permissions = Permission::with('permissionRole')
                 ->where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
-
-        }else{
-
+        } else {
             $permissions = Permission::with('permissionRole')
                 ->orderBy('id', 'ASC')->paginate(10);
         }
+
         return response()->json($permissions);
     }
 

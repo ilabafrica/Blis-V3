@@ -89,7 +89,6 @@ class CreateBlisTables extends Migration
             $table->string('display');
         });
 
-
         /*
          * @system https://www.hl7.org/fhir/practitioner.html
          * @description details of the clinician
@@ -661,16 +660,14 @@ class CreateBlisTables extends Migration
             $table->increments('id');
         });
 
-        Schema::create('instruments', function(Blueprint $table)
-        {
+        Schema::create('instruments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 100)->unique();
             $table->softDeletes();
             $table->timestamps();
         });
 
-        Schema::create('lots', function(Blueprint $table)
-        {
+        Schema::create('lots', function (Blueprint $table) {
             $table->increments('id');
             $table->string('number', 100)->unique();
             $table->string('description', 400)->nullable();
@@ -682,8 +679,7 @@ class CreateBlisTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('control_types', function(Blueprint $table)
-        {
+        Schema::create('control_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 100)->unique();
             $table->string('description', 400)->nullable();
@@ -694,8 +690,7 @@ class CreateBlisTables extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('control_measures', function(Blueprint $table)
-        {
+        Schema::create('control_measures', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('unit');
@@ -708,7 +703,7 @@ class CreateBlisTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('control_measure_ranges', function(Blueprint $table){
+        Schema::create('control_measure_ranges', function (Blueprint $table) {
             $table->increments('id');
             $table->decimal('upper_range', 6, 2)->nullable();
             $table->decimal('lower_range', 6, 2)->nullable();
@@ -720,7 +715,7 @@ class CreateBlisTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('control_tests', function(Blueprint $table){
+        Schema::create('control_tests', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('lot_id')->unsigned();
             $table->integer('entered_by')->unsigned();
@@ -733,7 +728,7 @@ class CreateBlisTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('control_results', function(Blueprint $table){
+        Schema::create('control_results', function (Blueprint $table) {
             $table->increments('id');
             $table->string('results');
             $table->integer('control_measure_id')->unsigned();
@@ -743,7 +738,6 @@ class CreateBlisTables extends Migration
             $table->foreign('control_measure_id')->references('id')->on('control_measures');
             $table->timestamps();
         });
-
     }
 
     /**

@@ -21,9 +21,7 @@ class LocationController extends Controller
             $search = $request->query('search');
             $locations = Location::where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
-
-        }else{
-
+        } else {
             $locations = Location::paginate(10);
         }
 
@@ -43,7 +41,7 @@ class LocationController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json(['message'=>'Please check all fields and try again'],422);
+            return response()->json(['message'=>'Please check all fields and try again'], 422);
         } else {
             $location = new Location;
             $location->identifier = $request->input('identifier');
@@ -87,7 +85,7 @@ class LocationController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json(['message'=>'Please check all fields and try again'],422);
+            return response()->json(['message'=>'Please check all fields and try again'], 422);
         } else {
             $location = Location::findOrFail($id);
             $location->identifier = $request->input('identifier');

@@ -9,10 +9,9 @@ namespace App\Models;
  */
 use Illuminate\Database\Eloquent\Model;
 
-
 class PermissionRole extends Model
 {
-    protected $table='permission_role';
+    protected $table = 'permission_role';
 
-    public $fillable=['permission_id','role_id'];
+    public $fillable = ['permission_id', 'role_id'];
 }
