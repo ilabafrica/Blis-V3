@@ -25,7 +25,6 @@
           <td
             v-for="role in roles"
             :key="role.id">
-            {{getAssignment(row.item,role)}}
               <v-checkbox
                 v-model="permissionRoleIds"
                 :value="getAssignment(row.item,role)"
