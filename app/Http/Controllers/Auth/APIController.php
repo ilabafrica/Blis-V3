@@ -40,7 +40,6 @@ class APIController extends Controller
         if (! \Hash::check(request('password'), $user->password)) {
 
             //flash('Wrong email or password')->error();
-
             return response()->json([
                 'message' => 'Wrong email or password',
                 'status' => 422,

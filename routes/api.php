@@ -21,20 +21,18 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
-    // Access Control|Accounts|Permissions|Roles|Assign Permissions|Assign Roles
-    Route::group(['middleware' => ['permission:manage_users']], function () {
-        Route::resource('address', 'AddressController');
-        Route::resource('user', 'UserController');
-        Route::resource('permission', 'PermissionController');
-
-        Route::get('permissionrole/attach', 'PermissionRoleController@attach');
-        Route::get('permissionrole/detach', 'PermissionRoleController@detach');
-        Route::get('permissionrole', 'PermissionRoleController@index');
-
-        Route::resource('roleuser', 'RoleUserController');
-        Route::post('roleuser/delete', ['uses' => 'RoleUserController@delete']);
-        Route::resource('role', 'RoleController');
-    });
+	// Access Control|Accounts|Permissions|Roles|Assign Permissions|Assign Roles
+	Route::group(['middleware' => ['permission:manage_users']], function() {
+		Route::resource('address', 'AddressController');
+		Route::resource('user', 'UserController');
+		Route::resource('permission', 'PermissionController');
+		Route::resource('roleuser', 'RoleUserController');
+		Route::post('roleuser/delete', ['uses' => 'RoleUserController@delete']);
+		Route::resource('role', 'RoleController');
+		Route::get('permissionrole/attach', 'PermissionRoleController@attach');
+		Route::get('permissionrole/detach', 'PermissionRoleController@detach');
+		Route::get('permissionrole', 'PermissionRoleController@index');
+	});
 
     // Health Units|Instrument|Reports|Barcode
     Route::group(['middleware' => ['permission:manage_configurations']], function () {
@@ -117,10 +115,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['middleware' => ['permission:manage_equipment']], function () {
     });
 
+    // todo: tobe be secured ... out in the open
+    Route::get('report', ["uses" => "ReportController@index"]);
+
     // Summary Log|Incidents|Report
     Route::group(['middleware' => ['permission:manage_biosafty_biosecurity']], function () {
     });
 });
-
-// todo: tobe be secured ... out in the open
-Route::get('report', ['uses' => 'ReportController@index']);

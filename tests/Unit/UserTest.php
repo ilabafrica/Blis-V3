@@ -21,15 +21,11 @@ class UserTest extends TestCase
 			"name"=>'Sample String',
 			"username"=>'Sample String',
 			"email"=>'Sample String',
-			"password"=>'Sample String',
-			"remember_token"=>'Sample String',
 		);
 		$this->updatedUserData=array(
 			"name"=>'Sample updated String',
 			"username"=>'Sample updated String',
 			"email"=>'Sample updated String',
-			"password"=>'Sample updated String',
-			"remember_token"=>'Sample updated String',
 		);
 	}
 
@@ -37,7 +33,7 @@ class UserTest extends TestCase
 	{
 		$response=$this->post('/api/user',$this->userData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("remember_token",$response->original);
+		$this->assertArrayHasKey("email",$response->original);
 	}
 
 	public function testListUser()
@@ -51,7 +47,7 @@ class UserTest extends TestCase
 		$response=$this->post('/api/user',$this->userData);
 		$response=$this->get('/api/user/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("remember_token",$response->original);
+		$this->assertArrayHasKey("email",$response->original);
 	}
 
 	public function testUpdateUser()
@@ -59,7 +55,7 @@ class UserTest extends TestCase
 		$response=$this->post('/api/user',$this->userData);
 		$response=$this->put('/api/user/1',$this->updatedUserData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("remember_token",$response->original);
+		$this->assertArrayHasKey("email",$response->original);
 	}
 
 	public function testDeleteUser()

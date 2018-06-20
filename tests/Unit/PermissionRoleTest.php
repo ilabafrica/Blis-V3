@@ -21,15 +21,14 @@ class PermissionRoleTest extends TestCase
 			"permission_id"=>1,
 			"role_id"=>2,
 		);
-		$this->updatedPermissionRoleData=array(
-			"permission_id"=>1,
-			"role_id"=>3,
-		);
 	}
 
-	public function testStorePermissionRole()
+	public function testAttachPermissionRole()
 	{
-		$response=$this->post('/api/permissionrole',$this->permissionRoleData);
+		$response=$this->get('/api/permissionrole/detach?permission_id='.
+			$this->permissionRoleData['permission_id'].'&&role_id='.
+			$this->permissionRoleData['role_id']
+		);
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
@@ -39,10 +38,12 @@ class PermissionRoleTest extends TestCase
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
-	public function testDeletePermissionRole()
+	public function testdetachPermissionRole()
 	{
-		$response=$this->post('/api/permissionrole',$this->permissionRoleData);
-		$response=$this->post('/api/permissionrole/delete',$this->permissionRoleData);
+		$response=$this->get('/api/permissionrole/detach?permission_id='.
+			$this->permissionRoleData['permission_id'].'&&role_id='.
+			$this->permissionRoleData['role_id']
+		);
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
