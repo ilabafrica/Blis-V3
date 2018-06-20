@@ -9,14 +9,15 @@ namespace App\Http\Controllers;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
-use Illuminate\Http\Request;
 use App\Models\Instrument;
+use Illuminate\Http\Request;
 
 class InstrumentController extends Controller
 {
     public function index()
     {
         $instrument = Instrument::orderBy('id', 'ASC')->paginate(20);
+
         return response()->json($instrument);
     }
 
@@ -28,9 +29,9 @@ class InstrumentController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array(
+        $rules = [
             'name' => 'required',
-        );
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -41,6 +42,7 @@ class InstrumentController extends Controller
 
             try {
                 $instrument->save();
+
                 return response()->json($instrument);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -57,6 +59,7 @@ class InstrumentController extends Controller
     public function show($id)
     {
         $instrument = Instrument::findOrFail($id);
+
         return response()->json($instrument);
     }
 
@@ -69,9 +72,9 @@ class InstrumentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = array(
+        $rules = [
             'name' => 'required',
-        );
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -82,6 +85,7 @@ class InstrumentController extends Controller
 
             try {
                 $instrument->save();
+
                 return response()->json($instrument);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -100,6 +104,7 @@ class InstrumentController extends Controller
         try {
             $instrument = Instrument::findOrFail($id);
             $instrument->delete();
+
             return response()->json($instrument, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

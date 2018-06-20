@@ -13,7 +13,7 @@ use Zizaco\Entrust\EntrustPermission;
 
 class Permission extends EntrustPermission
 {
-    protected $fillable=['name','display_name'];
+    protected $fillable = ['name', 'display_name'];
 
     public function roles()
     {
@@ -42,5 +42,4 @@ class Permission extends EntrustPermission
 
         return false;
     }
-
 }

@@ -11,8 +11,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\Permission;
-use App\Models\PermissionRole;
 use Illuminate\Http\Request;
+use App\Models\PermissionRole;
 
 class PermissionRoleController extends Controller
 {
@@ -39,8 +39,8 @@ class PermissionRoleController extends Controller
 
             try {
                 $role->attachPermission($permission);
-                return response()->json(['message' => 'Item Successfully deleted']);
 
+                return response()->json(['message' => 'Item Successfully deleted']);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -56,7 +56,6 @@ class PermissionRoleController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-
             return response()->json($validator);
         } else {
             $role = Role::find($request->input('role_id'));
@@ -64,12 +63,11 @@ class PermissionRoleController extends Controller
 
             try {
                 $role->detachPermission($permission);
-                return response()->json(['message' => 'Item Successfully deleted']);
 
+                return response()->json(['message' => 'Item Successfully deleted']);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
         }
     }
-
 }

@@ -17,6 +17,7 @@ class ControlMeasureRangeController extends Controller
     public function index()
     {
         $controlMeasureRange = ControlMeasureRange::orderBy('id', 'ASC')->paginate(20);
+
         return response()->json($controlMeasureRange);
     }
 
@@ -44,6 +45,7 @@ class ControlMeasureRangeController extends Controller
 
             try {
                 $controlMeasureRange->save();
+
                 return response()->json($controlMeasureRange);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -60,6 +62,7 @@ class ControlMeasureRangeController extends Controller
     public function show($id)
     {
         $controlMeasureRange = ControlMeasureRange::findOrFail($id);
+
         return response()->json($controlMeasureRange);
     }
 
@@ -72,9 +75,9 @@ class ControlMeasureRangeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = array(
+        $rules = [
             'control_measure_id' => 'required',
-        );
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -88,6 +91,7 @@ class ControlMeasureRangeController extends Controller
 
             try {
                 $controlMeasureRange->save();
+
                 return response()->json($controlMeasureRange);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -106,6 +110,7 @@ class ControlMeasureRangeController extends Controller
         try {
             $controlMeasureRange = ControlMeasureRange::findOrFail($id);
             $controlMeasureRange->delete();
+
             return response()->json($controlMeasureRange, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

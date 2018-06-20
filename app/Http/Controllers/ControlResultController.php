@@ -17,6 +17,7 @@ class ControlResultController extends Controller
     public function index()
     {
         $controlResult = ControlResult::orderBy('id', 'ASC')->paginate(20);
+
         return response()->json($controlResult);
     }
 
@@ -45,6 +46,7 @@ class ControlResultController extends Controller
 
             try {
                 $controlResult->save();
+
                 return response()->json($controlResult);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -61,6 +63,7 @@ class ControlResultController extends Controller
     public function show($id)
     {
         $controlResult = ControlResult::findOrFail($id);
+
         return response()->json($controlResult);
     }
 
@@ -73,11 +76,11 @@ class ControlResultController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = array(
+        $rules = [
             'results' => 'required',
             'control_measure_id' => 'required',
             'control_test_id' => 'required',
-        );
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -90,6 +93,7 @@ class ControlResultController extends Controller
 
             try {
                 $controlResult->save();
+
                 return response()->json($controlResult);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -108,6 +112,7 @@ class ControlResultController extends Controller
         try {
             $controlResult = ControlResult::findOrFail($id);
             $controlResult->delete();
+
             return response()->json($controlResult, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

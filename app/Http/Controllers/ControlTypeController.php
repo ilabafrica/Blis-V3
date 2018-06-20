@@ -9,14 +9,15 @@ namespace App\Http\Controllers;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
-use Illuminate\Http\Request;
 use App\Models\ControlType;
+use Illuminate\Http\Request;
 
 class ControlTypeController extends Controller
 {
     public function index()
     {
         $controlType = ControlType::orderBy('id', 'ASC')->paginate(20);
+
         return response()->json($controlType);
     }
 
@@ -44,6 +45,7 @@ class ControlTypeController extends Controller
 
             try {
                 $controlType->save();
+
                 return response()->json($controlType);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -60,6 +62,7 @@ class ControlTypeController extends Controller
     public function show($id)
     {
         $controlType = ControlType::findOrFail($id);
+
         return response()->json($controlType);
     }
 
@@ -72,10 +75,10 @@ class ControlTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = array(
+        $rules = [
             'name' => 'required',
             'instrument_id' => 'required',
-        );
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -88,6 +91,7 @@ class ControlTypeController extends Controller
 
             try {
                 $controlType->save();
+
                 return response()->json($controlType);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -106,6 +110,7 @@ class ControlTypeController extends Controller
         try {
             $controlType = ControlType::findOrFail($id);
             $controlType->delete();
+
             return response()->json($controlType, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

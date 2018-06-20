@@ -9,14 +9,15 @@ namespace App\Http\Controllers;
  * Devs			 - Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
-use Illuminate\Http\Request;
 use App\Models\Specimen;
+use Illuminate\Http\Request;
 
 class SpecimenController extends Controller
 {
     public function index()
     {
         $specimen = Specimen::orderBy('id', 'ASC')->paginate(20);
+
         return response()->json($specimen);
     }
 
@@ -110,6 +111,7 @@ class SpecimenController extends Controller
 
             try {
                 $specimen->save();
+
                 return response()->json($specimen);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

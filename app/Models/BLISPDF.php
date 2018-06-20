@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Models;
-use \TCPDF;
+
+use TCPDF;
 
 /*
  * (c) @iLabAfrica
@@ -11,10 +12,12 @@ use \TCPDF;
  * More Devs	 - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
  */
 
-class BLISPDF extends TCPDF {
+class BLISPDF extends TCPDF
+{
     //Pdf Header
-    Public function Header(){
-        if($this->page == 1){
+    public function Header()
+    {
+        if ($this->page == 1) {
             // Logo
             $image_file = 'ilabafrica.jpg';
             $this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
@@ -24,15 +27,14 @@ class BLISPDF extends TCPDF {
             $this->Cell(0, 15, 'Sample Report', 0, false, 'C', 0, '', 0, false, 'M', 'M');
 
             $this->SetMargins(PDF_MARGIN_LEFT, 50, PDF_MARGIN_RIGHT);
-        }else {
-
+        } else {
             $this->SetMargins(PDF_MARGIN_LEFT, 15, PDF_MARGIN_RIGHT);
         }
     }
 
-
-    Public function Footer(){
-// Class 'App\Models\DateTime' not found
+    public function Footer()
+    {
+        // Class 'App\Models\DateTime' not found
         // $now = new DateTime();
         // $printTime = $now->format('Y-m-d H:i');
 

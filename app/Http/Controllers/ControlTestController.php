@@ -9,14 +9,15 @@ namespace App\Http\Controllers;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
-use Illuminate\Http\Request;
 use App\Models\ControlTest;
+use Illuminate\Http\Request;
 
 class ControlTestController extends Controller
 {
     public function index()
     {
         $controlTest = ControlTest::orderBy('id', 'ASC')->paginate(20);
+
         return response()->json($controlTest);
     }
 
@@ -47,6 +48,7 @@ class ControlTestController extends Controller
 
             try {
                 $controlTest->save();
+
                 return response()->json($controlTest);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -63,6 +65,7 @@ class ControlTestController extends Controller
     public function show($id)
     {
         $controlTest = ControlTest::findOrFail($id);
+
         return response()->json($controlTest);
     }
 
@@ -75,12 +78,12 @@ class ControlTestController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = array(
+        $rules = [
             'lot_id' => 'required',
             'entered_by' => 'required',
             'control_id' => 'required',
             'control_type_id' => 'required',
-        );
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -94,6 +97,7 @@ class ControlTestController extends Controller
 
             try {
                 $controlTest->save();
+
                 return response()->json($controlTest);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -112,6 +116,7 @@ class ControlTestController extends Controller
         try {
             $controlTest = ControlTest::findOrFail($id);
             $controlTest->delete();
+
             return response()->json($controlTest, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

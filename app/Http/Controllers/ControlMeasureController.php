@@ -17,6 +17,7 @@ class ControlMeasureController extends Controller
     public function index()
     {
         $controlMeasure = ControlMeasure::orderBy('id', 'ASC')->paginate(20);
+
         return response()->json($controlMeasure);
     }
 
@@ -47,6 +48,7 @@ class ControlMeasureController extends Controller
 
             try {
                 $controlMeasure->save();
+
                 return response()->json($controlMeasure);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -63,6 +65,7 @@ class ControlMeasureController extends Controller
     public function show($id)
     {
         $controlMeasure = ControlMeasure::findOrFail($id);
+
         return response()->json($controlMeasure);
     }
 
@@ -75,12 +78,12 @@ class ControlMeasureController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = array(
+        $rules = [
             'name' => 'required',
             'unit' => 'required',
             'control_type_id' => 'required',
             'measure_type_id' => 'required',
-        );
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -94,6 +97,7 @@ class ControlMeasureController extends Controller
 
             try {
                 $controlMeasure->save();
+
                 return response()->json($controlMeasure);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -112,6 +116,7 @@ class ControlMeasureController extends Controller
         try {
             $controlMeasure = ControlMeasure::findOrFail($id);
             $controlMeasure->delete();
+
             return response()->json($controlMeasure, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
