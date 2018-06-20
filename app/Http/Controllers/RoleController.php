@@ -17,6 +17,7 @@ class RoleController extends Controller
 {
     public function index()
     {
+
         $role = Role::with('permissionRole')->get();
 
         return response()->json($role);
@@ -107,10 +108,7 @@ class RoleController extends Controller
     public function destroy($id)
     {
         try {
-            $role = Role::findOrFail($id);
-            $role->delete();
-
-            return response()->json($role, 200);
+            return response()->json(Role::destroy($id), 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }

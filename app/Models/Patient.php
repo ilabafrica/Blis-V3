@@ -36,7 +36,12 @@ class Patient extends Model
 
     public function name()
     {
-        return $this->hasOne('App\Models\Name', 'patient_id');
+        return $this->hasOne('App\Models\Name', 'id', 'name_id');
+    }
+
+    public function gender()
+    {
+        return $this->hasOne('App\Models\Gender', 'id', 'gender_id');
     }
 
     public function practitioner()

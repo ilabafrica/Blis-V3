@@ -53,7 +53,7 @@ class CreateBlisTables extends Migration
         Schema::create('names', function (Blueprint $table) {
             $table->increments('id');
             $table->string('use', 20)->default('usual');
-            $table->string('text');
+            $table->string('text')->nullable();
             $table->string('family')->nullable();
             $table->string('given')->nullable();
             $table->string('prefix')->nullable();
@@ -85,7 +85,7 @@ class CreateBlisTables extends Migration
          */
         Schema::create('genders', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code', 10);
+            $table->string('code', 10)->nullable();
             $table->string('display');
         });
 

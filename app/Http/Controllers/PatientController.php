@@ -10,15 +10,28 @@ namespace App\Http\Controllers;
  */
 
 use App\Models\Patient;
+use App\Models\Name;
+use App\Models\Gender;
+use Auth;
 use Illuminate\Http\Request;
+
 
 class PatientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $patient = Patient::orderBy('id', 'ASC')->paginate(20);
 
-        return response()->json($patient);
+        if ($request->query('search')) {
+            $search = $request->query('search');
+            $patient = Patient::whereHas('name', function($query) use ($search){
+                $query->where('given', 'LIKE', "%{$search}%")->orWhere('family', 'LIKE', "%{$search}%");
+            })->with('gender', 'name')
+                ->paginate(10);
+
+        }else{
+            $patient = Patient::with('name', 'gender')->orderBy('id', 'ASC')->paginate(20);
+        }
+            return response()->json($patient);
     }
 
     /**
@@ -31,43 +44,48 @@ class PatientController extends Controller
     {
         $rules = [
             'identifier' => 'required',
-            'active' => 'required',
-            'name_id' => 'required',
-            'gender_id' => 'required',
             'birth_date' => 'required',
-            'created_by' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator);
         } else {
-            $patient = new Patient;
-            $patient->identifier = $request->input('identifier');
-            $patient->active = $request->input('active');
-            $patient->name_id = $request->input('name_id');
-            $patient->gender_id = $request->input('gender_id');
-            $patient->birth_date = $request->input('birth_date');
-            $patient->deceased = $request->input('deceased');
-            $patient->deceased_date_time = $request->input('deceased_date_time');
-            $patient->address_id = $request->input('address_id');
-            $patient->marital_status = $request->input('marital_status');
-            $patient->photo = $request->input('photo');
-            $patient->animal = $request->input('animal');
-            $patient->species_id = $request->input('species_id');
-            $patient->breed_id = $request->input('breed_id');
-            $patient->gender_status = $request->input('gender_status');
-            $patient->practitioner_id = $request->input('practitioner_id');
-            $patient->organization_id = $request->input('organization_id');
-            $patient->created_by = $request->input('created_by');
+            $name = new Name;
+            $name->text = $request->input('family');
+            $name->family = $request->input('family');
+            $name->given = $request->input('given');
 
             try {
-                $patient->save();
-
-                return response()->json($patient);
+                $name->save();
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
+
+            $gender = new Gender;
+            $gender->code = $request->input('gender');
+            $gender->display = ucfirst($request->input('gender'));
+
+            try {
+                $gender->save();
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+
+            $patient = new Patient;
+            $patient->identifier = $request->input('identifier');
+            $patient->name_id = $name->id;
+            $patient->gender_id = $gender->id;
+            $patient->birth_date = $request->input('birth_date');
+            $patient->created_by = Auth::user()->id;
+            
+
+            try {
+                $patient->save();
+            }catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+            return response()->json($patient);
         }
     }
 
@@ -95,7 +113,6 @@ class PatientController extends Controller
     {
         $rules = [
             'identifier' => 'required',
-            'active' => 'required',
             'name_id' => 'required',
             'gender_id' => 'required',
             'birth_date' => 'required',
@@ -125,10 +142,21 @@ class PatientController extends Controller
             $patient->organization_id = $request->input('organization_id');
             $patient->created_by = $request->input('created_by');
 
+            $name = Name::findOrFail($request->input('name.id'));
+            $name->family = $request->input('name.family');
+            $name->given = $request->input('name.given');
+
+            $gender = Gender::findOrFail($request->input('gender.id'));
+            $gender->code = $request->input('gender.display');
+            $gender->display = ucfirst($request->input('gender.display'));
+
             try {
                 $patient->save();
-
+                $name->save();
+                $gender->save();
+                
                 return response()->json($patient);
+
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

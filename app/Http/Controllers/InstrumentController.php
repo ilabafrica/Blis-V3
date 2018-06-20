@@ -14,9 +14,16 @@ use Illuminate\Http\Request;
 
 class InstrumentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $instrument = Instrument::orderBy('id', 'ASC')->paginate(20);
+        if ($request->query('search')) {
+            $search = $request->query('search');
+            $instrument = Instrument::where('name', 'LIKE', "%{$search}%")
+                ->paginate(10);
+
+        }else{
+            $instrument = Instrument::orderBy('id', 'ASC')->paginate(20);
+        }
 
         return response()->json($instrument);
     }

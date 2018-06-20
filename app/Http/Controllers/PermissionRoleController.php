@@ -11,15 +11,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\Permission;
-use Illuminate\Http\Request;
 use App\Models\PermissionRole;
+use Illuminate\Http\Request;
 
 class PermissionRoleController extends Controller
 {
     public function index()
     {
         $permissionsRoles = PermissionRole::all();
-
         return response()->json($permissionsRoles);
     }
 
