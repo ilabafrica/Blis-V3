@@ -15,11 +15,20 @@ use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $permission = Permission::all();
+        if ($request->query('search')) {
+            $search = $request->query('search');
+            $permissions = Permission::with('permissionRole')
+                ->where('name', 'LIKE', "%{$search}%")
+                ->paginate(10);
 
-        return response()->json($permission);
+        }else{
+
+            $permissions = Permission::with('permissionRole')
+                ->orderBy('id', 'ASC')->paginate(10);
+        }
+        return response()->json($permissions);
     }
 
     /**

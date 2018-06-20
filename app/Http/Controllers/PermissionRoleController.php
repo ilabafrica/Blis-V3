@@ -11,28 +11,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\Permission;
+use App\Models\PermissionRole;
 use Illuminate\Http\Request;
 
 class PermissionRoleController extends Controller
 {
     public function index()
     {
-        $rolesPermissions = Role::with('perms')->paginate(20);
-        return response()->json($rolesPermissions);
+        $permissionsRoles = PermissionRole::all();
+
+        return response()->json($permissionsRoles);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function attach(Request $request)
     {
-        $rules = array(
+        $rules = [
             'permission_id' => 'required',
             'role_id' => 'required',
-        );
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -43,29 +39,24 @@ class PermissionRoleController extends Controller
 
             try {
                 $role->attachPermission($permission);
-                $role = Role::with('perms')->find($request->input('role_id'));
-                return response()->json($role);
+                return response()->json(['message' => 'Item Successfully deleted']);
+
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  id
-     * @return \Illuminate\Http\Response
-     */
-    public function delete(Request $request)
+    public function detach(Request $request)
     {
-        $rules = array(
+        $rules = [
             'permission_id' => 'required',
             'role_id' => 'required',
-        );
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
+
             return response()->json($validator);
         } else {
             $role = Role::find($request->input('role_id'));
@@ -73,11 +64,12 @@ class PermissionRoleController extends Controller
 
             try {
                 $role->detachPermission($permission);
-                $role = Role::with('perms')->find($request->input('role_id'));
-                return response()->json($role);
+                return response()->json(['message' => 'Item Successfully deleted']);
+
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
         }
     }
+
 }

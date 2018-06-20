@@ -17,7 +17,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $user = User::all();
+        $user = User::paginate(10);
 
         return response()->json($user);
     }
@@ -31,9 +31,10 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
+            'name'     => 'required',
+            'username' => 'required',
+            'email'    => 'required',
+            //'password' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -44,12 +45,11 @@ class UserController extends Controller
             $user->name = $request->input('name');
             $user->username = $request->input('username');
             $user->email = $request->input('email');
-            $user->password = $request->input('password');
-            $user->remember_token = $request->input('remember_token');
+            $user->password = bcrypt('mydefaultpassword');
+            //$user->remember_token = $request->input('remember_token');
 
             try {
                 $user->save();
-
                 return response()->json($user);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -82,7 +82,7 @@ class UserController extends Controller
         $rules = [
             'name' => 'required',
             'email' => 'required',
-            'password' => 'required',
+            //'password' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -93,8 +93,8 @@ class UserController extends Controller
             $user->name = $request->input('name');
             $user->username = $request->input('username');
             $user->email = $request->input('email');
-            $user->password = $request->input('password');
-            $user->remember_token = $request->input('remember_token');
+            //$user->password = $request->input('password');
+            //$user->remember_token = $request->input('remember_token');
 
             try {
                 $user->save();

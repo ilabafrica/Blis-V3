@@ -26,9 +26,12 @@ Route::group(['middleware' => 'auth:api'], function () {
 	Route::group(['middleware' => ['permission:manage_users']], function() {
 		Route::resource('address', 'AddressController');
 		Route::resource('user', 'UserController');
-		Route::resource('permissionrole', 'PermissionRoleController');
-		Route::post('permissionrole/delete', ['uses' => 'PermissionRoleController@delete']);
 		Route::resource('permission', 'PermissionController');
+
+		Route::get('permissionrole/attach', 'PermissionRoleController@attach');
+		Route::get('permissionrole/detach', 'PermissionRoleController@detach');
+		Route::get('permissionrole', 'PermissionRoleController@index');
+
 		Route::resource('roleuser', 'RoleUserController');
 		Route::post('roleuser/delete', ['uses' => 'RoleUserController@delete']);
 		Route::resource('role', 'RoleController');
@@ -120,9 +123,5 @@ Route::group(['middleware' => 'auth:api'], function () {
 	});
 });
 
+// todo: tobe be secured ... out in the open
 Route::get('report', ["uses" => "ReportController@index"]);
-// these below are just for testing how ever
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-

@@ -27,6 +27,7 @@ class APIController extends Controller
 
         if (!$user) {
 
+            //flash('Wrong email or password')->error();
             return response()->json([
                 'message' => 'Wrong email or password',
                 'status' => 422
@@ -37,6 +38,8 @@ class APIController extends Controller
          belongs to this user
         */
         if (!\Hash::check(request('password'), $user->password)) {
+
+            //flash('Wrong email or password')->error();
 
             return response()->json([
                 'message' => 'Wrong email or password',

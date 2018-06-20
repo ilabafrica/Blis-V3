@@ -22,4 +22,14 @@ class Role extends EntrustRole
     {
         return Role::find(1);
     }
+
+    public function permissionRole()
+    {
+        return $this->hasMany('App\Models\PermissionRole');
+    }
+
+    public function permissions()
+    {
+        return $this->belongsToMany('App\Models\Permission');
+    }
 }
