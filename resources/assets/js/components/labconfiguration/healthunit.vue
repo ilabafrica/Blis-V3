@@ -114,13 +114,7 @@
 
     computed: {
       formTitle () {
-        if (this.editedIndex === -1) {
-          this.resetDialogReferences();
-          return 'New Item'
-        }else{
-
-          return 'Edit Item'
-        }
+        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
       },
 
       length: function() {

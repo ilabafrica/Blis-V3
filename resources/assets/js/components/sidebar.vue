@@ -19,6 +19,16 @@
       </v-list-tile-action>
       <v-list-tile-title>Home</v-list-tile-title>
     </v-list-tile>
+    <v-list-tile>
+      <v-list-tile-action>
+        <v-icon>assignment_ind</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-title>
+        <router-link to="/patients/patient">
+          <a>Patients</a>
+        </router-link>
+      </v-list-tile-title>
+    </v-list-tile>
     <v-list-group prepend-icon="settings" value="true">
       <v-list-tile slot="activator">
         <v-list-tile-title>Lab Configuration</v-list-tile-title>
@@ -66,6 +76,17 @@
         <v-list-tile-title v-text="test.label"></v-list-tile-title>
       </v-list-tile>
     </v-list-group>
+    <v-list-group prepend-icon="vertical_split" value="true">
+      <v-list-tile slot="activator">
+        <v-list-tile-title>Quality Controls</v-list-tile-title>
+      </v-list-tile>
+      <v-list-tile v-for="(quality_control, i) in quality_control" :key="i" :to="{path:quality_control.path}">
+        <v-list-tile-action>
+          <v-icon v-text="quality_control.icon"></v-icon>
+        </v-list-tile-action>
+        <v-list-tile-title v-text="quality_control.label"></v-list-tile-title>
+      </v-list-tile>
+    </v-list-group>
   </v-list>
   </div>
 </template>
@@ -74,9 +95,19 @@
     data: () => ({
       lab_configurations: [
         {
+          path: '/labconfiguration/specimentype',
+          label: 'Specimen Types',
+          icon: 'file_copy'
+        },
+        {
           path: '/labconfiguration/healthunit',
           label: 'Health Units',
           icon: 'add_circle'
+        },
+        {
+          path: '/labconfiguration/facility',
+          label: 'Facility',
+          icon: 'domain'
         },
         {
           path: '/',
@@ -84,14 +115,14 @@
           icon: 'build'
         },
         {
-          path: '/',
+          path: '/labconfiguration/interfacedequipment',
           label: 'Interfaced Equipment',
           icon: 'devices'
         },
       ],
       test_catalogs: [
         {
-          path: '/',
+          path: '/testcatalog/testtypecategory',
           label: 'Lab Sections',
           icon: 'dashboard'
         },
@@ -111,7 +142,7 @@
           icon: 'extension'
         },
         {
-          path: '/',
+          path: '/testcatalog/drug',
           label: 'Drugs',
           icon: 'opacity'
         },
@@ -168,6 +199,13 @@
           path: '/',
           label: 'Verified Tests',
           icon: 'check_box'
+        },
+      ],
+      quality_control: [
+        {
+          path: '/qualitycontrol/lot',
+          label: 'Lots',
+          icon: 'layers'
         },
       ]
     })

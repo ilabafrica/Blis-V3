@@ -39,11 +39,48 @@ export default new Router({
       name: 'SideBar',
       component: require('../components/sidebar'),
     },
+    {
+      path: '/patients/patient',
+      name: 'Patients',
+      component: require('../components/patients/patient'),
+      beforeEnter: ifAuthenticated,
+    },
     // Lab Configurations
+    {
+      path: '/labconfiguration/specimentype',
+      name: 'SpecimenType',
+      component: require('../components/labconfiguration/specimentype'),
+      beforeEnter: ifAuthenticated,
+    },
     {
       path: '/labconfiguration/healthunit',
       name: 'HealthUnit',
       component: require('../components/labconfiguration/healthunit'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/labconfiguration/facility',
+      name: 'Facility',
+      component: require('../components/labconfiguration/facility'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/labconfiguration/interfacedequipment',
+      name: 'InterfacedEquipment',
+      component: require('../components/labconfiguration/interfacedequipment'),
+      beforeEnter: ifAuthenticated,
+    },
+    // Test Catalog
+    {
+      path: '/testcatalog/testtypecategory',
+      name: 'LabSections',
+      component: require('../components/testcatalog/testtypecategory'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/testcatalog/drug',
+      name: 'Drugs',
+      component: require('../components/testcatalog/drug'),
       beforeEnter: ifAuthenticated,
     },
     // Access Control
@@ -63,6 +100,13 @@ export default new Router({
       path: '/accesscontrol/roles',
       name: 'Roles',
       component: require('../components/accesscontrol/roles'),
+      beforeEnter: ifAuthenticated,
+    },
+    //Quality Control
+    {
+      path: '/qualitycontrol/lot',
+      name: 'Lot',
+      component: require('../components/qualitycontrol/lot'),
       beforeEnter: ifAuthenticated,
     },
   ],

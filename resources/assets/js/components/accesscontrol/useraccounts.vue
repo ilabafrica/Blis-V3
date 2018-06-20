@@ -42,6 +42,18 @@
       </v-form>
       </v-card>
     </v-dialog>
+    <v-card-title>
+      Users
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="search"
+        label="Search"
+        single-line
+        v-on:keyup.enter="initialize"
+        hide-details>
+      </v-text-field>
+    </v-card-title>
   <v-data-table
     :headers="headers"
     :items="user"
@@ -80,6 +92,9 @@
       valid: true,
       dialog: false,
       delete: false,
+      saving: false,
+      search: '',
+      query: '',
       pagination: {
         page: 1,
         per_page: 0,
@@ -110,13 +125,8 @@
     },
 
     computed: {
-      formTitle() {
-        if(this.editedIndex === -1){
-          this.resetDialogReferences();
-          return 'New User'
-        }else{
-          return 'Edit User'
-        }
+      formTitle () {
+        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
       },
       length: function() {
         return Math.ceil(this.pagination.total / 10);
@@ -131,9 +141,15 @@
 
     methods: {
       initialize () {
-        apiCall({url: '/api/user?page=' + this.pagination.page, method: 'GET' })
+
+        this.query = 'page='+ this.pagination.page;
+        if (this.search != '') {
+            this.query = this.query+'&search='+this.search;
+        }
+
+        apiCall({url: '/api/user?' + this.query, method: 'GET' })
         .then(resp => {
-          console.log(resp.data)
+          console.log(resp)
           this.user = resp.data;
           this.pagination.total = resp.total;
         })

@@ -15,9 +15,16 @@ use Illuminate\Http\Request;
 
 class SpecimenTypeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $specimenType = SpecimenType::orderBy('id', 'ASC')->paginate(20);
+        if ($request->query('search')) {
+            $search = $request->query('search');
+            $specimenType = SpecimenType::where('name', 'LIKE', "%{$search}%")
+                ->paginate(20);
+
+        }else{
+            $specimenType = SpecimenType::orderBy('id', 'ASC')->paginate(20);
+        }
 
         return response()->json($specimenType);
     }

@@ -11,12 +11,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Lot;
+use App\Models\Instrument;
 
 class LotController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $lot = Lot::orderBy('id', 'ASC')->paginate(20);
+        if ($request->query('search')) {
+            $search = $request->query('search');
+            $lot = Lot::with('instrument')->where('number', 'LIKE', "%{$search}%")
+                ->paginate(20);
+        }else{
+            $lot = Lot::with('instrument')->orderBy('id', 'ASC')->paginate(20);
+        }
+
         return response()->json($lot);
     }
 
@@ -29,9 +37,9 @@ class LotController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'number' => 'required',
-            'expiry' => 'required',
-            'instrument_id' => 'required',
+            //'number' => 'required',
+            //'expiry' => 'required',
+            //'instrument_id' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
@@ -42,7 +50,7 @@ class LotController extends Controller
             $lot->number = $request->input('number');
             $lot->description = $request->input('description');
             $lot->expiry = $request->input('expiry');
-            $lot->instrument_id = $request->input('instrument_id');
+            $lot->instrument_id = $request->input('instrument');
 
             try {
                 $lot->save();

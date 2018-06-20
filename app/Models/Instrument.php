@@ -11,5 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Instrument extends Model
 {
-	//
+	public function Lot()
+    {
+        return $this->belongsTo('App\Models\Lot');
+    }
 }
