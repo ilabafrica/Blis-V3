@@ -18,6 +18,7 @@ class RoleUserController extends Controller
     public function index()
     {
         $usersRoles = User::with('roles')->paginate(20);
+
         return response()->json($usersRoles);
     }
 
@@ -29,10 +30,10 @@ class RoleUserController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array(
+        $rules = [
             'user_id' => 'required',
             'role_id' => 'required',
-        );
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -44,6 +45,7 @@ class RoleUserController extends Controller
             try {
                 $user->attachRole($role);
                 $user = User::with('roles')->find($request->input('user_id'));
+
                 return response()->json($user);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -59,10 +61,10 @@ class RoleUserController extends Controller
      */
     public function delete(Request $request)
     {
-        $rules = array(
+        $rules = [
             'user_id' => 'required',
             'role_id' => 'required',
-        );
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -74,6 +76,7 @@ class RoleUserController extends Controller
             try {
                 $user->detachRole($role);
                 $user = User::with('roles')->find($request->input('user_id'));
+
                 return response()->json($user);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

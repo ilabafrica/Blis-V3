@@ -3,48 +3,45 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
-use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 
 class APIController extends Controller
 {
-    public function register(){
-
+    public function register()
+    {
         $user = User::create([
             'name' => request('name'),
             'email' => request('email'),
-            'password' => bcrypt(request('password'))
+            'password' => bcrypt(request('password')),
         ]);
 
         return response($user->jsonSerialize(), Response::HTTP_CREATED);
-
     }
 
-    public function login(){
+    public function login()
+    {
         // Check if a user with the specified email exists
         $user = User::whereEmail(request('username'))->first();
 
-        if (!$user) {
+        if (! $user) {
 
             //flash('Wrong email or password')->error();
-            
             return response()->json([
                 'message' => 'Wrong email or password',
-                'status' => 422
+                'status' => 422,
             ], 422);
         }
         /*
          If a user with the email was found - check if the specified password
          belongs to this user
         */
-        if (!\Hash::check(request('password'), $user->password)) {
-
-            //flash('Wrong email or password')->error();
+        if (! \Hash::check(request('password'), $user->password)) {
 
             return response()->json([
                 'message' => 'Wrong email or password',
-                'status' => 422
+                'status' => 422,
             ], 422);
         }
 
@@ -64,7 +61,7 @@ class APIController extends Controller
         if ($response->getStatusCode() != 200) {
             return response()->json([
                 'message' => 'Wrong email or password',
-                'status' => 422
+                'status' => 422,
             ], 422);
         }
 
@@ -75,26 +72,27 @@ class APIController extends Controller
         return response()->json([
             'token' => $data->access_token,
             'user' => $user,
-            'status' => 200
+            'status' => 200,
         ]);
     }
 
-    public function logout(){
-
+    public function logout()
+    {
         $accessToken = auth()->user()->token();
 
         $refreshToken = \DB::table('oauth_refresh_tokens')
             ->where('access_token_id', $accessToken->id)
             ->update([
-                'revoked' => true
+                'revoked' => true,
             ]);
 
         $accessToken->revoke();
 
         return response()->json(['status' => 200]);
     }
-    public function getUser() {
 
+    public function getUser()
+    {
         return auth()->user();
     }
 }

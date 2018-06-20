@@ -9,9 +9,9 @@ namespace App\Http\Controllers;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
-use Illuminate\Http\Request;
 use App\Models\Lot;
 use App\Models\Instrument;
+use Illuminate\Http\Request;
 
 class LotController extends Controller
 {
@@ -24,7 +24,6 @@ class LotController extends Controller
         }else{
             $lot = Lot::with('instrument')->orderBy('id', 'ASC')->paginate(20);
         }
-
         return response()->json($lot);
     }
 
@@ -50,10 +49,10 @@ class LotController extends Controller
             $lot->number = $request->input('number');
             $lot->description = $request->input('description');
             $lot->expiry = $request->input('expiry');
-            $lot->instrument_id = $request->input('instrument');
-
+            $lot->instrument_id = $request->input('instrument_id');
             try {
                 $lot->save();
+
                 return response()->json($lot);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -70,6 +69,7 @@ class LotController extends Controller
     public function show($id)
     {
         $lot = Lot::findOrFail($id);
+
         return response()->json($lot);
     }
 
@@ -82,11 +82,11 @@ class LotController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = array(
+        $rules = [
             'number' => 'required',
             'expiry' => 'required',
             'instrument_id' => 'required',
-        );
+        ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -100,6 +100,7 @@ class LotController extends Controller
 
             try {
                 $lot->save();
+
                 return response()->json($lot);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -118,6 +119,7 @@ class LotController extends Controller
         try {
             $lot = Lot::findOrFail($id);
             $lot->delete();
+
             return response()->json($lot, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

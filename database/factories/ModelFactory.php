@@ -111,7 +111,6 @@ $factory->define(App\Models\StatusHistory::class, function (Faker\Generator $fak
     ];
 });
 
-
 $factory->define(App\Models\Collection::class, function (Faker\Generator $faker) {
     return [
         'collector' => $faker->randomNumber(),
@@ -121,8 +120,6 @@ $factory->define(App\Models\Collection::class, function (Faker\Generator $faker)
         'body_site' => $faker->randomNumber(),
     ];
 });
-
-
 
 $factory->define(App\Models\Specimen::class, function (Faker\Generator $faker) {
     return [
@@ -135,6 +132,3 @@ $factory->define(App\Models\Specimen::class, function (Faker\Generator $faker) {
         'note' => $faker->word,
     ];
 });
-
-
-
