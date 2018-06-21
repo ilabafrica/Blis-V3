@@ -9,29 +9,27 @@ namespace App\Http\Controllers;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
-use App\Models\Patient;
+use Auth;
 use App\Models\Name;
 use App\Models\Gender;
-use Auth;
+use App\Models\Patient;
 use Illuminate\Http\Request;
-
 
 class PatientController extends Controller
 {
     public function index(Request $request)
     {
-
         if ($request->query('search')) {
             $search = $request->query('search');
-            $patient = Patient::whereHas('name', function($query) use ($search){
+            $patient = Patient::whereHas('name', function ($query) use ($search) {
                 $query->where('given', 'LIKE', "%{$search}%")->orWhere('family', 'LIKE', "%{$search}%");
             })->with('gender', 'name')
                 ->paginate(10);
-
-        }else{
+        } else {
             $patient = Patient::with('name', 'gender')->orderBy('id', 'ASC')->paginate(20);
         }
-            return response()->json($patient);
+
+        return response()->json($patient);
     }
 
     /**
@@ -78,13 +76,13 @@ class PatientController extends Controller
             $patient->gender_id = $gender->id;
             $patient->birth_date = $request->input('birth_date');
             $patient->created_by = Auth::user()->id;
-            
 
             try {
                 $patient->save();
-            }catch (\Illuminate\Database\QueryException $e) {
+            } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
+
             return response()->json($patient);
         }
     }
@@ -154,9 +152,8 @@ class PatientController extends Controller
                 $patient->save();
                 $name->save();
                 $gender->save();
-                
-                return response()->json($patient);
 
+                return response()->json($patient);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

@@ -21,9 +21,10 @@ class LotController extends Controller
             $search = $request->query('search');
             $lot = Lot::with('instrument')->where('number', 'LIKE', "%{$search}%")
                 ->paginate(20);
-        }else{
+        } else {
             $lot = Lot::with('instrument')->orderBy('id', 'ASC')->paginate(20);
         }
+
         return response()->json($lot);
     }
 

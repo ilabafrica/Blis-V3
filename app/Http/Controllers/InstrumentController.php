@@ -20,8 +20,7 @@ class InstrumentController extends Controller
             $search = $request->query('search');
             $instrument = Instrument::where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
-
-        }else{
+        } else {
             $instrument = Instrument::orderBy('id', 'ASC')->paginate(20);
         }
 

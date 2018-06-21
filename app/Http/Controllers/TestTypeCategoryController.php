@@ -21,9 +21,7 @@ class TestTypeCategoryController extends Controller
             $search = $request->query('search');
             $testTypeCategory = TestTypeCategory::where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
-
-        }else{
-
+        } else {
             $testTypeCategory = TestTypeCategory::orderBy('id', 'ASC')->paginate(10);
         }
 
