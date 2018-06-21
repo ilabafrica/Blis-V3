@@ -142,8 +142,8 @@
           icon: 'extension'
         },
         {
-          path: '/testcatalog/drug',
-          label: 'Drugs',
+          path: '/testcatalog/antibiotic',
+          label: 'Antibiotics',
           icon: 'opacity'
         },
         {
@@ -169,7 +169,7 @@
           icon: 'ballot'
         },
         {
-          path: '/',
+          path: '/accesscontrol/roleusers',
           label: 'Assign Roles',
           icon: 'verified_user'
         },

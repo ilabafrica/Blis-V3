@@ -11,24 +11,18 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Models\Role;
+use App\Models\RoleUser;
 use Illuminate\Http\Request;
 
 class RoleUserController extends Controller
 {
     public function index()
     {
-        $usersRoles = User::with('roles')->paginate(20);
-
+        $usersRoles = RoleUser::all();
         return response()->json($usersRoles);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function attach(Request $request)
     {
         $rules = [
             'user_id' => 'required',
@@ -53,13 +47,7 @@ class RoleUserController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  id
-     * @return \Illuminate\Http\Response
-     */
-    public function delete(Request $request)
+    public function detach(Request $request)
     {
         $rules = [
             'user_id' => 'required',

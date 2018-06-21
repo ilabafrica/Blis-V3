@@ -21,15 +21,14 @@ class RoleUserTest extends TestCase
 			"user_id"=>1,
 			"role_id"=>1,
 		);
-		$this->updatedRoleUserData=array(
-			"user_id"=>1,
-			"role_id"=>1,
-		);
 	}
 
-	public function testStoreRoleUser()
+	public function testAttachRoleUser()
 	{
-		$response=$this->post('/api/roleuser',$this->roleUserData);
+		$response=$this->get('/api/roleuser/detach?role_id='.
+			$this->roleUserData['role_id'].'&&user_id='.
+			$this->roleUserData['user_id']
+		);
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
@@ -39,11 +38,12 @@ class RoleUserTest extends TestCase
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
-	public function testDeleteRoleUser()
+	public function testdetachRoleUser()
 	{
-		$response=$this->post('/api/roleuser',$this->roleUserData);
-		$response=$this->post('/api/roleuser/delete',$this->roleUserData);
+		$response=$this->get('/api/roleuser/detach?role_id='.
+			$this->roleUserData['role_id'].'&&user_id='.
+			$this->roleUserData['user_id']
+		);
 		$this->assertEquals(200,$response->getStatusCode());
 	}
-
 }

@@ -27,11 +27,12 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('user', 'UserController');
         Route::resource('permission', 'PermissionController');
         Route::resource('role', 'RoleController');
-        Route::resource('roleuser', 'RoleUserController');
-        Route::post('roleuser/delete', ['uses' => 'RoleUserController@delete']);
         Route::get('permissionrole/attach', 'PermissionRoleController@attach');
         Route::get('permissionrole/detach', 'PermissionRoleController@detach');
         Route::get('permissionrole', 'PermissionRoleController@index');
+        Route::get('roleuser/attach', 'RoleUserController@attach');
+        Route::get('roleuser/detach', 'RoleUserController@detach');
+        Route::get('roleuser', 'RoleUserController@index');
     });
 
     // Health Units|Instrument|Reports|Barcode
@@ -61,7 +62,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('rejectionreason', 'RejectionReasonController');
         Route::resource('specimenstatus', 'SpecimenStatusController');
         Route::resource('specimentype', 'SpecimenTypeController');
-        Route::resource('drug', 'DrugController');
+        Route::resource('antibiotic', 'AntibioticController');
     });
 
 
@@ -123,8 +124,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     ], function () {
         Route::resource('specimenrejection', 'SpecimenRejectionController');
         Route::resource('antibioticsusceptibility', 'AntibioticSusceptibilityController');
-        Route::resource('antibiotic', 'AntibioticController');
-        Route::resource('collection', 'CollectionController');
         Route::resource('referral', 'ReferralController');
         Route::resource('result', 'ResultController');
         Route::resource('specimen', 'SpecimenController');

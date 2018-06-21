@@ -58,7 +58,7 @@
 
     <v-data-table
       :headers="headers"
-      :items="drug"
+      :items="antibiotic"
       hide-actions
       class="elevation-1"
     >
@@ -109,7 +109,7 @@
         { text: 'Description', value: 'description' },
         { text: 'Actions', value: 'name', sortable: false }
       ],
-      drug: [],
+      antibiotics: [],
       editedIndex: -1,
       editedItem: {
         name: '',
@@ -152,10 +152,10 @@
             this.query = this.query+'&search='+this.search;
         }
 
-        apiCall({url: '/api/drug?' + this.query, method: 'GET' })
+        apiCall({url: '/api/antibiotic?' + this.query, method: 'GET' })
         .then(resp => {
           console.log(resp)
-          this.drug = resp.data;
+          this.antibiotics = resp.data;
           this.pagination.total = resp.total;
         })
         .catch(error => {
@@ -164,7 +164,7 @@
       },
 
       editItem (item) {
-        this.editedIndex = this.drug.indexOf(item)
+        this.editedIndex = this.antibiotics.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
@@ -174,9 +174,9 @@
         confirm('Are you sure you want to delete this item?') && (this.delete = true)
 
         if (this.delete) {
-          const index = this.drug.indexOf(item)
-          this.drug.splice(index, 1)
-          apiCall({url: '/api/drug/'+item.id, method: 'DELETE' })
+          const index = this.antibiotics.indexOf(item)
+          this.antibiotics.splice(index, 1)
+          apiCall({url: '/api/antibiotic/'+item.id, method: 'DELETE' })
           .then(resp => {
             console.log(resp)
           })
@@ -207,9 +207,9 @@
         // update
         if (this.editedIndex > -1) {
 
-          apiCall({url: '/api/drug/'+this.editedItem.id, data: this.editedItem, method: 'PUT' })
+          apiCall({url: '/api/antibiotic/'+this.editedItem.id, data: this.editedItem, method: 'PUT' })
           .then(resp => {
-            Object.assign(this.drug[this.editedIndex], this.editedItem)
+            Object.assign(this.antibiotics[this.editedIndex], this.editedItem)
             console.log(resp)
             this.resetDialogReferences();
             this.saving = false;
@@ -221,9 +221,9 @@
         // store
         } else {
 
-          apiCall({url: '/api/drug', data: this.editedItem, method: 'POST' })
+          apiCall({url: '/api/antibiotic', data: this.editedItem, method: 'POST' })
           .then(resp => {
-            this.drug.push(this.editedItem)
+            this.antibiotics.push(this.editedItem)
             console.log(resp)
             this.resetDialogReferences();
             this.saving = false;

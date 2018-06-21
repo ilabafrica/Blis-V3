@@ -79,8 +79,8 @@ export default new Router({
     },
     {
       path: '/testcatalog/drug',
-      name: 'Drugs',
-      component: require('../components/testcatalog/drug'),
+      name: 'Antibiotics',
+      component: require('../components/testcatalog/antibiotic'),
       beforeEnter: ifAuthenticated,
     },
     // Access Control
@@ -100,6 +100,12 @@ export default new Router({
       path: '/accesscontrol/roles',
       name: 'Roles',
       component: require('../components/accesscontrol/roles'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/accesscontrol/roleusers',
+      name: 'Roles',
+      component: require('../components/accesscontrol/roleusers'),
       beforeEnter: ifAuthenticated,
     },
     //Quality Control

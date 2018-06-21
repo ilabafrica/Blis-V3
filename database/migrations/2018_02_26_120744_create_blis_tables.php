@@ -764,7 +764,6 @@ class CreateBlisTables extends Migration
         Schema::dropIfExists('specimen_rejections');
         Schema::dropIfExists('tests');
         Schema::dropIfExists('specimens');
-        Schema::dropIfExists('collections');
         Schema::dropIfExists('referrals');
         Schema::dropIfExists('referral_reasons');
         Schema::dropIfExists('rejection_reasons');
