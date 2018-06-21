@@ -19,6 +19,7 @@ class RoleUserController extends Controller
     public function index()
     {
         $usersRoles = RoleUser::all();
+
         return response()->json($usersRoles);
     }
 

@@ -36,7 +36,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 
     // Health Units|Instrument|Reports|Barcode
-    Route::group(['middleware' => ['permission:manage_configurations']], function() {
+    Route::group(['middleware' => ['permission:manage_configurations']], function () {
         Route::resource('adhoccategory', 'AdhocCategoryController');
         Route::resource('adhocoption', 'AdhocOptionController');
         Route::resource('code', 'CodeController');
@@ -45,7 +45,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 
     // Lab Sections|Specimen Types|Specimen Rejection|Test Types|Drugs|Organisms
-    Route::group(['middleware' => ['permission:manage_test_catalog']], function() {
+    Route::group(['middleware' => ['permission:manage_test_catalog']], function () {
         Route::resource('susceptibilitybreakpoint', 'SusceptibilityBreakPointController');
         Route::resource('susceptibilityrange', 'SusceptibilityRangeController');
         Route::resource('testmapping', 'TestMappingController');
@@ -64,7 +64,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('specimentype', 'SpecimenTypeController');
         Route::resource('antibiotic', 'AntibioticController');
     });
-
 
     // Health Units|Instrument|Reports|Barcode
     Route::group(['middleware' => ['permission:manage_configurations']], function () {

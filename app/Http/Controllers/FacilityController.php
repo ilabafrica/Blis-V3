@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Facility;
+use Illuminate\Http\Request;
 
 class FacilityController extends Controller
 {
@@ -18,9 +18,7 @@ class FacilityController extends Controller
             $search = $request->query('search');
             $facility = Facility::where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
-
-        }else{
-
+        } else {
             $facility = Facility::paginate(10);
         }
 
@@ -49,6 +47,7 @@ class FacilityController extends Controller
 
             try {
                 $facility->save();
+
                 return response()->json($facility);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

@@ -21,8 +21,7 @@ class SpecimenTypeController extends Controller
             $search = $request->query('search');
             $specimenType = SpecimenType::where('name', 'LIKE', "%{$search}%")
                 ->paginate(20);
-
-        }else{
+        } else {
             $specimenType = SpecimenType::orderBy('id', 'ASC')->paginate(20);
         }
 

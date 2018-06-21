@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 class Gender extends Model
 {
     public $timestamps = false;
-    
+
     public function Patient()
     {
         return $this->belongsTo('App\Models\Patient');

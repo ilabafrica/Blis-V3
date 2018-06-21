@@ -15,16 +15,13 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-
     public function index(Request $request)
-    {   
+    {
         if ($request->query('search')) {
             $search = $request->query('search');
             $user = User::where('username', 'LIKE', "%{$search}%")
                 ->paginate(10);
-
-        }else{
-
+        } else {
             $user = User::paginate(10);
         }
 
@@ -59,6 +56,7 @@ class UserController extends Controller
 
             try {
                 $user->save();
+
                 return response()->json($user);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
