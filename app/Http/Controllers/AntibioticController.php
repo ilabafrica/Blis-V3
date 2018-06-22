@@ -15,11 +15,17 @@ use Illuminate\Http\Request;
 
 class AntibioticController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $antibiotic = Antibiotic::orderBy('id', 'ASC')->paginate(20);
+        if ($request->query('search')) {
+            $search = $request->query('search');
+            $antibiotics = Antibiotic::where('name', 'LIKE', "%{$search}%")
+                ->paginate(20);
+        } else {
+            $antibiotics = Antibiotic::orderBy('id', 'ASC')->paginate(20);
+        }
 
-        return response()->json($antibiotic);
+        return response()->json($antibiotics);
     }
 
     /**
@@ -31,7 +37,6 @@ class AntibioticController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'code' => 'required',
             'name' => 'required',
 
         ];

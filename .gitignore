@@ -6,7 +6,13 @@
 /.idea
 /.vagrant
 Homestead.json
+composer.lock
 Homestead.yaml
 npm-debug.log
 yarn-error.log
 .env
+/public/js
+/public/css
+/public/fonts
+/public/images
+/public/mix-manifest.json

@@ -6,12 +6,12 @@
     "type": "project",
     "require": {
         "php": ">=7.1.3",
-        "fideloper/proxy": "4.0",
+        "fideloper/proxy": "~4.0",
         "laravel/framework": "5.6.*",
         "laravel/passport": "^5.0",
         "laravel/tinker": "~1.0",
-        "zizaco/entrust": "5.2.x-dev",
-        "tecnickcom/tcpdf": "^6.2"
+        "tecnickcom/tcpdf": "^6.2",
+        "zizaco/entrust": "5.2.x-dev"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

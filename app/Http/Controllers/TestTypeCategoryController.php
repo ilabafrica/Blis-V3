@@ -15,9 +15,15 @@ use App\Models\TestTypeCategory;
 
 class TestTypeCategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $testTypeCategory = TestTypeCategory::orderBy('id', 'ASC')->paginate(20);
+        if ($request->query('search')) {
+            $search = $request->query('search');
+            $testTypeCategory = TestTypeCategory::where('name', 'LIKE', "%{$search}%")
+                ->paginate(10);
+        } else {
+            $testTypeCategory = TestTypeCategory::orderBy('id', 'ASC')->paginate(10);
+        }
 
         return response()->json($testTypeCategory);
     }
@@ -105,10 +111,7 @@ class TestTypeCategoryController extends Controller
     public function destroy($id)
     {
         try {
-            $testTypeCategory = TestTypeCategory::findOrFail($id);
-            $testTypeCategory->delete();
-
-            return response()->json($testTypeCategory, 200);
+            return response()->json(TestTypeCategory::destroy($id), 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }

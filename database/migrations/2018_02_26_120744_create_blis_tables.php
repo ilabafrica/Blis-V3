@@ -31,14 +31,16 @@ class CreateBlisTables extends Migration
          * @system Multiple
          * @code male|female|234|etc
          * @display UI text of the code
+         * @description additional information
          */
         Schema::create('codes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code_system_id');
+            $table->integer('code_system_id')->unsigned();
             $table->string('code');
             $table->string('display');
             $table->string('description');
             $table->timestamps();
+            $table->foreign('code_system_id')->references('id')->on('code_systems');
         });
 
         /*
@@ -51,43 +53,11 @@ class CreateBlisTables extends Migration
         Schema::create('names', function (Blueprint $table) {
             $table->increments('id');
             $table->string('use', 20)->default('usual');
-            $table->string('text');
+            $table->string('text')->nullable();
             $table->string('family')->nullable();
             $table->string('given')->nullable();
             $table->string('prefix')->nullable();
             $table->string('suffix')->nullable();
-            $table->timestamps();
-        });
-
-        /*
-         * @system https://www.hl7.org/fhir/datatypes.html#ContactPoint
-         * @example phone|fax|email|pager|url|sms|other
-         * @use home|work|temp|old|mobile
-         */
-        Schema::create('telecoms', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('patient_id')->unsigned();
-            $table->string('system', 20)->default('phone');
-            $table->string('value');
-            $table->string('use', 20)->nullable();
-            $table->integer('rank')->unsigned()->nullable();
-            $table->timestamps();
-        });
-
-        /*
-         * @system https://www.hl7.org/fhir/datatypes.html#Address
-         */
-        Schema::create('addresses', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('patient_id')->unsigned();
-            $table->string('text');
-            $table->string('line')->nullable();
-            $table->string('city')->nullable();
-            $table->string('district')->nullable();
-            $table->string('state')->nullable();
-            $table->string('postal_code')->nullable();
-            $table->string('country')->nullable();
-            $table->string('period')->nullable();
             $table->timestamps();
         });
 
@@ -115,7 +85,7 @@ class CreateBlisTables extends Migration
          */
         Schema::create('genders', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code', 10);
+            $table->string('code', 10)->nullable();
             $table->string('display');
         });
 
@@ -163,6 +133,7 @@ class CreateBlisTables extends Migration
             $table->integer('species_id')->unsigned();
             $table->string('code');
             $table->string('display');
+            $table->foreign('species_id')->references('id')->on('species');
         });
 
         /*
@@ -184,7 +155,6 @@ class CreateBlisTables extends Migration
             $table->string('identifier'); //Business identifier
             $table->boolean('active')->default(1);
             $table->integer('name_id')->unsigned();
-            $table->integer('telecom_id')->unsigned()->nullable();
             $table->integer('gender_id')->unsigned();
             $table->date('birth_date');
             $table->boolean('deceased')->default(0)->nullable();
@@ -204,14 +174,46 @@ class CreateBlisTables extends Migration
 
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('name_id')->references('id')->on('names');
-            $table->foreign('telecom_id')->references('id')->on('telecoms');
             $table->foreign('gender_id')->references('id')->on('genders');
-            $table->foreign('address_id')->references('id')->on('addresses');
             $table->foreign('practitioner_id')->references('id')->on('practitioners');
             $table->foreign('organization_id')->references('id')->on('organizations');
             $table->foreign('species_id')->references('id')->on('species');
             $table->foreign('breed_id')->references('id')->on('breeds');
             $table->foreign('marital_status')->references('id')->on('marital_statuses');
+        });
+
+        /*
+         * @system https://www.hl7.org/fhir/datatypes.html#Address
+         */
+        Schema::create('addresses', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('patient_id')->unsigned();
+            $table->string('text');
+            $table->string('line')->nullable();
+            $table->string('city')->nullable();
+            $table->string('district')->nullable();
+            $table->string('state')->nullable();
+            $table->string('postal_code')->nullable();
+            $table->string('country')->nullable();
+            $table->string('period')->nullable();
+            $table->timestamps();
+            $table->foreign('patient_id')->references('id')->on('patients');
+        });
+
+        /*
+         * @system https://www.hl7.org/fhir/datatypes.html#ContactPoint
+         * @example phone|fax|email|pager|url|sms|other
+         * @use home|work|temp|old|mobile
+         */
+        Schema::create('telecoms', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('patient_id')->unsigned();
+            $table->string('system', 20)->default('phone');
+            $table->string('value');
+            $table->string('use', 20)->nullable();
+            $table->integer('rank')->unsigned()->nullable();
+            $table->timestamps();
+            $table->foreign('patient_id')->references('id')->on('patients');
         });
 
         /*
@@ -361,6 +363,10 @@ class CreateBlisTables extends Migration
             $table->timestamps();
 
             $table->unique(['test_type_id', 'specimen_type_id']);
+
+            $table->foreign('code_id')->references('id')->on('codes');
+            $table->foreign('test_type_id')->references('id')->on('test_types');
+            $table->foreign('specimen_type_id')->references('id')->on('specimen_types');
         });
 
         /*
@@ -389,15 +395,15 @@ class CreateBlisTables extends Migration
          */
         Schema::create('specimen_statuses', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 20);
+            $table->string('name', 45);
         });
         /*
          * @system blis.v3 defined
-         * @example wards|clinics
+         * @example wards|clinics|healthunits
          */
         Schema::create('locations', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('identifier', 45);
+            $table->string('identifier', 45)->nullable();
             $table->string('name', 100);
         });
 
@@ -482,17 +488,6 @@ class CreateBlisTables extends Migration
 
         /*
          * @system blis.v3 defined
-         */
-        Schema::create('collections', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('collector_id')->unsigned();
-            $table->timestamp('collection_date_time');
-
-            $table->foreign('collector_id')->references('id')->on('users');
-        });
-
-        /*
-         * @system blis.v3 defined
          * @specimen_status_id available|unavailable|unsatisfactory|entered-in-error
          * @identifier External Identifier
          * @accession_identifier Identifier assigned by the lab
@@ -506,12 +501,15 @@ class CreateBlisTables extends Migration
             $table->integer('parent_id')->unsigned();
             $table->integer('specimen_status_id')->unsigned();
             $table->integer('received_by')->unsigned();
+            $table->integer('collected_by')->unsigned();
             $table->timestamp('time_collected')->nullable();
             $table->timestamp('received_time')->nullable();
 
             $table->index('received_by');
             $table->foreign('specimen_type_id')->references('id')->on('specimen_types');
             $table->foreign('specimen_status_id')->references('id')->on('specimen_statuses');
+            $table->foreign('received_by')->references('id')->on('users');
+            $table->foreign('collected_by')->references('id')->on('users');
         });
 
         /*
@@ -661,6 +659,85 @@ class CreateBlisTables extends Migration
         Schema::create('counter', function (Blueprint $table) {
             $table->increments('id');
         });
+
+        Schema::create('instruments', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name', 100)->unique();
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
+        Schema::create('lots', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('number', 100)->unique();
+            $table->string('description', 400)->nullable();
+            $table->date('expiry');
+            $table->integer('instrument_id')->unsigned();
+
+            $table->foreign('instrument_id')->references('id')->on('instruments');
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
+        Schema::create('control_types', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name', 100)->unique();
+            $table->string('description', 400)->nullable();
+            $table->integer('instrument_id')->unsigned();
+
+            $table->foreign('instrument_id')->references('id')->on('instruments');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('control_measures', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('unit');
+            $table->integer('control_type_id')->unsigned();
+            $table->integer('measure_type_id')->unsigned();
+
+            $table->foreign('measure_type_id')->references('id')->on('measure_types');
+            $table->foreign('control_type_id')->references('id')->on('control_types');
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
+        Schema::create('control_measure_ranges', function (Blueprint $table) {
+            $table->increments('id');
+            $table->decimal('upper_range', 6, 2)->nullable();
+            $table->decimal('lower_range', 6, 2)->nullable();
+            $table->string('alphanumeric', '100')->nullable();
+            $table->integer('control_measure_id')->unsigned();
+
+            $table->foreign('control_measure_id')->references('id')->on('control_measures');
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
+        Schema::create('control_tests', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('lot_id')->unsigned();
+            $table->integer('entered_by')->unsigned();
+            $table->integer('control_id')->unsigned();
+            $table->integer('control_type_id')->unsigned();
+
+            $table->foreign('control_type_id')->references('id')->on('control_types');
+            $table->foreign('entered_by')->references('id')->on('users');
+            $table->foreign('lot_id')->references('id')->on('lots');
+            $table->timestamps();
+        });
+
+        Schema::create('control_results', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('results');
+            $table->integer('control_measure_id')->unsigned();
+            $table->integer('control_test_id')->unsigned();
+
+            $table->foreign('control_test_id')->references('id')->on('control_tests');
+            $table->foreign('control_measure_id')->references('id')->on('control_measures');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -670,6 +747,13 @@ class CreateBlisTables extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('control_results');
+        Schema::dropIfExists('control_tests');
+        Schema::dropIfExists('control_measure_ranges');
+        Schema::dropIfExists('control_measures');
+        Schema::dropIfExists('control_types');
+        Schema::dropIfExists('lots');
+        Schema::dropIfExists('instruments');
         Schema::dropIfExists('counter');
         Schema::dropIfExists('adhoc_options');
         Schema::dropIfExists('adhoc_categories');
@@ -680,7 +764,6 @@ class CreateBlisTables extends Migration
         Schema::dropIfExists('specimen_rejections');
         Schema::dropIfExists('tests');
         Schema::dropIfExists('specimens');
-        Schema::dropIfExists('collections');
         Schema::dropIfExists('referrals');
         Schema::dropIfExists('referral_reasons');
         Schema::dropIfExists('rejection_reasons');
