@@ -42,4 +42,5 @@ class Permission extends EntrustPermission
 
         return false;
     }
+
 }

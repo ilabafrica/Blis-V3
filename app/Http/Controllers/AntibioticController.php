@@ -21,6 +21,7 @@ class AntibioticController extends Controller
             $search = $request->query('search');
             $antibiotics = Antibiotic::where('name', 'LIKE', "%{$search}%")
                 ->paginate(20);
+
         } else {
             $antibiotics = Antibiotic::orderBy('id', 'ASC')->paginate(20);
         }
