@@ -12,8 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class TestType extends Model
 {
-    public function Test()
+    public function test()
     {
         return $this->hasMany('App\Models\Test');
+    }
+
+    public function measures()
+    {
+        return $this->hasMany('App\Models\Measure');
     }
 }

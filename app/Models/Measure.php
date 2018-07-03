@@ -14,4 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Measure extends Model
 {
+    public function testType()
+    {
+        return $this->belongsTo('App\Models\TestType');
+    }
 }

@@ -48,7 +48,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['middleware' => ['permission:manage_test_catalog']], function () {
         Route::resource('susceptibilitybreakpoint', 'SusceptibilityBreakPointController');
         Route::resource('susceptibilityrange', 'SusceptibilityRangeController');
-        Route::resource('testmapping', 'TestMappingController');
+        Route::resource('testtypemapping', 'TestTypeMappingController');
         Route::resource('testphase', 'TestPhaseController');
         Route::resource('teststatus', 'TestStatusController');
         Route::resource('testtypecategory', 'TestTypeCategoryController');
@@ -96,18 +96,13 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     // Registration
     Route::group(['middleware' => ['permission:manage_patients|view_patient_names']], function () {
-        Route::resource('breed', 'BreedController');
         Route::resource('encounterclass', 'EncounterClassController');
         Route::resource('encounterstatus', 'EncounterStatusController');
         Route::resource('encounter', 'EncounterController');
         Route::resource('gender', 'GenderController');
-        Route::resource('maritalstatus', 'MaritalStatusController');
         Route::resource('name', 'NameController');
         Route::resource('organization', 'OrganizationController');
         Route::resource('patient', 'PatientController');
-        Route::resource('practitioner', 'PractitionerController');
-        Route::resource('species', 'SpeciesController');
-        Route::resource('telecom', 'TelecomController');
     });
 
     // Routine and Reference Testing

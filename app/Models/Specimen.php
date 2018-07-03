@@ -10,13 +10,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Specimen extends Model
 {
-    /**
-     * Specimen status constants.
-     */
-    const NOT_COLLECTED = 1;
-    const RECEIVED = 2;
-    const REJECTED = 3;
-
     public $timestamps = false;
 
     public function test()

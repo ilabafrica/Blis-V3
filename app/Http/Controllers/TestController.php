@@ -80,6 +80,14 @@ class TestController extends Controller
     {
         $test = Test::findOrFail($id);
 
+        // if requested by emr
+        // todo: will be moved to save of something of that kind
+        // todo: try send $test see if it can be played with as object on the other side...
+        if (ThereIsAnEmr) {
+            // the interface should check if it's from emr else ignore it
+            EMR::sendTestResults($test->id);
+        }
+
         return response()->json($test);
     }
 

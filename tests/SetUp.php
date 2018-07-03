@@ -15,7 +15,6 @@ trait SetUp
      */
     public function setup(){
         parent::Setup();
-        \Artisan::call('db:seed');
 
         $this->setVariables();
         \Laravel\Passport\Passport::actingAs(\App\User::find(1),['create-servers']);

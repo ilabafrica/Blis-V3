@@ -97,9 +97,9 @@ export default new Router({
       beforeEnter: ifAuthenticated,
     },
     {
-      path: '/accesscontrol/roles',
-      name: 'Roles',
-      component: require('../components/accesscontrol/roles'),
+      path: '/accesscontrol/role',
+      name: 'Role',
+      component: require('../components/accesscontrol/role'),
       beforeEnter: ifAuthenticated,
     },
     {

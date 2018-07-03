@@ -14,5 +14,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class SpecimenStatus extends Model
 {
+    const pending = 1;
+    const received = 2;
+    const rejected = 3;
+
     public $timestamps = false;
 }

@@ -14,6 +14,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gender extends Model
 {
+
+    const male = 0;
+    const female = 1;
+    const both = 2;
+    const unknown = 3;
+
     public $timestamps = false;
 
     public function Patient()

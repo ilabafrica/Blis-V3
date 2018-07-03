@@ -132,11 +132,7 @@ class PatientController extends Controller
             $patient->address_id = $request->input('address_id');
             $patient->marital_status = $request->input('marital_status');
             $patient->photo = $request->input('photo');
-            $patient->animal = $request->input('animal');
-            $patient->species_id = $request->input('species_id');
-            $patient->breed_id = $request->input('breed_id');
             $patient->gender_status = $request->input('gender_status');
-            $patient->practitioner_id = $request->input('practitioner_id');
             $patient->organization_id = $request->input('organization_id');
             $patient->created_by = $request->input('created_by');
 

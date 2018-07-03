@@ -21,4 +21,44 @@ class Test extends Model
     {
         return $this->belongsTo('App\Models\Specimen');
     }
+
+    /*
+     * User (created) relationship
+     */
+    public function createdBy()
+    {
+        return $this->belongsTo('App\User', 'created_by', 'id');
+    }
+
+    /*
+     * User (tested) relationship
+     */
+    public function testedBy()
+    {
+        return $this->belongsTo('App\User', 'tested_by', 'id');
+    }
+
+    /*
+     * User (verified) relationship
+     */
+    public function verifiedBy()
+    {
+        return $this->belongsTo('App\User', 'verified_by', 'id');
+    }
+
+    /*
+     * Test Results relationship
+     */
+    public function results()
+    {
+        return $this->hasMany('TestResult', 'test_id');
+    }
+
+    /*
+     * Test Status relationship
+     */
+    public function testStatus()
+    {
+        return $this->belongsTo('TestStatus');
+    }
 }
