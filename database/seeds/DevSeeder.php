@@ -4,19 +4,20 @@ use App\User;
 use App\Models\Role;
 use App\Models\Gender;
 use App\Models\Patient;
-use App\Models\TestPhase;
-use App\Models\TestStatus;
-use App\Models\MeasureType;
-use App\Models\SpecimenStatus;
 use App\Models\Measure;
 use App\Models\TestType;
+use App\Models\TestPhase;
+use App\Models\TestStatus;
+use App\Models\Antibiotic;
 use App\Models\Instrument;
+use App\Models\MeasureType;
 use App\Models\MeasureRange;
 use App\Models\SpecimenType;
+use App\Models\SpecimenStatus;
 use App\Models\TestTypeCategory;
 use App\Models\GramStainRange;
 use App\Models\RejectionReason;
-use App\Models\DrugSusceptibilityMeasure;
+use App\Models\SusceptibilityBreakPoint;
 
 use Illuminate\Database\Seeder;
 class DevSeeder extends Seeder
@@ -670,12 +671,12 @@ class DevSeeder extends Seeder
             "name" => "Culture and Sensitivity",
             "test_type_category_id" => $testTypeCategoryMicrobiology->id
         ]);
-        $testTypeGramStaining = TestType::create([
-            "name" => "Gram Staining",
+        $testTypeGramStain = TestType::create([
+            "name" => "Gram Stain",
             "test_type_category_id" => $testTypeCategoryMicrobiology->id
         ]);
-        $testTypeIndiaInkStaining = TestType::create([
-            "name" => "India Ink Staining",
+        $testTypeIndiaInkStain = TestType::create([
+            "name" => "India Ink Stain",
             "test_type_category_id" => $testTypeCategoryMicrobiology->id
         ]);
         $testTypeProtein = TestType::create([
@@ -694,8 +695,8 @@ class DevSeeder extends Seeder
             "name" => "White Blood Cell Count",
             "test_type_category_id" => $testTypeCategoryMicrobiology->id
         ]);
-        $testTypeZNStaining = TestType::create([
-            "name" => "ZN Staining",
+        $testTypeZNStain = TestType::create([
+            "name" => "ZN Stain",
             "test_type_category_id" => $testTypeCategoryMicrobiology->id
         ]);
         $testTypeModifiedZn = TestType::create([
@@ -919,17 +920,17 @@ class DevSeeder extends Seeder
             "measure_type_id" => "4",
             "test_type_id" => $testTypeCultureAndSensitivity->id,
             "name" => "Culture and Sensitivity"]);
-        $measureGramStaining = Measure::create([
+        $measureGramStain = Measure::create([
             "measure_type_id" => "4",
-            "test_type_id" => $testTypeGramStaining->id,
-            "name" => "Gram Staining", 'unit' => '']);
-        $measureIndiaInkStaining = Measure::create([
+            "test_type_id" => $testTypeGramStain->id,
+            "name" => "Gram Stain", 'unit' => '']);
+        $measureIndiaInkStain = Measure::create([
             "measure_type_id" => "2",
-            "test_type_id" => $testTypeIndiaInkStaining->id,
-            "name" => "India Ink Staining"
+            "test_type_id" => $testTypeIndiaInkStain->id,
+            "name" => "India Ink Stain"
         ]);
-        MeasureRange::create(["measure_id" => $measureIndiaInkStaining->id, "display" => "Positive"]);
-        MeasureRange::create(["measure_id" => $measureIndiaInkStaining->id, "display" => "Negative"]);
+        MeasureRange::create(["measure_id" => $measureIndiaInkStain->id, "display" => "Positive"]);
+        MeasureRange::create(["measure_id" => $measureIndiaInkStain->id, "display" => "Negative"]);
 
         $measureProtein = Measure::create([
             "measure_type_id" => "4",
@@ -946,10 +947,10 @@ class DevSeeder extends Seeder
             "test_type_id" => $testTypeWhiteBloodCellCount->id,
             "name" => "White Blood Cell Count",
         ]);
-        $measureZNStaining = Measure::create([
+        $measureZNStain = Measure::create([
             "measure_type_id" => "4",
-            "test_type_id" => $testTypeZNStaining->id,
-            "name" => "ZN Staining",
+            "test_type_id" => $testTypeZNStain->id,
+            "name" => "ZN Stain",
         ]);
         $measureModifiedZn = Measure::create([
             "measure_type_id" => "4",
@@ -1054,7 +1055,7 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeCSF->id,
-            "test_type_id" => $testTypeIndiaInkStaining->id
+            "test_type_id" => $testTypeIndiaInkStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1063,11 +1064,11 @@ class DevSeeder extends Seeder
         ]);
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeCSF->id,
-            "test_type_id" => $testTypeGramStaining->id
+            "test_type_id" => $testTypeGramStain->id
         ]);
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeCSF->id,
-            "test_type_id" => $testTypeZNStaining->id
+            "test_type_id" => $testTypeZNStain->id
         ]);
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeCSF->id,
@@ -1104,7 +1105,7 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypePusSwab->id,
-            "test_type_id" => $testTypeGramStaining->id
+            "test_type_id" => $testTypeGramStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1114,7 +1115,7 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypePusSwab->id,
-            "test_type_id" => $testTypeZNStaining->id
+            "test_type_id" => $testTypeZNStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1124,7 +1125,7 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeWoundSwab->id,
-            "test_type_id" => $testTypeGramStaining->id
+            "test_type_id" => $testTypeGramStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1134,7 +1135,7 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeWoundSwab->id,
-            "test_type_id" => $testTypeZNStaining->id
+            "test_type_id" => $testTypeZNStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1154,7 +1155,7 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeUretheralSwab->id,
-            "test_type_id" => $testTypeGramStaining->id
+            "test_type_id" => $testTypeGramStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1174,7 +1175,7 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeHVS->id,
-            "test_type_id" => $testTypeGramStaining->id
+            "test_type_id" => $testTypeGramStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1184,7 +1185,7 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeEyeSwab->id,
-            "test_type_id" => $testTypeGramStaining->id
+            "test_type_id" => $testTypeGramStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1204,7 +1205,7 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeEarSwab->id,
-            "test_type_id" => $testTypeGramStaining->id
+            "test_type_id" => $testTypeGramStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1219,7 +1220,7 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeThroatSwab->id,
-            "test_type_id" => $testTypeGramStaining->id
+            "test_type_id" => $testTypeGramStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1234,7 +1235,7 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeAspirates->id,
-            "test_type_id" => $testTypeGramStaining->id
+            "test_type_id" => $testTypeGramStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1244,7 +1245,7 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeAspirates->id,
-            "test_type_id" => $testTypeZNStaining->id
+            "test_type_id" => $testTypeZNStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1259,12 +1260,12 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeBAL->id,
-            "test_type_id" => $testTypeGramStaining->id
+            "test_type_id" => $testTypeGramStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeBAL->id,
-            "test_type_id" => $testTypeZNStaining->id
+            "test_type_id" => $testTypeZNStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1274,7 +1275,7 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeSputum->id,
-            "test_type_id" => $testTypeZNStaining->id
+            "test_type_id" => $testTypeZNStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1284,7 +1285,7 @@ class DevSeeder extends Seeder
 
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeSputum->id,
-            "test_type_id" => $testTypeGramStaining->id
+            "test_type_id" => $testTypeGramStain->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -1323,5 +1324,7074 @@ class DevSeeder extends Seeder
             "test_type_id" => $testTypeCultureAndSensitivity->id
         ]);
         $this->command->info("more blood associated type types and measures seeded");
+
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "No organism seen",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram positive cocci in singles",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram positive cocci in chains",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram positive cocci in clusters",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram positive diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram positive micrococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram positive rods",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram positive rods with terminal spores",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram positive rods with sub-terminal spores",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram positive rods with endospores",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram negative diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram negative intracellular diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram negative extracellular diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram negative rods",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram positive yeast cells",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "Gram negative pleomorphic rods",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram positive cocci in singles",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram positive cocci in chains",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram positive cocci in clusters",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram positive diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram positive micrococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram positive rods",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram positive rods with terminal spores",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram positive rods with sub-terminal spores",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram positive rods with endospores",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram negative diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram negative intracellular diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram negative extracellular diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram negative rods",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram positive yeast cells",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+ Gram negative pleomorphic rods",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram positive cocci in singles",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram positive cocci in chains",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram positive cocci in clusters",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram positive diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram positive micrococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram positive rods",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram positive rods with terminal spores",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram positive rods with sub-terminal spores",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram positive rods with endospores",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram negative diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram negative intracellular diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram negative extracellular diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram negative rods",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram positive yeast cells",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "++ Gram negative pleomorphic rods",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram positive cocci in singles",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram positive cocci in chains",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram positive cocci in clusters",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram positive diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram positive micrococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram positive rods",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram positive rods with terminal spores",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram positive rods with sub-terminal spores",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram positive rods with endospores",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram negative diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram negative intracellular diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram negative extracellular diplococci",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram negative rods",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram positive yeast cells",
+        ]);
+        MeasureRange::create([
+            "measure_id" => $measureGramStain->id,
+            "display" => "+++ Gram negative pleomorphic rods",
+        ]);
+        $this->command->info("Gram Stain Measure Ranges");
+
+        $antibiotic1 = Antibiotic::create(['name' => 'Amikacin']);
+        $antibiotic2 = Antibiotic::create(['name' => 'Ampicillin']);
+        $antibiotic3 = Antibiotic::create(['name' => 'Augmentin']);
+        $antibiotic4 = Antibiotic::create(['name' => 'Cefotaxime']);
+        $antibiotic5 = Antibiotic::create(['name' => 'Ceftazidime']);
+        $antibiotic6 = Antibiotic::create(['name' => 'Ceftriaxone']);
+        $antibiotic7 = Antibiotic::create(['name' => 'Ceftizoxime']);
+        $antibiotic8 = Antibiotic::create(['name' => 'Cefuroxime']);
+        $antibiotic9 = Antibiotic::create(['name' => 'Cefuroxime oral']);
+        $antibiotic10 = Antibiotic::create(['name' => 'Chloramphenicol']);
+        $antibiotic11 = Antibiotic::create(['name' => 'Ciprofloxacin']);
+        $antibiotic12 = Antibiotic::create(['name' => 'Co-trimoxazole']);
+        $antibiotic13 = Antibiotic::create(['name' => 'Gentamicin']);
+        $antibiotic14 = Antibiotic::create(['name' => 'Imipenem']);
+        $antibiotic15 = Antibiotic::create(['name' => 'Meropenem']);
+        $antibiotic16 = Antibiotic::create(['name' => 'Nalidixic acid']);
+        $antibiotic17 = Antibiotic::create(['name' => 'Peperacillintazobactam']);
+        $antibiotic18 = Antibiotic::create(['name' => 'Piperacillin']);
+        $antibiotic19 = Antibiotic::create(['name' => 'Nitrofurantoin']);
+        $antibiotic20 = Antibiotic::create(['name' => 'Trimethoprim']);
+        $antibiotic21 = Antibiotic::create(['name' => 'Amoxycillin']);
+        $antibiotic22 = Antibiotic::create(['name' => 'Cefepime']);
+        $antibiotic23 = Antibiotic::create(['name' => 'Colistin']);
+        $antibiotic24 = Antibiotic::create(['name' => 'Tetracycline']);
+        $antibiotic25 = Antibiotic::create(['name' => 'Erythromycin']);
+        $antibiotic26 = Antibiotic::create(['name' => 'Clindamycin']);
+        $antibiotic27 = Antibiotic::create(['name' => 'Vancomycin']);
+        $antibiotic28 = Antibiotic::create(['name' => 'Linezolid']);
+        $antibiotic29 = Antibiotic::create(['name' => 'Penicillin G']);
+        $antibiotic30 = Antibiotic::create(['name' => 'Cefoxitin']);
+        $antibiotic31 = Antibiotic::create(['name' => 'Rifampicin']);
+        $antibiotic32 = Antibiotic::create(['name' => 'Streptomycin']);
+        $antibiotic33 = Antibiotic::create(['name' => 'Minocycline']);
+        $antibiotic34 = Antibiotic::create(['name' => 'Cefexime']);
+        $antibiotic35 = Antibiotic::create(['name' => 'spectinomycin']);
+        $antibiotic36 = Antibiotic::create(['name' => 'Oxacillin']);
+        $antibiotic37 = Antibiotic::create(['name' => 'Levofloxacin']);
+        $antibiotic38 = Antibiotic::create(['name' => 'Cefuroxime Parentral']);
+        $antibiotic39 = Antibiotic::create(['name' => 'High level Gentamicin']);
+
+        $organismMeasureRange1= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Pseudomonas aeruginosa',
+        ]);
+        $organismMeasureRange2= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Escherichia coli',
+        ]);
+        $organismMeasureRange3= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Enterobacteriacae',
+        ]);
+        $organismMeasureRange5= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Pseudomonas flourescens',
+        ]);
+        $organismMeasureRange6= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Pseudomonas spp',
+        ]);
+        $organismMeasureRange12= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Acinetobacter spp',
+        ]);
+        $organismMeasureRange13= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Acinetobacter baumannii',
+        ]);
+        $organismMeasureRange16= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Salmonella spp',
+        ]);
+        $organismMeasureRange17= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Salmonella typhi',
+        ]);
+        $organismMeasureRange18= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Salmonella paratyphi B',
+        ]);
+        $organismMeasureRange19= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Salmonella choleraesuis',
+        ]);
+        $organismMeasureRange20= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Vibrio cholerae',
+        ]);
+        $organismMeasureRange21= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Viridans streptococcus',
+        ]);
+        $organismMeasureRange23= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Staphylococcus aureus',
+        ]);
+        $organismMeasureRange24= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Staphylococcus epidermidis',
+        ]);
+        $organismMeasureRange25= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Staphylococcus spp',
+        ]);
+        $organismMeasureRange29= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Staphylococcus horminis',
+        ]);
+        $organismMeasureRange30= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Staphylococcus pasteuri.',
+        ]);
+        $organismMeasureRange31= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Staphylococcus saprophyticus',
+        ]);
+        $organismMeasureRange32= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Enterobacter spp',
+        ]);
+        $organismMeasureRange33= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Enterobacter cloacae',
+        ]);
+        $organismMeasureRange34= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Enterococcus spp',
+        ]);
+        $organismMeasureRange35= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Enterococcus feacalis',
+        ]);
+        $organismMeasureRange36= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Streptococcus spp',
+        ]);
+        $organismMeasureRange37= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Burkholderia cepacia',
+        ]);
+        $organismMeasureRange38= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Burkholderia mallei',
+        ]);
+        $organismMeasureRange39= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Burkholderia pseudomallei',
+        ]);
+        $organismMeasureRange40= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Neisseria spp',
+        ]);
+        $organismMeasureRange41= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Neisseria gonorrhae',
+        ]);
+        $organismMeasureRange42= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Neisseria gonorrhoeae',
+        ]);
+        $organismMeasureRange43= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Neisseria meningitidis',
+        ]);
+        $organismMeasureRange44= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Haemophilus spp',
+        ]);
+        $organismMeasureRange45= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Haemophilus influenzae spp',
+        ]);
+        $organismMeasureRange46= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Haemophilus influenzae type B',
+        ]);
+        $organismMeasureRange48= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Haemophilus influenzae nontypaeble',
+        ]);
+        $organismMeasureRange52= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Haemophilus influenza',
+        ]);
+        $organismMeasureRange53= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Haemophilus ducreyi',
+        ]);
+        $organismMeasureRange54= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Haemophilus aphrophilus',
+        ]);
+        $organismMeasureRange55= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Haemophilus aegyptius',
+        ]);
+        $organismMeasureRange56= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Haemophilus parainfluenzae',
+        ]);
+        $organismMeasureRange61= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Streptococcus pneumoniae',
+        ]);
+        $organismMeasureRange67= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Enterobacter aerogenes',
+        ]);
+        $organismMeasureRange68= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Edwardsiella tarda',
+        ]);
+        $organismMeasureRange69= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Ehrlichia chaffeensis',
+        ]);
+        $organismMeasureRange71= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Eikenella corrodens',
+        ]);
+        $organismMeasureRange72= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Klebsiella pneumoniae',
+        ]);
+        $organismMeasureRange74= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Klebsiella oxytoca',
+        ]);
+        $organismMeasureRange75= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Kelbsiella spp',
+        ]);
+        $organismMeasureRange76= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Kingella kingae',
+        ]);
+        $organismMeasureRange77= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Proteus mirabilis',
+        ]);
+        $organismMeasureRange80= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Citrobacter freundii',
+        ]);
+        $organismMeasureRange81= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Citrobacter spp',
+        ]);
+        $organismMeasureRange83= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Providencia spp',
+        ]);
+        $organismMeasureRange84= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Proteus valgaris',
+        ]);
+        $organismMeasureRange87= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Providentia rettgeri',
+        ]);
+        $organismMeasureRange88= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Providentia stuartii',
+        ]);
+        $organismMeasureRange89= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Salmonella nontyphi group B',
+        ]);
+        $organismMeasureRange90= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Stenotrophomonas maltophilia',
+        ]);
+        $organismMeasureRange91= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Morganella morganii',
+        ]);
+        $organismMeasureRange95= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Morganella spp',
+        ]);
+        $organismMeasureRange96= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Salmonella paratyphi A',
+        ]);
+        $organismMeasureRange97= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Enterrococcus faecium',
+        ]);
+        $organismMeasureRange98= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Shigella boydii',
+        ]);
+        $organismMeasureRange99= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Shigella dysenteriae',
+        ]);
+        $organismMeasureRange100= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Shigella flexneri',
+        ]);
+        $organismMeasureRange101= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Shigella sonnei',
+        ]);
+        $organismMeasureRange102= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Streptococcus pyogenes',
+        ]);
+        $organismMeasureRange103= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Streptococcus pyogenes (Group A Strep)',
+        ]);
+        $organismMeasureRange107= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Streptococcus salivarius',
+        ]);
+        $organismMeasureRange108= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Streptococcus sanguis',
+        ]);
+        $organismMeasureRange109= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Salmonella group B',
+        ]);
+        $organismMeasureRange110= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Moraxella spp',
+        ]);
+        $organismMeasureRange111= MeasureRange::create([
+            'measure_id' => $measureCultureAndSensitivity->id,
+            'display' => 'Coagulase-negative Staphylococcus',
+        ]);
+
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic1->id,
+            'measure_range_id' => $organismMeasureRange1->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic3->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic7->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange2->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic7->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange1->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange1->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange1->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange1->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange1->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange1->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange1->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange1->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic23->id,
+            'measure_range_id' => $organismMeasureRange1->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '12.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic1->id,
+            'measure_range_id' => $organismMeasureRange5->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange5->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange5->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange5->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic23->id,
+            'measure_range_id' => $organismMeasureRange5->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '11.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange5->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange5->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange5->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange5->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange5->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic1->id,
+            'measure_range_id' => $organismMeasureRange6->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange6->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange6->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange6->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic23->id,
+            'measure_range_id' => $organismMeasureRange6->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '11.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange6->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange6->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange6->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange6->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange6->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange12->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange12->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange12->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic1->id,
+            'measure_range_id' => $organismMeasureRange12->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange12->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange12->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange12->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange12->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange12->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange12->id,
+            'resistant_max' => '11.0',
+            'intermediate_min' => '12.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange12->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '21.0',
+            'sensitive_min' => '22.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange12->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange13->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange13->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic1->id,
+            'measure_range_id' => $organismMeasureRange13->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange13->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '21.0',
+            'sensitive_min' => '22.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange13->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange13->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange13->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange13->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange13->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange13->id,
+            'resistant_max' => '11.0',
+            'intermediate_min' => '12.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange13->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange13->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange16->id,
+            'resistant_max' => '20.0',
+            'intermediate_min' => '21.0',
+            'intermediate_max' => '30.0',
+            'sensitive_min' => '31.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange16->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange16->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange16->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange16->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange16->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange17->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange17->id,
+            'resistant_max' => '20.0',
+            'intermediate_min' => '21.0',
+            'intermediate_max' => '30.0',
+            'sensitive_min' => '31.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange17->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange17->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange17->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange17->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange18->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange18->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange18->id,
+            'resistant_max' => '20.0',
+            'intermediate_min' => '21.0',
+            'intermediate_max' => '30.0',
+            'sensitive_min' => '31.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange18->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange18->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange18->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange19->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange19->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange19->id,
+            'resistant_max' => '20.0',
+            'intermediate_min' => '21.0',
+            'intermediate_max' => '30.0',
+            'sensitive_min' => '31.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange19->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange19->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange19->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange20->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange20->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange20->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange20->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange21->id,
+            'resistant_max' => '24.0',
+            'intermediate_min' => '25.0',
+            'intermediate_max' => '26.0',
+            'sensitive_min' => '27.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange21->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange21->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange21->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange21->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic28->id,
+            'measure_range_id' => $organismMeasureRange21->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange21->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic1->id,
+            'measure_range_id' => $organismMeasureRange23->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange23->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange23->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange23->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange23->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange23->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange23->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic28->id,
+            'measure_range_id' => $organismMeasureRange23->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange23->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange23->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange23->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange23->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic30->id,
+            'measure_range_id' => $organismMeasureRange23->id,
+            'resistant_max' => '21.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '22.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange23->id,
+            'resistant_max' => '28.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic1->id,
+            'measure_range_id' => $organismMeasureRange24->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange24->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange24->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange24->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange24->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange24->id,
+            'resistant_max' => '28.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange24->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic28->id,
+            'measure_range_id' => $organismMeasureRange24->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange24->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange24->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange24->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange24->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange24->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic30->id,
+            'measure_range_id' => $organismMeasureRange24->id,
+            'resistant_max' => '21.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '22.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic28->id,
+            'measure_range_id' => $organismMeasureRange25->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange25->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange25->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic1->id,
+            'measure_range_id' => $organismMeasureRange25->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange25->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange25->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange25->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange25->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange25->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange25->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange25->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange25->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic30->id,
+            'measure_range_id' => $organismMeasureRange25->id,
+            'resistant_max' => '21.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '22.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange25->id,
+            'resistant_max' => '28.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange29->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange29->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange29->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange29->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange29->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange29->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic28->id,
+            'measure_range_id' => $organismMeasureRange29->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange29->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange29->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange29->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange29->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange29->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic30->id,
+            'measure_range_id' => $organismMeasureRange29->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic1->id,
+            'measure_range_id' => $organismMeasureRange29->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic1->id,
+            'measure_range_id' => $organismMeasureRange30->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic30->id,
+            'measure_range_id' => $organismMeasureRange30->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange30->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange30->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange30->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange30->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange30->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange30->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic28->id,
+            'measure_range_id' => $organismMeasureRange30->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange30->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange30->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange30->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange30->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange30->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic1->id,
+            'measure_range_id' => $organismMeasureRange31->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic30->id,
+            'measure_range_id' => $organismMeasureRange31->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange31->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange31->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange31->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange31->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange31->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange31->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic28->id,
+            'measure_range_id' => $organismMeasureRange31->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange31->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange31->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange31->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange31->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange31->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic28->id,
+            'measure_range_id' => $organismMeasureRange34->id,
+            'resistant_max' => '20.0',
+            'intermediate_min' => '21.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange34->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange34->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic32->id,
+            'measure_range_id' => $organismMeasureRange34->id,
+            'resistant_max' => '6.0',
+            'intermediate_min' => '7.0',
+            'intermediate_max' => '9.0',
+            'sensitive_min' => '10.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange34->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange34->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange34->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange34->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange34->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange34->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange34->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange35->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange35->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic32->id,
+            'measure_range_id' => $organismMeasureRange35->id,
+            'resistant_max' => '6.0',
+            'intermediate_min' => '7.0',
+            'intermediate_max' => '9.0',
+            'sensitive_min' => '10.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange35->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange35->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange35->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic28->id,
+            'measure_range_id' => $organismMeasureRange35->id,
+            'resistant_max' => '20.0',
+            'intermediate_min' => '21.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange35->id,
+            'resistant_max' => '6.0',
+            'intermediate_min' => '7.0',
+            'intermediate_max' => '9.0',
+            'sensitive_min' => '10.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange35->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange35->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange35->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange35->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange36->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange36->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange36->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange36->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange36->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange36->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '24.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange37->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange37->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic33->id,
+            'measure_range_id' => $organismMeasureRange37->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange37->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange38->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange38->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic33->id,
+            'measure_range_id' => $organismMeasureRange38->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange38->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange39->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange39->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic33->id,
+            'measure_range_id' => $organismMeasureRange39->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange39->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange40->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '35.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic34->id,
+            'measure_range_id' => $organismMeasureRange40->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '31.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange40->id,
+            'resistant_max' => '27.0',
+            'intermediate_min' => '28.0',
+            'intermediate_max' => '40.0',
+            'sensitive_min' => '41.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange40->id,
+            'resistant_max' => '26.0',
+            'intermediate_min' => '27.0',
+            'intermediate_max' => '46.0',
+            'sensitive_min' => '47.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange40->id,
+            'resistant_max' => '30.0',
+            'intermediate_min' => '31.0',
+            'intermediate_max' => '37.0',
+            'sensitive_min' => '38.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic35->id,
+            'measure_range_id' => $organismMeasureRange40->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange41->id,
+            'resistant_max' => '30.0',
+            'intermediate_min' => '31.0',
+            'intermediate_max' => '37.0',
+            'sensitive_min' => '38.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic35->id,
+            'measure_range_id' => $organismMeasureRange41->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange41->id,
+            'resistant_max' => '26.0',
+            'intermediate_min' => '27.0',
+            'intermediate_max' => '46.0',
+            'sensitive_min' => '47.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange41->id,
+            'resistant_max' => '27.0',
+            'intermediate_min' => '28.0',
+            'intermediate_max' => '40.0',
+            'sensitive_min' => '41.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange41->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '35.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange42->id,
+            'resistant_max' => '30.0',
+            'intermediate_min' => '31.0',
+            'intermediate_max' => '37.0',
+            'sensitive_min' => '38.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic35->id,
+            'measure_range_id' => $organismMeasureRange42->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange42->id,
+            'resistant_max' => '26.0',
+            'intermediate_min' => '27.0',
+            'intermediate_max' => '46.0',
+            'sensitive_min' => '47.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange42->id,
+            'resistant_max' => '27.0',
+            'intermediate_min' => '28.0',
+            'intermediate_max' => '40.0',
+            'sensitive_min' => '41.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange42->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '35.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange43->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '35.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange43->id,
+            'resistant_max' => '27.0',
+            'intermediate_min' => '28.0',
+            'intermediate_max' => '40.0',
+            'sensitive_min' => '41.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange43->id,
+            'resistant_max' => '26.0',
+            'intermediate_min' => '27.0',
+            'intermediate_max' => '46.0',
+            'sensitive_min' => '47.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic35->id,
+            'measure_range_id' => $organismMeasureRange43->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange43->id,
+            'resistant_max' => '30.0',
+            'intermediate_min' => '31.0',
+            'intermediate_max' => '37.0',
+            'sensitive_min' => '38.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange44->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange44->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange44->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange44->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange44->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange44->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange44->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic3->id,
+            'measure_range_id' => $organismMeasureRange44->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange44->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '21.0',
+            'sensitive_min' => '22.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange44->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange45->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange45->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange45->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange45->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange45->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange45->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange45->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange45->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic3->id,
+            'measure_range_id' => $organismMeasureRange45->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange45->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '21.0',
+            'sensitive_min' => '22.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange46->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange46->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange46->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange46->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange46->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange46->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange46->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange46->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic3->id,
+            'measure_range_id' => $organismMeasureRange46->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange46->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '21.0',
+            'sensitive_min' => '22.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange48->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange48->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange48->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange48->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange48->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange48->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange48->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange48->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic3->id,
+            'measure_range_id' => $organismMeasureRange48->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange48->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '21.0',
+            'sensitive_min' => '22.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic3->id,
+            'measure_range_id' => $organismMeasureRange52->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange52->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '21.0',
+            'sensitive_min' => '22.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange52->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange52->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange52->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange52->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange52->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange52->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange52->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange52->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange53->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange53->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange53->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange53->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange53->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange53->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange53->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange53->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic3->id,
+            'measure_range_id' => $organismMeasureRange53->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange53->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '21.0',
+            'sensitive_min' => '22.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange54->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange54->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange54->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange54->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange54->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange54->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange54->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange54->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic3->id,
+            'measure_range_id' => $organismMeasureRange54->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange54->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '21.0',
+            'sensitive_min' => '22.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange55->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange55->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange55->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange55->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange55->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange55->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange55->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange55->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic3->id,
+            'measure_range_id' => $organismMeasureRange55->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange55->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '21.0',
+            'sensitive_min' => '22.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange56->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange56->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange56->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange56->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange56->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange56->id,
+            'resistant_max' => '25.0',
+            'intermediate_min' => '26.0',
+            'intermediate_max' => '28.0',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange56->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange56->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic3->id,
+            'measure_range_id' => $organismMeasureRange56->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange56->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '21.0',
+            'sensitive_min' => '22.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange61->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange61->id,
+            'resistant_max' => '24.0',
+            'intermediate_min' => '25.0',
+            'intermediate_max' => '27.0',
+            'sensitive_min' => '28.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange61->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic28->id,
+            'measure_range_id' => $organismMeasureRange61->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange61->id,
+            'resistant_max' => '20.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange61->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange61->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic36->id,
+            'measure_range_id' => $organismMeasureRange61->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange67->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange68->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange69->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange71->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange72->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange74->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange75->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange76->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange77->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange80->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange81->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange83->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange84->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange3->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange87->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange88->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange89->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange89->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange89->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange89->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange89->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange89->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic20->id,
+            'measure_range_id' => $organismMeasureRange90->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic33->id,
+            'measure_range_id' => $organismMeasureRange90->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic37->id,
+            'measure_range_id' => $organismMeasureRange90->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic18->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic17->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic14->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic9->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic8->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic5->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic21->id,
+            'measure_range_id' => $organismMeasureRange95->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic38->id,
+            'measure_range_id' => $organismMeasureRange91->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange96->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange96->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange96->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange96->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange96->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange96->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => 'NUL.L',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange97->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange97->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic32->id,
+            'measure_range_id' => $organismMeasureRange97->id,
+            'resistant_max' => '6.0',
+            'intermediate_min' => '7.0',
+            'intermediate_max' => '9.0',
+            'sensitive_min' => '10.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange97->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange97->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange97->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic28->id,
+            'measure_range_id' => $organismMeasureRange97->id,
+            'resistant_max' => '20.0',
+            'intermediate_min' => '21.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange97->id,
+            'resistant_max' => '6.0',
+            'intermediate_min' => '7.0',
+            'intermediate_max' => '9.0',
+            'sensitive_min' => '10.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange97->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange97->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange97->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange97->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange98->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange98->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange98->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange98->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange99->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange99->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange99->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange99->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange100->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange100->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange100->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange100->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange101->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange101->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange101->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange101->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange36->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '24.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange102->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '24.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange102->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '24.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange102->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange102->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange102->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange102->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange102->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange103->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange103->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange103->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '24.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange103->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange103->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange103->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange103->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '24.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange107->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange107->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange107->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '24.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange107->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange107->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange107->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange107->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '24.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange108->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange108->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange108->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '24.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange108->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange108->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange108->id,
+            'resistant_max' => '17.0',
+            'intermediate_min' => '18.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange108->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '24.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic22->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '18.0',
+            'intermediate_min' => '19.0',
+            'intermediate_max' => '24.0',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic1->id,
+            'measure_range_id' => $organismMeasureRange32->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic2->id,
+            'measure_range_id' => $organismMeasureRange109->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange109->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange109->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange109->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic6->id,
+            'measure_range_id' => $organismMeasureRange109->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic16->id,
+            'measure_range_id' => $organismMeasureRange109->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic39->id,
+            'measure_range_id' => $organismMeasureRange34->id,
+            'resistant_max' => '6.0',
+            'intermediate_min' => '7.0',
+            'intermediate_max' => '9.0',
+            'sensitive_min' => '10.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic3->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic15->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => '20.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic4->id,
+            'measure_range_id' => $organismMeasureRange33->id,
+            'resistant_max' => '22.0',
+            'intermediate_min' => '23.0',
+            'intermediate_max' => '25.0',
+            'sensitive_min' => '26.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic25->id,
+            'measure_range_id' => $organismMeasureRange110->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '22.0',
+            'sensitive_min' => '23.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange110->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange110->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange110->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange110->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange110->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange110->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange110->id,
+            'resistant_max' => '13.0',
+            'intermediate_min' => '14.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange110->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic28->id,
+            'measure_range_id' => $organismMeasureRange110->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic24->id,
+            'measure_range_id' => $organismMeasureRange111->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '18.0',
+            'sensitive_min' => '19.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic27->id,
+            'measure_range_id' => $organismMeasureRange111->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '15.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic31->id,
+            'measure_range_id' => $organismMeasureRange111->id,
+            'resistant_max' => '16.0',
+            'intermediate_min' => '17.0',
+            'intermediate_max' => '19.0',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic19->id,
+            'measure_range_id' => $organismMeasureRange111->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '16.0',
+            'sensitive_min' => '17.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic28->id,
+            'measure_range_id' => $organismMeasureRange111->id,
+            'resistant_max' => 'NUL.L',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '20.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic11->id,
+            'measure_range_id' => $organismMeasureRange111->id,
+            'resistant_max' => '15.0',
+            'intermediate_min' => '16.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic10->id,
+            'measure_range_id' => $organismMeasureRange111->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '17.0',
+            'sensitive_min' => '18.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic36->id,
+            'measure_range_id' => $organismMeasureRange111->id,
+            'resistant_max' => '19.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '25.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic29->id,
+            'measure_range_id' => $organismMeasureRange111->id,
+            'resistant_max' => '28.0',
+            'intermediate_min' => 'NUL.L',
+            'intermediate_max' => 'NUL.L',
+            'sensitive_min' => '29.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic26->id,
+            'measure_range_id' => $organismMeasureRange111->id,
+            'resistant_max' => '14.0',
+            'intermediate_min' => '15.0',
+            'intermediate_max' => '20.0',
+            'sensitive_min' => '21.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic12->id,
+            'measure_range_id' => $organismMeasureRange111->id,
+            'resistant_max' => '10.0',
+            'intermediate_min' => '11.0',
+            'intermediate_max' => '15.0',
+            'sensitive_min' => '16.0',
+        ]);
+        SusceptibilityBreakPoint::create([
+            'antibiotic_id' => $antibiotic13->id,
+            'measure_range_id' => $organismMeasureRange111->id,
+            'resistant_max' => '12.0',
+            'intermediate_min' => '13.0',
+            'intermediate_max' => '14.0',
+            'sensitive_min' => '15.0',
+        ]);
+
     }
 }

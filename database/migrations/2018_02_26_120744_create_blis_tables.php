@@ -702,7 +702,7 @@ class CreateBlisTables extends Migration
 
         //Super Admin
         $superUser = \App\User::create([
-            'name' => 'Omera Oluoch',
+            'name' => 'BLIS Super Admin',
             'username' => 'admin@blis.local',
             'email' => 'admin@blis.local',
             'password' =>  bcrypt('password'),
