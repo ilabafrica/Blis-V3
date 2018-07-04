@@ -52,6 +52,11 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('testphase', 'TestPhaseController');
         Route::resource('teststatus', 'TestStatusController');
         Route::resource('testtypecategory', 'TestTypeCategoryController');
+        Route::get('specimentypetesttype', 'SpecimenTypeTestTypeController@index');
+        Route::get('specimentypetesttype/attach', 'SpecimenTypeTestTypeController@attach');
+        Route::get('specimentypetesttype/detach', 'SpecimenTypeTestTypeController@detach');
+        Route::post('specimentypetesttype/create', 'SpecimenTypeTestTypeController@create');
+
         Route::resource('testtype', 'TestTypeController');
         Route::resource('rejectionreason', 'RejectionReasonController');
         Route::resource('interpretation', 'InterpretationController');

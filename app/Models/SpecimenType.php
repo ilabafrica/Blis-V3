@@ -14,4 +14,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class SpecimenType extends Model
 {
+    public function specimenTypeTestType()
+    {
+        return $this->hasMany('App\Models\specimenTypeTestType');
+    }
+
+    public function testType()
+    {
+        return $this->belongsToMany('App\Models\TestType');
+    }	
 }

@@ -47,12 +47,6 @@ export default new Router({
     },
     // Lab Configurations
     {
-      path: '/labconfiguration/specimentype',
-      name: 'SpecimenType',
-      component: require('../components/labconfiguration/specimentype'),
-      beforeEnter: ifAuthenticated,
-    },
-    {
       path: '/labconfiguration/healthunit',
       name: 'HealthUnit',
       component: require('../components/labconfiguration/healthunit'),
@@ -83,6 +77,18 @@ export default new Router({
       component: require('../components/testcatalog/antibiotic'),
       beforeEnter: ifAuthenticated,
     },
+    {
+      path: '/testcatalog/specimentype',
+      name: 'SpecimenType',
+      component: require('../components/testcatalog/specimentype'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/testcatalog/testtype',
+      name: 'TestTypes',
+      component: require('../components/testcatalog/testtype'),
+      beforeEnter: ifAuthenticated,
+    },
     // Access Control
     {
       path: '/accesscontrol/useraccounts',
@@ -104,7 +110,7 @@ export default new Router({
     },
     {
       path: '/accesscontrol/roleusers',
-      name: 'Roles',
+      name: 'RolesUsers',
       component: require('../components/accesscontrol/roleusers'),
       beforeEnter: ifAuthenticated,
     },

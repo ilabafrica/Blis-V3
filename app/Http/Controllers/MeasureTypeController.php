@@ -17,7 +17,7 @@ class MeasureTypeController extends Controller
 {
     public function index()
     {
-        $measureType = MeasureType::orderBy('id', 'ASC')->paginate(20);
+        $measureType = MeasureType::orderBy('id', 'ASC')->get();
 
         return response()->json($measureType);
     }

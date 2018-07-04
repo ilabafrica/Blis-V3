@@ -16,4 +16,19 @@ class TestType extends Model
     {
         return $this->hasMany('App\Models\Test');
     }
+
+    public function testtypecategory()
+    {
+        return $this->hasOne('App\Models\TestTypeCategory', 'id', 'test_type_category_id');
+    }
+
+    public function specimenType()
+    {
+        return $this->belongsToMany('App\Models\SpecimenType');
+    }
+
+    public function specimenTypeTestType()
+    {
+        return $this->hasMany('App\Models\specimenTypeTestType');
+    }
 }

@@ -278,7 +278,7 @@ class CreateBlisTables extends Migration
         Schema::create('interpretations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code', 60)->nullable();
-            $table->integer('name')->unsigned()->nullable();
+            $table->string('name')->nullable();
 
             $table->softDeletes();
         });
@@ -302,7 +302,7 @@ class CreateBlisTables extends Migration
             $table->decimal('high', 7, 3)->nullable();
             $table->decimal('low_critical', 7, 3)->nullable();
             $table->decimal('high_critical', 7, 3)->nullable();
-            $table->string('display');
+            $table->string('display');// alphanumeric option
             $table->integer('interpretation_id')->unsigned()->nullable();
 
             $table->softDeletes();
@@ -350,6 +350,19 @@ class CreateBlisTables extends Migration
             $table->foreign('test_type_id')->references('id')->on('test_types');
             $table->foreign('measure_id')->references('id')->on('measures');
             $table->unique(['test_type_id', 'measure_id']);
+        });
+
+        /*
+         * @system blis.v3 defined
+         */
+        Schema::create('specimen_type_test_type', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('specimen_type_id')->unsigned();
+            $table->integer('test_type_id')->unsigned();
+
+            $table->foreign('specimen_type_id')->references('id')->on('specimen_types');
+            $table->foreign('test_type_id')->references('id')->on('test_types');
+            $table->unique(['specimen_type_id', 'test_type_id']);
         });
 
         /*
@@ -762,6 +775,7 @@ class CreateBlisTables extends Migration
         Schema::dropIfExists('antibiotics');
         Schema::dropIfExists('results');
         Schema::dropIfExists('specimen_rejections');
+        Schema::dropIfExists('specimen_type_test_type');
         Schema::dropIfExists('tests');
         Schema::dropIfExists('specimens');
         Schema::dropIfExists('referrals');

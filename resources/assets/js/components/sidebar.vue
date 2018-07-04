@@ -95,11 +95,6 @@
     data: () => ({
       lab_configurations: [
         {
-          path: '/labconfiguration/specimentype',
-          label: 'Specimen Types',
-          icon: 'file_copy'
-        },
-        {
           path: '/labconfiguration/healthunit',
           label: 'Health Units',
           icon: 'add_circle'
@@ -127,7 +122,7 @@
           icon: 'dashboard'
         },
         {
-          path: '/',
+          path: '/testcatalog/specimentype',
           label: 'Specimen Types',
           icon: 'assignment_turned_in'
         },
@@ -137,7 +132,7 @@
           icon: 'assignment_late'
         },
         {
-          path: '/',
+          path: '/testcatalog/testtype',
           label: 'Test Types',
           icon: 'extension'
         },

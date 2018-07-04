@@ -30,37 +30,38 @@ class MeasureRangeController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'measure_id' => 'required',
-            'gender_id' => 'required',
-            'display' => 'required',
+            //'measure_id' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator);
         } else {
-            $measureRange = new MeasureRange;
-            $measureRange->code = $request->input('code');
-            $measureRange->code_id = $request->input('code_id');
-            $measureRange->system = $request->input('system');
-            $measureRange->measure_id = $request->input('measure_id');
-            $measureRange->age_min = $request->input('age_min');
-            $measureRange->age_max = $request->input('age_max');
-            $measureRange->gender_id = $request->input('gender_id');
-            $measureRange->low = $request->input('low');
-            $measureRange->high = $request->input('high');
-            $measureRange->low_critical = $request->input('low_critical');
-            $measureRange->high_critical = $request->input('high_critical');
-            $measureRange->display = $request->input('display');
-            $measureRange->interpretation_id = $request->input('interpretation_id');
+            $input = $request->all();
+            for ($i = 0; $i < count($input); $i++) {
+                    $measureRange = new MeasureRange;
+                    //$measureRange->code = $request->input('code');
+                    //$measureRange->code_id = $request->input('code_id');
+                    //$measureRange->system = $request->input('system');
+                    $measureRange->measure_id = $input[$i]["measure_id"];
+                    $measureRange->age_min = $input[$i]["age_min"];
+                    $measureRange->age_max = $input[$i]["age_max"];
+                    $measureRange->gender_id = $input[$i]["gender_id"];
+                    $measureRange->low = $input[$i]["low"];
+                    $measureRange->high = $input[$i]["high"];
+                    //$measureRange->low_critical = $request->input('low_critical');
+                    //$measureRange->high_critical = $request->input('high_critical');
+                    $measureRange->display = 'display';
+                    //$measureRange->interpretation_id = $request->input('interpretation_id');
 
-            try {
-                $measureRange->save();
+                try {
+                    $measureRange->save();
 
-                return response()->json($measureRange);
-            } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                } catch (\Illuminate\Database\QueryException $e) {
+                    return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                }
             }
+            return response()->json($measureRange);
         }
     }
 
