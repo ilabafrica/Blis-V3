@@ -12,6 +12,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class TestType extends Model
 {
+    protected $hidden = [
+        'deleted_at',
+        'created_at',
+        'updated_at',
+    ];
+
     public function test()
     {
         return $this->hasMany('App\Models\Test');

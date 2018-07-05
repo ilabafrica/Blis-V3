@@ -235,7 +235,11 @@ class CreateBlisTables extends Migration
 
         /*
          * @system blis.v3 defined
-         * @code positive|negative|normal|high|low|critically_low|critically_high
+         * @code [used on measure_ranges for alphanumeric ranges, multi and culture]
+         *       positive|negative|reactive|non-reactive|MicroB-growth|MicroB-non-growth|
+         *
+         *       [used on in reporting for numeric ranges]
+         *       normal|high|low|critically_low|critically_high
          */
         Schema::create('interpretations', function (Blueprint $table) {
             $table->increments('id');
@@ -467,9 +471,9 @@ class CreateBlisTables extends Migration
         Schema::create('tests', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('encounter_id')->unsigned();
-            $table->integer('identifier')->nullable();
+            $table->string('identifier')->nullable();
             $table->integer('test_type_id')->unsigned();
-            $table->integer('specimen_id')->unsigned()->default(0);
+            $table->integer('specimen_id')->unsigned()->nullable();
             $table->integer('test_status_id')->unsigned()->default(0);
             $table->integer('created_by')->unsigned();
             $table->integer('tested_by')->unsigned()->default(0);
@@ -625,7 +629,6 @@ class CreateBlisTables extends Migration
             $table->unique(['instrument_id','test_type_id']);
         });
 
-        // control tables are a near replicate of routine and referencing testing
         Schema::create('lots', function (Blueprint $table) {
             $table->increments('id');
             $table->string('number', 100)->unique();

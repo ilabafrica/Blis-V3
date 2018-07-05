@@ -919,7 +919,7 @@ class DevSeeder extends Seeder
         $measureCultureAndSensitivity = Measure::create([
             "measure_type_id" => "4",
             "test_type_id" => $testTypeCultureAndSensitivity->id,
-            "name" => "Culture and Sensitivity"]);
+            "name" => "Organisms Isolated"]);
         $measureGramStain = Measure::create([
             "measure_type_id" => "4",
             "test_type_id" => $testTypeGramStain->id,
@@ -2155,9 +2155,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange3->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -2268,8 +2268,8 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic23->id,
             'measure_range_id' => $organismMeasureRange1->id,
             'resistant_max' => '10.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '12.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -2308,8 +2308,8 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic23->id,
             'measure_range_id' => $organismMeasureRange5->id,
             'resistant_max' => '10.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '11.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -2388,8 +2388,8 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic23->id,
             'measure_range_id' => $organismMeasureRange6->id,
             'resistant_max' => '10.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '11.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -2883,17 +2883,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic27->id,
             'measure_range_id' => $organismMeasureRange21->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '17.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic28->id,
             'measure_range_id' => $organismMeasureRange21->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -2964,8 +2964,8 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic28->id,
             'measure_range_id' => $organismMeasureRange23->id,
             'resistant_max' => '16.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -2995,25 +2995,25 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic27->id,
             'measure_range_id' => $organismMeasureRange23->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic30->id,
             'measure_range_id' => $organismMeasureRange23->id,
             'resistant_max' => '21.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '22.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange23->id,
             'resistant_max' => '28.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '29.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -3027,10 +3027,10 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic27->id,
             'measure_range_id' => $organismMeasureRange24->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic20->id,
@@ -3060,8 +3060,8 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange24->id,
             'resistant_max' => '28.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '29.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -3076,8 +3076,8 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic28->id,
             'measure_range_id' => $organismMeasureRange24->id,
             'resistant_max' => '16.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -3124,16 +3124,16 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic30->id,
             'measure_range_id' => $organismMeasureRange24->id,
             'resistant_max' => '21.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '22.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic28->id,
             'measure_range_id' => $organismMeasureRange25->id,
             'resistant_max' => '16.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -3203,10 +3203,10 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic27->id,
             'measure_range_id' => $organismMeasureRange25->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic26->id,
@@ -3228,353 +3228,353 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic30->id,
             'measure_range_id' => $organismMeasureRange25->id,
             'resistant_max' => '21.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '22.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange25->id,
             'resistant_max' => '28.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '29.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic27->id,
             'measure_range_id' => $organismMeasureRange29->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic20->id,
             'measure_range_id' => $organismMeasureRange29->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic24->id,
             'measure_range_id' => $organismMeasureRange29->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic31->id,
             'measure_range_id' => $organismMeasureRange29->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange29->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic19->id,
             'measure_range_id' => $organismMeasureRange29->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic28->id,
             'measure_range_id' => $organismMeasureRange29->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic13->id,
             'measure_range_id' => $organismMeasureRange29->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic25->id,
             'measure_range_id' => $organismMeasureRange29->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic26->id,
             'measure_range_id' => $organismMeasureRange29->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange29->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic10->id,
             'measure_range_id' => $organismMeasureRange29->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic30->id,
             'measure_range_id' => $organismMeasureRange29->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic1->id,
             'measure_range_id' => $organismMeasureRange29->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic1->id,
             'measure_range_id' => $organismMeasureRange30->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic30->id,
             'measure_range_id' => $organismMeasureRange30->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic27->id,
             'measure_range_id' => $organismMeasureRange30->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic20->id,
             'measure_range_id' => $organismMeasureRange30->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic24->id,
             'measure_range_id' => $organismMeasureRange30->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic31->id,
             'measure_range_id' => $organismMeasureRange30->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange30->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic19->id,
             'measure_range_id' => $organismMeasureRange30->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic28->id,
             'measure_range_id' => $organismMeasureRange30->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic13->id,
             'measure_range_id' => $organismMeasureRange30->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic25->id,
             'measure_range_id' => $organismMeasureRange30->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic26->id,
             'measure_range_id' => $organismMeasureRange30->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange30->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic10->id,
             'measure_range_id' => $organismMeasureRange30->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic1->id,
             'measure_range_id' => $organismMeasureRange31->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic30->id,
             'measure_range_id' => $organismMeasureRange31->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic27->id,
             'measure_range_id' => $organismMeasureRange31->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic20->id,
             'measure_range_id' => $organismMeasureRange31->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic24->id,
             'measure_range_id' => $organismMeasureRange31->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic31->id,
             'measure_range_id' => $organismMeasureRange31->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange31->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic19->id,
             'measure_range_id' => $organismMeasureRange31->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic28->id,
             'measure_range_id' => $organismMeasureRange31->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic13->id,
             'measure_range_id' => $organismMeasureRange31->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic25->id,
             'measure_range_id' => $organismMeasureRange31->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic26->id,
             'measure_range_id' => $organismMeasureRange31->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic10->id,
             'measure_range_id' => $organismMeasureRange31->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange31->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic18->id,
@@ -3787,9 +3787,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange33->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -3876,16 +3876,16 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange34->id,
             'resistant_max' => '14.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '15.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic2->id,
             'measure_range_id' => $organismMeasureRange34->id,
             'resistant_max' => '16.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '17.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -3924,8 +3924,8 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange35->id,
             'resistant_max' => '14.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '15.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -3980,8 +3980,8 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic2->id,
             'measure_range_id' => $organismMeasureRange35->id,
             'resistant_max' => '16.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '17.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -3995,9 +3995,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic27->id,
             'measure_range_id' => $organismMeasureRange36->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '17.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4027,9 +4027,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange36->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '24.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4131,17 +4131,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange40->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '35.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic34->id,
             'measure_range_id' => $organismMeasureRange40->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '31.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4211,9 +4211,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange41->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '35.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4251,17 +4251,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange42->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '35.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange43->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '35.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4315,9 +4315,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic15->id,
             'measure_range_id' => $organismMeasureRange44->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4339,9 +4339,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange44->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4356,8 +4356,8 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic3->id,
             'measure_range_id' => $organismMeasureRange44->id,
             'resistant_max' => '19.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4371,9 +4371,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange44->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4403,17 +4403,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic15->id,
             'measure_range_id' => $organismMeasureRange45->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange45->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4435,17 +4435,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange45->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '26.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic3->id,
             'measure_range_id' => $organismMeasureRange45->id,
             'resistant_max' => '19.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4459,9 +4459,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange46->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '26.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4499,17 +4499,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic15->id,
             'measure_range_id' => $organismMeasureRange46->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange46->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4524,8 +4524,8 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic3->id,
             'measure_range_id' => $organismMeasureRange46->id,
             'resistant_max' => '19.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4563,17 +4563,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic15->id,
             'measure_range_id' => $organismMeasureRange48->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange48->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4595,17 +4595,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange48->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '26.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic3->id,
             'measure_range_id' => $organismMeasureRange48->id,
             'resistant_max' => '19.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4620,8 +4620,8 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic3->id,
             'measure_range_id' => $organismMeasureRange52->id,
             'resistant_max' => '19.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4659,9 +4659,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic15->id,
             'measure_range_id' => $organismMeasureRange52->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4675,17 +4675,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange52->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '26.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange52->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4723,17 +4723,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic15->id,
             'measure_range_id' => $organismMeasureRange53->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange53->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4755,17 +4755,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange53->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '26.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic3->id,
             'measure_range_id' => $organismMeasureRange53->id,
             'resistant_max' => '19.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4803,17 +4803,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic15->id,
             'measure_range_id' => $organismMeasureRange54->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange54->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4835,17 +4835,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange54->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '26.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic3->id,
             'measure_range_id' => $organismMeasureRange54->id,
             'resistant_max' => '19.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4883,17 +4883,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic15->id,
             'measure_range_id' => $organismMeasureRange55->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange55->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4915,17 +4915,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange55->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '26.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic3->id,
             'measure_range_id' => $organismMeasureRange55->id,
             'resistant_max' => '19.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4963,17 +4963,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic15->id,
             'measure_range_id' => $organismMeasureRange56->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange56->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -4995,17 +4995,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange56->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '26.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic3->id,
             'measure_range_id' => $organismMeasureRange56->id,
             'resistant_max' => '19.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -5043,17 +5043,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic28->id,
             'measure_range_id' => $organismMeasureRange61->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic10->id,
             'measure_range_id' => $organismMeasureRange61->id,
             'resistant_max' => '20.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '21.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -5075,138 +5075,138 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic36->id,
             'measure_range_id' => $organismMeasureRange61->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic18->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic17->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic19->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic16->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic15->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic14->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic13->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic12->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic10->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic9->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic8->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic5->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic4->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange67->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic2->id,
@@ -5347,9 +5347,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange68->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -5419,9 +5419,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange69->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -5619,9 +5619,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange71->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -5779,9 +5779,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange72->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -5923,9 +5923,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange74->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -6067,9 +6067,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange75->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -6211,9 +6211,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange76->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -6355,9 +6355,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange77->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -6499,9 +6499,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange80->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -6643,9 +6643,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange81->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -6787,9 +6787,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange83->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -6811,146 +6811,146 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic16->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic15->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic14->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic13->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic12->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic10->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic9->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic8->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic5->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic4->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic2->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic21->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic18->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic17->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic19->id,
             'measure_range_id' => $organismMeasureRange84->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic15->id,
@@ -7083,9 +7083,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange87->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -7219,9 +7219,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange88->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -7251,50 +7251,50 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic2->id,
             'measure_range_id' => $organismMeasureRange89->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange89->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic10->id,
             'measure_range_id' => $organismMeasureRange89->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange89->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic12->id,
             'measure_range_id' => $organismMeasureRange89->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic16->id,
             'measure_range_id' => $organismMeasureRange89->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic20->id,
@@ -7443,9 +7443,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange91->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -7587,9 +7587,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic22->id,
             'measure_range_id' => $organismMeasureRange95->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -7619,50 +7619,50 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic2->id,
             'measure_range_id' => $organismMeasureRange96->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange96->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic10->id,
             'measure_range_id' => $organismMeasureRange96->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic11->id,
             'measure_range_id' => $organismMeasureRange96->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic12->id,
             'measure_range_id' => $organismMeasureRange96->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic16->id,
             'measure_range_id' => $organismMeasureRange96->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
-            'sensitive_min' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
+            'sensitive_min' => NULL,
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic27->id,
@@ -7700,8 +7700,8 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange97->id,
             'resistant_max' => '14.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '15.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -7756,8 +7756,8 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic2->id,
             'measure_range_id' => $organismMeasureRange97->id,
             'resistant_max' => '16.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '17.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -7891,25 +7891,25 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange36->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '24.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange102->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '24.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange102->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '24.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -7939,9 +7939,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic27->id,
             'measure_range_id' => $organismMeasureRange102->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '17.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -7955,9 +7955,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic27->id,
             'measure_range_id' => $organismMeasureRange103->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '17.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -7971,9 +7971,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange103->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '24.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -8003,17 +8003,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange103->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '24.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic27->id,
             'measure_range_id' => $organismMeasureRange107->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '17.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -8027,9 +8027,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange107->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '24.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -8059,17 +8059,17 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange107->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '24.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic27->id,
             'measure_range_id' => $organismMeasureRange108->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '17.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -8083,9 +8083,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange108->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '24.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -8115,9 +8115,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic6->id,
             'measure_range_id' => $organismMeasureRange108->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '24.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -8307,9 +8307,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic27->id,
             'measure_range_id' => $organismMeasureRange111->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '15.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -8331,9 +8331,9 @@ class DevSeeder extends Seeder
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic28->id,
             'measure_range_id' => $organismMeasureRange111->id,
-            'resistant_max' => 'NUL.L',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'resistant_max' => NULL,
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '20.0',
         ]);
         SusceptibilityBreakPoint::create([
@@ -8356,16 +8356,16 @@ class DevSeeder extends Seeder
             'antibiotic_id' => $antibiotic36->id,
             'measure_range_id' => $organismMeasureRange111->id,
             'resistant_max' => '19.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '25.0',
         ]);
         SusceptibilityBreakPoint::create([
             'antibiotic_id' => $antibiotic29->id,
             'measure_range_id' => $organismMeasureRange111->id,
             'resistant_max' => '28.0',
-            'intermediate_min' => 'NUL.L',
-            'intermediate_max' => 'NUL.L',
+            'intermediate_min' => NULL,
+            'intermediate_max' => NULL,
             'sensitive_min' => '29.0',
         ]);
         SusceptibilityBreakPoint::create([
