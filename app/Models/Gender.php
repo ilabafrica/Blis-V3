@@ -15,10 +15,10 @@ use Illuminate\Database\Eloquent\Model;
 class Gender extends Model
 {
 
-    const male = 0;
-    const female = 1;
-    const both = 2;
-    const unknown = 3;
+    const male = 1;
+    const female = 2;
+    const both = 3;
+    const unknown = 4;
 
     public $timestamps = false;
 

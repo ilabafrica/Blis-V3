@@ -23,6 +23,11 @@ class TestType extends Model
         return $this->hasMany('App\Models\Test');
     }
 
+    public function specimenTypes()
+    {
+        return $this->belongsToMany('App\Models\SpecimenType','test_type_mappings');
+    }
+
     public function measures()
     {
         return $this->hasMany('App\Models\Measure');

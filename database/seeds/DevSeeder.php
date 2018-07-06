@@ -2,6 +2,7 @@
 
 use App\User;
 use App\Models\Role;
+use App\Models\Test;
 use App\Models\Gender;
 use App\Models\Patient;
 use App\Models\Measure;
@@ -93,7 +94,6 @@ class DevSeeder extends Seeder
 
         $testTypeHIV = TestType::create(["name" => "HIV", "test_type_category_id" => $testTypeCategorySerology ->id]);
         $testTypeBS = TestType::create(["name" => "BS for mps", "test_type_category_id" => $test_categories->id]);
-        $testTypeHB = TestType::create(["name" => "HB", "test_type_category_id" => $test_categories->id]);
         $testTypeUrinalysis = TestType::create(["name" => "Urinalysis", "test_type_category_id" => $test_categories->id]);
         $testTypeWBC = TestType::create(["name" => "WBC", "test_type_category_id" => $test_categories->id]);
 
@@ -114,8 +114,6 @@ class DevSeeder extends Seeder
         MeasureRange::create(["measure_id" => $measureBloodGroup->id, "display" => "B+"]);
         MeasureRange::create(["measure_id" => $measureBloodGroup->id, "display" => "AB-"]);
         MeasureRange::create(["measure_id" => $measureBloodGroup->id, "display" => "AB+"]);
-        $measureHB = Measure::create(["measure_type_id" => MeasureType::numeric, "test_type_id" => $testTypeHB->id,"name" => "HB",
-            "unit" => "g/dL"]);
 
         $measuresUrinalysisData = [
             // Urine Microscopy
@@ -155,6 +153,9 @@ class DevSeeder extends Seeder
         foreach ($measuresUrinalysisData as $measureU) {
             $measuresUrinalysis[] = Measure::create($measureU);
         }
+
+        \DB::table('test_type_mappings')->insert(
+            ["test_type_id" => $testTypeUrinalysis->id, "specimen_type_id" => $specimenTypeUrine->id]);
 
         $measuresWBCData = [
             ["measure_type_id" => MeasureType::numeric,
@@ -224,8 +225,11 @@ class DevSeeder extends Seeder
                 "unit" =>"",
             ],
         ];
-        foreach($measureHIV as $measureH){
-            Measure::create($measureH);
+
+        foreach($measureHIV as $measure){
+            $id = Measure::create($measure)->id;
+            MeasureRange::create(["measure_id" => $id, "display" => "Reactive"]);
+            MeasureRange::create(["measure_id" => $id, "display" => "Non Reactive"]);
         }
 
         $measureBSforMPS = Measure::create([
@@ -263,14 +267,6 @@ class DevSeeder extends Seeder
             ["test_type_id" => $testTypeBS->id, "specimen_type_id" => $specimenTypeBlood->id]);
         \DB::table('test_type_mappings')->insert(
             ["test_type_id" => $testTypeGXM->id, "specimen_type_id" => $specimenTypeBlood->id]);
-        \DB::table('test_type_mappings')->insert(
-            ["test_type_id" => $testTypeHB->id, "specimen_type_id" => $specimenTypeBlood->id]);
-        \DB::table('test_type_mappings')->insert(
-            ["test_type_id" => $testTypeHB->id, "specimen_type_id" => $specimenTypeNasalSwab->id]);
-        \DB::table('test_type_mappings')->insert(
-            ["test_type_id" => $testTypeHB->id, "specimen_type_id" => $specimenTypePleuralTap->id]);
-        \DB::table('test_type_mappings')->insert(
-            ["test_type_id" => $testTypeHB->id, "specimen_type_id" => $specimenTypeVomitus->id]);
         \DB::table('test_type_mappings')->insert(
             ["test_type_id" => $testTypeWBC->id, "specimen_type_id" => $specimenTypeBlood->id]);
 
@@ -704,34 +700,6 @@ class DevSeeder extends Seeder
             'test_type_category_id' => $testTypeCategoryMicrobiology->id,
         ]);
 
-        // these dont neccesarily belong to micro b, ... just testing
-        $testTypeSerumAmylase = TestType::create([
-            "name" => "Serum Amylase",
-            'test_type_category_id' => $testTypeCategoryMicrobiology->id,
-        ]);
-        $testTypeCulcium = TestType::create([
-            "name" => "Culcium",
-            'test_type_category_id' => $testTypeCategoryMicrobiology->id,
-        ]);
-        $testTypeSGOT = TestType::create([
-            "name" => "SGOT",
-            'test_type_category_id' => $testTypeCategoryMicrobiology->id,
-        ]);
-        $testTypeIndirectCOOMBSTest = TestType::create([
-            "name" => "Indirect COOMBS Test",
-            'test_type_category_id' => $testTypeCategoryMicrobiology->id,
-        ]);
-        $testTypeDirectCOOMBSTest = TestType::create([
-            "name" => "Direct COOMBS Test",
-            'test_type_category_id' => $testTypeCategoryMicrobiology->id,
-        ]);
-        $testTypeDuTest = TestType::create([
-            "name" => "DuT est",
-            'test_type_category_id' => $testTypeCategoryMicrobiology->id,
-        ]);
-
-
-
         $testTypeCrag = TestType::create(["name" => "Crag","test_type_category_id" => $testTypeCategoryMicrobiology->id,]);
         $testTypeDifferential = TestType::create(["name" => "Differential","test_type_category_id" => $testTypeCategoryMicrobiology->id,]);
         $testTypeTotalCellCount = TestType::create(["name" => "Total Cell Count","test_type_category_id" => $testTypeCategoryMicrobiology->id,]);
@@ -963,58 +931,6 @@ class DevSeeder extends Seeder
             "test_type_id" => $testTypeWetSalineIodinePrep->id,
             "name" => "Wet Saline Iodine Prep", "unit" => "",
         ]);
-        $measureSerumAmylase = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $testTypeSerumAmylase->id,
-            "name" => "SERUM AMYLASE", "unit" => "",
-        ]);
-        $measureCalcium = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $testTypeCulcium->id,
-            "name" => "calcium", "unit" => "",
-        ]);
-        $measureSGOT = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $testTypeSGOT->id,
-            "name" => "SGOT", "unit" => "",
-        ]);
-        $measureIndirectCOOMBSTest = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $testTypeIndirectCOOMBSTest->id,
-            "name" => "Indirect COOMBS test", "unit" => "",
-        ]);
-        $measureDirectCOOMBSTest = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $testTypeDirectCOOMBSTest->id,
-            "name" => "Direct COOMBS test", "unit" => "",
-        ]);
-        $measureDuTest = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $testTypeDuTest->id,
-            "name" => "Du test", "unit" => "",
-        ]);
-
-        MeasureRange::create(["measure_id" => $measureSerumAmylase->id, "display" => "Low"]);
-        MeasureRange::create(["measure_id" => $measureSerumAmylase->id, "display" => "High"]);
-        MeasureRange::create(["measure_id" => $measureSerumAmylase->id, "display" => "Normal"]);
-
-        MeasureRange::create(["measure_id" => $measureCalcium->id, "display" => "High"]);
-        MeasureRange::create(["measure_id" => $measureCalcium->id, "display" => "Low"]);
-        MeasureRange::create(["measure_id" => $measureCalcium->id, "display" => "Normal"]);
-
-        MeasureRange::create(["measure_id" => $measureSGOT->id, "display" => "High"]);
-        MeasureRange::create(["measure_id" => $measureSGOT->id, "display" => "Low"]);
-        MeasureRange::create(["measure_id" => $measureSGOT->id, "display" => "Normal"]);
-
-        MeasureRange::create(["measure_id" => $measureIndirectCOOMBSTest->id, "display" => "Positive"]);
-        MeasureRange::create(["measure_id" => $measureIndirectCOOMBSTest->id, "display" => "Negative"]);
-
-        MeasureRange::create(["measure_id" => $measureDirectCOOMBSTest->id, "display" => "Positive"]);
-        MeasureRange::create(["measure_id" => $measureDirectCOOMBSTest->id, "display" => "Negative"]);
-
-        MeasureRange::create(["measure_id" => $measureDuTest->id, "display" => "Positive"]);
-        MeasureRange::create(["measure_id" => $measureDuTest->id, "display" => "Negative"]);
-
         $this->command->info("Measures seeded");
 
         // test type specimen types
@@ -1146,6 +1062,11 @@ class DevSeeder extends Seeder
         \DB::table('test_type_mappings')->insert([
             "specimen_type_id" => $specimenTypeUretheralSwab->id,
             "test_type_id" => $testTypeWetPreparation->id
+        ]);
+
+        \DB::table('test_type_mappings')->insert([
+            "specimen_type_id" => $specimenTypeUretheralSwab->id,
+            "test_type_id" => $testTypeWetSalineIodinePrep->id
         ]);
 
         \DB::table('test_type_mappings')->insert([
@@ -8393,5 +8314,51 @@ class DevSeeder extends Seeder
             'sensitive_min' => '15.0',
         ]);
 
+        // create users, tobe used randomly
+        factory(App\User::class, 20)->create();
+
+        // create locations, tobe used randomly
+        factory(App\Models\Location::class, 100)->create();
+
+        // create tests with all its dependencies from results to patient
+        factory(App\Models\Test::class, 1000)->create();
+
+        // create results
+        foreach (Test::all() as $test) {
+            foreach ($test->testType->measures as $measure) {
+
+
+                $measureRange = MeasureRange::where('measure_id',$measure->id)
+                    ->inRandomOrder()->first();
+
+                if ($measure->measure_type_id == MeasureType::numeric) {
+
+                    factory(App\Models\Result::class)->make([
+                        'test_id' => $test->id,
+                        'measure_id' => $measure->id,
+                        // 'result' => $measure->id, // todo: eventually choos a high low normal critically_high critically_low randomly... work on the logic...
+                        'measure_range_id' => $measureRange->id,
+                    ]);
+
+                }elseif ($measure->measure_type_id == MeasureType::alphanumeric) {
+
+
+                    factory(App\Models\Result::class)->make([
+                        'test_id' => $test->id,
+                        'measure_id' => $measure->id,
+                        'measure_range_id' => $measureRange->id,
+                    ]);
+
+                }elseif ($measure->measure_type_id == MeasureType::multi_alphanumeric) {
+                    # code...: when the moment comes, microscopy, micro biology
+                }else{
+                    // no measure range for free text
+                    factory(App\Models\Result::class)->make([
+                        'test_id' => $test->id,
+                        'measure_id' => $measure->id,
+                    ]);
+                }
+            }
+        }
     }
 }
