@@ -40,6 +40,7 @@ class MeasureController extends Controller
             return response()->json($validator);
         } else {
             $measure = new Measure;
+            $measure->test_type_id = $request->input('test_type_id');
             $measure->measure_type_id = $request->input('measure_type_id');
             $measure->name = $request->input('measure_name');
             $measure->unit = $request->input('unit');

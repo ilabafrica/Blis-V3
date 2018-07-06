@@ -70,39 +70,7 @@ $factory->define(\App\Models\Organization::class, function (Faker\Generator $fak
     ];
 });
 
-$factory->define(\App\Models\MaritalStatus::class, function (Faker\Generator $faker) {
-    return [
-        'code' => 'Annuled',
-        'display' => $faker->word,
-        'definition' => $faker->word,
-    ];
-});
 
-$factory->define(\App\Models\Patient::class, function (Faker\Generator $faker) {
-    $userId = factory(\App\User::class)->create()->id;
-
-    return [
-        'created_by' => $userId,
-        'identifier' => $faker->unique()->safeEmail,
-        'name_id' => factory(\App\Models\Name::class)->create()->id,
-        'gender_id' => factory(\App\Models\Gender::class)->create()->id,
-        'birth_date' => \Faker\Factory::create()->date(),
-        'marital_status' => factory(\App\Models\MaritalStatus::class)->create()->id,
-    ];
-});
-
-$factory->define(\App\Models\Practitioner::class, function (Faker\Generator $faker) {
-    $userId = factory(\App\User::class)->create()->id;
-
-    return [
-        'created_by' => $userId,
-        'name' => factory(\App\Models\Name::class)->create()->id,
-        'telecom' => factory(\App\Models\ContactPoint::class)->create(['created_by'=>$userId])->id,
-        'gender_id' => factory(\App\Models\Gender::class)->create()->id,
-        'birth_date' => \Faker\Factory::create()->date(),
-        'address' => factory(\App\Models\Address::class)->create()->id,
-    ];
-});
 
 $factory->define(App\Models\StatusHistory::class, function (Faker\Generator $faker) {
     return [

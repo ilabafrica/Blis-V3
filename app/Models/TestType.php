@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TestType extends Model
 {
-    public function Test()
+    public function test()
     {
         return $this->hasMany('App\Models\Test');
     }
@@ -30,5 +30,9 @@ class TestType extends Model
     public function specimenTypeTestType()
     {
         return $this->hasMany('App\Models\specimenTypeTestType');
+    }
+    public function measures()
+    {
+        return $this->hasMany('App\Models\Measure');
     }
 }

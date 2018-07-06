@@ -17,4 +17,9 @@ class Instrument extends Model
     {
         return $this->belongsTo('App\Models\Lot');
     }
+
+    public function testTypes()
+    {
+        return $this->belongsToMany('App\Models\TestType');
+    }
 }

@@ -14,11 +14,6 @@ class Patient extends Model
 {
     protected $table = 'patients';
 
-    const MALE = 0;
-    const FEMALE = 1;
-    const BOTH = 2;
-    const UNKNOWN = 3;
-
     public function address()
     {
         return $this->hasMany('App\Models\Address');

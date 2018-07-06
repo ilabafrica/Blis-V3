@@ -50,7 +50,7 @@ class TestTypeController extends Controller
             $testType->name = $request->input('name');
             $testType->description = $request->input('description');
             $testType->test_type_category_id = $request->input('test_type_category_id');
-            //$testType->targetTAT = $request->input('targetTAT');
+            $testType->targetTAT = $request->input('targetTAT');
 
             try {
                 $testType->save();

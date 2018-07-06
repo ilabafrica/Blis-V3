@@ -159,8 +159,8 @@
           icon: 'how_to_reg'
         },
         {
-          path: '/accesscontrol/roles',
-          label: 'Roles',
+          path: '/accesscontrol/role',
+          label: 'Role',
           icon: 'ballot'
         },
         {

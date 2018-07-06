@@ -4,22 +4,21 @@ namespace App\Http\Controllers;
 
 /*
  * (c) @iLabAfrica
- * BLIS      - a port of the Basic Laboratory Information System (BLIS) to Laravel.
- * Team Lead     - Emmanuel Kweyu.
- * Devs      - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma.
- * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
+ * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead	 - Emmanuel Kweyu.
+ * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use App\Models\TestTypeMapping;
 use Illuminate\Http\Request;
-use App\Models\MaritalStatus;
 
-class MaritalStatusController extends Controller
+class TestTypeMappingController extends Controller
 {
     public function index()
     {
-        $maritalStatus = MaritalStatus::orderBy('id', 'ASC')->paginate(20);
+        $testMapping = TestTypeMapping::orderBy('id', 'ASC')->paginate(20);
 
-        return response()->json($maritalStatus);
+        return response()->json($testMapping);
     }
 
     /**
@@ -31,23 +30,23 @@ class MaritalStatusController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'code' => 'required',
-            'display' => 'required',
-
+            'test_type_id' => 'required',
+            'specimen_type_id' => 'required',
         ];
+
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator);
         } else {
-            $maritalStatus = new MaritalStatus;
-            $maritalStatus->code = $request->input('code');
-            $maritalStatus->display = $request->input('display');
-            $maritalStatus->definition = $request->input('definition');
+            $testMapping = new TestTypeMapping;
+            $testMapping->code_id = $request->input('code_id');
+            $testMapping->test_type_id = $request->input('test_type_id');
+            $testMapping->specimen_type_id = $request->input('specimen_type_id');
 
             try {
-                $maritalStatus->save();
+                $testMapping->save();
 
-                return response()->json($maritalStatus);
+                return response()->json($testMapping);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -62,9 +61,9 @@ class MaritalStatusController extends Controller
      */
     public function show($id)
     {
-        $maritalStatus = MaritalStatus::findOrFail($id);
+        $testMapping = TestTypeMapping::findOrFail($id);
 
-        return response()->json($maritalStatus);
+        return response()->json($testMapping);
     }
 
     /**
@@ -77,23 +76,23 @@ class MaritalStatusController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'code' => 'required',
-            'display' => 'required',
-
+            'test_type_id' => 'required',
+            'specimen_type_id' => 'required',
         ];
+
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $maritalStatus = MaritalStatus::findOrFail($id);
-            $maritalStatus->code = $request->input('code');
-            $maritalStatus->display = $request->input('display');
-            $maritalStatus->definition = $request->input('definition');
+            $testMapping = TestTypeMapping::findOrFail($id);
+            $testMapping->code_id = $request->input('code_id');
+            $testMapping->test_type_id = $request->input('test_type_id');
+            $testMapping->specimen_type_id = $request->input('specimen_type_id');
 
             try {
-                $maritalStatus->save();
+                $testMapping->save();
 
-                return response()->json($maritalStatus);
+                return response()->json($testMapping);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -109,10 +108,10 @@ class MaritalStatusController extends Controller
     public function destroy($id)
     {
         try {
-            $maritalStatus = MaritalStatus::findOrFail($id);
-            $maritalStatus->delete();
+            $testMapping = TestTypeMapping::findOrFail($id);
+            $testMapping->delete();
 
-            return response()->json($maritalStatus, 200);
+            return response()->json($testMapping, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
