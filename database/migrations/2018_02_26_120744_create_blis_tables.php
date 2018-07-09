@@ -142,7 +142,7 @@ class CreateBlisTables extends Migration
             $table->integer('name_id')->unsigned();
             $table->integer('gender_id')->unsigned();
             $table->date('birth_date');
-            $table->boolean('deceased')->default(0)->nullable();
+            $table->boolean('deceased')->default(0);
             $table->date('deceased_date_time')->nullable();
             $table->integer('address_id')->unsigned()->nullable();
             $table->string('marital_status')->nullable();
@@ -235,7 +235,11 @@ class CreateBlisTables extends Migration
 
         /*
          * @system blis.v3 defined
-         * @code positive|negative|normal|high|low|critically_low|critically_high
+         * @code [used on measure_ranges for alphanumeric ranges, multi and culture]
+         *       positive|negative|reactive|non-reactive|MicroB-growth|MicroB-non-growth|
+         *
+         *       [used on in reporting for numeric ranges]
+         *       normal|high|low|critically_low|critically_high
          */
         Schema::create('interpretations', function (Blueprint $table) {
             $table->increments('id');
@@ -384,7 +388,8 @@ class CreateBlisTables extends Migration
          */
         Schema::create('encounter_statuses', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 45);
+            $table->string('code', 20)->nullable();
+            $table->string('display', 45);
         });
 
         /*
@@ -393,7 +398,8 @@ class CreateBlisTables extends Migration
          */
         Schema::create('encounter_classes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 45);
+            $table->string('code', 20)->nullable();
+            $table->string('display', 45);
         });
 
         /*
@@ -415,7 +421,7 @@ class CreateBlisTables extends Migration
             $table->string('practitioner_organisation')->nullable();
 
             $table->foreign('patient_id')->references('id')->on('patients');
-            $table->foreign('encounter_class_id')->references('id')->on('patients');
+            $table->foreign('encounter_class_id')->references('id')->on('encounter_classes');
             $table->foreign('encounter_status_id')
                 ->references('id')->on('encounter_statuses');
             $table->timestamps();
@@ -471,12 +477,12 @@ class CreateBlisTables extends Migration
         Schema::create('specimens', function (Blueprint $table) {
             $table->increments('id');
             $table->string('identifier')->nullable();
-            $table->string('accession_identifier');
+            $table->string('accession_identifier')->nullable();
             $table->integer('specimen_type_id')->unsigned();
-            $table->integer('parent_id')->unsigned();
-            $table->integer('specimen_status_id')->unsigned();
+            $table->integer('parent_id')->unsigned()->nullable();
+            $table->integer('specimen_status_id')->unsigned()->default(\App\Models\SpecimenStatus::received);
             $table->integer('received_by')->unsigned();
-            $table->integer('collected_by')->unsigned();
+            $table->string('collected_by')->nullable();
             $table->timestamp('time_collected')->nullable();
             $table->timestamp('received_time')->nullable();
 
@@ -484,7 +490,6 @@ class CreateBlisTables extends Migration
             $table->foreign('specimen_type_id')->references('id')->on('specimen_types');
             $table->foreign('specimen_status_id')->references('id')->on('specimen_statuses');
             $table->foreign('received_by')->references('id')->on('users');
-            $table->foreign('collected_by')->references('id')->on('users');
         });
 
         /*
@@ -494,13 +499,13 @@ class CreateBlisTables extends Migration
         Schema::create('tests', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('encounter_id')->unsigned();
-            $table->integer('identifier')->nullable();
+            $table->string('identifier')->nullable();
             $table->integer('test_type_id')->unsigned();
-            $table->integer('specimen_id')->unsigned()->default(0);
-            $table->integer('test_status_id')->unsigned()->default(0);
-            $table->integer('created_by')->unsigned();
-            $table->integer('tested_by')->unsigned()->default(0);
-            $table->integer('verified_by')->unsigned()->default(0);
+            $table->integer('specimen_id')->unsigned()->nullable();
+            $table->integer('test_status_id')->unsigned()->default(\App\Models\TestStatus::pending);
+            $table->integer('created_by')->unsigned()->nullable();
+            $table->integer('tested_by')->unsigned()->nullable();
+            $table->integer('verified_by')->unsigned()->nullable();
             $table->string('requested_by', 60);
             $table->timestamp('time_started')->nullable();
             $table->timestamp('time_completed')->nullable();
@@ -652,7 +657,6 @@ class CreateBlisTables extends Migration
             $table->unique(['instrument_id','test_type_id']);
         });
 
-        // control tables are a near replicate of routine and referencing testing
         Schema::create('lots', function (Blueprint $table) {
             $table->increments('id');
             $table->string('number', 100)->unique();
@@ -729,7 +733,7 @@ class CreateBlisTables extends Migration
 
         //Super Admin
         $superUser = \App\User::create([
-            'name' => 'Omera Oluoch',
+            'name' => 'BLIS Super Admin',
             'username' => 'admin@blis.local',
             'email' => 'admin@blis.local',
             'password' =>  bcrypt('password'),
@@ -800,6 +804,15 @@ class CreateBlisTables extends Migration
         ];
         foreach ($genders as $gender) {
             \App\Models\Gender::create($gender);
+        }
+
+        /* encounter class table */
+        $encounterClasses = [
+          ['id' => '1', 'code' => 'inpatient', 'display' => 'In Patient'],
+          ['id' => '2', 'code' => 'outpatient', 'display' => 'Out Patient'],
+        ];
+        foreach ($encounterClasses as $encounterClass) {
+            \App\Models\EncounterClass::create($encounterClass);
         }
 
         /* Permissions table */

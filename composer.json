@@ -11,7 +11,8 @@
         "laravel/passport": "^5.0",
         "laravel/tinker": "~1.0",
         "tecnickcom/tcpdf": "^6.2",
-        "zizaco/entrust": "5.2.x-dev"
+        "zizaco/entrust": "5.2.x-dev",
+        "ilabafrica/emrinterface": "v0.1-alpha"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
@@ -26,8 +27,7 @@
             "database/factories"
         ],
         "psr-4": {
-            "App\\": "app/",
-            "ILabAfrica\\EMRInterface\\": "packages/ilabafrica/emrinterface/src"
+            "App\\": "app/"
         }
     },
     "autoload-dev": {

@@ -12,6 +12,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class TestType extends Model
 {
+    protected $hidden = [
+        'deleted_at',
+        'created_at',
+        'updated_at',
+    ];
+
     public function test()
     {
         return $this->hasMany('App\Models\Test');
@@ -31,6 +37,12 @@ class TestType extends Model
     {
         return $this->hasMany('App\Models\specimenTypeTestType');
     }
+
+    public function specimenTypes()
+    {
+        return $this->belongsToMany('App\Models\SpecimenType','test_type_mappings');
+    }
+
     public function measures()
     {
         return $this->hasMany('App\Models\Measure');
