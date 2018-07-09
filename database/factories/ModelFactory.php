@@ -95,7 +95,7 @@ $factory->define(\App\Models\Result::class, function (Faker\Generator $faker) {
         'test_id' => NULL,// must be passed
         'measure_id' => NULL,// must be passed
         'result' => $faker->word,
-        'measure_range_id' => NULL,
+        'measure_range_id' => NULL,// must be passed
         'time_entered' => date('Y-m-d H:i:s'),
     ];
 });
