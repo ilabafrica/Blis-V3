@@ -19,6 +19,14 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/logout', 'Auth\APIController@logout');
     Route::get('/get-user', 'Auth\APIController@getUser');
 });
+Route::group(['prefix' => 'tpa'], function () {
+
+    Route::post('login', 'ThirdPartyAppAuthController@login');
+    Route::post('logout', 'ThirdPartyAppAuthController@logout');
+    Route::post('refresh', 'ThirdPartyAppAuthController@refresh');
+    Route::post('me', 'ThirdPartyAppAuthController@me');
+
+});
 
 Route::group(['middleware' => 'auth:api'], function () {
     // Access Control|Accounts|Permissions|Roles|Assign Permissions|Assign Roles
