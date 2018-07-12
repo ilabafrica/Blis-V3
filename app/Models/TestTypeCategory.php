@@ -14,4 +14,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class TestTypeCategory extends Model
 {
+
+    protected $hidden = [
+        'deleted_at',
+        'created_at',
+        'updated_at',
+    ];
+
+    public function testTypes()
+    {
+        return $this->hasMany('App\Models\TestType');
+    }
 }

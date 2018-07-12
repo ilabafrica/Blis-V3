@@ -46,14 +46,14 @@
                 <v-radio-group v-if="editedIndex > -1"
                   v-model="editedItem.gender.display" row
                   >
-                  <v-radio label="Male" value="Male"></v-radio>
-                  <v-radio label="Female" value="Female"></v-radio>
+                  <v-radio label="Male" value="2"></v-radio>
+                  <v-radio label="Female" value="1"></v-radio>
                 </v-radio-group>
                 <v-radio-group v-if="editedIndex === -1"
-                  v-model="editedItem.gender" row
+                  v-model="editedItem.gender_id" row
                   >
-                  <v-radio label="Male" value="Male"></v-radio>
-                  <v-radio label="Female" value="Female"></v-radio>
+                  <v-radio label="Male" value="2"></v-radio>
+                  <v-radio label="Female" value="1"></v-radio>
                 </v-radio-group>
               </v-flex>
               <v-flex xs12 sm12 md12>
@@ -135,7 +135,6 @@
       saving: false,
       landscape: true,
       reactive: true,
-      dropdown_gender: ['Female', 'Male'],
       search: '',
       query: '',
       pagination: {
@@ -156,14 +155,14 @@
       editedItem: {
         identifier: '',
         name: '',
-        gender: '',
+        gender_id: '',
         birth_date: '',
 
       },
       defaultItem: {
         identifier: '',
         name: '',
-        gender: '',
+        gender_id: '',
         birth_date: '',
 
       }

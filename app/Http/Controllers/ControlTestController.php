@@ -31,7 +31,7 @@ class ControlTestController extends Controller
     {
         $rules = [
             'lot_id' => 'required',
-            'entered_by' => 'required',
+            'tested_by' => 'required',
             'control_id' => 'required',
             'control_type_id' => 'required',
         ];
@@ -42,7 +42,7 @@ class ControlTestController extends Controller
         } else {
             $controlTest = new ControlTest;
             $controlTest->lot_id = $request->input('lot_id');
-            $controlTest->entered_by = $request->input('entered_by');
+            $controlTest->tested_by = $request->input('tested_by');
             $controlTest->control_id = $request->input('control_id');
             $controlTest->control_type_id = $request->input('control_type_id');
 
@@ -80,7 +80,7 @@ class ControlTestController extends Controller
     {
         $rules = [
             'lot_id' => 'required',
-            'entered_by' => 'required',
+            'tested_by' => 'required',
             'control_id' => 'required',
             'control_type_id' => 'required',
         ];
@@ -91,7 +91,7 @@ class ControlTestController extends Controller
         } else {
             $controlTest = ControlTest::findOrFail($id);
             $controlTest->lot_id = $request->input('lot_id');
-            $controlTest->entered_by = $request->input('entered_by');
+            $controlTest->tested_by = $request->input('tested_by');
             $controlTest->control_id = $request->input('control_id');
             $controlTest->control_type_id = $request->input('control_type_id');
 

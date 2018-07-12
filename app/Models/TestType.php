@@ -12,8 +12,39 @@ use Illuminate\Database\Eloquent\Model;
 
 class TestType extends Model
 {
-    public function Test()
+    protected $hidden = [
+        'deleted_at',
+        'created_at',
+        'updated_at',
+    ];
+
+    public function test()
     {
         return $this->hasMany('App\Models\Test');
+    }
+
+    public function testtypecategory()
+    {
+        return $this->hasOne('App\Models\TestTypeCategory', 'id', 'test_type_category_id');
+    }
+
+    public function specimenType()
+    {
+        return $this->belongsToMany('App\Models\SpecimenType');
+    }
+
+    public function specimenTypeTestType()
+    {
+        return $this->hasMany('App\Models\specimenTypeTestType');
+    }
+
+    public function specimenTypes()
+    {
+        return $this->belongsToMany('App\Models\SpecimenType','test_type_mappings');
+    }
+
+    public function measures()
+    {
+        return $this->hasMany('App\Models\Measure');
     }
 }

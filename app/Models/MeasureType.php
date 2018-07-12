@@ -14,5 +14,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class MeasureType extends Model
 {
+
+    const numeric = 1;
+    const alphanumeric = 2;
+    const multi_alphanumeric = 3;
+    const free_text = 4;
+
     public $timestamps = false;
 }

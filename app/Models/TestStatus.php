@@ -14,5 +14,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class TestStatus extends Model
 {
+	const pending = 1;
+	const started = 2;
+	const completed = 3;
+	const verified = 4;
     public $timestamps = false;
 }

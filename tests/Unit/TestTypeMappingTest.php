@@ -31,37 +31,37 @@ class TestMappingTest extends TestCase
 
 	public function testStoreTestMapping()
 	{
-		$response=$this->post('/api/testmapping',$this->testMappingData);
+		$response=$this->post('/api/testtypemapping',$this->testMappingData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("specimen_type_id",$response->original);
 	}
 
 	public function testListTestMapping()
 	{
-		$response=$this->get('/api/testmapping');
+		$response=$this->get('/api/testtypemapping');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowTestMapping()
 	{
-		$response=$this->post('/api/testmapping',$this->testMappingData);
-		$response=$this->get('/api/testmapping/1');
+		$response=$this->post('/api/testtypemapping',$this->testMappingData);
+		$response=$this->get('/api/testtypemapping/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("specimen_type_id",$response->original);
 	}
 
 	public function testUpdateTestMapping()
 	{
-		$response=$this->post('/api/testmapping',$this->testMappingData);
-		$response=$this->put('/api/testmapping/1',$this->updatedTestMappingData);
+		$response=$this->post('/api/testtypemapping',$this->testMappingData);
+		$response=$this->put('/api/testtypemapping/1',$this->updatedTestMappingData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("specimen_type_id",$response->original);
 	}
 
 	public function testDeleteTestMapping()
 	{
-		$response=$this->post('/api/testmapping',$this->testMappingData);
-		$response=$this->delete('/api/testmapping/1');
+		$response=$this->post('/api/testtypemapping',$this->testMappingData);
+		$response=$this->delete('/api/testtypemapping/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 

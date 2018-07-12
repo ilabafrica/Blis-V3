@@ -17,7 +17,7 @@ class GenderController extends Controller
 {
     public function index()
     {
-        $gender = Gender::orderBy('id', 'ASC')->paginate(20);
+        $gender = Gender::orderBy('id', 'ASC')->get();
 
         return response()->json($gender);
     }

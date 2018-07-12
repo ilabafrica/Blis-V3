@@ -44,7 +44,7 @@
 
     <v-data-table
       :headers="headers"
-      :items="facility"
+      :items="organization"
       hide-actions
       class="elevation-1"
     >
@@ -91,7 +91,7 @@
         { text: 'Name', value: 'name' },
         { text: 'Actions', value: 'name', sortable: false }
       ],
-      facility: [],
+      organization: [],
       editedIndex: -1,
       editedItem: {
         name: '',
@@ -130,10 +130,10 @@
             this.query = this.query+'&search='+this.search;
         }
 
-        apiCall({url: '/api/facility?' + this.query, method: 'GET' })
+        apiCall({url: '/api/organization?' + this.query, method: 'GET' })
         .then(resp => {
           console.log(resp)
-          this.facility = resp.data;
+          this.organization = resp.data;
           this.pagination.total = resp.total;
         })
         .catch(error => {
@@ -142,7 +142,7 @@
       },
 
       editItem (item) {
-        this.editedIndex = this.facility.indexOf(item)
+        this.editedIndex = this.organization.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
@@ -152,9 +152,9 @@
         confirm('Are you sure you want to delete this item?') && (this.delete = true)
 
         if (this.delete) {
-          const index = this.facility.indexOf(item)
-          this.facility.splice(index, 1)
-          apiCall({url: '/api/facility/'+item.id, method: 'DELETE' })
+          const index = this.organization.indexOf(item)
+          this.organization.splice(index, 1)
+          apiCall({url: '/api/organization/'+item.id, method: 'DELETE' })
           .then(resp => {
             console.log(resp)
           })
@@ -185,9 +185,9 @@
         // update
         if (this.editedIndex > -1) {
 
-          apiCall({url: '/api/facility/'+this.editedItem.id, data: this.editedItem, method: 'PUT' })
+          apiCall({url: '/api/organization/'+this.editedItem.id, data: this.editedItem, method: 'PUT' })
           .then(resp => {
-            Object.assign(this.facility[this.editedIndex], this.editedItem)
+            Object.assign(this.organization[this.editedIndex], this.editedItem)
             console.log(resp)
             this.resetDialogReferences();
             this.saving = false;
@@ -199,9 +199,9 @@
         // store
         } else {
 
-          apiCall({url: '/api/facility', data: this.editedItem, method: 'POST' })
+          apiCall({url: '/api/organization', data: this.editedItem, method: 'POST' })
           .then(resp => {
-            this.facility.push(this.editedItem)
+            this.organization.push(this.editedItem)
             console.log(resp)
             this.resetDialogReferences();
             this.saving = false;

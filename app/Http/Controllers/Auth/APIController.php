@@ -44,11 +44,15 @@ class APIController extends Controller
             ], 422);
         }
 
+        $secret = \DB::table('oauth_clients')
+            ->where('id', env('PASSWORD_CLIENT_ID'))
+            ->first()->secret;
+
         // Send an internal API request to get an access token
         $data = [
             'grant_type' => 'password',
             'client_id' => env('PASSWORD_CLIENT_ID'),
-            'client_secret' => env('PASSWORD_CLIENT_SECRET'),
+            'client_secret' => $secret,
             'username' => request('username'),
             'password' => request('password'),
         ];

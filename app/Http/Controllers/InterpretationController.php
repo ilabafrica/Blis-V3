@@ -17,7 +17,7 @@ class InterpretationController extends Controller
 {
     public function index()
     {
-        $interpretation = Interpretation::orderBy('id', 'ASC')->paginate(20);
+        $interpretation = Interpretation::orderBy('id', 'ASC')->get();
 
         return response()->json($interpretation);
     }

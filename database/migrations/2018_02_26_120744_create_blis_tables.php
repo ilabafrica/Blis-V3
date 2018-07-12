@@ -13,6 +13,48 @@ class CreateBlisTables extends Migration
      */
     public function up()
     {
+        // Create table for storing roles
+        Schema::create('roles', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name')->unique();
+            $table->string('display_name')->nullable();
+            $table->string('description')->nullable();
+            $table->timestamps();
+        });
+
+        // Create table for associating roles to users (Many-to-Many)
+        Schema::create('role_user', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->integer('role_id')->unsigned();
+
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')
+                ->onUpdate('cascade')->onDelete('cascade');
+        });
+
+        // Create table for storing permissions
+        Schema::create('permissions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name')->unique();
+            $table->string('display_name')->nullable();
+            $table->string('description')->nullable();
+            $table->timestamps();
+        });
+
+        // Create table for associating permissions to roles (Many-to-Many)
+        Schema::create('permission_role', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('permission_id')->unsigned();
+            $table->integer('role_id')->unsigned();
+
+            $table->foreign('permission_id')->references('id')->on('permissions')
+                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')
+                ->onUpdate('cascade')->onDelete('cascade');
+        });
+
         /*
          * @system Multiple
          * @name Code System Name: LOINC|FHIR|CLSI|ISO
@@ -70,8 +112,8 @@ class CreateBlisTables extends Migration
             $table->string('identifier')->nullable();
             $table->integer('created_by')->unsigned()->references('id')->on('users');
             $table->boolean('active')->default(1);
-            $table->integer('organization_type_id')->unsigned();
             $table->string('name');
+            $table->string('description')->nullable();
             $table->string('alias')->nullable();
             $table->string('telecom')->nullable();
             $table->string('address')->nullable();
@@ -85,65 +127,8 @@ class CreateBlisTables extends Migration
          */
         Schema::create('genders', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code', 10)->nullable();
-            $table->string('display');
-        });
-
-        /*
-         * @system https://www.hl7.org/fhir/practitioner.html
-         * @description details of the clinician
-         */
-        Schema::create('practitioners', function (Blueprint $table) {
-            $table->increments('id');
-            $table->boolean('active')->default(1);
-            $table->integer('created_by')->unsigned()
-                ->references('id')->on('users');
-            $table->integer('name')
-                ->references('id')->on('names')->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->integer('telecom')->nullable()
-                ->references('id')->on('telecoms')->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->integer('address')->nullable()
-                ->references('id')->on('addresses')->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->integer('gender_id')->unsigned();
-            $table->date('birth_date')->nullable();
-            $table->string('photo')->nullable();
-            $table->string('qualification')->nullable();
-            $table->timestamps();
-
-            $table->foreign('gender_id')->references('id')->on('genders');
-        });
-
-        /*
-         * @system blis.v3 defined
-         */
-        Schema::create('species', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('code');
-            $table->string('display');
-        });
-
-        /*
-         * @system blis.v3 defined
-         */
-        Schema::create('breeds', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('species_id')->unsigned();
-            $table->string('code');
-            $table->string('display');
-            $table->foreign('species_id')->references('id')->on('species');
-        });
-
-        /*
-         * @system https://www.hl7.org/fhir/valueset-marital-status.html#expansion
-         */
-        Schema::create('marital_statuses', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('code');
-            $table->string('display');
-            $table->string('definition')->nullable();
+            $table->string('code', 10);
+            $table->string('display', 10);
         });
 
         /*
@@ -157,16 +142,12 @@ class CreateBlisTables extends Migration
             $table->integer('name_id')->unsigned();
             $table->integer('gender_id')->unsigned();
             $table->date('birth_date');
-            $table->boolean('deceased')->default(0)->nullable();
+            $table->boolean('deceased')->default(0);
             $table->date('deceased_date_time')->nullable();
             $table->integer('address_id')->unsigned()->nullable();
-            $table->integer('marital_status')->unsigned()->nullable();
+            $table->string('marital_status')->nullable();
             $table->string('photo')->nullable();
-            $table->boolean('animal')->default(0)->nullable();
-            $table->integer('species_id')->unsigned()->nullable();
-            $table->integer('breed_id')->unsigned()->nullable();
             $table->string('gender_status')->nullable();
-            $table->integer('practitioner_id')->unsigned()->nullable();
             $table->integer('organization_id')->unsigned()->nullable();
             $table->integer('created_by')->unsigned();
 
@@ -175,11 +156,7 @@ class CreateBlisTables extends Migration
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('name_id')->references('id')->on('names');
             $table->foreign('gender_id')->references('id')->on('genders');
-            $table->foreign('practitioner_id')->references('id')->on('practitioners');
             $table->foreign('organization_id')->references('id')->on('organizations');
-            $table->foreign('species_id')->references('id')->on('species');
-            $table->foreign('breed_id')->references('id')->on('breeds');
-            $table->foreign('marital_status')->references('id')->on('marital_statuses');
         });
 
         /*
@@ -201,28 +178,12 @@ class CreateBlisTables extends Migration
         });
 
         /*
-         * @system https://www.hl7.org/fhir/datatypes.html#ContactPoint
-         * @example phone|fax|email|pager|url|sms|other
-         * @use home|work|temp|old|mobile
-         */
-        Schema::create('telecoms', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('patient_id')->unsigned();
-            $table->string('system', 20)->default('phone');
-            $table->string('value');
-            $table->string('use', 20)->nullable();
-            $table->integer('rank')->unsigned()->nullable();
-            $table->timestamps();
-            $table->foreign('patient_id')->references('id')->on('patients');
-        });
-
-        /*
          * @system blis.v3 defined
          */
         Schema::create('specimen_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code', 45);
-            $table->string('name', 100)->nullable();
+            $table->string('code', 45)->nullable();
+            $table->string('name', 100);
 
             $table->softDeletes();
             $table->timestamps();
@@ -260,6 +221,7 @@ class CreateBlisTables extends Migration
          */
         Schema::create('measures', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('test_type_id')->unsigned();
             $table->integer('measure_type_id')->unsigned();
             $table->string('name', 100);
             $table->string('unit', 30)->nullable();
@@ -273,12 +235,16 @@ class CreateBlisTables extends Migration
 
         /*
          * @system blis.v3 defined
-         * @code positive|negative|normal|high|low|critically_low|critically_high
+         * @code [used on measure_ranges for alphanumeric ranges, multi and culture]
+         *       positive|negative|reactive|non-reactive|MicroB-growth|MicroB-non-growth|
+         *
+         *       [used on in reporting for numeric ranges]
+         *       normal|high|low|critically_low|critically_high
          */
         Schema::create('interpretations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code', 60)->nullable();
-            $table->integer('name')->unsigned()->nullable();
+            $table->string('name')->nullable();
 
             $table->softDeletes();
         });
@@ -286,29 +252,25 @@ class CreateBlisTables extends Migration
         /*
          * @system multiple sources
          * @code numerous
-         * @alphanumeric +|++|+++|Positive|E.Coli|Gram Positive(i.e. include gram stains and organisms)
-         * @interpretation_id for the alphanumeric and cultureAndSensitivity
+         * @alphanumeric[display] +|++|+++|Positive|E.Coli|Gram Positive(i.e. include gram stains and organisms)
+         * @interpretation_id for the alphanumeric[display] and cultureAndSensitivity
          */
         Schema::create('measure_ranges', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code')->nullable();
             $table->integer('code_id')->unsigned()->nullable();
-            $table->string('system')->nullable();
             $table->integer('measure_id')->unsigned();
             $table->decimal('age_min')->nullable();
             $table->decimal('age_max')->nullable();
-            $table->integer('gender_id')->unsigned();
+            $table->integer('gender_id')->unsigned()->nullable();
             $table->decimal('low', 7, 3)->nullable();
             $table->decimal('high', 7, 3)->nullable();
             $table->decimal('low_critical', 7, 3)->nullable();
             $table->decimal('high_critical', 7, 3)->nullable();
-            $table->string('display');
+            $table->string('display')->nullable(); // alphanumeric option
             $table->integer('interpretation_id')->unsigned()->nullable();
 
             $table->softDeletes();
-            $table->foreign('gender_id')->references('id')->on('genders');
             $table->foreign('measure_id')->references('id')->on('measures');
-            $table->foreign('interpretation_id')->references('id')->on('interpretations');
         });
 
         /*
@@ -331,6 +293,7 @@ class CreateBlisTables extends Migration
             $table->string('description', 100)->nullable();
             $table->integer('test_type_category_id')->unsigned();
             $table->string('targetTAT', 50)->nullable();
+            $table->boolean('active')->default(1);
 
             $table->foreign('test_type_category_id')
                 ->references('id')->on('test_type_categories');
@@ -342,6 +305,7 @@ class CreateBlisTables extends Migration
         /*
          * @system blis.v3 defined
          */
+
         Schema::create('test_type_measures', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('test_type_id')->unsigned();
@@ -355,18 +319,17 @@ class CreateBlisTables extends Migration
         /*
          * @system blis.v3 defined
          */
-        Schema::create('test_mappings', function (Blueprint $table) {
+        Schema::create('test_type_mappings', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('code_id')->unsigned()->nullable();
             $table->integer('test_type_id')->unsigned();
             $table->integer('specimen_type_id')->unsigned();
             $table->timestamps();
 
-            $table->unique(['test_type_id', 'specimen_type_id']);
-
             $table->foreign('code_id')->references('id')->on('codes');
             $table->foreign('test_type_id')->references('id')->on('test_types');
             $table->foreign('specimen_type_id')->references('id')->on('specimen_types');
+            $table->unique(['test_type_id', 'specimen_type_id']);
         });
 
         /*
@@ -412,7 +375,8 @@ class CreateBlisTables extends Migration
          */
         Schema::create('encounter_statuses', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 45);
+            $table->string('code', 20)->nullable();
+            $table->string('display', 45);
         });
 
         /*
@@ -421,7 +385,8 @@ class CreateBlisTables extends Migration
          */
         Schema::create('encounter_classes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 45);
+            $table->string('code', 20)->nullable();
+            $table->string('display', 45);
         });
 
         /*
@@ -438,9 +403,12 @@ class CreateBlisTables extends Migration
             $table->integer('encounter_class_id')->unsigned()->nullable();
             $table->integer('encounter_status_id')->unsigned()->nullable();
             $table->string('bed_no')->nullable();
+            $table->string('practitioner_name')->nullable();
+            $table->string('practitioner_contact')->nullable();
+            $table->string('practitioner_organisation')->nullable();
 
             $table->foreign('patient_id')->references('id')->on('patients');
-            $table->foreign('encounter_class_id')->references('id')->on('patients');
+            $table->foreign('encounter_class_id')->references('id')->on('encounter_classes');
             $table->foreign('encounter_status_id')
                 ->references('id')->on('encounter_statuses');
             $table->timestamps();
@@ -451,7 +419,7 @@ class CreateBlisTables extends Migration
          */
         Schema::create('rejection_reasons', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 100);
+            $table->string('display', 100);
         });
 
         /*
@@ -459,7 +427,7 @@ class CreateBlisTables extends Migration
          */
         Schema::create('referral_reasons', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 100);
+            $table->string('display', 100);
         });
 
         /*
@@ -496,12 +464,12 @@ class CreateBlisTables extends Migration
         Schema::create('specimens', function (Blueprint $table) {
             $table->increments('id');
             $table->string('identifier')->nullable();
-            $table->string('accession_identifier');
+            $table->string('accession_identifier')->nullable();
             $table->integer('specimen_type_id')->unsigned();
-            $table->integer('parent_id')->unsigned();
-            $table->integer('specimen_status_id')->unsigned();
+            $table->integer('parent_id')->unsigned()->nullable();
+            $table->integer('specimen_status_id')->unsigned()->default(\App\Models\SpecimenStatus::received);
             $table->integer('received_by')->unsigned();
-            $table->integer('collected_by')->unsigned();
+            $table->string('collected_by')->nullable();
             $table->timestamp('time_collected')->nullable();
             $table->timestamp('received_time')->nullable();
 
@@ -509,7 +477,6 @@ class CreateBlisTables extends Migration
             $table->foreign('specimen_type_id')->references('id')->on('specimen_types');
             $table->foreign('specimen_status_id')->references('id')->on('specimen_statuses');
             $table->foreign('received_by')->references('id')->on('users');
-            $table->foreign('collected_by')->references('id')->on('users');
         });
 
         /*
@@ -519,13 +486,13 @@ class CreateBlisTables extends Migration
         Schema::create('tests', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('encounter_id')->unsigned();
-            $table->integer('identifier')->nullable();
+            $table->string('identifier')->nullable();
             $table->integer('test_type_id')->unsigned();
-            $table->integer('specimen_id')->unsigned()->default(0);
-            $table->integer('test_status_id')->unsigned()->default(0);
-            $table->integer('created_by')->unsigned();
-            $table->integer('tested_by')->unsigned()->default(0);
-            $table->integer('verified_by')->unsigned()->default(0);
+            $table->integer('specimen_id')->unsigned()->nullable();
+            $table->integer('test_status_id')->unsigned()->default(\App\Models\TestStatus::pending);
+            $table->integer('created_by')->unsigned()->nullable();
+            $table->integer('tested_by')->unsigned()->nullable();
+            $table->integer('verified_by')->unsigned()->nullable();
             $table->string('requested_by', 60);
             $table->timestamp('time_started')->nullable();
             $table->timestamp('time_completed')->nullable();
@@ -550,7 +517,7 @@ class CreateBlisTables extends Migration
             $table->increments('id');
             $table->integer('specimen_id')->unsigned();
             $table->integer('test_phase_id')->unsigned();
-            $table->integer('test_id')->unsigned()->nullable();
+            $table->integer('test_id')->unsigned()->nullable();// determined by the phase: do a write up
             $table->integer('rejected_by')->unsigned();
             $table->integer('rejection_reason_id')->unsigned()->nullable();
             $table->string('reject_explained_to', 100)->nullable();
@@ -572,7 +539,7 @@ class CreateBlisTables extends Migration
             $table->increments('id');
             $table->integer('test_id')->unsigned();
             $table->integer('measure_id')->unsigned();
-            $table->string('result', 1000)->nullable();
+            $table->string('result')->nullable();
             $table->integer('measure_range_id')->unsigned()->nullable();
             $table->timestamp('time_entered')->default(DB::raw('CURRENT_TIMESTAMP'));
 
@@ -586,7 +553,7 @@ class CreateBlisTables extends Migration
          */
         Schema::create('antibiotics', function ($table) {
             $table->increments('id');
-            $table->string('code');
+            $table->string('code')->nullable();
             $table->string('name');
         });
 
@@ -679,65 +646,182 @@ class CreateBlisTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('control_types', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name', 100)->unique();
-            $table->string('description', 400)->nullable();
-            $table->integer('instrument_id')->unsigned();
-
-            $table->foreign('instrument_id')->references('id')->on('instruments');
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::create('control_measures', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('unit');
-            $table->integer('control_type_id')->unsigned();
-            $table->integer('measure_type_id')->unsigned();
-
-            $table->foreign('measure_type_id')->references('id')->on('measure_types');
-            $table->foreign('control_type_id')->references('id')->on('control_types');
-            $table->softDeletes();
-            $table->timestamps();
-        });
-
-        Schema::create('control_measure_ranges', function (Blueprint $table) {
-            $table->increments('id');
-            $table->decimal('upper_range', 6, 2)->nullable();
-            $table->decimal('lower_range', 6, 2)->nullable();
-            $table->string('alphanumeric', '100')->nullable();
-            $table->integer('control_measure_id')->unsigned();
-
-            $table->foreign('control_measure_id')->references('id')->on('control_measures');
-            $table->softDeletes();
-            $table->timestamps();
-        });
-
         Schema::create('control_tests', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('lot_id')->unsigned();
-            $table->integer('entered_by')->unsigned();
-            $table->integer('control_id')->unsigned();
-            $table->integer('control_type_id')->unsigned();
+            $table->integer('tested_by')->unsigned()->nullable();
+            $table->integer('test_type_id')->unsigned();
+            $table->integer('test_status_id')->unsigned()->default(\App\Models\TestStatus::pending);
+            $table->timestamp('time_started')->nullable();
+            $table->timestamp('time_completed')->nullable();
+            $table->timestamp('time_verified')->nullable();
 
-            $table->foreign('control_type_id')->references('id')->on('control_types');
-            $table->foreign('entered_by')->references('id')->on('users');
+            $table->foreign('test_type_id')->references('id')->on('test_types');
             $table->foreign('lot_id')->references('id')->on('lots');
+            $table->foreign('test_status_id')->references('id')->on('test_statuses');
             $table->timestamps();
         });
 
         Schema::create('control_results', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('results');
-            $table->integer('control_measure_id')->unsigned();
+            $table->string('result');
+            $table->integer('measure_id')->unsigned();
             $table->integer('control_test_id')->unsigned();
 
             $table->foreign('control_test_id')->references('id')->on('control_tests');
-            $table->foreign('control_measure_id')->references('id')->on('control_measures');
+            $table->foreign('measure_id')->references('id')->on('measures');
             $table->timestamps();
         });
+
+        Eloquent::unguard();
+
+        //Super Admin
+        $superUser = \App\User::create([
+            'name' => 'BLIS Super Admin',
+            'username' => 'admin@blis.local',
+            'email' => 'admin@blis.local',
+            'password' =>  bcrypt('password'),
+        ]);
+
+        /* Measure Types */
+        $measureTypes = [
+            ['id' => '1', 'name' => 'Numeric'],
+            ['id' => '2', 'name' => 'Alphanumeric'],
+            ['id' => '3', 'name' => 'Multi Alphanumeric'],
+            ['id' => '4', 'name' => 'Free Text'],
+        ];
+
+        foreach ($measureTypes as $measureType) {
+            \App\Models\MeasureType::create($measureType);
+        }
+
+        /* Test Phase table */
+        $test_phases = [
+          ['id' => '1', 'name' => 'PreAnalytical'],
+          ['id' => '2', 'name' => 'Analytical'],
+          ['id' => '3', 'name' => 'PostAnalytical'],
+        ];
+        foreach ($test_phases as $test_phase) {
+            \App\Models\TestPhase::create($test_phase);
+        }
+
+        /* Test Status table */
+        $test_statuses = [
+          ['id' => '1', 'name' => 'pending', 'test_phase_id' => '1'], //PreAnalytical
+          ['id' => '2', 'name' => 'started', 'test_phase_id' => '2'], //Analytical
+          ['id' => '3', 'name' => 'completed', 'test_phase_id' => '3'], //PostAnalytical
+          ['id' => '4', 'name' => 'verified', 'test_phase_id' => '3'], //PostAnalytical
+        ];
+        foreach ($test_statuses as $test_status) {
+            \App\Models\TestStatus::create($test_status);
+        }
+
+        /* Specimen Status table */
+        $specimen_statuses = [
+          ['id' => '1', 'name' => 'pending'],// mostly redandant status, only if implementation is requested
+          ['id' => '2', 'name' => 'received'],
+          ['id' => '3', 'name' => 'rejected'],
+        ];
+        foreach ($specimen_statuses as $specimen_status) {
+            \App\Models\SpecimenStatus::create($specimen_status);
+        }
+
+        \App\Models\SusceptibilityRange::create([
+            'code' => 'S',
+            'name'=>'Sensitive',
+        ]);
+        \App\Models\SusceptibilityRange::create([
+            'code' => 'I',
+            'name'=>'Intermediate',
+        ]);
+        \App\Models\SusceptibilityRange::create([
+            'code' => 'R',
+            'name'=>'Resistant',
+        ]);
+
+        /* gender table */
+        $genders = [
+          ['id' => '1', 'code' => 'male', 'display' => 'Male'],
+          ['id' => '2', 'code' => 'female', 'display' => 'Female'],
+          ['id' => '3', 'code' => 'both', 'display' => 'Both'],
+          ['id' => '4', 'code' => 'unknown', 'display' => 'Unknown'],
+        ];
+        foreach ($genders as $gender) {
+            \App\Models\Gender::create($gender);
+        }
+
+        /* encounter class table */
+        $encounterClasses = [
+          ['id' => '1', 'code' => 'inpatient', 'display' => 'In Patient'],
+          ['id' => '2', 'code' => 'outpatient', 'display' => 'Out Patient'],
+        ];
+        foreach ($encounterClasses as $encounterClass) {
+            \App\Models\EncounterClass::create($encounterClass);
+        }
+
+        /* Permissions table */
+        $permissions = [
+            // system configurations
+            ['name' => 'manage_configurations', 'display_name' => 'Can manage configurations'],
+
+            // manage test menu
+            ['name' => 'manage_test_catalog', 'display_name' => 'Can manage test catalog'],
+
+            // user management
+            ['name' => 'manage_users', 'display_name' => 'Can manage users'],
+
+            // patient data management
+            ['name' => 'manage_patients', 'display_name' => 'Can add patients'],
+            ['name' => 'view_patient_names', 'display_name' => 'Can view patient names'],
+
+            // routine and reference testing
+            ['name' => 'request_test', 'display_name' => 'Can request new test'], // includes external systems
+            ['name' => 'accept_test_specimen', 'display_name' => 'Can accept test specimen'],
+            ['name' => 'reject_test_specimen', 'display_name' => 'Can reject test specimen'],
+            ['name' => 'change_test_specimen', 'display_name' => 'Can change test specimen'],
+            ['name' => 'start_test', 'display_name' => 'Can start tests'],
+            ['name' => 'enter_test_results', 'display_name' => 'Can enter tests results'],
+            ['name' => 'edit_test_results', 'display_name' => 'Can edit test results'],
+            ['name' => 'verify_test_results', 'display_name' => 'Can verify test results'],
+            ['name' => 'refer_test_specimens', 'display_name' => 'Can refer specimens'],
+            ['name' => 'manage_quality_control', 'display_name' => 'Can manage Quality Control'],
+
+            // reporting
+            ['name' => 'view_reports', 'display_name' => 'Can view reports'],
+
+            // inventory and equipment
+            ['name' => 'manage_inventory', 'display_name' => 'Can manage inventory'],
+            ['name' => 'request_topup', 'display_name' => 'Can request top-up'],
+            ['name' => 'manage_equipment', 'display_name' => 'Can manage equipment'],
+
+            // biosafty and biosecurity
+            ['name' => 'manage_biosafty_biosecurity', 'display_name' => 'Can manage biosafty-biosecurity'],
+
+            // biosafty and biosecurity
+            ['name' => 'manage_blood_bank', 'display_name' => 'Can manage blood bank'],
+            ['name' => 'view_blood_bank', 'display_name' => 'Can view blood bank'],
+        ];
+
+        foreach ($permissions as $permission) {
+            \App\Models\Permission::create($permission);
+        }
+
+        /* Roles table */
+        $superRole = \App\Models\Role::create(['name' => 'Superadmin']);
+
+        \App\Models\Role::create(['name' => 'Technologist']);
+        \App\Models\Role::create(['name' => 'Receptionist']);
+
+
+        $superUser = \App\User::find($superUser->id);
+        $permissions = \App\Models\Permission::all();
+
+        //Assign all permissions to role Superadmin
+        foreach ($permissions as $permission) {
+            $superRole->attachPermission($permission);
+        }
+        //Assign role Superadmin to user_id=1
+        $superUser->attachRole($superRole);
     }
 
     /**
@@ -762,6 +846,7 @@ class CreateBlisTables extends Migration
         Schema::dropIfExists('antibiotics');
         Schema::dropIfExists('results');
         Schema::dropIfExists('specimen_rejections');
+        Schema::dropIfExists('specimen_type_test_type');
         Schema::dropIfExists('tests');
         Schema::dropIfExists('specimens');
         Schema::dropIfExists('referrals');
@@ -785,16 +870,15 @@ class CreateBlisTables extends Migration
         Schema::dropIfExists('test_type_categories');
         Schema::dropIfExists('specimen_types');
         Schema::dropIfExists('patients');
-        Schema::dropIfExists('marital_statuses');
-        Schema::dropIfExists('breeds');
-        Schema::dropIfExists('species');
-        Schema::dropIfExists('practitioners');
         Schema::dropIfExists('genders');
         Schema::dropIfExists('organizations');
         Schema::dropIfExists('addresses');
-        Schema::dropIfExists('telecoms');
         Schema::dropIfExists('names');
         Schema::dropIfExists('codes');
         Schema::dropIfExists('code_systems');
+        Schema::dropIfExists('permission_role');
+        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('role_user');
+        Schema::dropIfExists('roles');
     }
 }

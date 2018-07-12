@@ -22,7 +22,7 @@ class SpecimenTypeController extends Controller
             $specimenType = SpecimenType::where('name', 'LIKE', "%{$search}%")
                 ->paginate(20);
         } else {
-            $specimenType = SpecimenType::orderBy('id', 'ASC')->paginate(20);
+            $specimenType = SpecimenType::orderBy('name', 'ASC')->paginate(20);
         }
 
         return response()->json($specimenType);
