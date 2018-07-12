@@ -55,7 +55,7 @@
                 <v-list-tile-title>Measures</v-list-tile-title>
                   <v-flex xs3 sm3 md3>
                     <v-text-field
-                      v-model="measure.measure_name"
+                      v-model="measure.name"
                       :rules="[v => !!v || 'Measure Name is Required']"
                       label="Name">
                     </v-text-field>
@@ -79,7 +79,7 @@
                   </v-flex>
                   <v-flex xs3 sm3 md3>
                     <v-text-field
-                      v-model="measure.measure_description"
+                      v-model="measure.description"
                       :rules="[v => !!v || 'Description is Required']"
                       label="Description">
                     </v-text-field>
@@ -323,10 +323,10 @@
       testtypemapping:[],
 
       measure: {
-        measure_name: '',
+        name: '',
         measure_type_id: '',
         unit: '',
-        measure_description: '',
+        description: '',
       },
 
       numerics: [],

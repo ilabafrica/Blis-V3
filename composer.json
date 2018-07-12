@@ -12,7 +12,7 @@
         "laravel/tinker": "~1.0",
         "tecnickcom/tcpdf": "^6.2",
         "zizaco/entrust": "5.2.x-dev",
-        "ilabafrica/emrinterface": "v0.1-alpha"
+        "ilabafrica/emrinterface": "dev-master"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

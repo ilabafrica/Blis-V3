@@ -270,7 +270,7 @@ class DevSeeder extends Seeder
         \DB::table('test_type_mappings')->insert(
             ["test_type_id" => $testTypeWBC->id, "specimen_type_id" => $specimenTypeBlood->id]);
 
-        $this->command->info("test_type_mappings seeded");
+        $this->command->info("Test Type Mappings Seeded");
 
         /* Instruments table */
         $instrumentsData = [
@@ -8333,8 +8333,9 @@ class DevSeeder extends Seeder
         $this->command->info("Tests Seeded");
 
         // create results
-        echo "Results Seeding";
         foreach (Test::all() as $test) {
+
+            \ILabAfrica\EMRInterface\DiagnosticOrder::create(['test_id' => $test->id]);
             foreach ($test->testType->measures as $measure) {
 
 

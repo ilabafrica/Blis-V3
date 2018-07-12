@@ -40,7 +40,6 @@ class MeasureRangeController extends Controller
             $input = $request->all();
             for ($i = 0; $i < count($input); $i++) {
                     $measureRange = new MeasureRange;
-                    //$measureRange->code_id = $request->input('code_id');
                     $measureRange->measure_id = $input[$i]["measure_id"];
 
                     //Numeric Range

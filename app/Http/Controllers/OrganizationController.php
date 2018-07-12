@@ -33,7 +33,7 @@ class OrganizationController extends Controller
         $rules = [
             'created_by' => 'required',
             'active' => 'required',
-            'organization_type_id' => 'required',
+            'description' => 'required',
             'name' => 'required',
 
         ];
@@ -45,7 +45,7 @@ class OrganizationController extends Controller
             $organization->identifier = $request->input('identifier');
             $organization->created_by = $request->input('created_by');
             $organization->active = $request->input('active');
-            $organization->organization_type_id = $request->input('organization_type_id');
+            $organization->description = $request->input('description');
             $organization->name = $request->input('name');
             $organization->alias = $request->input('alias');
             $organization->telecom = $request->input('telecom');
@@ -86,7 +86,7 @@ class OrganizationController extends Controller
         $rules = [
             'created_by' => 'required',
             'active' => 'required',
-            'organization_type_id' => 'required',
+            'description' => 'required',
             'name' => 'required',
 
         ];
@@ -98,7 +98,7 @@ class OrganizationController extends Controller
             $organization->identifier = $request->input('identifier');
             $organization->created_by = $request->input('created_by');
             $organization->active = $request->input('active');
-            $organization->organization_type_id = $request->input('organization_type_id');
+            $organization->description = $request->input('description');
             $organization->name = $request->input('name');
             $organization->alias = $request->input('alias');
             $organization->telecom = $request->input('telecom');

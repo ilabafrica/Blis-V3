@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Instrument extends Model
 {
-    public function Lot()
+    public function lot()
     {
         return $this->belongsTo('App\Models\Lot');
     }
