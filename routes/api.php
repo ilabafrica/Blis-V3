@@ -48,7 +48,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['middleware' => ['permission:manage_test_catalog']], function () {
         Route::resource('susceptibilitybreakpoint', 'SusceptibilityBreakPointController');
         Route::resource('susceptibilityrange', 'SusceptibilityRangeController');
-        Route::resource('testtypemapping', 'TestTypeMappingController');
+        Route::get('testtypemapping', 'TestTypeMappingController@index');
+        Route::post('testtypemapping/update', 'TestTypeMappingController@update');
+        Route::post('testtypemapping/create', 'TestTypeMappingController@create');
+
         Route::resource('testphase', 'TestPhaseController');
         Route::resource('teststatus', 'TestStatusController');
         Route::resource('testtypecategory', 'TestTypeCategoryController');

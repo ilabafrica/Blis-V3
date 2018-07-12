@@ -9,6 +9,8 @@ namespace App\Http\Controllers;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use App\Models\SpecimenType;
+use App\Models\TestType;
 use App\Models\TestTypeMapping;
 use Illuminate\Http\Request;
 
@@ -16,7 +18,7 @@ class TestTypeMappingController extends Controller
 {
     public function index()
     {
-        $testMapping = TestTypeMapping::orderBy('id', 'ASC')->paginate(20);
+        $testMapping = TestTypeMapping::all();
 
         return response()->json($testMapping);
     }
@@ -27,30 +29,20 @@ class TestTypeMappingController extends Controller
      * @param  \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function create(Request $request)
     {
-        $rules = [
-            'test_type_id' => 'required',
-            'specimen_type_id' => 'required',
-        ];
-
-        $validator = \Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json($validator);
-        } else {
+        $input = $request->all();
+        $specimen_types = $request->input('specimen_type');
+        for ($i = 0; $i < count($input)-1; $i++) {
             $testMapping = new TestTypeMapping;
-            $testMapping->code_id = $request->input('code_id');
-            $testMapping->test_type_id = $request->input('test_type_id');
-            $testMapping->specimen_type_id = $request->input('specimen_type_id');
-
-            try {
-                $testMapping->save();
-
-                return response()->json($testMapping);
-            } catch (\Illuminate\Database\QueryException $e) {
+            $testMapping->specimen_type_id = $input[$i];
+            $testMapping->test_type_id = array_search(null, $input);
+                try {
+                    $testMapping->save();
+                } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                }                
             }
-        }
     }
 
     /**
@@ -73,30 +65,43 @@ class TestTypeMappingController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $rules = [
-            'test_type_id' => 'required',
-            'specimen_type_id' => 'required',
-        ];
-
-        $validator = \Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json($validator, 422);
-        } else {
-            $testMapping = TestTypeMapping::findOrFail($id);
-            $testMapping->code_id = $request->input('code_id');
-            $testMapping->test_type_id = $request->input('test_type_id');
-            $testMapping->specimen_type_id = $request->input('specimen_type_id');
-
-            try {
-                $testMapping->save();
-
-                return response()->json($testMapping);
-            } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        $input = $request->all();
+        
+        for ($i=0; $i < count($input)-1; $i++) {
+            if(TestTypeMapping::where('test_type_id', '=', array_search(null, $input))->where('specimen_type_id', '=', $input[$i])->exists()){
+                //if the specimen is unchanged
+            }else{
+                //if a new specimen has been selected
+                $testMapping = new TestTypeMapping;
+                $testMapping->specimen_type_id = $input[$i];
+                $testMapping->test_type_id = array_search(null, $input);
+                    try {
+                        $testMapping->save();
+                    } catch (\Illuminate\Database\QueryException $e) {
+                    return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                    } 
             }
         }
+
+        //Delete Unselected Specimens
+        $allMappings = TestTypeMapping::where('test_type_id', '=', array_search(null, $input))->pluck('specimen_type_id')->toArray();
+        $unselectedSpecimens = array_diff($allMappings, $input);
+
+        if(empty($unselectedSpecimens)){
+            //no specimens have been deselected
+        }else{
+            foreach ($unselectedSpecimens as $index => $id) { 
+                try {
+                    $testMapping = TestTypeMapping::where('test_type_id', '=', array_search(null, $input))->where('specimen_type_id', '=', $id)->firstOrFail();
+                    $testMapping->delete();
+                } catch (\Illuminate\Database\QueryException $e) {
+                    return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                }
+            }
+        }
+        
     }
 
     /**
