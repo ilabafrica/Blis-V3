@@ -16,3 +16,4 @@ yarn-error.log
 /public/fonts
 /public/images
 /public/mix-manifest.json
+/.vscode

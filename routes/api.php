@@ -25,6 +25,7 @@ Route::group(['prefix' => 'tpa'], function () {
     Route::post('logout', 'ThirdPartyAppAuthController@logout');
     Route::post('refresh', 'ThirdPartyAppAuthController@refresh');
     Route::post('me', 'ThirdPartyAppAuthController@me');
+    Route::post('payload', 'ThirdPartyAppAuthController@payload');
 
     Route::get('/testmenu', 'ThirdPartyAppController@testmenu');
 	Route::post('/testrequest', 'ThirdPartyAppController@receiveTestRequest');

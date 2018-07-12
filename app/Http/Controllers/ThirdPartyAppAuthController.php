@@ -42,6 +42,15 @@ class ThirdPartyAppAuthController extends Controller
     {
         return response()->json(auth('tpa_api')->user());
     }
+    /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function payload()
+    {
+        return response()->json(auth('tpa_api')->payload());
+    }
 
     /**
      * Log the user out (Invalidate the token).
