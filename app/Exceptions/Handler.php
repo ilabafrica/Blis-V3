@@ -60,7 +60,6 @@ class Handler extends ExceptionHandler
         else if($exception instanceof JWTException){
             return response()->json(['error'=>'Valid Token is Required'],400);
         }
-        dd($exception);
         return parent::render($request, $exception);
     }
 }
