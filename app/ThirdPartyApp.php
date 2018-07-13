@@ -12,6 +12,7 @@ class ThirdPartyApp extends Authenticatable implements JWTSubject
     use EntrustUserTrait;
     use Notifiable;
 
+    public $incrementing=false;
     /**
      * The attributes that are mass assignable.
      *

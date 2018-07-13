@@ -14,13 +14,14 @@ class CreateThirdPartyAppsTable extends Migration
     public function up()
     {
         Schema::create('third_party_apps', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id');
             $table->string('name');
             $table->string('username')->nullable();
             $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->primary('id');
         });
     }
 

@@ -476,7 +476,7 @@ class CreateBlisTables extends Migration
             $table->integer('test_type_id')->unsigned();
             $table->integer('specimen_id')->unsigned()->nullable();
             $table->integer('test_status_id')->unsigned()->default(\App\Models\TestStatus::pending);
-            $table->integer('created_by')->unsigned()->nullable();
+            $table->uuid('created_by')->nullable();
             $table->integer('tested_by')->unsigned()->nullable();
             $table->integer('verified_by')->unsigned()->nullable();
             $table->string('requested_by', 60);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Models\Name;
 use App\Models\Test;
 use App\Models\Gender;
@@ -98,7 +99,7 @@ class ThirdPartyAppController extends Controller
                     $patient->name_id = $name->id;
                     $patient->gender_id = $gender->id;
                     $patient->birth_date = $request->input('subject.birthDate');
-                    $patient->created_by = Auth::user()->id;
+                    $patient->created_by = Auth::guard('tpa_api')->user()->id;
                     $patient->save();
                 }
 
@@ -121,7 +122,7 @@ class ThirdPartyAppController extends Controller
                     $test->identifier = $request->input('subject.identifier');// using patient for now
                     $test->test_type_id = $item['test_type_id'];
                     $test->test_status_id = TestStatus::pending;
-                    $test->created_by = Auth::user()->id;
+                    $test->created_by = Auth::guard('tpa_api')->user()->id;
                     $test->requested_by = $request->input('orderer.name');// practitioner
                     $test->save();
 
