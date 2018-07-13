@@ -53,9 +53,9 @@ export default new Router({
       beforeEnter: ifAuthenticated,
     },
     {
-      path: '/labconfiguration/facility',
-      name: 'Facility',
-      component: require('../components/labconfiguration/facility'),
+      path: '/labconfiguration/organization',
+      name: 'Organization',
+      component: require('../components/labconfiguration/organization'),
       beforeEnter: ifAuthenticated,
     },
     {
