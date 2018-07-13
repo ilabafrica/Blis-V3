@@ -38,10 +38,12 @@ class RoleUserController extends Controller
             $role = Role::find($request->input('role_id'));
 
             try {
-                $user->attachRole($role);
-                $user = User::with('roles')->find($request->input('user_id'));
+                $roleUser = RoleUser::create([
+                    'user_id' => $request->input('user_id'),
+                    'role_id' => $request->input('role_id'),
+                ]);
 
-                return response()->json($user);
+                return response()->json($roleUser);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -64,9 +66,8 @@ class RoleUserController extends Controller
 
             try {
                 $user->detachRole($role);
-                $user = User::with('roles')->find($request->input('user_id'));
 
-                return response()->json($user);
+                return response()->json(['message' => 'Item Successfully deleted']);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

@@ -13,5 +13,6 @@ class RoleUser extends Model
 {
     protected $table = 'role_user';
 
+    public $timestamps = false;
     public $fillable = ['user_id', 'role_id'];
 }

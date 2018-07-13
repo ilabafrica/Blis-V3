@@ -127,18 +127,6 @@
         })
       },
 
-      getPermissionsRoles () {
-        apiCall({url: '/api/permissionrole', method: 'GET' })
-        .then(resp => {
-          console.log(resp)
-          this.permissionsroles = resp;
-          this.permissionRoleIds = _.map(this.permissionsroles, 'id');
-        })
-        .catch(error => {
-          console.log(error.response)
-        })
-      },
-
       getAssignment (permission, role) {
           var value = 0;
           for (var i = this.permissionsroles.length - 1; i >= 0; i--) {
@@ -168,9 +156,9 @@
             url: '/api/permissionrole/detach?'+this.query,
             method: 'GET'
           })
-          .then(resp => {
-            console.log(resp)
-            this.getPermissionsRoles();
+          .then(response => {
+            console.log(response)
+            _.remove(this.permissionRoleIds, item => item === permissionRoleId);
           })
           .catch(error => {
             console.log(error.response)
@@ -183,9 +171,9 @@
             url: '/api/permissionrole/attach?'+this.query,
             method: 'GET'
           })
-          .then(resp => {
-            console.log(resp)
-            this.getPermissionsRoles();
+          .then(response => {
+            console.log(response)
+            this.permissionRoleIds.push(response.id);
           })
           .catch(error => {
             console.log(error.response)
