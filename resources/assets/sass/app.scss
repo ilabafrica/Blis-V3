@@ -27,3 +27,14 @@
 
 // Vuetify
 @import "~vuetify/dist/vuetify.min.css";
+
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(24, 135, 244);
+}
+::-webkit-scrollbar-track {
+  background: rgb(241, 241, 241);
+}

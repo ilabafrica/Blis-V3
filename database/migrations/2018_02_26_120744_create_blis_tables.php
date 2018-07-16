@@ -144,37 +144,18 @@ class CreateBlisTables extends Migration
             $table->date('birth_date');
             $table->boolean('deceased')->default(0);
             $table->date('deceased_date_time')->nullable();
-            $table->integer('address_id')->unsigned()->nullable();
+            $table->string('address')->nullable();
             $table->string('marital_status')->nullable();
             $table->string('photo')->nullable();
             $table->string('gender_status')->nullable();
             $table->integer('organization_id')->unsigned()->nullable();
-            $table->integer('created_by')->unsigned();
+            $table->string('created_by')->nullable();
 
             $table->timestamps();
 
-            $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('name_id')->references('id')->on('names');
             $table->foreign('gender_id')->references('id')->on('genders');
             $table->foreign('organization_id')->references('id')->on('organizations');
-        });
-
-        /*
-         * @system https://www.hl7.org/fhir/datatypes.html#Address
-         */
-        Schema::create('addresses', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('patient_id')->unsigned();
-            $table->string('text');
-            $table->string('line')->nullable();
-            $table->string('city')->nullable();
-            $table->string('district')->nullable();
-            $table->string('state')->nullable();
-            $table->string('postal_code')->nullable();
-            $table->string('country')->nullable();
-            $table->string('period')->nullable();
-            $table->timestamps();
-            $table->foreign('patient_id')->references('id')->on('patients');
         });
 
         /*
@@ -490,7 +471,7 @@ class CreateBlisTables extends Migration
             $table->integer('test_type_id')->unsigned();
             $table->integer('specimen_id')->unsigned()->nullable();
             $table->integer('test_status_id')->unsigned()->default(\App\Models\TestStatus::pending);
-            $table->integer('created_by')->unsigned()->nullable();
+            $table->uuid('created_by')->nullable();
             $table->integer('tested_by')->unsigned()->nullable();
             $table->integer('verified_by')->unsigned()->nullable();
             $table->string('requested_by', 60);
@@ -872,7 +853,6 @@ class CreateBlisTables extends Migration
         Schema::dropIfExists('patients');
         Schema::dropIfExists('genders');
         Schema::dropIfExists('organizations');
-        Schema::dropIfExists('addresses');
         Schema::dropIfExists('names');
         Schema::dropIfExists('codes');
         Schema::dropIfExists('code_systems');
