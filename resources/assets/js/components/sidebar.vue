@@ -23,9 +23,7 @@
       <v-list-tile-action>
         <v-icon>assignment_ind</v-icon>
       </v-list-tile-action>
-      <v-list-tile-title>
-          Patients
-      </v-list-tile-title>
+      <v-list-tile-title>Patients</v-list-tile-title>
     </v-list-tile>
     <v-list-group prepend-icon="settings" value="true">
       <v-list-tile slot="activator">

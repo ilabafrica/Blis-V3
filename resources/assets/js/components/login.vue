@@ -14,7 +14,7 @@
       <v-container fill-height>
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md5>
-            <v-card class="elevation-4">
+            <v-card class="elevation-3">
               <v-toolbar dark color="primary" class="elevation-0">
                 <v-toolbar-title>BLIS</v-toolbar-title>
                 <v-spacer></v-spacer>

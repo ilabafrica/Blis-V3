@@ -72,8 +72,7 @@
                 <v-date-picker v-show="calendar" v-model="editedItem.birth_date" :landscape="landscape" :reactive="reactive"></v-date-picker>
               </v-flex>
               <v-btn round outline xs12 sm6 color="blue darken-1" :disabled="!valid" @click.native="save">
-                Save
-                <v-icon right dark>cloud_upload</v-icon>
+                Save <v-icon right dark>cloud_upload</v-icon>
               </v-btn>
             </v-layout>
           </v-container>
