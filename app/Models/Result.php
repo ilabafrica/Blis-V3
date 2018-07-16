@@ -15,4 +15,14 @@ use Illuminate\Database\Eloquent\Model;
 class Result extends Model
 {
     public $timestamps = false;
+
+    public function measure()
+    {
+        return $this->belongsTo('App\Models\Measure');
+    }
+
+    public function measureRange()
+    {
+        return $this->belongsTo('App\Models\MeasureRange');
+    }
 }

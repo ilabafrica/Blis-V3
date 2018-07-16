@@ -51,7 +51,7 @@ class Test extends Model
      */
     public function results()
     {
-        return $this->hasMany('TestResult', 'test_id');
+        return $this->hasMany('App\Models\Result');
     }
 
     /*
@@ -59,6 +59,11 @@ class Test extends Model
      */
     public function testStatus()
     {
-        return $this->belongsTo('TestStatus');
+        return $this->belongsTo('App\Models\TestStatus');
+    }
+
+    public function encounter()
+    {
+        return $this->belongsTo('App\Models\Encounter');
     }
 }

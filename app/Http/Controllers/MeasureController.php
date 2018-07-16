@@ -17,7 +17,7 @@ class MeasureController extends Controller
 {
     public function index()
     {
-        $measure = Measure::orderBy('id', 'ASC')->paginate(20);
+        $measure = Measure::orderBy('id', 'ASC')->get();
 
         return response()->json($measure);
     }
@@ -32,7 +32,7 @@ class MeasureController extends Controller
     {
         $rules = [
             'measure_type_id' => 'required',
-            'name' => 'required',
+            'measure_name' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -40,15 +40,19 @@ class MeasureController extends Controller
             return response()->json($validator);
         } else {
             $measure = new Measure;
+            $measure->test_type_id = $request->input('test_type_id');
             $measure->measure_type_id = $request->input('measure_type_id');
-            $measure->name = $request->input('name');
+            $measure->name = $request->input('measure_name');
             $measure->unit = $request->input('unit');
-            $measure->description = $request->input('description');
+            $measure->description = $request->input('measure_description');
 
             try {
                 $measure->save();
 
-                return response()->json($measure);
+                $measureId = $measure->id;
+                $measureData = array('measure' => $measure, 'measureId' => $measureId );
+
+                return response()->json($measureData);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

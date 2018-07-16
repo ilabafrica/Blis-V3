@@ -18,10 +18,10 @@ class RejectionReasonTest extends TestCase
 	use DatabaseMigrations;
 	public function setVariables(){
 		$this->rejectionReasonData=array(
-			"name"=>'Sample String',
+			"display"=>'Sample String',
 		);
 		$this->updatedRejectionReasonData=array(
-			"name"=>'Sample updated String',
+			"display"=>'Sample updated String',
 		);
 	}
 
@@ -29,7 +29,7 @@ class RejectionReasonTest extends TestCase
 	{
 		$response=$this->post('/api/rejectionreason',$this->rejectionReasonData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testListRejectionReason()
@@ -43,7 +43,7 @@ class RejectionReasonTest extends TestCase
 		$response=$this->post('/api/rejectionreason',$this->rejectionReasonData);
 		$response=$this->get('/api/rejectionreason/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testUpdateRejectionReason()
@@ -51,7 +51,7 @@ class RejectionReasonTest extends TestCase
 		$response=$this->post('/api/rejectionreason',$this->rejectionReasonData);
 		$response=$this->put('/api/rejectionreason/1',$this->updatedRejectionReasonData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testDeleteRejectionReason()

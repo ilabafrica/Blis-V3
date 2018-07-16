@@ -112,8 +112,8 @@ class CreateBlisTables extends Migration
             $table->string('identifier')->nullable();
             $table->integer('created_by')->unsigned()->references('id')->on('users');
             $table->boolean('active')->default(1);
-            $table->integer('organization_type_id')->unsigned();
             $table->string('name');
+            $table->string('description')->nullable();
             $table->string('alias')->nullable();
             $table->string('telecom')->nullable();
             $table->string('address')->nullable();
@@ -244,7 +244,7 @@ class CreateBlisTables extends Migration
         Schema::create('interpretations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code', 60)->nullable();
-            $table->integer('name')->unsigned()->nullable();
+            $table->string('name')->nullable();
 
             $table->softDeletes();
         });
@@ -266,7 +266,7 @@ class CreateBlisTables extends Migration
             $table->decimal('high', 7, 3)->nullable();
             $table->decimal('low_critical', 7, 3)->nullable();
             $table->decimal('high_critical', 7, 3)->nullable();
-            $table->string('display')->nullable();
+            $table->string('display')->nullable(); // alphanumeric option
             $table->integer('interpretation_id')->unsigned()->nullable();
 
             $table->softDeletes();
@@ -293,12 +293,27 @@ class CreateBlisTables extends Migration
             $table->string('description', 100)->nullable();
             $table->integer('test_type_category_id')->unsigned();
             $table->string('targetTAT', 50)->nullable();
+            $table->boolean('active')->default(1);
 
             $table->foreign('test_type_category_id')
                 ->references('id')->on('test_type_categories');
 
             $table->softDeletes();
             $table->timestamps();
+        });
+
+        /*
+         * @system blis.v3 defined
+         */
+
+        Schema::create('test_type_measures', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('test_type_id')->unsigned();
+            $table->integer('measure_id')->unsigned();
+
+            $table->foreign('test_type_id')->references('id')->on('test_types');
+            $table->foreign('measure_id')->references('id')->on('measures');
+            $table->unique(['test_type_id', 'measure_id']);
         });
 
         /*
@@ -311,11 +326,10 @@ class CreateBlisTables extends Migration
             $table->integer('specimen_type_id')->unsigned();
             $table->timestamps();
 
-            $table->unique(['test_type_id', 'specimen_type_id']);
-
             $table->foreign('code_id')->references('id')->on('codes');
             $table->foreign('test_type_id')->references('id')->on('test_types');
             $table->foreign('specimen_type_id')->references('id')->on('specimen_types');
+            $table->unique(['test_type_id', 'specimen_type_id']);
         });
 
         /*
@@ -405,7 +419,7 @@ class CreateBlisTables extends Migration
          */
         Schema::create('rejection_reasons', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 100);
+            $table->string('display', 100);
         });
 
         /*
@@ -413,7 +427,7 @@ class CreateBlisTables extends Migration
          */
         Schema::create('referral_reasons', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 100);
+            $table->string('display', 100);
         });
 
         /*
@@ -503,7 +517,7 @@ class CreateBlisTables extends Migration
             $table->increments('id');
             $table->integer('specimen_id')->unsigned();
             $table->integer('test_phase_id')->unsigned();
-            $table->integer('test_id')->unsigned()->nullable();
+            $table->integer('test_id')->unsigned()->nullable();// determined by the phase: do a write up
             $table->integer('rejected_by')->unsigned();
             $table->integer('rejection_reason_id')->unsigned()->nullable();
             $table->string('reject_explained_to', 100)->nullable();
@@ -620,16 +634,6 @@ class CreateBlisTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('instrument_test_type', function(Blueprint $table)
-        {
-            $table->integer('instrument_id')->unsigned();
-            $table->integer('test_type_id')->unsigned();
-
-            $table->foreign('instrument_id')->references('id')->on('instruments');
-            $table->foreign('test_type_id')->references('id')->on('test_types');
-            $table->unique(['instrument_id','test_type_id']);
-        });
-
         Schema::create('lots', function (Blueprint $table) {
             $table->increments('id');
             $table->string('number', 100)->unique();
@@ -642,63 +646,30 @@ class CreateBlisTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('control_types', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name', 100)->unique();
-            $table->string('description', 400)->nullable();
-            $table->integer('instrument_id')->unsigned();
-
-            $table->foreign('instrument_id')->references('id')->on('instruments');
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::create('control_measures', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('unit');
-            $table->integer('control_type_id')->unsigned();
-            $table->integer('measure_type_id')->unsigned();
-
-            $table->foreign('measure_type_id')->references('id')->on('measure_types');
-            $table->foreign('control_type_id')->references('id')->on('control_types');
-            $table->softDeletes();
-            $table->timestamps();
-        });
-
-        Schema::create('control_measure_ranges', function (Blueprint $table) {
-            $table->increments('id');
-            $table->decimal('upper_range', 6, 2)->nullable();
-            $table->decimal('lower_range', 6, 2)->nullable();
-            $table->string('display', 100)->nullable();
-            $table->integer('control_measure_id')->unsigned();
-
-            $table->foreign('control_measure_id')->references('id')->on('control_measures');
-            $table->softDeletes();
-            $table->timestamps();
-        });
-
         Schema::create('control_tests', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('lot_id')->unsigned();
-            $table->integer('entered_by')->unsigned();
-            $table->integer('control_id')->unsigned();
-            $table->integer('control_type_id')->unsigned();
+            $table->integer('tested_by')->unsigned()->nullable();
+            $table->integer('test_type_id')->unsigned();
+            $table->integer('test_status_id')->unsigned()->default(\App\Models\TestStatus::pending);
+            $table->timestamp('time_started')->nullable();
+            $table->timestamp('time_completed')->nullable();
+            $table->timestamp('time_verified')->nullable();
 
-            $table->foreign('control_type_id')->references('id')->on('control_types');
-            $table->foreign('entered_by')->references('id')->on('users');
+            $table->foreign('test_type_id')->references('id')->on('test_types');
             $table->foreign('lot_id')->references('id')->on('lots');
+            $table->foreign('test_status_id')->references('id')->on('test_statuses');
             $table->timestamps();
         });
 
         Schema::create('control_results', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('results');
-            $table->integer('control_measure_id')->unsigned();
+            $table->string('result');
+            $table->integer('measure_id')->unsigned();
             $table->integer('control_test_id')->unsigned();
 
             $table->foreign('control_test_id')->references('id')->on('control_tests');
-            $table->foreign('control_measure_id')->references('id')->on('control_measures');
+            $table->foreign('measure_id')->references('id')->on('measures');
             $table->timestamps();
         });
 
@@ -875,6 +846,7 @@ class CreateBlisTables extends Migration
         Schema::dropIfExists('antibiotics');
         Schema::dropIfExists('results');
         Schema::dropIfExists('specimen_rejections');
+        Schema::dropIfExists('specimen_type_test_type');
         Schema::dropIfExists('tests');
         Schema::dropIfExists('specimens');
         Schema::dropIfExists('referrals');

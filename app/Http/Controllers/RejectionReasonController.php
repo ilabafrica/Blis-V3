@@ -31,7 +31,7 @@ class RejectionReasonController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required',
+            'display' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -39,7 +39,7 @@ class RejectionReasonController extends Controller
             return response()->json($validator);
         } else {
             $rejectionReason = new RejectionReason;
-            $rejectionReason->name = $request->input('name');
+            $rejectionReason->display = $request->input('display');
 
             try {
                 $rejectionReason->save();
@@ -74,7 +74,7 @@ class RejectionReasonController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => 'required',
+            'display' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -82,7 +82,7 @@ class RejectionReasonController extends Controller
             return response()->json($validator, 422);
         } else {
             $rejectionReason = RejectionReason::findOrFail($id);
-            $rejectionReason->name = $request->input('name');
+            $rejectionReason->display = $request->input('display');
 
             try {
                 $rejectionReason->save();

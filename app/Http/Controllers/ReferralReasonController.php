@@ -31,7 +31,7 @@ class ReferralReasonController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required',
+            'display' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -39,7 +39,7 @@ class ReferralReasonController extends Controller
             return response()->json($validator);
         } else {
             $referralReason = new ReferralReason;
-            $referralReason->name = $request->input('name');
+            $referralReason->display = $request->input('display');
 
             try {
                 $referralReason->save();
@@ -74,7 +74,7 @@ class ReferralReasonController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => 'required',
+            'display' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -82,7 +82,7 @@ class ReferralReasonController extends Controller
             return response()->json($validator, 422);
         } else {
             $referralReason = ReferralReason::findOrFail($id);
-            $referralReason->name = $request->input('name');
+            $referralReason->display = $request->input('display');
 
             try {
                 $referralReason->save();

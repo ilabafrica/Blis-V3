@@ -14,4 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Encounter extends Model
 {
+    public function patient()
+    {
+        return $this->belongsTo('App\Models\Patient');
+    }
 }

@@ -52,17 +52,25 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('adhocoption', 'AdhocOptionController');
         Route::resource('code', 'CodeController');
         Route::resource('counter', 'CounterController');
-        Route::resource('facility', 'FacilityController');
+        Route::resource('organization', 'OrganizationController');
     });
 
     // Lab Sections|Specimen Types|Specimen Rejection|Test Types|Drugs|Organisms
     Route::group(['middleware' => ['permission:manage_test_catalog']], function () {
         Route::resource('susceptibilitybreakpoint', 'SusceptibilityBreakPointController');
         Route::resource('susceptibilityrange', 'SusceptibilityRangeController');
-        Route::resource('testtypemapping', 'TestTypeMappingController');
+        Route::get('testtypemapping', 'TestTypeMappingController@index');
+        Route::post('testtypemapping/update', 'TestTypeMappingController@update');
+        Route::post('testtypemapping/create', 'TestTypeMappingController@create');
+
         Route::resource('testphase', 'TestPhaseController');
         Route::resource('teststatus', 'TestStatusController');
         Route::resource('testtypecategory', 'TestTypeCategoryController');
+        Route::get('specimentypetesttype', 'SpecimenTypeTestTypeController@index');
+        Route::get('specimentypetesttype/attach', 'SpecimenTypeTestTypeController@attach');
+        Route::get('specimentypetesttype/detach', 'SpecimenTypeTestTypeController@detach');
+        Route::post('specimentypetesttype/create', 'SpecimenTypeTestTypeController@create');
+
         Route::resource('testtype', 'TestTypeController');
         Route::resource('rejectionreason', 'RejectionReasonController');
         Route::resource('interpretation', 'InterpretationController');
@@ -112,7 +120,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('encounter', 'EncounterController');
         Route::resource('gender', 'GenderController');
         Route::resource('name', 'NameController');
-        Route::resource('organization', 'OrganizationController');
         Route::resource('patient', 'PatientController');
     });
 

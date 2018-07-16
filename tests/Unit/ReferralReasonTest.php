@@ -18,10 +18,10 @@ class ReferralReasonTest extends TestCase
 	use DatabaseMigrations;
 	public function setVariables(){
 		$this->referralReasonData=array(
-			"name"=>'Sample String',
+			"display"=>'Sample String',
 		);
 		$this->updatedReferralReasonData=array(
-			"name"=>'Sample updated String',
+			"display"=>'Sample updated String',
 		);
 	}
 
@@ -29,7 +29,7 @@ class ReferralReasonTest extends TestCase
 	{
 		$response=$this->post('/api/referralreason',$this->referralReasonData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testListReferralReason()
@@ -43,7 +43,7 @@ class ReferralReasonTest extends TestCase
 		$response=$this->post('/api/referralreason',$this->referralReasonData);
 		$response=$this->get('/api/referralreason/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testUpdateReferralReason()
@@ -51,7 +51,7 @@ class ReferralReasonTest extends TestCase
 		$response=$this->post('/api/referralreason',$this->referralReasonData);
 		$response=$this->put('/api/referralreason/1',$this->updatedReferralReasonData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testDeleteReferralReason()

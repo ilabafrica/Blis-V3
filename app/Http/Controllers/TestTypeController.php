@@ -10,13 +10,21 @@ namespace App\Http\Controllers;
  */
 
 use App\Models\TestType;
+use App\Models\SpecimenTypeTestType;
 use Illuminate\Http\Request;
 
 class TestTypeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $testType = TestType::orderBy('id', 'ASC')->paginate(20);
+        if ($request->query('search')) {
+            $search = $request->query('search');
+            $testType = TestType::where('name', 'LIKE', "%{$search}%")->orderBy('id', 'ASC')
+                ->with('testtypecategory')
+                ->paginate(10);
+        } else {
+            $testType = TestType::with('testtypecategory')->orderBy('id', 'ASC')->paginate(20);
+        }
 
         return response()->json($testType);
     }
@@ -46,11 +54,14 @@ class TestTypeController extends Controller
 
             try {
                 $testType->save();
-
-                return response()->json($testType);
+                $testTypeId = $testType->id;
+                $testTypeData = array('testType' => $testType, 'testTypeId' => $testTypeId );
+                return response()->json($testTypeData);
+                
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
+            
         }
     }
 
