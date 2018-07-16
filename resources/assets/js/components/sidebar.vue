@@ -19,14 +19,12 @@
       </v-list-tile-action>
       <v-list-tile-title>Home</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile>
+    <v-list-tile to="/patients/patient">
       <v-list-tile-action>
         <v-icon>assignment_ind</v-icon>
       </v-list-tile-action>
       <v-list-tile-title>
-        <router-link to="/patients/patient">
-          <a>Patients</a>
-        </router-link>
+          Patients
       </v-list-tile-title>
     </v-list-tile>
     <v-list-group prepend-icon="settings" value="true">

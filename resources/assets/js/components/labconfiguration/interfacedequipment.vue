@@ -3,9 +3,14 @@
     <v-dialog v-model="dialog" max-width="500px">
       <v-btn slot="activator" color="primary" dark class="mb-2">New Instrument</v-btn>
       <v-card>
-        <v-card-title>
-          <span class="headline">{{ formTitle }}</span>
-        </v-card-title>
+        <v-toolbar dark color="primary" class="elevation-0">
+          <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn round outline color="blue lighten-1" flat @click.native="close">
+            Cancel
+            <v-icon right dark>close</v-icon>
+          </v-btn>
+        </v-toolbar>
         <v-form ref="form" v-model="valid" lazy-validation>
         <v-card-text>
           <v-container grid-list-md>
@@ -17,13 +22,14 @@
                   label="Name">
                 </v-text-field>
               </v-flex>
+              <v-btn round outline xs12 sm6 color="blue darken-1" :disabled="!valid" @click.native="save">
+                Save
+                <v-icon right dark>cloud_upload</v-icon>
+              </v-btn>
             </v-layout>
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="save">Save</v-btn>
         </v-card-actions>
         </v-form>
       </v-card>

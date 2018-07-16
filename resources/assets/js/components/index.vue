@@ -3,7 +3,7 @@
     <v-navigation-drawer v-if='isAuthenticated && isProfileLoaded' v-model="drawer" fixed app>
       <sidebar></sidebar>
     </v-navigation-drawer>
-    <v-toolbar v-if="isAuthenticated && isProfileLoaded" color="primary" dark fixed app>
+    <v-toolbar v-if="isAuthenticated && isProfileLoaded" color="primary" class="elevation-1" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Application</v-toolbar-title>
       <v-spacer></v-spacer>

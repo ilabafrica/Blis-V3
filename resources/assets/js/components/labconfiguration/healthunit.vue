@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog" max-width="500px">
       <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
       <v-card>
-        <v-toolbar dark color="primary">
+        <v-toolbar dark color="primary" class="elevation-0">
           <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn round outline color="blue lighten-1" flat @click.native="close">
