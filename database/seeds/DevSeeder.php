@@ -20,6 +20,7 @@ use App\Models\GramStainRange;
 use App\Models\RejectionReason;
 use App\Models\SusceptibilityBreakPoint;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 class DevSeeder extends Seeder
 {
@@ -31,21 +32,21 @@ class DevSeeder extends Seeder
     public function run()
     {
         $rejection_reasons_array = [
-          ["name" => "Inadequate sample volume"],
-          ["name" => "Haemolysed sample"],
-          ["name" => "Specimen without lab request form"],
-          ["name" => "No test ordered on  lab request form of sample"],
-          ["name" => "No sample label or identifier"],
-          ["name" => "Wrong sample label"],
-          ["name" => "Unclear sample label"],
-          ["name" => "Sample in wrong container"],
-          ["name" => "Damaged/broken/leaking sample container"],
-          ["name" => "Too old sample"],
-          ["name" => "Date of sample collection not specified"],
-          ["name" => "Time of sample collection not specified"],
-          ["name" => "Improper transport media"],
-          ["name" => "Sample type unacceptable for required test"],
-          ["name" => "Other"],
+          ["display" => "Inadequate sample volume"],
+          ["display" => "Haemolysed sample"],
+          ["display" => "Specimen without lab request form"],
+          ["display" => "No test ordered on  lab request form of sample"],
+          ["display" => "No sample label or identifier"],
+          ["display" => "Wrong sample label"],
+          ["display" => "Unclear sample label"],
+          ["display" => "Sample in wrong container"],
+          ["display" => "Damaged/broken/leaking sample container"],
+          ["display" => "Too old sample"],
+          ["display" => "Date of sample collection not specified"],
+          ["display" => "Time of sample collection not specified"],
+          ["display" => "Improper transport media"],
+          ["display" => "Sample type unacceptable for required test"],
+          ["display" => "Other"],
         ];
         foreach ($rejection_reasons_array as $rejection_reason)
         {
@@ -281,7 +282,6 @@ class DevSeeder extends Seeder
         ];
 
         $instrument = Instrument::create($instrumentsData);
-        $instrument->testTypes()->attach([$testTypeWBC->id]);
 
         $this->command->info("Instruments table seeded");
 
@@ -8373,5 +8373,12 @@ class DevSeeder extends Seeder
             }
         }
         $this->command->info("Results Seeded");
+
+        \App\ThirdPartyApp::create([
+            'id' => (string) Str::uuid(),
+            'name' => 'Default EMR',
+            'email' => 'emr@blis.local',
+            'password' =>  bcrypt('password'),
+        ]);
     }
 }
