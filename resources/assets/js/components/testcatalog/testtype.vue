@@ -48,151 +48,229 @@
                         </tr>
                       </template>
                     </v-data-table>
-
-              
               <v-divider></v-divider>
-              <v-layout row wrap v-if="editLevel === 3">
-                <v-list-tile-title>Measures</v-list-tile-title>
-                  <v-flex xs3 sm3 md3>
-                    <v-text-field
-                      v-model="measure.measure_name"
-                      :rules="[v => !!v || 'Measure Name is Required']"
-                      label="Name">
-                    </v-text-field>
-                  </v-flex>
-                  <v-flex xs3 sm3 md3>
-                    <v-select
-                      :items="measure_types"
-                      v-model="measure.measure_type_id"
-                      overflow
-                      item-text="name"
-                      item-value="id"
-                      label="Measure Type"
-                    ></v-select>
-                  </v-flex>
-                  <v-flex xs3 sm3 md3>
-                    <v-text-field
-                      v-model="measure.unit"
-                      :rules="[v => !!v || 'Unit is Required']"
-                      label="Unit">
-                    </v-text-field>
-                  </v-flex>
-                  <v-flex xs3 sm3 md3>
-                    <v-text-field
-                      v-model="measure.measure_description"
-                      :rules="[v => !!v || 'Description is Required']"
-                      label="Description">
-                    </v-text-field>
-                  </v-flex>
-                  Range Values
-                  <v-container grid-list-md text-xs-center>
-                    <v-layout row wrap v-if="measure.measure_type_id === 1" v-for="(numeric, i) in numerics" :key="i">
+              <v-layout child-flex row wrap v-if="editLevel === 3">
+                <v-dialog v-model="dialog3" max-width="500px">
+                  <v-card>
+                    <v-card-title>
+                      Measure Details
+                    </v-card-title>
+                    <v-card-text>
+                        <v-flex xs12 sm12 md12>
+                          <v-text-field
+                            v-model="measurefield.name"
+                            :rules="[v => !!v || 'Measure Name is Required']"
+                            label="Name">
+                          </v-text-field>
+                        </v-flex>
+                        <v-flex xs12 sm12 md12>
+                          <v-select
+                            :items="measure_types"
+                            v-model="measurefield.measure_type_id"
+                            overflow
+                            item-text="name"
+                            item-value="id"
+                            label="Measure Type"
+                          ></v-select>
+                        </v-flex>
+                        <v-flex xs12 sm12 md12>
+                          <v-text-field
+                            v-model="measurefield.unit"
+                            :rules="[v => !!v || 'Unit is Required']"
+                            label="Unit">
+                          </v-text-field>
+                        </v-flex>
+                        <v-flex xs12 sm12 md12>
+                          <v-text-field
+                            v-model="measurefield.description"
+                            :rules="[v => !!v || 'Description is Required']"
+                            label="Description">
+                          </v-text-field>
+                        </v-flex>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-btn color="primary" flat @click.stop="dialog3=false">Close</v-btn>
+                      <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveMeasure">Save</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                <v-dialog v-model="dialog4" max-width="1000px">
+                  <v-card>
+                    <v-card-title>
+                      Measure Ranges
+                    </v-card-title>
+                    <v-layout v-if="measureRangeID === 1">
+                      <v-btn color="info" dark @click="dialog5 = !dialog5">
+                        Add New Range
+                      </v-btn>
+                      <v-data-table
+                        :headers="rangeheaders"
+                        :items="measureranges"
+                        max-width="900px"
+                        hide-actions
+                        v-if="editLevel === 3">
+                        <template slot="items" slot-scope="row">
+                          <tr :key="row.item.id">
+                            <td>{{row.item.display}}</td>
+                            <td>{{row.item.age_min}}</td>
+                            <td>{{row.item.age_max}}</td>
+                            <td>{{row.item.gender_id}}</td>
+                            <td>{{row.item.low}}</td>
+                            <td>{{row.item.high}}</td>
+                          </tr>
+                        </template>
+                      </v-data-table>
+                    </v-layout>
+
+                    <v-layout v-if="measureRangeID != 1">
+                      <v-btn color="info" dark @click="dialog6 = !dialog6">
+                        Add New Range
+                      </v-btn>
+                      <v-data-table
+                        :headers="alpharangeheaders"
+                        :items="measureranges"
+                        max-width="900px"
+                        hide-actions
+                        v-if="editLevel === 3">
+                        <template slot="items" slot-scope="row">
+                          <tr :key="row.item.id">
+                            <td>{{row.item.display}}</td>
+                            <td>{{row.item.interpretation_id}}</td>
+                          </tr>
+                        </template>
+                      </v-data-table>
+                    </v-layout>
+
+                    <v-card-actions>
+                      <v-btn color="primary" flat @click.stop="dialog4=false">Close</v-btn>
+                      <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveMeasure">Save</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                <v-dialog v-model="dialog5" max-width="500px">
+                  <v-card>
+                    <v-card-title>
+                      Numeric Range Details
+                    </v-card-title>
+                    <v-card-text>
                       
-                      <v-flex xs2 sm2 d-flex>
+                        <v-flex xs12 sm12 d-flex>
                         <v-select
-                          v-model="numeric.age_range"
+                          v-model="numerics.age_range"
                           :items="age_range"
                           label="Age Range"
                         ></v-select>
-                      </v-flex>:
-                      <v-flex xs2 sm2 md2>
+                      </v-flex>
+                      <v-flex xs12 sm12 md12>
                         <v-text-field
-                          v-model="numeric.age_min"
+                          v-model="numerics.age_min"
                           :rules="[v => !!v || 'Lower age limit is Required']"
                           label="Lower Age Limit">
                         </v-text-field>
-                      </v-flex>-
-                      <v-flex xs2 sm2 md2>
+                      </v-flex>
+                      <v-flex xs12 sm12 md12>
                         <v-text-field
-                          v-model="numeric.age_max"
+                          v-model="numerics.age_max"
                           :rules="[v => !!v || 'Upper age limit is Required']"
                           label="Upper Age Limit">
                         </v-text-field>
                       </v-flex>
-                      <v-flex xs2 sm2 d-flex>
+                      <v-flex xs12 sm12 d-flex>
                         <v-select
-                          v-model="numeric.gender_id"
+                          v-model="numerics.gender_id"
                           :items="gender"
                           label="Gender"
                           item-text="display"
                           item-value="id"
                         ></v-select>
                       </v-flex>
-                      <v-flex xs2 sm2 md2>
+                      <v-flex xs12 sm12 md12>
                         <v-text-field
-                          v-model="numeric.low"
+                          v-model="numerics.low"
                           :rules="[v => !!v || 'Lower Measure limit is Required']"
                           label="Lower Measure Range">
                         </v-text-field>
-                      </v-flex>-
-                      <v-flex xs2 sm2 md2>
+                      </v-flex>
+                      <v-flex xs12 sm12 md12>
                         <v-text-field
-                          v-model="numeric.high"
+                          v-model="numerics.high"
                           :rules="[v => !!v || 'Upper Measure limit is Required']"
                           label="Upper Measure Range">
                         </v-text-field>
                       </v-flex>
-                      <v-btn color="error" @click="removeNumericRange(i)">
-                          Remove Range
-                      </v-btn>
-                    </v-layout>
-                    <v-layout row wrap v-if="measure.measure_type_id === 2" v-for="(alphanumeric, i) in alphanumerics" :key="i">
-                      <v-flex xs2 sm2 md2>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-btn color="primary" flat @click.stop="dialog3=false">Close</v-btn>
+                      <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveMeasureRange">Save</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                <v-dialog v-model="dialog6" max-width="500px">
+                  <v-card>
+                    <v-card-title>
+                      Range Details
+                    </v-card-title>
+                    <v-card-text>
+                      <v-flex xs12 sm12 md12>
                         <v-text-field
-                          v-model="alphanumeric.display"
+                          v-model="alphanumerics.display"
                           :rules="[v => !!v || 'Value is Required']"
                           label="Value">
                         </v-text-field>
                       </v-flex>
-                      <v-flex xs2 sm2 d-flex>
+                      <v-flex xs12 sm12 d-flex>
                         <v-select
-                          v-model="alphanumeric.interpretation_id"
+                          v-model="alphanumerics.interpretation_id"
                           :items="interpretation"
                           label="Interpretation"
                           item-text="name"
                           item-value="id"
                         ></v-select>
                       </v-flex>
-                      <v-btn color="error" @click="removeAlphanumericRange(i)">
-                          Remove Range
-                      </v-btn>
-                    </v-layout>
-                    <v-layout row wrap v-if="measure.measure_type_id === 3" v-for="(multialphanumeric, i) in multialphanumerics" :key="i">
-                      <v-flex xs2 sm2 md2>
-                        <v-text-field
-                          v-model="multialphanumeric.display"
-                          :rules="[v => !!v || 'Value is Required']"
-                          label="Value">
-                        </v-text-field>
-                      </v-flex>
-                      <v-flex xs2 sm2 d-flex>
-                        <v-select
-                          v-model="multialphanumeric.interpretation_id"
-                          :items="interpretation"
-                          label="Interpretation"
-                          item-text="name"
-                          item-value="id"
-                        ></v-select>
-                      </v-flex>
-                      <v-btn color="error" @click="removeMultiAlphanumericRange(i)">
-                          Remove Range
-                      </v-btn>
-                    </v-layout>
-                  </v-container>
-                  <v-btn color="info" v-if="measure.measure_type_id === 1" @click="addNumericRange">
-                    Add New Range
-                  </v-btn>
-                  
-                  <v-btn color="info" v-if="measure.measure_type_id === 2" @click="addAlphanumericRange">
-                    Add New Range
-                  </v-btn>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-btn color="primary" flat @click.stop="dialog6=false">Close</v-btn>
+                      <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveMeasureRange">Save</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
 
-                  <v-btn color="info" v-if="measure.measure_type_id === 3" @click="addMultiAlphanumericRange">
-                    Add New Range
+
+
+                
+                <v-list-tile-title>Measures</v-list-tile-title>
+                
+                  <v-btn color="info" dark @click.stop="dialog3 = true" v-if="editLevel === 3">
+                    Add New Measure
                   </v-btn>
+                  <v-divider></v-divider>
+                  <v-layout child-flex>
+                      <v-data-table
+                        :headers="measureheaders"
+                        :items="measures"
+                        hide-actions
+                        class="elevation-1"
+                      >
+                        <template slot="items" slot-scope="props">
+                          <td>{{ props.item.name }}</td>
+                          <td class="text-xs-left">{{ props.item.unit }}</td>
+                          <td class="text-xs-left">{{ props.item.description }}</td>
+                          <td class="justify-left layout px-0">
+                            <v-btn icon class="mx-0" @click="editMeasure(props.item)">
+                              <v-icon color="teal">edit</v-icon>
+                            </v-btn>
+                            <v-btn icon class="mx-0" @click="deleteMeasure(props.item)">
+                              <v-icon color="pink">delete</v-icon>
+                            </v-btn>
+                            <v-btn color="info" dark @click="viewMeasureRanges(props.item)" v-if="editLevel === 3">
+                              Measure Ranges
+                            </v-btn>
+                          </td>
+                        </template>
+                      </v-data-table>
+                    </v-layout>
               </v-layout>
             </v-container>
-
           </v-card-text>
 
           <div style="flex: 1 1 auto;"></div>
@@ -204,7 +282,6 @@
             Test Details
           </v-card-title>
           <v-card-text>
-            
               <v-flex xs12 sm12 md12>
                 <v-text-field
                   v-model="newTest.name"
@@ -237,7 +314,6 @@
                   label="Lab Section"
                 ></v-select>
               </v-flex>
-
           </v-card-text>
           <v-card-actions>
             <v-btn color="primary" flat @click.stop="dialog2=false">Close</v-btn>
@@ -259,7 +335,6 @@
         hide-details>
       </v-text-field>
     </v-card-title>
-
     <v-data-table
       :headers="headers"
       :items="testtypes"
@@ -298,12 +373,18 @@
     data: () => ({
       dialog: false,
       dialog2: false,
+      dialog3: false,
+      dialog4: false,
+      dialog5: false,
+      dialog6: false,
       valid: true,
       dialog: false,
       delete: false,
       saving: false,
       editLevel: 1,
       updating: false,
+      measureRangeID: 0,
+      RangeID: 0,
 
       newTest: {
         name: '',
@@ -322,26 +403,43 @@
       specimen_type: [],
       testtypemapping:[],
 
-      measure: {
-        measure_name: '',
+      measurefield: {
+        test_type_id: '',
         measure_type_id: '',
+        name: '',
         unit: '',
-        measure_description: '',
+        description: '',
       },
 
-      numerics: [],
-      alphanumerics: [],
-      multialphanumerics: [],
+      numerics:{
+        age_range: '',
+        age_min: '',
+        age_max: '',
+        gender_id: '',
+        low: '',
+        high: '',
+      },
+      alphanumerics:{
+        display: '',
+        interpretation_id: '',
+      },
+      multialphanumerics:{
+        display: '',
+        interpretation_id: '',
+      },
+
+
       age_range: ['Years', 'Months', 'Days'],
       gender: [],
       interpretation: [],
       measure_types: [],
+      measureranges: [],
 
       specimentypes: [],
       testtypes: [],
+      measures: [],
       testtypecategory: [],
       items: [],
-      measures: [],
       
       search: '',
       query: '',
@@ -351,13 +449,32 @@
         total: 0,
         visible: 10
       },
+
       headers: [
         { text: 'Name', value: 'name' },
         { text: 'Description', value: 'description' },
         { text: 'Target Turnaround Time', value: 'targetTAT' },
         { text: 'Test Category', value: 'test_type_category_id' },
         { text: 'Actions', value: 'name', sortable: false }
+      ],
+      rangeheaders: [
+        { text: 'Display', value: 'display' },
+        { text: 'Minimum Age (Years)', value: 'age_min' },
+        { text: 'Maximum Age (Years)', value: 'age_max' },
+        { text: 'Gender', value: 'gender_id' },
+        { text: 'Lower limit', value: 'low' },
+        { text: 'Higher limit', value: 'high' },
+      ],
+      alpharangeheaders: [
+        { text: 'Display', value: 'display' },
+        { text: 'Interpretation', value: 'interpretation_id' },
+      ],
+      measureheaders: [
+        { text: 'Name', value: 'name' },
+        { text: 'Unit', value: 'unit' },
+        { text: 'Description', value: 'description', sortable: false }
       ]
+
     }),
 
     computed: {
@@ -465,36 +582,15 @@
         .catch(error => {
           console.log(error.response)
         })
-      },
 
-      addNumericRange: function () {
-        this.numerics.push(
-            {}
-          );
-      },
-
-      removeNumericRange: function (i) {
-        this.numerics.splice(i, 1)
-      },
-
-      addAlphanumericRange: function(){
-        this.alphanumerics.push(
-              {},
-          );
-      },
-
-      removeAlphanumericRange: function (i) {
-        this.alphanumerics.splice(i, 1)
-      },
-
-      addMultiAlphanumericRange: function(){
-        this.multialphanumerics.push(
-              {},
-          );
-      },
-
-      removeMultiAlphanumericRange: function (i) {
-        this.multialphanumerics.splice(i, 1)
+        apiCall({url: '/api/measurerange', method: 'GET' })
+        .then(resp => {
+          console.log(resp)
+          this.measureranges = resp;
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
       },
 
       editItem (item) {
@@ -502,6 +598,33 @@
         this.editLevel = this.testtypes.indexOf(item)
         this.newTest = Object.assign({}, item)
         this.dialog2 = true
+      },
+
+      editMeasure (item) {
+        this.updating = true
+        this.itemIndex = this.measures.indexOf(item)
+        this.measurefield = Object.assign({}, item)
+        this.editLevel = 3
+        this.dialog3 = true
+      },
+
+      viewMeasureRanges (item){
+        this.measureRangeMapper(item);
+        console.log('item id')
+        console.log(item.id)
+        this.RangeID = item.id
+        this.itemIndex = this.measures.indexOf(item)
+        if(item.measure_type_id === 1){
+          this.measureRangeID = 1
+        }else if(item.measure_type_id === 2){
+          this.measureRangeID = 2
+        }else if(item.measure_type_id === 3){
+          this.measureRangeID = 3
+        }else{
+          this.measureRangeID = 4
+        }
+        this.dialog4 = true
+
       },
 
       deleteItem (item) {
@@ -512,6 +635,24 @@
           const index = this.testtypes.indexOf(item)
           this.testtypes.splice(index, 1)
           apiCall({url: '/api/testtype/'+item.id, method: 'DELETE' })
+          .then(resp => {
+            console.log(resp)
+          })
+          .catch(error => {
+            console.log(error.response)
+          })
+        }
+
+      },
+
+      deleteMeasure (item) {
+
+        confirm('Are you sure you want to delete this item?') && (this.delete = true)
+
+        if (this.delete) {
+          const index = this.measures.indexOf(item)
+          this.measures.splice(index, 1)
+          apiCall({url: '/api/measure/'+item.id, method: 'DELETE' })
           .then(resp => {
             console.log(resp)
           })
@@ -552,18 +693,29 @@
         })
       },
 
+      measureMapper: function(x){
+        x = this.newTest.id;
+        this.measures = this.measures.filter(function(measureID){
+          return measureID.test_type_id === x;
+        })
+      },
+
+      measureRangeMapper: function(item){
+        this.measureranges = this.measureranges.filter(function(measureID){
+          return measureID.measure_id === item.id;
+        })
+      },
+
       saveTest () {
 
         this.saving = true;
         // update
         if (this.updating) {
-
           apiCall({url: '/api/testtype/'+this.newTest.id, data: this.newTest, method: 'PUT' })
           .then(resp => {
             Object.assign(this.testtypes[this.editLevel], this.newTest)
             console.log(resp)
             this.editLevel = 2;
-             
           })
           .catch(error => {
             console.log(error.response)
@@ -604,8 +756,9 @@
           .then(resp => {
             Object.assign(this.testtypes[this.editLevel], this.specimen_type)
             console.log(resp)
-            
+            this.measureMapper();
             this.editLevel = 3;
+            this.updating = false;
           })
           .catch(error => {
             console.log(error.response)
@@ -619,7 +772,42 @@
           .then(resp => {
             Object.assign(this.testtypes[this.editLevel], this.specimen_type)
             console.log(resp)
+            this.measureMapper();
             this.editLevel = 3;
+            this.updating = false;
+          })
+          .catch(error => {
+            console.log(error.response)
+          })
+        }
+      },
+
+      saveMeasure(){
+        this.saving = true;
+        // update
+        if (this.updating) {
+
+          apiCall({url: '/api/measure/'+this.measurefield.id, data: this.measurefield, method: 'PUT' })
+          .then(resp => {
+            Object.assign(this.measures[this.itemIndex], this.measurefield)
+            console.log(resp)
+            this.dialog3 = false;
+          })
+          .catch(error => {
+            console.log(error.response)
+          })
+
+        //store
+        } else {
+        this.measurefield.test_type_id = this.newTest.id;
+
+          apiCall({url: '/api/measure', data: this.measurefield, method: 'POST' })
+          .then(resp => {
+            this.measures.push(this.measurefield)
+            console.log('resp')
+            console.log(resp)
+            //this.saveMeasureRanges();
+            this.dialog3 = false;
           })
           .catch(error => {
             console.log(error.response)
@@ -629,66 +817,65 @@
 
       saveMeasureDetails (){
         this.saving = true;
-        this.measure.test_type_id = this.newTest.id;
-            apiCall({url: '/api/measure', data: this.measure, method: 'POST' })
-            .then(resp => {
-              //this.numerics.measure_id = resp.measureId;
-              if(this.measure.measure_type_id === 1){
-                  for (var i = this.numerics.length - 1; i >= 0; i--) {
-                        this.numerics[i].measure_id = resp.measureId;
-                  }
-                }
-              else if(this.measure.measure_type_id === 2){
-                  for (var i = this.alphanumerics.length - 1; i >= 0; i--) {
-                    this.alphanumerics[i].measure_id = resp.measureId;
-                  }
-                }
-              else{
-                for (var i = this.multialphanumerics.length - 1; i >= 0; i--) {
-                    this.multialphanumerics[i].measure_id = resp.measureId;
-                  }
+        for (var i = this.measurefields.length - 1; i >= 0; i--){
+          this.measurefields[i].test_type_id = this.newTest.id;
+        }
+        console.log('measurefields')
+        console.log(this.measurefields)
+
+        apiCall({url: '/api/measure', data: this.measurefields, method: 'POST' })
+        .then(resp => {
+
+            this.measurefields[i].test_type_id = this.newTest.id;
+            
+            if(this.measureRangeID === 1){
+              this.numerics.measure_id = resp.measureId;
               }
-              this.saveMeasureRanges();
-            })
-            .catch(error => {
-              console.log(error.response)
-            })
+            else if(this.measureRangeID === 2){
+              this.alphanumerics.measure_id = resp.measureId;
+              }
+            else{
+              this.multialphanumerics.measure_id = resp.measureId;  
+            }
+
+
+          this.saveMeasureRanges();
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
       },
 
-      saveMeasureRanges(){
-        if(this.measure.measure_type_id === 1){
+      saveMeasureRange(){
+        if(this.measureRangeID === 1){
+          this.numerics.measure_id = this.RangeID
           apiCall({url: '/api/measurerange', data: this.numerics, method: 'POST' })
           .then(resp => {
+            this.measureranges.push(this.numerics)
             console.log('numerics');
             console.log(this.numerics);
           })
           .catch(error => {
             console.log(error.response)
           })
-        }
-        else if(this.measure.measure_type_id === 2){
+          this.dialog5 = false
+        }else{
+          this.alphanumerics.measure_id = this.RangeID
           apiCall({url: '/api/measurerange', data: this.alphanumerics, method: 'POST' })
           .then(resp => {
+            this.measureranges.push(this.alphanumerics)
             console.log('alphanumerics');
             console.log(this.alphanumerics);
           })
           .catch(error => {
             console.log(error.response)
           })
+          this.dialog6 = false
         }
-        else{
-          apiCall({url: '/api/measurerange', data: this.multialphanumerics, method: 'POST' })
-          .then(resp => {
-            console.log('alphanumerics');
-            console.log(this.multialphanumerics);
-          })
-          .catch(error => {
-            console.log(error.response)
-          })
-        }
-        this.resetDialogReferences();
+        
+        /*this.resetDialogReferences();
         this.closeMainDialog();
-        this.saving = false;
+        this.saving = false;*/
       }
     }
   }

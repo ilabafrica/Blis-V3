@@ -18,4 +18,9 @@ class Measure extends Model
     {
         return $this->belongsTo('App\Models\TestType');
     }
+
+    public function measureRanges()
+    {
+        return $this->hasMany('App\Models\MeasureRange');
+    }
 }

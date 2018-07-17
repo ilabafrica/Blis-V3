@@ -104,7 +104,7 @@ class TestTypeController extends Controller
 
             try {
                 $testType->save();
-
+// $testType->load('measures.measureRanges')
                 return response()->json($testType);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
