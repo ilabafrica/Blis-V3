@@ -26,4 +26,9 @@ class Gender extends Model
     {
         return $this->belongsTo('App\Models\Patient');
     }
+
+    public function MeasureRange()
+    {
+        return $this->belongsTo('App\Models\MeasureRange');
+    }
 }

@@ -19,7 +19,7 @@
             <v-spacer></v-spacer>
             <v-toolbar-items>
               <v-btn v-if="editLevel === 2" dark flat @click.native="saveSpecimenTypes">Next</v-btn>
-              <v-btn v-if="editLevel === 3" dark flat @click.native="saveMeasureDetails">Save</v-btn>
+              <v-btn v-if="editLevel === 3" dark flat @click.native="closeMainDialog">Close</v-btn>
             </v-toolbar-items>
           </v-toolbar>
           <v-card-text>
@@ -30,7 +30,8 @@
               <v-divider></v-divider>
                 <v-list-tile-title
                   v-if="editLevel === 2"
-                >Specimen Types</v-list-tile-title>
+                  >Specimen Types
+                </v-list-tile-title>
                   <v-divider></v-divider>
                     <v-data-table
                       :items="specimentypes"
@@ -48,231 +49,222 @@
                         </tr>
                       </template>
                     </v-data-table>
-              <v-divider></v-divider>
-              <v-layout child-flex row wrap v-if="editLevel === 3">
-                <v-dialog v-model="dialog3" max-width="500px">
-                  <v-card>
-                    <v-card-title>
-                      Measure Details
-                    </v-card-title>
-                    <v-card-text>
-                        <v-flex xs12 sm12 md12>
-                          <v-text-field
-                            v-model="measurefield.name"
-                            :rules="[v => !!v || 'Measure Name is Required']"
-                            label="Name">
-                          </v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm12 md12>
-                          <v-select
-                            :items="measure_types"
-                            v-model="measurefield.measure_type_id"
-                            overflow
-                            item-text="name"
-                            item-value="id"
-                            label="Measure Type"
-                          ></v-select>
-                        </v-flex>
-                        <v-flex xs12 sm12 md12>
-                          <v-text-field
-                            v-model="measurefield.unit"
-                            :rules="[v => !!v || 'Unit is Required']"
-                            label="Unit">
-                          </v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm12 md12>
-                          <v-text-field
-                            v-model="measurefield.description"
-                            :rules="[v => !!v || 'Description is Required']"
-                            label="Description">
-                          </v-text-field>
-                        </v-flex>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn color="primary" flat @click.stop="dialog3=false">Close</v-btn>
-                      <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveMeasure">Save</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-                <v-dialog v-model="dialog4" max-width="1000px">
-                  <v-card>
-                    <v-card-title>
-                      Measure Ranges
-                    </v-card-title>
-                    <v-layout v-if="measureRangeID === 1">
-                      <v-btn color="info" dark @click="dialog5 = !dialog5">
-                        Add New Range
-                      </v-btn>
-                      <v-data-table
-                        :headers="rangeheaders"
-                        :items="measureranges"
-                        max-width="900px"
-                        hide-actions
-                        v-if="editLevel === 3">
-                        <template slot="items" slot-scope="row">
-                          <tr :key="row.item.id">
-                            <td>{{row.item.display}}</td>
-                            <td>{{row.item.age_min}}</td>
-                            <td>{{row.item.age_max}}</td>
-                            <td>{{row.item.gender_id}}</td>
-                            <td>{{row.item.low}}</td>
-                            <td>{{row.item.high}}</td>
-                          </tr>
-                        </template>
-                      </v-data-table>
-                    </v-layout>
-
-                    <v-layout v-if="measureRangeID != 1">
-                      <v-btn color="info" dark @click="dialog6 = !dialog6">
-                        Add New Range
-                      </v-btn>
-                      <v-data-table
-                        :headers="alpharangeheaders"
-                        :items="measureranges"
-                        max-width="900px"
-                        hide-actions
-                        v-if="editLevel === 3">
-                        <template slot="items" slot-scope="row">
-                          <tr :key="row.item.id">
-                            <td>{{row.item.display}}</td>
-                            <td>{{row.item.interpretation_id}}</td>
-                          </tr>
-                        </template>
-                      </v-data-table>
-                    </v-layout>
-
-                    <v-card-actions>
-                      <v-btn color="primary" flat @click.stop="dialog4=false">Close</v-btn>
-                      <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveMeasure">Save</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-                <v-dialog v-model="dialog5" max-width="500px">
-                  <v-card>
-                    <v-card-title>
-                      Numeric Range Details
-                    </v-card-title>
-                    <v-card-text>
-                      
-                        <v-flex xs12 sm12 d-flex>
-                        <v-select
-                          v-model="numerics.age_range"
-                          :items="age_range"
-                          label="Age Range"
-                        ></v-select>
-                      </v-flex>
-                      <v-flex xs12 sm12 md12>
-                        <v-text-field
-                          v-model="numerics.age_min"
-                          :rules="[v => !!v || 'Lower age limit is Required']"
-                          label="Lower Age Limit">
-                        </v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm12 md12>
-                        <v-text-field
-                          v-model="numerics.age_max"
-                          :rules="[v => !!v || 'Upper age limit is Required']"
-                          label="Upper Age Limit">
-                        </v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm12 d-flex>
-                        <v-select
-                          v-model="numerics.gender_id"
-                          :items="gender"
-                          label="Gender"
-                          item-text="display"
-                          item-value="id"
-                        ></v-select>
-                      </v-flex>
-                      <v-flex xs12 sm12 md12>
-                        <v-text-field
-                          v-model="numerics.low"
-                          :rules="[v => !!v || 'Lower Measure limit is Required']"
-                          label="Lower Measure Range">
-                        </v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm12 md12>
-                        <v-text-field
-                          v-model="numerics.high"
-                          :rules="[v => !!v || 'Upper Measure limit is Required']"
-                          label="Upper Measure Range">
-                        </v-text-field>
-                      </v-flex>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn color="primary" flat @click.stop="dialog3=false">Close</v-btn>
-                      <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveMeasureRange">Save</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-                <v-dialog v-model="dialog6" max-width="500px">
-                  <v-card>
-                    <v-card-title>
-                      Range Details
-                    </v-card-title>
-                    <v-card-text>
-                      <v-flex xs12 sm12 md12>
-                        <v-text-field
-                          v-model="alphanumerics.display"
-                          :rules="[v => !!v || 'Value is Required']"
-                          label="Value">
-                        </v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm12 d-flex>
-                        <v-select
-                          v-model="alphanumerics.interpretation_id"
-                          :items="interpretation"
-                          label="Interpretation"
-                          item-text="name"
-                          item-value="id"
-                        ></v-select>
-                      </v-flex>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn color="primary" flat @click.stop="dialog6=false">Close</v-btn>
-                      <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveMeasureRange">Save</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-
-
-
-                
-                <v-list-tile-title>Measures</v-list-tile-title>
-                
-                  <v-btn color="info" dark @click.stop="dialog3 = true" v-if="editLevel === 3">
-                    Add New Measure
-                  </v-btn>
-                  <v-divider></v-divider>
-                  <v-layout child-flex>
-                      <v-data-table
-                        :headers="measureheaders"
-                        :items="measures"
-                        hide-actions
-                        class="elevation-1"
-                      >
-                        <template slot="items" slot-scope="props">
-                          <td>{{ props.item.name }}</td>
-                          <td class="text-xs-left">{{ props.item.unit }}</td>
-                          <td class="text-xs-left">{{ props.item.description }}</td>
-                          <td class="justify-left layout px-0">
-                            <v-btn icon class="mx-0" @click="editMeasure(props.item)">
-                              <v-icon color="teal">edit</v-icon>
+                    <v-divider></v-divider>
+                    <v-layout child-flex row wrap v-if="editLevel === 3">
+                      <v-dialog v-model="dialog3" max-width="500px">
+                        <v-card>
+                          <v-card-title>
+                            Measure Details
+                          </v-card-title>
+                          <v-card-text>
+                            <v-flex xs12 sm12 md12>
+                              <v-text-field
+                                v-model="measurefield.name"
+                                :rules="[v => !!v || 'Measure Name is Required']"
+                                label="Name">
+                              </v-text-field>
+                            </v-flex>
+                            <v-flex xs12 sm12 md12>
+                              <v-select
+                                :items="measure_types"
+                                v-model="measurefield.measure_type_id"
+                                overflow
+                                item-text="name"
+                                item-value="id"
+                                label="Measure Type"
+                              ></v-select>
+                            </v-flex>
+                            <v-flex xs12 sm12 md12>
+                              <v-text-field
+                                v-model="measurefield.unit"
+                                :rules="[v => !!v || 'Unit is Required']"
+                                label="Unit">
+                              </v-text-field>
+                            </v-flex>
+                            <v-flex xs12 sm12 md12>
+                              <v-text-field
+                                v-model="measurefield.description"
+                                :rules="[v => !!v || 'Description is Required']"
+                                label="Description">
+                              </v-text-field>
+                            </v-flex>
+                          </v-card-text>
+                          <v-card-actions>
+                            <v-btn color="primary" flat @click.stop="closeMeasureDialogue">Close</v-btn>
+                            <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveMeasure">Save</v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                      <v-dialog v-model="dialog4" max-width="1000px">
+                        <v-card>
+                          <v-card-title>
+                            Measure Ranges
+                          </v-card-title>
+                          <v-layout v-if="measureRangeID === 1">
+                            <v-btn color="info" dark @click="dialog5 = !dialog5">
+                              Add New Range
                             </v-btn>
-                            <v-btn icon class="mx-0" @click="deleteMeasure(props.item)">
-                              <v-icon color="pink">delete</v-icon>
+                            <v-data-table
+                              :headers="rangeheaders"
+                              :items="measureranges"
+                              max-width="900px"
+                              hide-actions
+                              v-if="editLevel === 3">
+                              <template slot="items" slot-scope="row">
+                                <tr :key="row.item.id">
+                                  <td>{{row.item.display}}</td>
+                                  <td>{{row.item.age_min}}</td>
+                                  <td>{{row.item.age_max}}</td>
+                                  <td>{{row.item.gender.display}}</td>
+                                  <td>{{row.item.low}}</td>
+                                  <td>{{row.item.high}}</td>
+                                </tr>
+                              </template>
+                            </v-data-table>
+                          </v-layout>
+                          <v-layout v-if="measureRangeID != 1">
+                            <v-btn color="info" dark @click="dialog6 = !dialog6">
+                              Add New Range
                             </v-btn>
-                            <v-btn color="info" dark @click="viewMeasureRanges(props.item)" v-if="editLevel === 3">
-                              Measure Ranges
-                            </v-btn>
-                          </td>
-                        </template>
-                      </v-data-table>
+                            <v-data-table
+                              :headers="alpharangeheaders"
+                              :items="measureranges"
+                              max-width="900px"
+                              hide-actions
+                              v-if="editLevel === 3">
+                              <template slot="items" slot-scope="row">
+                                <tr :key="row.item.id">
+                                  <td>{{row.item.display}}</td>
+                                  <td>{{row.item.interpretation_id}}</td>
+                                </tr>
+                              </template>
+                            </v-data-table>
+                          </v-layout>
+                          <v-card-actions>
+                            <v-btn color="primary" flat @click.stop="dialog4 = false">Close</v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                      <v-dialog v-model="dialog5" max-width="500px">
+                        <v-card>
+                          <v-card-title>
+                            Numeric Range Details
+                          </v-card-title>
+                          <v-card-text>
+                            
+                              <v-flex xs12 sm12 d-flex>
+                              <v-select
+                                v-model="numerics.age_range"
+                                :items="age_range"
+                                label="Age Range"
+                              ></v-select>
+                            </v-flex>
+                            <v-flex xs12 sm12 md12>
+                              <v-text-field
+                                v-model="numerics.age_min"
+                                :rules="[v => !!v || 'Lower age limit is Required']"
+                                label="Lower Age Limit">
+                              </v-text-field>
+                            </v-flex>
+                            <v-flex xs12 sm12 md12>
+                              <v-text-field
+                                v-model="numerics.age_max"
+                                :rules="[v => !!v || 'Upper age limit is Required']"
+                                label="Upper Age Limit">
+                              </v-text-field>
+                            </v-flex>
+                            <v-flex xs12 sm12 d-flex>
+                              <v-select
+                                v-model="numerics.gender_id"
+                                :items="gender"
+                                label="Gender"
+                                item-text="display"
+                                item-value="id"
+                              ></v-select>
+                            </v-flex>
+                            <v-flex xs12 sm12 md12>
+                              <v-text-field
+                                v-model="numerics.low"
+                                :rules="[v => !!v || 'Lower Measure limit is Required']"
+                                label="Lower Measure Range">
+                              </v-text-field>
+                            </v-flex>
+                            <v-flex xs12 sm12 md12>
+                              <v-text-field
+                                v-model="numerics.high"
+                                :rules="[v => !!v || 'Upper Measure limit is Required']"
+                                label="Upper Measure Range">
+                              </v-text-field>
+                            </v-flex>
+                          </v-card-text>
+                          <v-card-actions>
+                            <v-btn color="primary" flat @click.stop="closeMeasureRangeDialog">Close</v-btn>
+                            <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveMeasureRange">Save</v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                      <v-dialog v-model="dialog6" max-width="500px">
+                        <v-card>
+                          <v-card-title>
+                            Range Details
+                          </v-card-title>
+                          <v-card-text>
+                            <v-flex xs12 sm12 md12>
+                              <v-text-field
+                                v-model="alphanumerics.display"
+                                :rules="[v => !!v || 'Value is Required']"
+                                label="Value">
+                              </v-text-field>
+                            </v-flex>
+                            <v-flex xs12 sm12 d-flex>
+                              <v-select
+                                v-model="alphanumerics.interpretation_id"
+                                :items="interpretation"
+                                label="Interpretation"
+                                item-text="name"
+                                item-value="id"
+                              ></v-select>
+                            </v-flex>
+                          </v-card-text>
+                          <v-card-actions>
+                            <v-btn color="primary" flat @click.stop="closeAlphaMeasureRangeDialog">Close</v-btn>
+                            <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveMeasureRange">Save</v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                      <v-list-tile-title>Measures</v-list-tile-title>
+                        <v-btn color="info" dark @click.stop="dialog3 = true" v-if="editLevel === 3">
+                          Add New Measure
+                        </v-btn>
+                        <v-divider></v-divider>
+                        <v-layout child-flex>
+                          <v-data-table
+                            :headers="measureheaders"
+                            :items="measures"
+                            hide-actions
+                            class="elevation-1"
+                          >
+                            <template slot="items" slot-scope="props">
+                              <td>{{ props.item.name }}</td>
+                              <td class="text-xs-left">{{ props.item.unit }}</td>
+                              <td class="text-xs-left">{{ props.item.description }}</td>
+                              <td class="justify-left layout px-0">
+                                <v-btn icon class="mx-0" @click="editMeasure(props.item)">
+                                  <v-icon color="teal">edit</v-icon>
+                                </v-btn>
+                                <v-btn icon class="mx-0" @click="deleteMeasure(props.item)">
+                                  <v-icon color="pink">delete</v-icon>
+                                </v-btn>
+                                <v-btn color="info" dark @click="viewMeasureRanges(props.item)" v-if="editLevel === 3">
+                                  Measure Ranges
+                                </v-btn>
+                              </td>
+                            </template>
+                          </v-data-table>
+                        </v-layout>
                     </v-layout>
-              </v-layout>
             </v-container>
           </v-card-text>
-
           <div style="flex: 1 1 auto;"></div>
         </v-card>
       </v-dialog>
@@ -282,47 +274,46 @@
             Test Details
           </v-card-title>
           <v-card-text>
-              <v-flex xs12 sm12 md12>
-                <v-text-field
-                  v-model="newTest.name"
-                  :rules="[v => !!v || 'Name is Required']"
-                  label="Name">
-                </v-text-field>
-              </v-flex>
-              <v-flex xs12 sm12 md12>
-                <v-text-field
-                  v-model="newTest.description"
-                  :rules="[v => !!v || 'Description is Required']"
-                  label="Description"
-                  multi-line>
-                </v-text-field>
-              </v-flex>
-              <v-flex xs12 sm12 md12>
-                <v-text-field
-                  v-model="newTest.targetTAT"
-                  :rules="[v => !!v || 'Target Turnaround Time is Required']"
-                  label="Target Turnaround Time">
-                </v-text-field>
-              </v-flex>
-              <v-flex xs12 sm12 md12>
-                <v-select
-                  :items="testtypecategory"
-                  v-model="newTest.test_type_category_id"
-                  overflow
-                  item-text="name"
-                  item-value="id"
-                  label="Lab Section"
-                ></v-select>
-              </v-flex>
+            <v-flex xs12 sm12 md12>
+              <v-text-field
+                v-model="newTest.name"
+                :rules="[v => !!v || 'Name is Required']"
+                label="Name">
+              </v-text-field>
+            </v-flex>
+            <v-flex xs12 sm12 md12>
+              <v-text-field
+                v-model="newTest.description"
+                :rules="[v => !!v || 'Description is Required']"
+                label="Description"
+                multi-line>
+              </v-text-field>
+            </v-flex>
+            <v-flex xs12 sm12 md12>
+              <v-text-field
+                v-model="newTest.targetTAT"
+                :rules="[v => !!v || 'Target Turnaround Time is Required']"
+                label="Target Turnaround Time">
+              </v-text-field>
+            </v-flex>
+            <v-flex xs12 sm12 md12>
+              <v-select
+                :items="testtypecategory"
+                v-model="newTest.test_type_category_id"
+                overflow
+                item-text="name"
+                item-value="id"
+                label="Lab Section"
+              ></v-select>
+            </v-flex>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" flat @click.stop="dialog2=false">Close</v-btn>
+            <v-btn color="primary" flat @click.stop="closeMainDialog">Close</v-btn>
             <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveTest">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
     </v-layout>
-
     <v-card-title>
       Test Type
       <v-spacer></v-spacer>
@@ -411,6 +402,14 @@
         description: '',
       },
 
+      defaultMeasureItem: {
+        test_type_id: '',
+        measure_type_id: '',
+        name: '',
+        unit: '',
+        description: '',
+      },
+
       numerics:{
         age_range: '',
         age_min: '',
@@ -419,22 +418,31 @@
         low: '',
         high: '',
       },
+
+      defaultNumericsItem:{
+        age_range: '',
+        age_min: '',
+        age_max: '',
+        gender_id: '',
+        low: '',
+        high: '',
+      },
+
       alphanumerics:{
         display: '',
         interpretation_id: '',
       },
-      multialphanumerics:{
+
+      defaultAlphaNumericsItem:{
         display: '',
         interpretation_id: '',
       },
-
 
       age_range: ['Years', 'Months', 'Days'],
       gender: [],
       interpretation: [],
       measure_types: [],
       measureranges: [],
-
       specimentypes: [],
       testtypes: [],
       measures: [],
@@ -674,6 +682,7 @@
 
       closeMainDialog () {
         this.dialog = false
+        this.dialog2 = false
 
         // if not saving reset dialog references to datatables
         if (!this.saving) {
@@ -681,9 +690,45 @@
         }
       },
 
+      closeMeasureDialogue () {
+        this.dialog3=false
+        this.updating = false
+        this.resetMeasureDialogReferences();
+        // if not saving reset dialog references to datatables
+        /*if (!this.saving) {
+          this.resetMeasureDialogReferences();
+        }*/
+      },
+
+      closeMeasureRangeDialog () {
+        this.dialog5=false
+        this.updating=false
+        this.resetMeasureRangeDialogReferences();
+
+      },
+
+      closeAlphaMeasureRangeDialog () {
+        this.dialog6=false
+        this.updating=false
+        this.resetAlphaMeasureRangeDialogReferences();
+
+      },
+
       resetDialogReferences() {
         this.newTest = Object.assign({}, this.defaultItem)
         this.editLevel = 1
+      },
+
+      resetMeasureDialogReferences() {
+        this.measurefield = Object.assign({}, this.defaultMeasureItem)
+      },
+
+      resetMeasureRangeDialogReferences () {
+        this.numerics = Object.assign({}, this.defaultNumericsItem)
+      },
+
+      resetAlphaMeasureRangeDialogReferences () {
+        this.alphanumerics = Object.assign({}, this.defaultAlphaNumericsItem)
       },
 
       testTypeMapper: function(x){
@@ -791,7 +836,7 @@
           .then(resp => {
             Object.assign(this.measures[this.itemIndex], this.measurefield)
             console.log(resp)
-            this.dialog3 = false;
+            this.closeMeasureDialogue();
           })
           .catch(error => {
             console.log(error.response)
@@ -806,44 +851,13 @@
             this.measures.push(this.measurefield)
             console.log('resp')
             console.log(resp)
-            //this.saveMeasureRanges();
-            this.dialog3 = false;
+            
+            this.closeMeasureDialogue();
           })
           .catch(error => {
             console.log(error.response)
           })
         }
-      },
-
-      saveMeasureDetails (){
-        this.saving = true;
-        for (var i = this.measurefields.length - 1; i >= 0; i--){
-          this.measurefields[i].test_type_id = this.newTest.id;
-        }
-        console.log('measurefields')
-        console.log(this.measurefields)
-
-        apiCall({url: '/api/measure', data: this.measurefields, method: 'POST' })
-        .then(resp => {
-
-            this.measurefields[i].test_type_id = this.newTest.id;
-            
-            if(this.measureRangeID === 1){
-              this.numerics.measure_id = resp.measureId;
-              }
-            else if(this.measureRangeID === 2){
-              this.alphanumerics.measure_id = resp.measureId;
-              }
-            else{
-              this.multialphanumerics.measure_id = resp.measureId;  
-            }
-
-
-          this.saveMeasureRanges();
-        })
-        .catch(error => {
-          console.log(error.response)
-        })
       },
 
       saveMeasureRange(){
@@ -858,7 +872,7 @@
           .catch(error => {
             console.log(error.response)
           })
-          this.dialog5 = false
+          this.closeMeasureRangeDialog();
         }else{
           this.alphanumerics.measure_id = this.RangeID
           apiCall({url: '/api/measurerange', data: this.alphanumerics, method: 'POST' })
@@ -870,7 +884,7 @@
           .catch(error => {
             console.log(error.response)
           })
-          this.dialog6 = false
+          this.closeAlphaMeasureRangeDialog();
         }
         
         /*this.resetDialogReferences();

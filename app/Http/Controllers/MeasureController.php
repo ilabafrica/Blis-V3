@@ -52,14 +52,12 @@ class MeasureController extends Controller
             try {
                 $measure->save();
 
-                $measureId = $measure->id;
-                $measureData[] = array('measure' => $measure, 'measureId' => $measureId );
-
+                return response()->json($measure);
                 
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
-            return response()->json($measureData);
+            
         }
     }
 
