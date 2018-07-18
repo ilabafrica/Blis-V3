@@ -37,12 +37,12 @@ class TestTypeMappingController extends Controller
             $testMapping = new TestTypeMapping;
             $testMapping->specimen_type_id = $input[$i];
             $testMapping->test_type_id = array_search(null, $input);
-                try {
-                    $testMapping->save();
-                } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-                }                
+            try {
+                $testMapping->save();
+            } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
+        }
     }
 
     /**
@@ -101,7 +101,54 @@ class TestTypeMappingController extends Controller
                 }
             }
         }
-        
+    }
+
+    public function attach(Request $request)
+    {
+        $rules = [
+            'specimen_type_id' => 'required',
+            'test_type_id' => 'required',
+        ];
+
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator);
+        } else {
+            $specimenType = SpecimenType::find($request->input('specimen_type_id'));
+            $testType = TestType::find($request->input('test_type_id'));
+
+            try {
+                $specimenType->testTypes()->attach($testType);
+
+                return response()->json(['message' => 'Item Successfully inserted']);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
+
+    public function detach(Request $request)
+    {
+        $rules = [
+            'specimen_type_id' => 'required',
+            'test_type_id' => 'required',
+        ];
+
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator);
+        } else {
+            $specimenType = SpecimenType::find($request->input('specimen_type_id'));
+            $testType = TestType::find($request->input('test_type_id'));
+
+            try {
+                $specimenType->testTypes()->detach($testType);
+
+                return response()->json(['message' => 'Item Successfully deleted']);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
     }
 
     /**

@@ -73,7 +73,11 @@ class TestTypeController extends Controller
      */
     public function show($id)
     {
-        $testType = TestType::findOrFail($id);
+        $testType = TestType::find($id)->load(
+            'testTypeCategory',
+            'specimenTypes',
+            'measures'
+        );
 
         return response()->json($testType);
     }
