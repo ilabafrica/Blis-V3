@@ -41,7 +41,7 @@ export default new Router({
     },
     {
       path: '/patients/patient',
-      name: 'Patients',
+      name: 'Patient',
       component: require('../components/patients/patient'),
       beforeEnter: ifAuthenticated,
     },
@@ -67,13 +67,13 @@ export default new Router({
     // Test Catalog
     {
       path: '/testcatalog/testtypecategory',
-      name: 'LabSections',
+      name: 'LabSection',
       component: require('../components/testcatalog/testtypecategory'),
       beforeEnter: ifAuthenticated,
     },
     {
       path: '/testcatalog/drug',
-      name: 'Antibiotics',
+      name: 'Antibiotic',
       component: require('../components/testcatalog/antibiotic'),
       beforeEnter: ifAuthenticated,
     },
@@ -85,20 +85,26 @@ export default new Router({
     },
     {
       path: '/testcatalog/testtype',
-      name: 'TestTypes',
-      component: require('../components/testcatalog/testtype'),
+      name: 'TestType',
+      component: require('../components/testcatalog/testtype/index'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/testcatalog/testtype/:id',
+      name: 'Measure',
+      component: require('../components/testcatalog/testtype/measure'),
       beforeEnter: ifAuthenticated,
     },
     // Access Control
     {
       path: '/accesscontrol/useraccounts',
-      name: 'UserAccounts',
+      name: 'UserAccount',
       component: require('../components/accesscontrol/useraccounts'),
       beforeEnter: ifAuthenticated,
     },
     {
       path: '/accesscontrol/permissions',
-      name: 'Permissions',
+      name: 'Permission',
       component: require('../components/accesscontrol/permissions'),
       beforeEnter: ifAuthenticated,
     },
@@ -110,7 +116,7 @@ export default new Router({
     },
     {
       path: '/accesscontrol/roleusers',
-      name: 'RolesUsers',
+      name: 'RoleUser',
       component: require('../components/accesscontrol/roleusers'),
       beforeEnter: ifAuthenticated,
     },

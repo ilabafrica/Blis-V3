@@ -14,13 +14,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class SpecimenType extends Model
 {
-    public function specimenTypeTestType()
+    public function testTypes()
     {
-        return $this->hasMany('App\Models\specimenTypeTestType');
+        return $this->belongsToMany('App\Models\TestType','test_type_mappings');
     }
 
-    public function testType()
-    {
-        return $this->belongsToMany('App\Models\TestType');
-    }	
+
 }

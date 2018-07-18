@@ -29,33 +29,35 @@ class MeasureController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
         $rules = [
-            'measure_type_id' => 'required',
-            'measure_name' => 'required',
+            /*'measure_type_id' => 'required',
+            'measure_name' => 'required',*/
 
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator);
         } else {
+            $input = $request->all();
+            $measureData = [];
+            
             $measure = new Measure;
             $measure->test_type_id = $request->input('test_type_id');
             $measure->measure_type_id = $request->input('measure_type_id');
-            $measure->name = $request->input('measure_name');
+            $measure->name = $request->input('name');
             $measure->unit = $request->input('unit');
-            $measure->description = $request->input('measure_description');
+            $measure->description = $request->input('description');
 
             try {
                 $measure->save();
 
-                $measureId = $measure->id;
-                $measureData = array('measure' => $measure, 'measureId' => $measureId );
-
-                return response()->json($measureData);
+                return response()->json($measure);
+                
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
+            
         }
     }
 

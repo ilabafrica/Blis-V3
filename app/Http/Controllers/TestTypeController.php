@@ -73,7 +73,11 @@ class TestTypeController extends Controller
      */
     public function show($id)
     {
-        $testType = TestType::findOrFail($id);
+        $testType = TestType::find($id)->load(
+            'testTypeCategory',
+            'specimenTypes',
+            'measures'
+        );
 
         return response()->json($testType);
     }
@@ -104,7 +108,7 @@ class TestTypeController extends Controller
 
             try {
                 $testType->save();
-
+// $testType->load('measures.measureRanges')
                 return response()->json($testType);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

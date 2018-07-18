@@ -15,4 +15,9 @@ use Illuminate\Database\Eloquent\Model;
 class MeasureRange extends Model
 {
     public $timestamps = false;
+
+        public function gender()
+    {
+        return $this->hasOne('App\Models\Gender', 'id', 'gender_id');
+    }
 }
