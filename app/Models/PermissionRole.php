@@ -13,5 +13,6 @@ class PermissionRole extends Model
 {
     protected $table = 'permission_role';
 
+    public $timestamps = false;
     public $fillable = ['permission_id', 'role_id'];
 }
