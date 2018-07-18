@@ -37,9 +37,31 @@ class MeasureRangeController extends Controller
         if ($validator->fails()) {
             return response()->json($validator);
         } else {
-            $measureRange = new MeasureRange;
-            //$measureRange->code_id = $request->input('code_id');
-            $measureRange->measure_id = $request->input('measure_id');
+            $input = $request->all();
+            for ($i = 0; $i < count($input); $i++) {
+                $measureRange = new MeasureRange;
+                $measureRange->measure_id = $input[$i]["measure_id"];
+
+                //Numeric Range
+                if (isset($input[$i]["age_min"])) {
+                        //if Months is selected
+                        if($input[$i]["age_range"]=="Months"){
+                            $input[$i]["age_min"] /= 12;
+                            $input[$i]["age_max"] /= 12;
+                        }
+
+                        //if Days is selected
+                        elseif ($input[$i]["age_range"]=="Days") {
+                            $input[$i]["age_min"] /= 365;
+                            $input[$i]["age_max"] /= 365;
+                        }
+                        
+                    $measureRange->age_min = $input[$i]["age_min"];
+                    $measureRange->age_max = $input[$i]["age_max"];
+                    $measureRange->gender_id = $input[$i]["gender_id"];
+                    $measureRange->low = $input[$i]["low"];
+                    $measureRange->high = $input[$i]["high"];
+                }
 
             $display = $request->input('display');
             $age_min = $request->input('age_min');

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFacilitiesTable extends Migration
+class CreateThirdPartyAppsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,15 @@ class CreateFacilitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('facilities', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('third_party_apps', function (Blueprint $table) {
+            $table->uuid('id');
             $table->string('name');
+            $table->string('username')->nullable();
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->rememberToken();
             $table->timestamps();
+            $table->primary('id');
         });
     }
 
@@ -27,6 +32,6 @@ class CreateFacilitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('facilities');
+        Schema::dropIfExists('third_party_apps');
     }
 }

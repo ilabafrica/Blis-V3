@@ -19,13 +19,13 @@ class ControlTestTest extends TestCase
 	public function setVariables(){
 		$this->controlTestData=array(
 			"lot_id"=>1,
-			"entered_by"=>1,
+			"tested_by"=>1,
 			"control_id"=>1,
 			"control_type_id"=>1,
 		);
 		$this->updatedControlTestData=array(
 			"lot_id"=>1,
-			"entered_by"=>1,
+			"tested_by"=>1,
 			"control_id"=>1,
 			"control_type_id"=>1,
 		);

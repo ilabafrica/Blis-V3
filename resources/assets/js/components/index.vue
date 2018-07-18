@@ -3,7 +3,7 @@
     <v-navigation-drawer v-if='isAuthenticated && isProfileLoaded' v-model="drawer" fixed app>
       <sidebar></sidebar>
     </v-navigation-drawer>
-    <v-toolbar v-if="isAuthenticated && isProfileLoaded" color="primary" dark fixed app>
+    <v-toolbar v-if="isAuthenticated && isProfileLoaded" color="primary" class="elevation-1" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Application</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -17,13 +17,15 @@
       </v-menu>
     </v-toolbar>
     <v-content>
-      <v-container fluid>
+      <v-container>
         <loading v-if='authLoading'></loading>
         <router-view></router-view>
       </v-container>
     </v-content>
     <v-footer v-if='isAuthenticated && isProfileLoaded' color="primary" app>
-      <span class="white--text">@iLabAfrica &copy; {{ new Date().getFullYear() }}</span>
+      <v-card-text class="white--text">
+        &copy; {{ new Date().getFullYear() }} — <strong>@iLabAfrica</strong>
+      </v-card-text>
     </v-footer>
   </v-app>
 </template>

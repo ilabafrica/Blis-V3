@@ -13,7 +13,7 @@
               <v-icon>close</v-icon>
             </v-btn>
             <v-toolbar-title>
-<!-- todo: here put name of measure whose ranges are being  worked on -->
+              <!-- todo: here put name of measure whose ranges are being  worked on -->
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
@@ -27,7 +27,7 @@
               <v-card-title>
                 Measure Ranges
               </v-card-title>
-<!-- todo: use constants explained -->
+                <!-- todo: use constants explained -->
               <v-layout v-if="measureTypeID === 1">
                 <v-btn color="info" dark @click="dialogNumericRange = !dialogNumericRange">
                   Add New Range
@@ -50,7 +50,7 @@
                 </v-data-table>
               </v-layout>
               <v-layout v-if="measureTypeID != 1">
-<!-- todo: use constants explained -->
+                <!-- todo: use constants explained -->
                 <v-btn color="info" dark @click="dialogAlphanumericRange = !dialogAlphanumericRange">
                   Add New Range
                 </v-btn>
