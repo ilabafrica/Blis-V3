@@ -105,6 +105,7 @@ class MeasureRangeController extends Controller
             
             return response()->json($measureRange);
         }
+        }
     }
 
     /**
