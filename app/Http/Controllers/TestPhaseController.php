@@ -17,7 +17,7 @@ class TestPhaseController extends Controller
 {
     public function index()
     {
-        $testPhase = TestPhase::orderBy('id', 'ASC')->paginate(20);
+        $testPhase = TestPhase::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($testPhase);
     }

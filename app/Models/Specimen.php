@@ -21,4 +21,9 @@ class Specimen extends Model
     {
         return $this->hasMany('App\Models\TestType');
     }
+
+    public function specimenType()
+    {
+        return $this->belongsTo('App\Models\SpecimenType');
+    }
 }

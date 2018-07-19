@@ -17,7 +17,7 @@ class NameController extends Controller
 {
     public function index()
     {
-        $name = Name::orderBy('id', 'ASC')->paginate(20);
+        $name = Name::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($name);
     }

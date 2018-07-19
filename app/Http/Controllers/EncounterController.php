@@ -17,7 +17,7 @@ class EncounterController extends Controller
 {
     public function index()
     {
-        $encounter = Encounter::orderBy('id', 'ASC')->paginate(20);
+        $encounter = Encounter::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($encounter);
     }

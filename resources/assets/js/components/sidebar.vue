@@ -7,7 +7,7 @@
           <img src="ILABLOGO1.jpg" >
         </v-list-tile-avatar>
         <v-list-tile-content>
-          <v-list-tile-title>BLIS @iLabAfrica</v-list-tile-title>
+          <v-list-tile-title> @iLabAfrica</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
@@ -61,18 +61,15 @@
         <v-list-tile-title v-text="access_control.label"></v-list-tile-title>
       </v-list-tile>
     </v-list-group>
-    <v-list-group prepend-icon="vertical_split" value="true">
-      <v-list-tile slot="activator">
-        <v-list-tile-title>Tests</v-list-tile-title>
-      </v-list-tile>
-      <v-list-tile v-for="(test, i) in tests" :key="i" :to="{path:test.path}">
-        <v-list-tile-action>
-          <v-icon v-text="test.icon"></v-icon>
-        </v-list-tile-action>
-        <v-list-tile-title v-text="test.label"></v-list-tile-title>
-      </v-list-tile>
-    </v-list-group>
-    <v-list-group prepend-icon="vertical_split" value="true">
+    <v-list-tile to="/test/index">
+      <v-list-tile-action>
+        <v-icon>vertical_split</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-title>
+          Tests
+      </v-list-tile-title>
+    </v-list-tile>
+    <v-list-group prepend-icon="sync" value="true">
       <v-list-tile slot="activator">
         <v-list-tile-title>Quality Controls</v-list-tile-title>
       </v-list-tile>
@@ -163,33 +160,6 @@
           path: '/accesscontrol/roleusers',
           label: 'Assign Roles',
           icon: 'verified_user'
-        },
-      ],
-      tests: [
-        {
-          path: '/',
-          label: 'Completed Tests',
-          icon: 'done_all'
-        },
-        {
-          path: '/',
-          label: 'Samples Not Recieved',
-          icon: 'report_problem'
-        },
-        {
-          path: '/',
-          label: 'Pending Tests',
-          icon: 'hourglass_empty'
-        },
-        {
-          path: '/',
-          label: 'Tests Started',
-          icon: 'sync'
-        },
-        {
-          path: '/',
-          label: 'Verified Tests',
-          icon: 'check_box'
         },
       ],
       quality_control: [

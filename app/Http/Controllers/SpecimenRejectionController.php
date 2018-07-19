@@ -17,7 +17,7 @@ class SpecimenRejectionController extends Controller
 {
     public function index()
     {
-        $specimenRejection = SpecimenRejection::orderBy('id', 'ASC')->paginate(20);
+        $specimenRejection = SpecimenRejection::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($specimenRejection);
     }

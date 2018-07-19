@@ -17,7 +17,7 @@ class AdhocCategoryController extends Controller
 {
     public function index()
     {
-        $adhocCategory = AdhocCategory::orderBy('id', 'ASC')->paginate(20);
+        $adhocCategory = AdhocCategory::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($adhocCategory);
     }

@@ -25,7 +25,7 @@ class PatientController extends Controller
             })->with('gender', 'name')
                 ->paginate(10);
         } else {
-            $patient = Patient::with('name', 'gender')->orderBy('id', 'ASC')->paginate(20);
+            $patient = Patient::with('name', 'gender')->orderBy('id', 'ASC')->paginate(10);
         }
 
         return response()->json($patient);
@@ -121,7 +121,6 @@ class PatientController extends Controller
             $patient->address_id = $request->input('address_id');
             $patient->marital_status = $request->input('marital_status');
             $patient->photo = $request->input('photo');
-            $patient->gender_status = $request->input('gender_status');
             $patient->organization_id = $request->input('organization_id');
             $patient->created_by = $request->input('created_by');
 

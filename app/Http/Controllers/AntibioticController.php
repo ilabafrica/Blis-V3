@@ -20,9 +20,9 @@ class AntibioticController extends Controller
         if ($request->query('search')) {
             $search = $request->query('search');
             $antibiotics = Antibiotic::where('name', 'LIKE', "%{$search}%")
-                ->paginate(20);
+                ->paginate(10);
         } else {
-            $antibiotics = Antibiotic::orderBy('id', 'ASC')->paginate(20);
+            $antibiotics = Antibiotic::orderBy('id', 'ASC')->paginate(10);
         }
 
         return response()->json($antibiotics);

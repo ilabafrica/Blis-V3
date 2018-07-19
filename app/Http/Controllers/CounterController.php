@@ -16,7 +16,7 @@ class CounterController extends Controller
 {
     public function index()
     {
-        $counter = Counter::orderBy('id', 'ASC')->paginate(20);
+        $counter = Counter::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($counter);
     }

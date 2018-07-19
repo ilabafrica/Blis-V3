@@ -16,7 +16,7 @@ class ControlTestController extends Controller
 {
     public function index()
     {
-        $controlTest = ControlTest::orderBy('id', 'ASC')->paginate(20);
+        $controlTest = ControlTest::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($controlTest);
     }

@@ -17,7 +17,7 @@ class SusceptibilityBreakPointController extends Controller
 {
     public function index()
     {
-        $susceptibilityBreakPoint = SusceptibilityBreakPoint::orderBy('id', 'ASC')->paginate(20);
+        $susceptibilityBreakPoint = SusceptibilityBreakPoint::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($susceptibilityBreakPoint);
     }

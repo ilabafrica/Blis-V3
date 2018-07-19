@@ -17,7 +17,7 @@ class ReferralController extends Controller
 {
     public function index()
     {
-        $referral = Referral::orderBy('id', 'ASC')->paginate(20);
+        $referral = Referral::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($referral);
     }
