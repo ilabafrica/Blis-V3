@@ -276,9 +276,8 @@ class DevSeeder extends Seeder
         /* Instruments table */
         $instrumentsData = [
             "name" => "Celltac F Mek 8222",
-            // "driver_name" => "KBLIS\\Plugins\\CelltacFMachine",
-            // "ip" => "192.168.1.12",
-            // "hostname" => "HEMASERVER"
+            "ip" => "192.168.1.12",
+            "hostname" => "HEMASERVER"
         ];
 
         $instrument = Instrument::create($instrumentsData);
@@ -8316,20 +8315,23 @@ class DevSeeder extends Seeder
             'intermediate_max' => '14.0',
             'sensitive_min' => '15.0',
         ]);
+
+
         $this->command->info("Susceptibility Break Points Seeded");
 
         // create users, tobe used randomly
-        factory(App\User::class, 20)->create();
+        factory(\App\User::class, 20)->create();
         $this->command->info("Users Seeded");
 
         // create locations, tobe used randomly
-        factory(App\Models\Location::class, 100)->create();
+        factory(\App\Models\Location::class, 100)->create();
         $this->command->info("Locations Seeded");
 
         // create tests with all its dependencies from results to patient
 
         $this->command->info("Tests Seeding...");
-        factory(App\Models\Test::class, 1000)->create();
+
+        factory(\App\Models\Test::class, (int)env('DEV_TEST_NO',1000))->create();
         $this->command->info("Tests Seeded");
 
         // create results
@@ -8344,7 +8346,7 @@ class DevSeeder extends Seeder
 
                 if ($measure->measure_type_id == MeasureType::numeric) {
 
-                    factory(App\Models\Result::class)->create([
+                    factory(\App\Models\Result::class)->create([
                         'test_id' => $test->id,
                         'measure_id' => $measure->id,
                         // 'result' => $measure->id, // todo: eventually choos a high low normal critically_high critically_low randomly... work on the logic...
@@ -8354,7 +8356,7 @@ class DevSeeder extends Seeder
                 }elseif ($measure->measure_type_id == MeasureType::alphanumeric) {
 
 
-                    factory(App\Models\Result::class)->create([
+                    factory(\App\Models\Result::class)->create([
                         'test_id' => $test->id,
                         'measure_id' => $measure->id,
                         'measure_range_id' => $measureRange->id,
@@ -8364,7 +8366,7 @@ class DevSeeder extends Seeder
                     # code...: when the moment comes, microscopy, micro biology
                 }else{
                     // no measure range for free text
-                    factory(App\Models\Result::class)->create([
+                    factory(\App\Models\Result::class)->create([
                         'test_id' => $test->id,
                         'measure_id' => $measure->id,
                     ]);

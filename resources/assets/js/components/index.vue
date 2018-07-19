@@ -5,7 +5,7 @@
     </v-navigation-drawer>
     <v-toolbar v-if="isAuthenticated && isProfileLoaded" color="primary" class="elevation-1" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Application</v-toolbar-title>
+      <v-toolbar-title>BLISv3.0</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu offset-y>
         <v-btn primary flat slot="activator"><v-icon left>developer_board</v-icon> {{name}}</v-btn>

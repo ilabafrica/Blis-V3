@@ -66,4 +66,82 @@ class Test extends Model
     {
         return $this->belongsTo('App\Models\Encounter');
     }
+
+   /*
+    * Search for tests meeting the given criteria
+    *
+    * @param String $searchString
+    * @param String $testStatusId
+    * @param String $dateFrom
+    * @param String $dateTo
+    * @return Collection
+    */
+    public static function search($searchString = '', $testStatusId = 0, $dateFrom = NULL, $dateTo = NULL)
+    {
+        $tests = Test::with(
+            'testType',
+            'encounter',
+            'testStatus',
+            'specimen.specimenType',
+            'encounter.patient.name',
+            'encounter.patient.gender'
+        )
+            ->where(function($q) use ($searchString){
+
+            $q->whereHas('encounter', function($q) use ($searchString)
+            {
+                $q->whereHas('patient', function($q)  use ($searchString)
+                {
+                    $q->where(function($q) use ($searchString){
+                        $q->where('identifier', '=', $searchString )
+                          ->orWhere('ulin', 'like', "%{$searchString}%");
+                    })
+                    ->orWhereHas('name', function($q) use ($searchString)
+                        {
+                            $q->where('text', 'like', "%{$searchString}%");
+                        });
+                    });
+            })
+            ->orWhereHas('testType', function($q) use ($searchString)
+            {
+                $q->where('name', 'like', "%{$searchString}%");//Search by test type
+            })
+            ->orWhereHas('specimen', function($q) use ($searchString)
+            {
+                $q->where('id', '=', $searchString );//Search by specimen number
+            })
+            ->orWhereHas('encounter',  function($q) use ($searchString)
+            {
+                $q->where(function($q) use ($searchString){
+                    $q->where('identifier', '=', $searchString )//Search by visit number
+                    ->orWhere('id', '=', $searchString);
+                });
+            });
+        });
+
+        if ($testStatusId > 0) {
+            $tests = $tests->where(function($q) use ($testStatusId)
+            {
+                $q->whereHas('testStatus', function($q) use ($testStatusId){
+                    $q->where('id','=', $testStatusId);//Filter by test status
+                });
+            });
+        }
+
+        if ($dateFrom||$dateTo) {
+            $tests = $tests->where(function($q) use ($dateFrom, $dateTo)
+            {
+                if($dateFrom)$q->where('created_at', '>=', $dateFrom);
+
+                if($dateTo){
+                    $dateTo = $dateTo . ' 23:59:59';
+                    $q->where('created_at', '<=', $dateTo);
+                }
+            });
+        }
+
+        $tests = $tests->orderBy('created_at', 'DESC')->paginate(10);
+
+        return $tests;
+    }
 }

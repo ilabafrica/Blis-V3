@@ -21,7 +21,7 @@ class InstrumentController extends Controller
             $instrument = Instrument::where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
         } else {
-            $instrument = Instrument::orderBy('id', 'ASC')->paginate(20);
+            $instrument = Instrument::orderBy('id', 'ASC')->paginate(10);
         }
 
         return response()->json($instrument);

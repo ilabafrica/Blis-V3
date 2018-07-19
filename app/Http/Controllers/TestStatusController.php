@@ -17,7 +17,7 @@ class TestStatusController extends Controller
 {
     public function index()
     {
-        $testStatus = TestStatus::orderBy('id', 'ASC')->paginate(20);
+        $testStatus = TestStatus::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($testStatus);
     }

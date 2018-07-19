@@ -138,6 +138,7 @@ class CreateBlisTables extends Migration
         Schema::create('patients', function (Blueprint $table) {
             $table->increments('id');
             $table->string('identifier'); //Business identifier
+            $table->string('ulin')->nullable(); //unique lab identification number
             $table->boolean('active')->default(1);
             $table->integer('name_id')->unsigned();
             $table->integer('gender_id')->unsigned();
@@ -147,7 +148,6 @@ class CreateBlisTables extends Migration
             $table->string('address')->nullable();
             $table->string('marital_status')->nullable();
             $table->string('photo')->nullable();
-            $table->string('gender_status')->nullable();
             $table->integer('organization_id')->unsigned()->nullable();
             $table->string('created_by')->nullable();
 
@@ -175,7 +175,7 @@ class CreateBlisTables extends Migration
          */
         Schema::create('test_type_categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code', 100)->unique()->nullable();
+            $table->string('code', 100)->nullable();
             $table->string('name', 100);
 
             $table->softDeletes();
@@ -611,6 +611,8 @@ class CreateBlisTables extends Migration
         Schema::create('instruments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 100)->unique();
+            $table->string('ip', 100)->nullable();
+            $table->string('hostname', 100)->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -648,6 +650,8 @@ class CreateBlisTables extends Migration
             $table->string('result');
             $table->integer('measure_id')->unsigned();
             $table->integer('control_test_id')->unsigned();
+            $table->integer('measure_range_id')->unsigned()->nullable();
+            $table->unique(['control_test_id', 'measure_id', 'measure_range_id']);
 
             $table->foreign('control_test_id')->references('id')->on('control_tests');
             $table->foreign('measure_id')->references('id')->on('measures');

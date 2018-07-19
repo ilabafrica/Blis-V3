@@ -17,7 +17,7 @@ class RejectionReasonController extends Controller
 {
     public function index()
     {
-        $rejectionReason = RejectionReason::orderBy('id', 'ASC')->paginate(20);
+        $rejectionReason = RejectionReason::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($rejectionReason);
     }

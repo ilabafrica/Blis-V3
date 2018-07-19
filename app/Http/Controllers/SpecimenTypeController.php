@@ -20,9 +20,9 @@ class SpecimenTypeController extends Controller
         if ($request->query('search')) {
             $search = $request->query('search');
             $specimenType = SpecimenType::where('name', 'LIKE', "%{$search}%")
-                ->paginate(20);
+                ->paginate(10);
         } else {
-            $specimenType = SpecimenType::orderBy('name', 'ASC')->paginate(20);
+            $specimenType = SpecimenType::orderBy('name', 'ASC')->paginate(10);
         }
 
         return response()->json($specimenType);
