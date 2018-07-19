@@ -14,6 +14,8 @@
 
 Route::post('/register', 'Auth\APIController@register');
 Route::post('/login', 'Auth\APIController@login');
+Route::get('/tests-done', 'UserStatisticsController@testsDone');
+Route::get('/tests-verified', 'UserStatisticsController@testsVerified');
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', 'Auth\APIController@logout');

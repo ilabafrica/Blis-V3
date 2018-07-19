@@ -134,5 +134,12 @@ export default new Router({
       component: require('../components/qualitycontrol/lot'),
       beforeEnter: ifAuthenticated,
     },
+    //Stats
+    {
+      path: '/stats/',
+      name: 'Stats',
+      component: require('../components/userstatistics/index'),
+      beforeEnter: ifAuthenticated,
+    },
   ],
 })
