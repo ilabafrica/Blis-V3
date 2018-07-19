@@ -156,18 +156,6 @@
       },
     },
 
-    beforeCreate() {
-
-        apiCall({url: '/api/specimentype', method: 'GET' })
-        .then(resp => {
-          console.log(resp)
-          this.specimentypes = resp.data;
-        })
-        .catch(error => {
-          console.log(error.response)
-        })
-    },
-
     watch: {
       dialog (val) {
         val || this.close()

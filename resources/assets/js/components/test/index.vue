@@ -34,64 +34,74 @@
         <td class="text-xs-right">{{ props.item.test_type.name }}</td>
         <td class="text-xs-right">{{ props.item.encounter.identifier }}</td>
         <td class="text-xs-right">{{ props.item.test_status.name }}</td>
-        <td class="justify-center layout px-0">
+        <td class="justify-left layout px-0">
+            <!-- Details(Verify) -->
+              <v-btn
+                outline
+                small
+                title="Details"
+                color="green"
+                @click="detail(props.item)">
+                Details
+              </v-btn>
+              <v-btn
+                outline
+                small
+                title="Collect"
+                color="deep-purple"
+                @click="collect(props.item)">
+                Collect
+              </v-btn>
+              <v-btn
+                outline
+                small
+                title="Start"
+                color="blue"
+                @click="start(props.item)">
+                Start
+              </v-btn>
+              <v-btn
+                outline
+                small
+                title="Enter"
+                color="light-blue"
+                @click="enter(props.item)">
+                Enter
+              </v-btn>
+              <v-btn
+                outline
+                small
+                title="Edit"
+                color="teal"
+                @click="edit(props.item)">
+                Edit
+              </v-btn>
+              <v-btn
+                outline
+                small
+                title="Reject"
+                color="red"
+                @click="reject(props.item)">
+                Reject
+              </v-btn>
+              <v-btn
+                outline
+                small
+                title="Refer"
+                color="amber"
+                @click="refer(props.item)">
+                Refer
+              </v-btn>
+            <!-- Verify(Details) -->
+              <v-btn
+                outline
+                small
+                title="Verify"
+                color="green"
+                @click="verify(props.item)">
+                Verify
+              </v-btn>
 
-<!-- 
-Details(Verify)
-Start
-Enter Results
-Edit Results
-Reject
-Refer
-Verify(Details)
-
-
-
-
-
-
-
-
- -->
-
-
-
-
-
-<div class="text-xs-center d-flex align-center">
-          <v-tooltip @click="detail(props.item)" top>
-            <v-icon slot="activator" color="green">eye</v-icon>
-            <span>Details</span>
-          </v-tooltip>
-          <v-tooltip @click="detail(props.item)" top>
-            <v-icon slot="activator" color="deep-purple">test-tube-empty</v-icon>
-            <span>Collect Specimen</span>
-          </v-tooltip>
-          <v-tooltip @click="edit(props.item)" top>
-            <v-icon slot="activator" color="blue">play-circle-outline</v-icon>
-            <span>Start</span>
-          </v-tooltip>
-          <v-tooltip @click="edit(props.item)" top>
-            <v-icon slot="activator" color="light-blue">subtitle-outline</v-icon>
-            <span>Enter Results</span>
-          </v-tooltip>
-          <v-tooltip @click="edit(props.item)" top>
-            <v-icon slot="activator" color="teal">edit</v-icon>
-            <span>Edit</span>
-          </v-tooltip>
-          <v-tooltip @click="reject(props.item)" top>
-            <v-icon slot="activator" color="red">close-box-outline</v-icon>
-            <span>Reject</span>
-          </v-tooltip>
-          <v-tooltip @click="refer(props.item)" top>
-            <v-icon slot="activator" color="amber">subdirectory-arrow-right</v-icon>
-            <span>Refer</span>
-          </v-tooltip>
-          <v-tooltip @click="verify(props.item)" top>
-            <v-icon slot="activator" color="pink">check-all</v-icon>
-            <span>Verify</span>
-          </v-tooltip>
-</div>
         </td>
       </template>
     </v-data-table>
