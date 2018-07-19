@@ -17,7 +17,7 @@ class AntibioticSusceptibilityController extends Controller
 {
     public function index()
     {
-        $antibioticSusceptibility = AntibioticSusceptibility::orderBy('id', 'ASC')->paginate(20);
+        $antibioticSusceptibility = AntibioticSusceptibility::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($antibioticSusceptibility);
     }

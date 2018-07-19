@@ -17,7 +17,7 @@ class OrganizationController extends Controller
 {
     public function index()
     {
-        $organization = Organization::orderBy('id', 'ASC')->paginate(20);
+        $organization = Organization::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($organization);
     }

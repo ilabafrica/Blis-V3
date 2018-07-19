@@ -17,7 +17,7 @@ class ResultController extends Controller
 {
     public function index()
     {
-        $result = Result::orderBy('id', 'ASC')->paginate(20);
+        $result = Result::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($result);
     }

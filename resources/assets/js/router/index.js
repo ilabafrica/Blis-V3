@@ -120,6 +120,13 @@ export default new Router({
       component: require('../components/accesscontrol/roleusers'),
       beforeEnter: ifAuthenticated,
     },
+    //Routine and Reference Testing
+    {
+      path: '/test/index',
+      name: 'Test',
+      component: require('../components/test/index'),
+      beforeEnter: ifAuthenticated,
+    },
     //Quality Control
     {
       path: '/qualitycontrol/lot',

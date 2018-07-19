@@ -20,9 +20,9 @@ class LotController extends Controller
         if ($request->query('search')) {
             $search = $request->query('search');
             $lot = Lot::with('instrument')->where('number', 'LIKE', "%{$search}%")
-                ->paginate(20);
+                ->paginate(10);
         } else {
-            $lot = Lot::with('instrument')->orderBy('id', 'ASC')->paginate(20);
+            $lot = Lot::with('instrument')->orderBy('id', 'ASC')->paginate(10);
         }
 
         return response()->json($lot);

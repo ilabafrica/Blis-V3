@@ -23,7 +23,7 @@ class TestTypeController extends Controller
                 ->with('testtypecategory')
                 ->paginate(10);
         } else {
-            $testType = TestType::with('testtypecategory')->orderBy('id', 'ASC')->paginate(20);
+            $testType = TestType::with('testtypecategory')->orderBy('id', 'ASC')->paginate(10);
         }
 
         return response()->json($testType);

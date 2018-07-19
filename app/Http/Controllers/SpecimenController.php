@@ -16,7 +16,7 @@ class SpecimenController extends Controller
 {
     public function index()
     {
-        $specimen = Specimen::orderBy('id', 'ASC')->paginate(20);
+        $specimen = Specimen::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($specimen);
     }

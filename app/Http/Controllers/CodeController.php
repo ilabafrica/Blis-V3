@@ -16,7 +16,7 @@ class CodeController extends Controller
 {
     public function index()
     {
-        $code = Code::orderBy('id', 'ASC')->paginate(20);
+        $code = Code::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($code);
     }

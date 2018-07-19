@@ -15,12 +15,37 @@ use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $test = Test::orderBy('id', 'ASC')->paginate(20);
+        // Search Conditions
+        if(
+            $request->query('search')||
+            $request->query('test_status_id')||
+            $request->query('date_from')||
+            $request->query('date_to')
+        ){
 
-        return response()->json($test);
+            $tests = Test::search(
+                $request->query('search'),
+                $request->query('test_status_id'),
+                ($request->query('date_from') ? $request->query('date_from') : date('Y-m-d')),
+                $request->query('date_to')
+            );
+
+        } else {
+            $tests = Test::with(
+                'testType',
+                'encounter',
+                'testStatus',
+                'specimen.specimenType',
+                'encounter.patient.name',
+                'encounter.patient.gender'
+            )->orderBy('created_at', 'DESC')->paginate(10);
+        }
+
+        return response()->json($tests);
     }
+
 
     /**
      * Store a newly created resource in storage.

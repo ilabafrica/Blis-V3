@@ -17,7 +17,7 @@ class AdhocOptionController extends Controller
 {
     public function index()
     {
-        $adhocOption = AdhocOption::orderBy('id', 'ASC')->paginate(20);
+        $adhocOption = AdhocOption::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($adhocOption);
     }

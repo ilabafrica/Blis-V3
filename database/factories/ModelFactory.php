@@ -56,6 +56,7 @@ $factory->define(\App\Models\Encounter::class, function (Faker\Generator $faker)
 
 $factory->define(\App\Models\Specimen::class, function (Faker\Generator $faker) {
     $userId = \App\User::inRandomOrder()->first()->id;
+
     return [
         'identifier' => $faker->word,
         'accession_identifier' => $faker->word,
@@ -69,10 +70,9 @@ $factory->define(\App\Models\Test::class, function (Faker\Generator $faker) {
     $testTypeId = \App\Models\TestType::inRandomOrder()->first()->id;
     $userId = \App\User::inRandomOrder()->first()->id;
     $specimenTypeId = \App\Models\TestTypeMapping::where('test_type_id',$testTypeId)->first()->specimen_type_id;
-    $specimen = factory(App\Models\Specimen::class)->make([
+    $specimen = factory(App\Models\Specimen::class)->create([
         'specimen_type_id' => $specimenTypeId,
     ]);
-
 
     return [
         'encounter_id' => factory(\App\Models\Encounter::class)->create()->id,

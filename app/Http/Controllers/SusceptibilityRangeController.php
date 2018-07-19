@@ -17,7 +17,7 @@ class SusceptibilityRangeController extends Controller
 {
     public function index()
     {
-        $susceptibilityRange = SusceptibilityRange::orderBy('id', 'ASC')->paginate(20);
+        $susceptibilityRange = SusceptibilityRange::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($susceptibilityRange);
     }
