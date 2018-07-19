@@ -651,7 +651,6 @@ class CreateBlisTables extends Migration
             $table->integer('measure_id')->unsigned();
             $table->integer('control_test_id')->unsigned();
             $table->integer('measure_range_id')->unsigned()->nullable();
-            $table->unique(['control_test_id', 'measure_id', 'measure_range_id']);
 
             $table->foreign('control_test_id')->references('id')->on('control_tests');
             $table->foreign('measure_id')->references('id')->on('measures');

@@ -14,9 +14,18 @@ use Illuminate\Http\Request;
 
 class ControlTestController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $controlTest = ControlTest::orderBy('id', 'ASC')->paginate(10);
+
+        if ($request->query('search')) {
+            $search = $request->query('search');
+            $controlTest = ControlTest::whereHas('name', function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%{$search}%");
+            })->with('instrument')
+                ->paginate(10);
+        } else {
+            $controlTest = ControlTest::with('instrument')->orderBy('id', 'ASC')->paginate(10);
+        }    
 
         return response()->json($controlTest);
     }
@@ -31,9 +40,9 @@ class ControlTestController extends Controller
     {
         $rules = [
             'lot_id' => 'required',
-            'tested_by' => 'required',
+            /*'tested_by' => 'required',
             'control_id' => 'required',
-            'control_type_id' => 'required',
+            'control_type_id' => 'required',*/
         ];
 
         $validator = \Validator::make($request->all(), $rules);
@@ -43,8 +52,9 @@ class ControlTestController extends Controller
             $controlTest = new ControlTest;
             $controlTest->lot_id = $request->input('lot_id');
             $controlTest->tested_by = $request->input('tested_by');
-            $controlTest->control_id = $request->input('control_id');
-            $controlTest->control_type_id = $request->input('control_type_id');
+            $controlTest->test_type_id = $request->input('test_type_id');
+            /*$controlTest->control_id = $request->input('control_id');
+            $controlTest->control_type_id = $request->input('control_type_id');*/
 
             try {
                 $controlTest->save();

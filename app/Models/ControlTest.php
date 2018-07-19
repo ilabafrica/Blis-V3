@@ -28,4 +28,12 @@ class ControlTest extends Model
     {
         return $this->belongsTo('ControlType');
     }
+
+    /**
+     * Relationship between control test and its control.
+     */
+    public function instrument()
+    {
+        return $this->hasOne('App\Models\Instrument', 'id', 'lot_id');
+    }
 }

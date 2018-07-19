@@ -134,5 +134,11 @@ export default new Router({
       component: require('../components/qualitycontrol/lot'),
       beforeEnter: ifAuthenticated,
     },
+    {
+      path: '/qualitycontrol/controltest',
+      name: 'ControlTest',
+      component: require('../components/qualitycontrol/controltest'),
+      beforeEnter: ifAuthenticated,
+    },
   ],
 })

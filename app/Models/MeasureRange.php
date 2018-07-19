@@ -16,8 +16,8 @@ class MeasureRange extends Model
 {
     public $timestamps = false;
 
-        public function gender()
+    public function gender()
     {
-        return $this->hasOne('App\Models\Gender', 'id', 'gender_id');
+    	return $this->hasOne('App\Models\Gender', 'id', 'gender_id');
     }
 }
