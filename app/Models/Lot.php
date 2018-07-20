@@ -17,4 +17,9 @@ class Lot extends Model
     {
         return $this->belongsTo('App\Models\Instrument');
     }
+
+    public function controltest()
+    {
+        return $this->belongsTo('App\Models\ControlTest');
+    }
 }

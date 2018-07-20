@@ -30,10 +30,10 @@ class ControlTest extends Model
     }
 
     /**
-     * Relationship between control test and its control.
+     * Relationship between control test and its lot.
      */
-    public function instrument()
+    public function lot()
     {
-        return $this->hasOne('App\Models\Instrument', 'id', 'lot_id');
+        return $this->hasOne('App\Models\Lot', 'id', 'lot_id');
     }
 }

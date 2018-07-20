@@ -10,7 +10,6 @@ namespace App\Http\Controllers;
  */
 
 use App\Models\Lot;
-use App\Models\Instrument;
 use Illuminate\Http\Request;
 
 class LotController extends Controller

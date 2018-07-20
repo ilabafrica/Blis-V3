@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ControlTest;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ControlTestController extends Controller
 {
@@ -21,11 +22,11 @@ class ControlTestController extends Controller
             $search = $request->query('search');
             $controlTest = ControlTest::whereHas('name', function ($query) use ($search) {
                 $query->where('name', 'LIKE', "%{$search}%");
-            })->with('instrument')
+            })->with('lot.instrument')
                 ->paginate(10);
         } else {
-            $controlTest = ControlTest::with('instrument')->orderBy('id', 'ASC')->paginate(10);
-        }    
+            $controlTest = ControlTest::with('lot.instrument')->orderBy('id', 'ASC')->paginate(10);
+        }
 
         return response()->json($controlTest);
     }
@@ -37,7 +38,7 @@ class ControlTestController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
         $rules = [
             'lot_id' => 'required',
             /*'tested_by' => 'required',
@@ -87,12 +88,12 @@ class ControlTestController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
+    {   
         $rules = [
             'lot_id' => 'required',
-            'tested_by' => 'required',
+            /*'tested_by' => 'required',
             'control_id' => 'required',
-            'control_type_id' => 'required',
+            'control_type_id' => 'required',*/
         ];
 
         $validator = \Validator::make($request->all(), $rules);
@@ -102,8 +103,12 @@ class ControlTestController extends Controller
             $controlTest = ControlTest::findOrFail($id);
             $controlTest->lot_id = $request->input('lot_id');
             $controlTest->tested_by = $request->input('tested_by');
-            $controlTest->control_id = $request->input('control_id');
-            $controlTest->control_type_id = $request->input('control_type_id');
+            $controlTest->test_status_id = $request->input('test_status_id');
+            if($request->input('time_started') == 0){
+                $controlTest->time_started =  Carbon::now()->toDateTimeString();;
+            }
+            /*$controlTest->control_id = $request->input('control_id');
+            $controlTest->control_type_id = $request->input('control_type_id');*/
 
             try {
                 $controlTest->save();
