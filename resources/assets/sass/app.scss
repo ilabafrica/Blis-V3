@@ -44,10 +44,17 @@
 .blis-stats-title{
   
 }
+.blis-stats-card-parent{
+  padding:10px;
+}
 .blis-stats-card{
-  grid-template-columns: 4fr 6fr;
-  padding: 1rem;
+  padding: 15px;
+  background-color: white;
 }
 .blis-stats-num{
   font-size: 2rem;
+}
+.blis-stats-num-label{
+  color: #d1d1d1;
+
 }
