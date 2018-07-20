@@ -651,7 +651,6 @@ class CreateBlisTables extends Migration
             $table->integer('measure_id')->unsigned();
             $table->integer('control_test_id')->unsigned();
             $table->integer('measure_range_id')->unsigned()->nullable();
-            $table->unique(['control_test_id', 'measure_id', 'measure_range_id']);
 
             $table->foreign('control_test_id')->references('id')->on('control_tests');
             $table->foreign('measure_id')->references('id')->on('measures');
@@ -670,10 +669,26 @@ class CreateBlisTables extends Migration
 
         /* Measure Types */
         $measureTypes = [
-            ['id' => '1', 'name' => 'Numeric'],
-            ['id' => '2', 'name' => 'Alphanumeric'],
-            ['id' => '3', 'name' => 'Multi Alphanumeric'],
-            ['id' => '4', 'name' => 'Free Text'],
+            [
+                'id' => '1',
+                'code' => 'numeric',
+                'name' => 'Numeric'
+            ],
+            [
+                'id' => '2',
+                'code' => 'alphanumeric',
+                'name' => 'Alphanumeric'
+            ],
+            [
+                'id' => '3',
+                'code' => 'multi_alphanumeric',
+                'name' => 'Multi Alphanumeric'
+            ],
+            [
+                'id' => '4',
+                'code' => 'free_text',
+                'name' => 'Free Text'
+            ],
         ];
 
         foreach ($measureTypes as $measureType) {

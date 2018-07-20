@@ -8320,18 +8320,18 @@ class DevSeeder extends Seeder
         $this->command->info("Susceptibility Break Points Seeded");
 
         // create users, tobe used randomly
-        factory(\App\User::class, 20)->create();
+        factory(\App\User::class, 10)->create();
         $this->command->info("Users Seeded");
 
         // create locations, tobe used randomly
-        factory(\App\Models\Location::class, 100)->create();
+        factory(\App\Models\Location::class, 10)->create();
         $this->command->info("Locations Seeded");
 
         // create tests with all its dependencies from results to patient
 
         $this->command->info("Tests Seeding...");
 
-        factory(\App\Models\Test::class, (int)env('DEV_TEST_NO',1000))->create();
+        factory(\App\Models\Test::class, (int)env('DEV_TEST_NO',10))->create();
         $this->command->info("Tests Seeded");
 
         // create results

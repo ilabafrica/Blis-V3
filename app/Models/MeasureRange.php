@@ -18,6 +18,6 @@ class MeasureRange extends Model
 
         public function gender()
     {
-        return $this->hasOne('App\Models\Gender', 'id', 'gender_id');
+        return $this->belongsTo('App\Models\Gender');
     }
 }
