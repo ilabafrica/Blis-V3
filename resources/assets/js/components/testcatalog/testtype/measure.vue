@@ -23,51 +23,63 @@
           <v-card-text>
 
             <!-- list of measure ranges -->
-            <v-card>
+            <div  v-if="measure.measure_type">
+              <v-card v-if="measure.measure_type.code === 'numeric'">
+                <v-card-title>
+                  <v-btn color="info" dark @click="dialogNumericRange = !dialogNumericRange">
+                    Add New Range
+                  </v-btn>
+                </v-card-title>
+                <v-layout>
+                  <v-data-table
+                    :headers="rangeheaders"
+                    :items="measure.measure_ranges"
+                    max-width="900px"
+                    hide-actions >
+                    <template slot="items" slot-scope="row">
+                      <tr :key="row.item.id">
+                        <td>{{row.item.age_min}}</td>
+                        <td>{{row.item.age_max}}</td>
+                        <td>{{row.item.gender.display}}</td>
+                        <td>{{row.item.low}}</td>
+                        <td>{{row.item.high}}</td>
+                        <td class="justify-left layout px-0">
+                          <v-btn icon class="mx-0" @click="deleteItem(row.item)">
+                            <v-icon color="pink">delete</v-icon>
+                          </v-btn>
+                        </td>
+                      </tr>
+                    </template>
+                  </v-data-table>
+                </v-layout>
+              </v-card>
+            <v-card v-if="measure.measure_type.code != 'numeric'">
               <v-card-title>
-                Measure Ranges
-              </v-card-title>
-                <!-- todo: use constants explained -->
-              <v-layout v-if="measureTypeID === 1">
-                <v-btn color="info" dark @click="dialogNumericRange = !dialogNumericRange">
-                  Add New Range
-                </v-btn>
-                <v-data-table
-                  :headers="rangeheaders"
-                  :items="measureranges"
-                  max-width="900px"
-                  hide-actions >
-                  <template slot="items" slot-scope="row">
-                    <tr :key="row.item.id">
-                      <td>{{row.item.display}}</td>
-                      <td>{{row.item.age_min}}</td>
-                      <td>{{row.item.age_max}}</td>
-                      <td>{{row.item.gender.display}}</td>
-                      <td>{{row.item.low}}</td>
-                      <td>{{row.item.high}}</td>
-                    </tr>
-                  </template>
-                </v-data-table>
-              </v-layout>
-              <v-layout v-if="measureTypeID != 1">
-                <!-- todo: use constants explained -->
                 <v-btn color="info" dark @click="dialogAlphanumericRange = !dialogAlphanumericRange">
                   Add New Range
                 </v-btn>
+              </v-card-title>
+              <v-layout>
                 <v-data-table
                   :headers="alpharangeheaders"
-                  :items="measureranges"
+                  :items="measure.measure_ranges"
                   max-width="900px"
                   hide-actions>
                   <template slot="items" slot-scope="row">
                     <tr :key="row.item.id">
                       <td>{{row.item.display}}</td>
                       <td>{{row.item.interpretation_id}}</td>
+                      <td class="justify-left layout px-0">
+                        <v-btn icon class="mx-0" @click="deleteItem(row.item)">
+                          <v-icon color="pink">delete</v-icon>
+                        </v-btn>
+                      </td>
                     </tr>
                   </template>
                 </v-data-table>
               </v-layout>
             </v-card>
+            </div>
 
             <v-container>
               <v-layout child-flex row wrap>
@@ -86,7 +98,7 @@
                       </v-flex>
                       <v-flex xs12 sm12 md12>
                         <v-select
-                          :items="measure_types"
+                          :items="measureTypes"
                           v-model="measurefield.measure_type_id"
                           overflow
                           item-text="name"
@@ -246,16 +258,15 @@
           <template slot="items" slot-scope="props">
             <td>{{ props.item.name }}</td>
             <td class="text-xs-left">{{ props.item.unit }}</td>
-            <td class="text-xs-left">{{ props.item.description }}</td>
             <td class="justify-left layout px-0">
               <v-btn icon class="mx-0" @click="editMeasure(props.item)">
                 <v-icon color="teal">edit</v-icon>
               </v-btn>
+              <v-btn icon class="mx-0" @click="getMeasureRanges(props.item)">
+                <v-icon color="info">tune</v-icon>
+              </v-btn>
               <v-btn icon class="mx-0" @click="deleteMeasure(props.item)">
                 <v-icon color="pink">delete</v-icon>
-              </v-btn>
-              <v-btn color="info" dark @click="viewMeasureRanges(props.item)">
-                Measure Ranges...
               </v-btn>
             </td>
           </template>
@@ -277,11 +288,12 @@
       delete: false,
       saving: false,
       updating: false,
-      measureTypeID: 0,
+      savingMeasure: false,
+      updatingMeasure: false,
+      measureType: '',
       RangeID: 0,
 
-      specimen_type: [],
-      testtypemapping:[],
+      measure: {},
 
       measurefield: {
         test_type_id: '',
@@ -291,7 +303,7 @@
         description: '',
       },
 
-      defaultMeasureItem: {
+      defaultMeasure: {
         test_type_id: '',
         measure_type_id: '',
         name: '',
@@ -308,7 +320,7 @@
         high: '',
       },
 
-      defaultNumericsItem:{
+      defaultNumerics:{
         age_range: '',
         age_min: '',
         age_max: '',
@@ -322,7 +334,7 @@
         interpretation_id: '',
       },
 
-      defaultAlphaNumericsItem:{
+      defaultAlphaNumerics:{
         display: '',
         interpretation_id: '',
       },
@@ -330,35 +342,34 @@
       age_range: ['Years', 'Months', 'Days'],
       gender: [],
       interpretation: [],
-      measure_types: [],
-      measureranges: [],
+      measureTypes: [],
+      measureRanges: [],
       specimenTypes: [],
       testType: {},
       measures: [],
-      testtypecategory: [],
       items: [],
       
       search: '',
       query: '',
 
       rangeheaders: [
-        { text: 'Display', value: 'display' },
         { text: 'Minimum Age (Years)', value: 'age_min' },
         { text: 'Maximum Age (Years)', value: 'age_max' },
         { text: 'Gender', value: 'gender_id' },
         { text: 'Lower limit', value: 'low' },
         { text: 'Higher limit', value: 'high' },
+        { text: 'Actions', value: 'name', sortable: false },
       ],
       alpharangeheaders: [
         { text: 'Display', value: 'display' },
         { text: 'Interpretation', value: 'interpretation_id' },
+        { text: 'Actions', value: 'name', sortable: false },
       ],
       measureheaders: [
         { text: 'Name', value: 'name' },
         { text: 'Unit', value: 'unit' },
-        { text: 'Description', value: 'description', sortable: false }
+        { text: 'Actions', value: 'name', sortable: false },
       ]
-
     }),
 
     computed: {
@@ -412,26 +423,7 @@
             this.query = this.query+'&search='+this.search;
         }
 
-        apiCall({url: '/api/testtypemapping', method: 'GET' })
-        .then(resp => {
-          console.log(resp)
-          this.testtypemapping = resp;
-        })
-        .catch(error => {
-          console.log(error.response)
-        })
-
-        apiCall({url: '/api/testtype?' + this.query, method: 'GET' })
-        .then(resp => {
-          console.log(resp)
-          this.testType = resp.data;
-          this.pagination.total = resp.total;
-        })
-        .catch(error => {
-          console.log(error.response)
-        })
-
-        apiCall({url: '/api/gender?' + this.query, method: 'GET' })
+        apiCall({url: '/api/gender', method: 'GET' })
         .then(resp => {
           console.log(resp)
           this.gender = resp;
@@ -440,7 +432,7 @@
           console.log(error.response)
         })
 
-        apiCall({url: '/api/interpretation?' + this.query, method: 'GET' })
+        apiCall({url: '/api/interpretation', method: 'GET' })
         .then(resp => {
           console.log(resp)
           this.interpretation = resp;
@@ -449,28 +441,10 @@
           console.log(error.response)
         })
 
-        apiCall({url: '/api/testtypecategory', method: 'GET' })
-        .then(resp => {
-          console.log(resp)
-          this.testtypecategory = resp.data;
-        })
-        .catch(error => {
-          console.log(error.response)
-        })
-
         apiCall({url: '/api/measuretype', method: 'GET' })
         .then(resp => {
           console.log(resp)
-          this.measure_types = resp;
-        })
-        .catch(error => {
-          console.log(error.response)
-        })
-
-        apiCall({url: '/api/measurerange', method: 'GET' })
-        .then(resp => {
-          console.log(resp)
-          this.measureranges = resp;
+          this.measureTypes = resp;
         })
         .catch(error => {
           console.log(error.response)
@@ -478,26 +452,26 @@
       },
 
       editMeasure (item) {
-        this.updating = true
+        this.updatingMeasure = true
         this.itemIndex = this.measures.indexOf(item)
         this.measurefield = Object.assign({}, item)
         this.dialogMeasure = true
       },
 
-      viewMeasureRanges (item){
-        this.measureRangeMapper(item);
-        console.log('item id')
-        console.log(item.id)
-        this.RangeID = item.id
-        this.itemIndex = this.measures.indexOf(item)
-        if(item.measure_type_id === 1){
-          this.measureTypeID = 1
-        }else if(item.measure_type_id === 2){
-          this.measureTypeID = 2
-        }else if(item.measure_type_id === 3){
-          this.measureTypeID = 3
+      getMeasureRanges (measure){
+
+        this.measure = measure
+        this.measureRanges = measure.measure_ranges;
+        this.measureId = measure.id
+        this.itemIndex = this.measures.indexOf(measure)
+        if(measure.measure_type.code === 'numeric'){
+          this.measureType = 'numeric';
+        }else if(measure.measure_type.code === 'alphanumeric'){
+          this.measureType = 'alphanumeric';
+        }else if(measure.measure_type.code === 'multi_alphanumeric'){
+          this.measureType = 'multi_alphanumeric';
         }else{
-          this.measureTypeID = 4
+          this.measureType = 'free_text'
         }
         this.dialog = true
       },
@@ -521,103 +495,38 @@
 
       closeMainDialog () {
         this.dialog = false
-        // if not saving reset dialog references to datatables
-        if (!this.saving) {
-          this.resetDialogReferences();
-        }
       },
 
       closeMeasureDialogue () {
         this.dialogMeasure=false
-        this.updating = false
+        this.updatingMeasure = false
         this.resetMeasureDialogReferences();
-        // if not saving reset dialog references to datatables
-        /*if (!this.saving) {
-          this.resetMeasureDialogReferences();
-        }*/
       },
 
       closeMeasureRangeDialog () {
         this.dialogNumericRange=false
-        this.updating=false
+        this.updatingMeasureRange=false
         this.resetMeasureRangeDialogReferences();
 
       },
 
       closeAlphaMeasureRangeDialog () {
         this.dialogAlphanumericRange=false
-        this.updating=false
+        this.updatingMeasureRange=false
         this.resetAlphaMeasureRangeDialogReferences();
 
       },
 
       resetMeasureDialogReferences() {
-        this.measurefield = Object.assign({}, this.defaultMeasureItem)
+        this.measurefield = Object.assign({}, this.defaultMeasure)
       },
 
       resetMeasureRangeDialogReferences () {
-        this.numerics = Object.assign({}, this.defaultNumericsItem)
+        this.numerics = Object.assign({}, this.defaultNumerics)
       },
 
       resetAlphaMeasureRangeDialogReferences () {
-        this.alphanumerics = Object.assign({}, this.defaultAlphaNumericsItem)
-      },
-
-      testTypeMapper: function(testTypeId){
-        testTypeId = this.newTest.id;
-        this.testtypemapping = this.testtypemapping.filter(function(testID){
-          return testID.test_type_id === testTypeId;
-        })
-      },
-
-      measureMapper: function(testTypeId){
-        testTypeId = this.newTest.id;
-        this.measures = this.measures.filter(function(measureID){
-          return measureID.test_type_id === testTypeId;
-        })
-      },
-
-      measureRangeMapper: function(item){
-        this.measureranges = this.measureranges.filter(function(measureID){
-          return measureID.measure_id === item.id;
-        })
-      },
-
-      saveTest () {
-
-        this.saving = true;
-        // update
-        if (this.updating) {
-          apiCall({url: '/api/testtype/'+this.newTest.id, data: this.newTest, method: 'PUT' })
-          .then(resp => {
-            Object.assign(this.testType[this.editLevel], this.newTest)
-            console.log(resp)
-          })
-          .catch(error => {
-            console.log(error.response)
-          })
-
-          this.testTypeMapper();
-
-          this.specimen_type = _.map(this.testtypemapping, 'specimen_type_id');
-          
-          this.close()
-          this.dialog = true;
-
-        // store
-        } else {
-
-          apiCall({url: '/api/testtype', data: this.newTest, method: 'POST' })
-          .then(resp => {
-            this.testType.push(this.newTest)
-            console.log(resp.testTypeId)
-            this.newTest.id = resp.testTypeId;
-          })
-          .catch(error => {
-            console.log(error.response)
-          })
-          this.close()
-        }
+        this.alphanumerics = Object.assign({}, this.defaultAlphaNumerics)
       },
 
       updateTestType () {
@@ -677,9 +586,9 @@
       },
 
       saveMeasure(){
-        this.saving = true;
+        this.savingMeasure = true;
         // update
-        if (this.updating) {
+        if (this.updatingMeasure) {
 
           apiCall({url: '/api/measure/'+this.measurefield.id, data: this.measurefield, method: 'PUT' })
           .then(resp => {
@@ -693,7 +602,7 @@
 
         //store
         } else {
-        this.measurefield.test_type_id = this.newTest.id;
+        this.measurefield.test_type_id = this.testType.id;
 
           apiCall({url: '/api/measure', data: this.measurefield, method: 'POST' })
           .then(resp => {
@@ -710,11 +619,12 @@
       },
 
       saveMeasureRange(){
-        if(this.measureTypeID === 1){
-          this.numerics.measure_id = this.RangeID
+
+        if(this.measureType === 'numeric'){
+          this.numerics.measure_id = this.measureId
           apiCall({url: '/api/measurerange', data: this.numerics, method: 'POST' })
           .then(resp => {
-            this.measureranges.push(this.numerics)
+            this.measureRanges.push(this.numerics)
             console.log('numerics');
             console.log(this.numerics);
           })
@@ -723,10 +633,10 @@
           })
           this.closeMeasureRangeDialog();
         }else{
-          this.alphanumerics.measure_id = this.RangeID
+          this.alphanumerics.measure_id = this.measureId
           apiCall({url: '/api/measurerange', data: this.alphanumerics, method: 'POST' })
           .then(resp => {
-            this.measureranges.push(this.alphanumerics)
+            this.measureRanges.push(this.alphanumerics)
             console.log('alphanumerics');
             console.log(this.alphanumerics);
           })
@@ -735,10 +645,6 @@
           })
           this.closeAlphaMeasureRangeDialog();
         }
-        
-        /*this.resetDialogReferences();
-        this.closeMainDialog();
-        this.saving = false;*/
       }
     }
   }

@@ -69,7 +69,7 @@
           Tests
       </v-list-tile-title>
     </v-list-tile>
-    <v-list-group prepend-icon="sync" value="true">
+    <v-list-group prepend-icon="sync_problem" value="true">
       <v-list-tile slot="activator">
         <v-list-tile-title>Quality Controls</v-list-tile-title>
       </v-list-tile>

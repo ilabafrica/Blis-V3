@@ -669,10 +669,26 @@ class CreateBlisTables extends Migration
 
         /* Measure Types */
         $measureTypes = [
-            ['id' => '1', 'name' => 'Numeric'],
-            ['id' => '2', 'name' => 'Alphanumeric'],
-            ['id' => '3', 'name' => 'Multi Alphanumeric'],
-            ['id' => '4', 'name' => 'Free Text'],
+            [
+                'id' => '1',
+                'code' => 'numeric',
+                'name' => 'Numeric'
+            ],
+            [
+                'id' => '2',
+                'code' => 'alphanumeric',
+                'name' => 'Alphanumeric'
+            ],
+            [
+                'id' => '3',
+                'code' => 'multi_alphanumeric',
+                'name' => 'Multi Alphanumeric'
+            ],
+            [
+                'id' => '4',
+                'code' => 'free_text',
+                'name' => 'Free Text'
+            ],
         ];
 
         foreach ($measureTypes as $measureType) {
