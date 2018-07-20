@@ -38,3 +38,16 @@
 ::-webkit-scrollbar-track {
   background: rgb(241, 241, 241);
 }
+.blis-grid{
+  display: grid;
+}
+.blis-stats-title{
+  
+}
+.blis-stats-card{
+  grid-template-columns: 4fr 6fr;
+  padding: 1rem;
+}
+.blis-stats-num{
+  font-size: 2rem;
+}
