@@ -18,6 +18,7 @@ Route::get('/tests-done', 'UserStatisticsController@testsDone');
 Route::get('/tests-done/gender', 'UserStatisticsController@testsDoneByGender');
 Route::get('/tests-done/full', 'UserStatisticsController@testsDonePlusPatient');
 Route::get('/tests-verified', 'UserStatisticsController@testsVerified');
+Route::get('/test-statuses', 'UserStatisticsController@testStatuses');
 Route::get('/logins', 'UserStatisticsController@logins2');
 
 Route::middleware('auth:api')->group(function () {

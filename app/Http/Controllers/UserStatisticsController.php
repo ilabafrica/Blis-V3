@@ -44,4 +44,9 @@ class UserStatisticsController extends Controller
         $tests = User::find(1)->first()->testsVerified()->groupBy('timing')->select(DB::raw('count(*) as total, DATE(time_started) as timing'))->get();        
         return response()->json($tests);
     }
+    public function testStatuses(){
+        $test_statuses = DB::select("SELECT id, name, test_phase_id FROM test_statuses");
+        return response()->json($test_statuses);
+    }
 }
+
