@@ -13,6 +13,18 @@
                     <span class="blis-stats-num-label">Total Tests {{status.name}}</span>
                 </div>
             </div>
+            <div class="flex blis-stats-card-parent xs12 sm4 md3 lg2" v-if="oldest_patient_tested">
+                <div class="elevation-1 blis-grid blis-stats-card">
+                    <span class="blis-stats-num"> {{oldest_patient_tested.age_at_test}} </span>
+                    <span class="blis-stats-num-label">Oldest Patient Tested</span>
+                </div>
+            </div>
+            <div class="flex blis-stats-card-parent xs12 sm4 md3 lg2" v-if="youngest_patient_tested">
+                <div class="elevation-1 blis-grid blis-stats-card">
+                    <span class="blis-stats-num"> {{youngest_patient_tested.age_at_test}} </span>
+                    <span class="blis-stats-num-label">Youngest Patient Tested</span>
+                </div>
+            </div>
         </v-layout>
         <v-layout row wrap style="margin:20px;">
             <v-flex xs12 sm6 md4 lg4 style="padding:10px;">
@@ -42,6 +54,16 @@
                     </v-card-title>
                     <v-card-text>
                         <canvas id="myChart3" width="400" height="400"></canvas>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+            <v-flex xs12 sm6 md4 lg4 style="padding:10px;">
+                <v-card>
+                    <v-card-title class="headline grey lighten-2" primary-title>
+                        Total Tests Per Category
+                    </v-card-title>
+                    <v-card-text>
+                        <canvas id="myChart4" width="400" height="400"></canvas>
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -78,8 +100,11 @@ export default {
     counts:{
         date_counts: {},
         gender_counts : {},
-        type_counts:{}
-    }
+        type_counts:{},
+        type_category_counts:{}
+    },
+    oldest_patient_tested:{},
+    youngest_patient_tested:{}
   }),
 
   computed: {
@@ -107,6 +132,13 @@ export default {
         .catch(error => {
             console.log(error.response)
         })
+        apiCall({url:"/api/test-types?"+this.query, method:"GET"})
+        .then(resp=>{
+            Vue.set(this.tests, 'types', resp)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
 
         apiCall({url:"/api/tests-done/full?"+this.query, method:"GET"})
         .then(resp=>{
@@ -114,7 +146,7 @@ export default {
             // let gender_counts = {'1':0, '2':0, '3':0,'4':0}
             let gender_counts = {}
             let date_counts = {}
-            let status_counts = {}, type_counts = {}
+            let status_counts = {}, type_counts = {}, type_category_counts = {}
             let youngest_patient_tested = {}, oldest_patient_tested = {}
             resp.map(x =>{
                 // For each iteration check if a gender index has been instanitated matching the current gender id and add 1 to it else assign the new gender count index a value of 1 
@@ -133,9 +165,12 @@ export default {
                 if(typeof oldest_patient_tested.age_at_test === 'undefined' || Math.round(oldest_patient_tested.age_at_test * 100)<=Math.round(x.age_at_test * 100)){
                     oldest_patient_tested =  x
                 }
-                type_counts[x.test_type_id]? true : type_counts[x.test_type_id] = {}
-                type_counts[x.test_type_id].name = x.test_type_name
-                type_counts[x.test_type_id].total = type_counts[x.test_type_id].total ? type_counts[x.test_type_id].total + 1 : 1 
+                // type_counts[x.test_type_id]? true : type_counts[x.test_type_id] = {}
+                // type_counts[x.test_type_id].name = x.test_type_name
+                // type_counts[x.test_type_id].total = type_counts[x.test_type_id].total ? type_counts[x.test_type_id].total + 1 : 1 
+                
+                type_counts[x.test_type_id] = type_counts[x.test_type_id] ? type_counts[x.test_type_id] + 1 : 1 
+                type_category_counts[x.test_type_category_id] = type_category_counts[x.test_type_category_id] ? type_category_counts[x.test_type_category_id] + 1 : 1 
             })
             console.log("Gender Counts are" ,gender_counts)
             console.log("Date Counts are",date_counts)
@@ -143,6 +178,7 @@ export default {
             console.log("Youngest Patient Tested",youngest_patient_tested)
             console.log("Oldest Patient Tested",oldest_patient_tested)
             console.log("Type Counts are",type_counts)
+            console.log("Type Category Counts are",type_category_counts)
 
             let labels = [], gender_count_totals = [], gender_count_totals_done = []
             for (const key in gender_counts) {
@@ -164,6 +200,8 @@ export default {
                     }
                 };
            
+            let basicBackgroundColors = ['#1976d2', '#a6e1fa', '#0a2472', '#e4e4e4', '#EAD2AC']
+            
             var ctx = document.getElementById("myChart");
             var myRadarChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -172,7 +210,7 @@ export default {
                     datasets: [{
                             data: gender_count_totals,
                             label: 'Total Per Gender',
-                            backgroundColor:['#1976d2', '#a6e1fa', '#0a2472', '#e4e4e4']
+                            backgroundColor: basicBackgroundColors
                         }
                     ]
                 }
@@ -185,6 +223,10 @@ export default {
             let ordered_status_counts = {};
             Object.keys(status_counts).sort().forEach(function(key) {
                 ordered_status_counts[key] = status_counts[key];
+            });
+            let ordered_type_category_counts = {};
+            Object.keys(type_category_counts).sort().forEach(function(key) {
+                ordered_type_category_counts[key] = type_category_counts[key];
             });
             var ctx2 = document.getElementById("myChart2");
             var myRadarChart = new Chart(ctx2, {
@@ -207,7 +249,22 @@ export default {
                     labels: Object.keys(ordered_status_counts),
                     datasets: [{
                             data: Object.values(ordered_status_counts),
-                            label: 'Total Test Per Status'
+                            label: 'Total Test Per Status',
+                            backgroundColor: basicBackgroundColors
+                        }
+                    ]
+                }
+            });
+
+            var ctx4 = document.getElementById("myChart4");
+            var mydoughnutChart2 = new Chart(ctx4, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(ordered_type_category_counts),
+                    datasets: [{
+                            data: Object.values(ordered_type_category_counts),
+                            label: 'Total Test Per Category',
+                            backgroundColor: basicBackgroundColors
                         }
                     ]
                 }
@@ -215,6 +272,8 @@ export default {
             
             
             Vue.set(this.tests,'cur',resp)
+            Vue.set(this,'youngest_patient_tested',youngest_patient_tested)
+            Vue.set(this,'oldest_patient_tested',oldest_patient_tested)
             
             Vue.set(this.counts, 'gender_counts', gender_counts)
             Vue.set(this.counts, 'date_counts', ordered_date_counts)
