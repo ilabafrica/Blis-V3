@@ -17,7 +17,7 @@
       </v-menu>
     </v-toolbar>
     <v-content>
-      <v-container>
+      <v-container fluid>
         <loading v-if='authLoading'></loading>
         <router-view></router-view>
       </v-container>

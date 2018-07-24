@@ -32,7 +32,7 @@ class UserStatisticsController extends Controller
     //
     public function testsDonePlusPatient(Request $request)
     {
-        $tests = DB::select('SELECT t.tested_by, DATE(t.time_started) as test_started_at, t.test_status_id, g.code as gender_id, DATEDIFF(t.time_started, p.birth_date)/365.25 as age_at_test, e.location_id FROM patients p, tests t, encounters e, genders g WHERE p.id = e.patient_id AND t.encounter_id=e.id AND t.tested_by = 1 AND g.id = p.gender_id');
+        $tests = DB::select('SELECT t.id, t.tested_by, DATE(t.time_started) as test_started_at, t.test_status_id, t.test_type_id, tt.name as test_type_name, g.code as gender_id, DATEDIFF(t.time_started, p.birth_date)/365.25 as age_at_test, e.location_id FROM patients p, tests t, encounters e, genders g, test_types tt WHERE p.id = e.patient_id AND t.encounter_id=e.id AND t.tested_by = 1 AND g.id = p.gender_id AND tt.id = t.test_type_id');
         return response()->json($tests);
     }
     public function testsVerified(Request $request)
@@ -47,6 +47,10 @@ class UserStatisticsController extends Controller
     public function testStatuses(){
         $test_statuses = DB::select("SELECT id, name, test_phase_id FROM test_statuses");
         return response()->json($test_statuses);
+    }
+    public function testTypes(){
+        $test_types = DB::select("SELECT id, name FROM test_types");
+        return response()->json($test_types);
     }
 }
 
