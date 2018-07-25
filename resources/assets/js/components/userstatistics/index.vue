@@ -1,16 +1,16 @@
 <template>
     <div>
         <v-layout row wrap>   
-            <div v-if="logins" class="flex blis-stats-card-parent xs12 sm6 md4 lg3" v-for="x in getAggregateLogins()" :key ="x">
-                <v-card>
+            <div v-if="logins" class="flex blis-stats-card-parent xs12 sm6 md4 lg3" v-for="(x,i) in users" :key ="i">
+                <v-card >
                     <v-card-title class="headline grey lighten-2" >
-                        {{x.details.name}}
+                        {{x.name}}
                     </v-card-title>
                     <v-card-text>
-                        Account Created: {{x.details.created_at}} <br>
-                        First Logged Access: {{x.first_login}}<br>
-                        Last Logged Access: {{x.last_login}}<br>
-                        Total Logged Accesses: {{x.total}}
+                        Account Created: {{x.created_at || "N/A"}} <br>
+                        First Logged Access: {{x.first_login || "N/A"}}<br>
+                        Last Logged Access: {{x.last_login || "N/A"}}<br>
+                        Total Logged Accesses: {{x.total || "N/A"}}
                     </v-card-text>
                 </v-card>
             </div>
@@ -80,11 +80,15 @@ export default {
                 }
             }
             Vue.set(this, 'users', resp)
-            
+
+            //Getting users is the backbone of stats, so its request is "blocking" the thread
             apiCall({url:"/api/logins?"+this.query, method:"GET"})
             .then(resp=>{
+                resp.forEach(element => {
+                    this.users[element.user_id] = Object.assign({},this.users[element.user_id],{...element})
+                });
                 Vue.set(this, 'logins', resp)
-                console.log("Logins are ", this.logins)
+                console.log("Logins are ", this.users)
             })
 
             apiCall({url:"/api/test-statuses?"+this.query, method:"GET"})

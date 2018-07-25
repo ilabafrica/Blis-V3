@@ -20,8 +20,8 @@ class UserStatisticsController extends Controller
     }
     public function logins2(){
         // $logins = DB::select('SELECT count(*) as total, DATE(created_at) as timing FROM  oauth_access_tokens where user_id=1 GROUP BY timing');
-        // $logins = DB::table('oauth_access_tokens')->groupBy('user_id')->selectRaw('user_id, count(*) as total, MAX(created_at) as last_login, MIN(created_at) as first_login')->get();
-        $logins = DB::select('SELECT u.id, u.name, u.created_at, oat.created_at as access_time FROM users u, oauth_access_tokens oat WHERE u.id = oat.user_id');
+        $logins = DB::table('oauth_access_tokens')->groupBy('user_id')->selectRaw('user_id, count(*) as total, MAX(created_at) as last_login, MIN(created_at) as first_login')->get();
+        // $logins = DB::select('SELECT u.id, u.name, u.created_at, oat.created_at as access_time FROM users u, oauth_access_tokens oat WHERE u.id = oat.user_id');
         return response()->json($logins);
     }
     //
