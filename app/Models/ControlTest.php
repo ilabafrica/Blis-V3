@@ -36,4 +36,9 @@ class ControlTest extends Model
     {
         return $this->hasOne('App\Models\Lot', 'id', 'lot_id');
     }
+
+    public function testType()
+    {
+        return $this->hasOne('App\Models\TestType', 'id', 'test_type_id');
+    }
 }

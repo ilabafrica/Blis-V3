@@ -30,29 +30,73 @@ class ControlResultController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'results' => 'required',
+            /*'results' => 'required',
             'control_measure_id' => 'required',
-            'control_test_id' => 'required',
+            'control_test_id' => 'required',*/
         ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator);
         } else {
+            $controlResults = [];
+            $input = $request->all();
+            foreach ($input as $index => $value) {
+                if($value){
+                    if(is_array($value['result'])){
+                        $this->storeMultiAlpha($value);
+                    }else{
+                        $controlResult = new ControlResult;
+                        $controlResult->result = $value['result'];
+                        $controlResult->measure_id = $value['measure_id'];
+                        $controlResult->control_test_id = $value['control_test_id'];
+
+                        if($value['measure_ranges_id']){
+                            foreach ($value['measure_ranges_id'] as $measure_range) {
+                                if ($value['result'] === $measure_range['display']){
+                                    $controlResult->measure_range_id = $measure_range['id'];
+                                }
+                            }
+                        }
+                        try {
+                            $controlResult->save();
+                            $controlResults[] = $controlResult;
+                            
+                        } catch (\Illuminate\Database\QueryException $e) {
+                            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                        }
+                    }
+                }
+            }
+
+            return response()->json($controlResults);
+        }
+    }
+
+    public function storeMultiAlpha($value){
+        
+        foreach ($value['result'] as $result) {
             $controlResult = new ControlResult;
-            $controlResult->results = $request->input('results');
-            $controlResult->control_measure_id = $request->input('control_measure_id');
-            $controlResult->control_test_id = $request->input('control_test_id');
+            $controlResult->result = $result;
+            $controlResult->measure_id = $value['measure_id'];
+            $controlResult->control_test_id = $value['control_test_id'];
+
+            if($value['measure_ranges_id']){
+                foreach ($value['measure_ranges_id'] as $measure_range) {
+                    if ($result === $measure_range['display']){
+                        $controlResult->measure_range_id = $measure_range['id'];
+                    }
+                }
+            }
 
             try {
                 $controlResult->save();
-
-                return response()->json($controlResult);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
         }
     }
+
 
     /**
      * Display the specified resource.

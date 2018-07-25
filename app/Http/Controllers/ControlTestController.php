@@ -17,17 +17,16 @@ class ControlTestController extends Controller
 {
     public function index(Request $request)
     {
-
         if ($request->query('search')) {
             $search = $request->query('search');
             $controlTest = ControlTest::whereHas('name', function ($query) use ($search) {
                 $query->where('name', 'LIKE', "%{$search}%");
-            })->with('lot.instrument')
+            })->with('lot.instrument')->with('testType.measures')
                 ->paginate(10);
         } else {
-            $controlTest = ControlTest::with('lot.instrument')->orderBy('id', 'ASC')->paginate(10);
+            $controlTest = ControlTest::with('lot.instrument')->with('testType.measures.measureRanges')
+            ->with('testType.measures.measureType')->orderBy('id', 'ASC')->paginate(10);
         }
-
         return response()->json($controlTest);
     }
 
