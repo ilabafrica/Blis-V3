@@ -14,13 +14,18 @@
 
 Route::post('/register', 'Auth\APIController@register');
 Route::post('/login', 'Auth\APIController@login');
+
 Route::get('/tests-done', 'UserStatisticsController@testsDone');
+Route::get('/tests-done/totals', 'UserStatisticsController@testsDoneTotals');
 Route::get('/tests-done/gender', 'UserStatisticsController@testsDoneByGender');
 Route::get('/tests-done/full', 'UserStatisticsController@testsDonePlusPatient');
 Route::get('/tests-verified', 'UserStatisticsController@testsVerified');
+Route::get('/tests-verified/totals', 'UserStatisticsController@testsVerifiedTotals');
 Route::get('/test-statuses', 'UserStatisticsController@testStatuses');
 Route::get('/test-types', 'UserStatisticsController@testTypes');
+Route::get('/test-type-categories', 'UserStatisticsController@testTypeCategories');
 Route::get('/logins', 'UserStatisticsController@logins2');
+Route::get('/stats/users', 'UserStatisticsController@getUsers');
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', 'Auth\APIController@logout');
