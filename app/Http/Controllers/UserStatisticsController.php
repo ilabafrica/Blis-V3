@@ -9,9 +9,8 @@ use Illuminate\Support\Facades\DB;
 
 class UserStatisticsController extends Controller
 {
-    public function getUsers(){
-        // $tests = Test::count()->values('id')->groupBy('id');
-        $users = User::all()->pluck('name','id');
+    public function getUsers(){        
+        $users = User::select('id','name','created_at')->get();
         return response()->json($users);
     }
     public function logins(){
@@ -19,9 +18,7 @@ class UserStatisticsController extends Controller
         return response()->json($logins);
     }
     public function logins2(){
-        // $logins = DB::select('SELECT count(*) as total, DATE(created_at) as timing FROM  oauth_access_tokens where user_id=1 GROUP BY timing');
-        $logins = DB::table('oauth_access_tokens')->groupBy('user_id')->selectRaw('user_id, count(*) as total, MAX(created_at) as last_login, MIN(created_at) as first_login')->get();
-        // $logins = DB::select('SELECT u.id, u.name, u.created_at, oat.created_at as access_time FROM users u, oauth_access_tokens oat WHERE u.id = oat.user_id');
+        $logins = DB::table('oauth_access_tokens')->groupBy('user_id')->selectRaw('user_id, count(*) as total, MAX(created_at) as last_login, MIN(created_at) as first_login')->get();        
         return response()->json($logins);
     }
     //
@@ -72,7 +69,7 @@ class UserStatisticsController extends Controller
         return response()->json($tests);
     }
     public function testsVerifiedTotals(){
-        $tests = DB::select('SELECT COUNT(*) as total, verified_by FROM tests GROUP BY tested_by');
+        $tests = DB::select('SELECT COUNT(*) as total, verified_by FROM tests GROUP BY verified_by');
         return response()->json($tests);
     }
     

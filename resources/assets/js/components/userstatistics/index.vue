@@ -1,17 +1,23 @@
 <template>
     <div>
         <v-layout row wrap>   
+            <p class="flex xs12" style="font-size:2rem; font-weight:100">User Statistics</p>
             <div v-if="logins" class="flex blis-stats-card-parent xs12 sm6 md4 lg3" v-for="(x,i) in users" :key ="i">
                 <v-card >
-                    <v-card-title class="headline grey lighten-2" >
+                    <v-card-title class="headline blue-text">
                         {{x.name}}
                     </v-card-title>
                     <v-card-text>
-                        Account Created: {{x.created_at || "N/A"}} <br>
-                        First Logged Access: {{x.first_login || "N/A"}}<br>
-                        Last Logged Access: {{x.last_login || "N/A"}}<br>
-                        Total Logged Accesses: {{x.total || "N/A"}}
+                        <span class="grey--text">Account Created: </span> {{x.created_at || "N/A"}} <br>
+                        <span class="grey--text">First Logged Access: </span> {{x.first_login || "N/A"}}<br>
+                        <span class="grey--text">Last Logged Access: </span> {{x.last_login || "N/A"}}<br>
+                        <span class="grey--text">Total Logged Accesses: </span> {{x.total || "N/A"}} <br>                        
+                        <span class="grey--text">Tests Done: </span> {{x.tests_done || "N/A"}} <br>                        
+                        <span class="grey--text">Tests Verified: </span> {{x.tests_verified || "N/A"}} <br>                        
                     </v-card-text>
+                    <v-card-actions style="padding:0">                        
+                        <v-btn block class="blue--text white" style="margin:0">View More</v-btn>
+                    </v-card-actions>                    
                 </v-card>
             </div>
             
@@ -25,6 +31,7 @@ import apiCall from "../../utils/api";
 import Chart from "chart.js";
 export default {
   data: () => ({
+    url_prefix: "/api/stats/",
     search: "",
     query: "",
     pagination: {
@@ -72,26 +79,26 @@ export default {
             this.query = this.query + "&search=" + this.search;
         }
 
-        apiCall({url:"/api/stats/users?"+this.query, method:"GET"})
+        apiCall({url:this.url_prefix+"users?"+this.query, method:"GET"})
         .then(resp=>{
-            for (const key in resp) {
-                if (resp.hasOwnProperty(key)) {
-                    resp[key] = {name: resp[key]}
-                }
-            }
-            Vue.set(this, 'users', resp)
+            let users = {}
+            resp.map(x => {
+                users[x.id]={name:x.name, created_at:x.created_at}
+            })
+            Vue.set(this, 'users', users)
 
             //Getting users is the backbone of stats, so its request is "blocking" the thread
-            apiCall({url:"/api/logins?"+this.query, method:"GET"})
+            apiCall({url:this.url_prefix+"logins?"+this.query, method:"GET"})
             .then(resp=>{
                 resp.forEach(element => {
                     this.users[element.user_id] = Object.assign({},this.users[element.user_id],{...element})
                 });
                 Vue.set(this, 'logins', resp)
-                console.log("Logins are ", this.users)
+                console.log("Logins are ", this.logins)
+                console.log("User Details are ", this.users)
             })
 
-            apiCall({url:"/api/test-statuses?"+this.query, method:"GET"})
+            apiCall({url:this.url_prefix+"tests/statuses?"+this.query, method:"GET"})
             .then(resp=>{
                 Vue.set(this.tests, 'statuses', resp)
                 console.log("Test Statuses are ", this.tests.statuses)
@@ -99,23 +106,36 @@ export default {
             .catch(error => {
                 console.log(error.response)
             })
-            apiCall({url:"/api/test-types?"+this.query, method:"GET"})
+            apiCall({url:this.url_prefix+"tests/types?"+this.query, method:"GET"})
             .then(resp=>{
                 Vue.set(this.tests, 'types', resp)
             })
             .catch(error => {
                 console.log(error.response)
             })
-            apiCall({url:"/api/test-type-categories?"+this.query, method:"GET"})
+            apiCall({url:this.url_prefix+"tests/type-categories?"+this.query, method:"GET"})
             .then(resp=>{
                 Vue.set(this.tests, 'categories', resp)
             })
             .catch(error => {
                 console.log(error.response)
             })
-            apiCall({url:"/api/tests-done/total?"+this.query, method:"GET"})
+            apiCall({url:this.url_prefix+"tests/done/totals?"+this.query, method:"GET"})
             .then(resp=>{
-                Vue.set(this.tests, 'categories', resp)
+                resp.forEach(element => {
+                    Vue.set(this.users[element.tested_by],'tests_done',element.total)  
+                });
+                console.log("User Details with tests done are ", this.users)
+            })
+            .catch(error => {
+                console.log(error.response)
+            })
+            apiCall({url:this.url_prefix+"tests/verified/totals?"+this.query, method:"GET"})
+            .then(resp=>{
+                resp.forEach(element => {
+                    Vue.set(this.users[element.verified_by],'tests_verified',element.total) 
+                });
+                console.log("User Details with tests verified are ", this.users)
             })
             .catch(error => {
                 console.log(error.response)
@@ -124,24 +144,6 @@ export default {
         .catch(error => {
             console.log(error.response)
         })
-    },
-
-    getAggregateLogins(){
-        let counts={}
-        this.logins.forEach(x => {
-            if(counts[x.id]){
-                counts[x.id].total += 1
-                if(new Date(x.access_time)>new Date(counts[x.id].last_login)){
-                    counts[x.id].last_login = x.access_time
-                }
-                if(new Date(x.access_time)<new Date(counts[x.id].first_login)){
-                    counts[x.id].first_login = x.access_time
-                }
-            }else{
-                counts[x.id] = {total: 1, details:x, first_login:x.access_time, last_login:x.access_time}
-            }
-        });
-        return counts
     },
 
     getAge(birthday) {
