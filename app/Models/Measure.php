@@ -28,4 +28,9 @@ class Measure extends Model
     {
         return $this->hasMany('App\Models\MeasureRange');
     }
+
+    public function controlResults()
+    {
+        return $this->hasMany('App\Models\ControlResult');
+    }
 }

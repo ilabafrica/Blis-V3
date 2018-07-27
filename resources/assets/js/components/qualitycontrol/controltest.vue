@@ -95,7 +95,7 @@
                   overflow
                 >
                 </v-select>
-                <v-select
+<!--                 <v-select
                   v-if="measure.measure_type.name === 'Multi Alphanumeric'"
                   :items="measure.measure_ranges"
                   chips
@@ -111,7 +111,7 @@
                   :label="measure.name"
                   item-text="display"
                   item-value="display"
-                ></v-select>
+                ></v-select> -->
               </v-flex>
             </v-layout>
           </v-container>
@@ -163,6 +163,7 @@
           </v-btn>
           <v-btn v-if="props.item.time_started === null" depressed small @click="startItem(props.item)">Start</v-btn>
           <v-btn v-if="props.item.test_status_id === 2" depressed small color="primary" @click="itemResults(props.item)">Enter Results</v-btn>
+          <v-btn v-if="props.item.test_status_id === 3" depressed small color="success" @click="itemResultsEdit(props.item)">Edit Results</v-btn>
         </td>
       </template>
     </v-data-table>
@@ -206,11 +207,14 @@
         { text: 'Value', value: 'value' }
       ],
       controltest: [],
+      controlresults: [],
+      controlmeasures: [],
       lot: [],
       testtype: [],
       measures: [],
       results: [],
       inputs: [],
+      inputsarray: [],
       editedIndex: -1,
       editedItem: {
         lot_id: 0,
@@ -297,6 +301,7 @@
         console.log ('item edited')
         console.log (item)
         this.editedIndex = this.controltest.indexOf(item)
+        this.editedItem = Object.assign({}, item)
         this.measures = item.test_type.measures
         for (var i = this.measures.length - 1; i >= 0; i--){
           this.measures[i].control_test_id = item.id;
@@ -304,8 +309,51 @@
         this.resultdialog = true
         console.log('check item')
         console.log(this.measures)
-        /*this.editedItem = Object.assign({}, item)
-        this.dialog = true*/
+      },
+
+      itemResultsEdit (item) {
+        console.log('item')
+        console.log(item)
+        this.editedIndex = this.controltest.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.measures = item.test_type.measures
+        for (var i = this.measures.length - 1; i >= 0; i--){
+          this.measures[i].control_test_id = item.id;
+        }
+        this.controlmeasures = item.test_type.measures
+
+        console.log('controlmeasures')
+        console.log(this.controlmeasures)
+
+        for (var i = this.controlmeasures.length - 1; i >= 0; i--){
+          this.controlresults[i] = this.controlmeasures[i].control_results;
+        }
+
+        console.log('controlresults')
+        console.log(this.controlresults)
+
+        for (var i = this.controlresults.length - 1; i >= 0; i--){
+          for (var x = this.controlresults[i].length - 1; x >= 0; x--){
+            this.inputsarray[i] = this.controlresults[i][x];
+          }
+        }
+
+        console.log('inputs array')
+        console.log(this.inputsarray)
+
+        for (var i = this.inputsarray.length - 1; i >= 0; i--){
+          if(! this.inputsarray[i]){
+            
+          }else{
+            this.inputs[i] = this.inputsarray[i].result;
+          }
+          
+        }
+
+        console.log('inputs')
+        console.log(this.inputs)
+
+        this.resultdialog = true
       },
 
       startItem (item) {
@@ -411,18 +459,37 @@
       },
 
       saveResults () {
-        apiCall({url: '/api/controlresult', data: this.results, method: 'POST' })
+/*        this.saving = true;
+        // update
+        if (this.editedIndex > -1) {
+
+          apiCall({url: '/api/controlresult/'+this.results.id, data: this.results, method: 'PUT' })
           .then(resp => {
-            console.log('before reset')
-            console.log(this.results)
-            this.resetResultDialogReferences();
-            console.log('after reset')
-            console.log(this.results)
-            this.resultdialog = false;
+            console.log(resp)
+            this.resetDialogReferences();
+            this.saving = false;
           })
           .catch(error => {
             console.log(error.response)
           })
+
+        // store
+        } else {*/
+          apiCall({url: '/api/controlresult', data: this.results, method: 'POST' })
+            .then(resp => {
+              console.log('edited item')
+              console.log(this.editedItem)
+              this.editedItem.test_status_id = 3;
+              console.log('after edit')
+              console.log(this.editedIndex)
+              this.save();
+              this.resetResultDialogReferences();
+              this.resultdialog = false;
+            })
+            .catch(error => {
+              console.log(error.response)
+            })
+          /*}*/
       }
     }
   }

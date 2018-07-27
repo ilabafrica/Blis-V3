@@ -25,7 +25,7 @@ class ControlTestController extends Controller
                 ->paginate(10);
         } else {
             $controlTest = ControlTest::with('lot.instrument')->with('testType.measures.measureRanges')
-            ->with('testType.measures.measureType')->orderBy('id', 'ASC')->paginate(10);
+            ->with('testType.measures.measureType')->with('testType.measures.controlResults')->orderBy('id', 'ASC')->paginate(10);
         }
         return response()->json($controlTest);
     }
