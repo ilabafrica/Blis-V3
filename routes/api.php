@@ -17,6 +17,7 @@ Route::post('/login', 'Auth\APIController@login');
 
 Route::group(['prefix' => 'stats'], function () {
     Route::group(['prefix' => 'tests'], function () {
+        Route::get('/totals', 'UserStatisticsController@testsTotals');
         Route::get('/done', 'UserStatisticsController@testsDone');
         Route::get('/done/totals', 'UserStatisticsController@testsDoneTotals');
         Route::get('/done/gender', 'UserStatisticsController@testsDoneByGender');

@@ -2,7 +2,18 @@
     <div>
         <v-layout row wrap>   
             <p class="flex xs12" style="font-size:2rem; font-weight:100">User Statistics</p>
-            <div v-if="logins" class="flex blis-stats-card-parent xs12 sm6 md4 lg3" v-for="(x,i) in users" :key ="i">
+            <v-flex xs12>
+                <v-text-field
+                    v-model="search"
+                    append-icon="search"
+                    label="Search"
+                    single-line
+                    hide-details>
+                </v-text-field>
+            </v-flex>
+        </v-layout>
+        <v-layout row wrap>   
+            <div v-if="logins" class="flex blis-stats-card-parent xs12 sm6 md4 lg3" v-for="(x,i) in filteredUsers" :key ="i">
                 <v-card >
                     <v-card-title class="headline blue-text">
                         {{x.name}}
@@ -63,7 +74,20 @@ export default {
 
   computed: {
     length: function() {
-      return Math.ceil(this.pagination.total / this.pagination.visible);
+        return Math.ceil(this.pagination.total / this.pagination.visible);
+    },
+    filteredUsers(){
+        let filteredUser ={}
+        if(this.users){
+            for (const key in this.users) {
+                if (this.users.hasOwnProperty(key)) {                
+                    if(this.users[key].name.match(this.search)){
+                        filteredUser[key]= this.users[key]
+                    }
+                }
+            }
+        }
+        return filteredUser
     }
     
   },
