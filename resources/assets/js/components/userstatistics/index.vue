@@ -16,7 +16,7 @@
                         <span class="grey--text">Tests Verified: </span> {{x.tests_verified || "N/A"}} <br>                        
                     </v-card-text>
                     <v-card-actions style="padding:0">                        
-                        <v-btn block class="blue--text white" style="margin:0">View More</v-btn>
+                        <v-btn :to="{name:'single_user_stats', params:{id:i}}" block class="blue--text white" style="margin:0">View More</v-btn>
                     </v-card-actions>                    
                 </v-card>
             </div>

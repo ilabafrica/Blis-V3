@@ -38,7 +38,12 @@ class UserStatisticsController extends Controller
     {
         // $tests = DB::select('SELECT t.id, t.tested_by, DATE(t.time_started) as test_started_at, t.test_status_id, t.test_type_id, tt.name as test_type_name, g.code as gender_id, DATEDIFF(t.time_started, p.birth_date)/365.25 as age_at_test, e.location_id FROM patients p, tests t, encounters e, genders g, test_types tt WHERE p.id = e.patient_id AND t.encounter_id=e.id AND t.tested_by > 1 AND g.id = p.gender_id AND tt.id = t.test_type_id');
         // $tests = DB::select('SELECT t.id, t.tested_by, DATE(t.time_started) as test_started_at, t.test_status_id, t.test_type_id, g.code as gender_id, DATEDIFF(t.time_started, p.birth_date)/365.25 as age_at_test, e.location_id FROM patients p, tests t, encounters e, genders g WHERE p.id = e.patient_id AND t.encounter_id=e.id AND t.tested_by > 1 AND g.id = p.gender_id');
-        $tests = DB::select('SELECT t.id, t.tested_by, DATE(t.time_started) as test_started_at, t.test_status_id, t.test_type_id, ttc.id as test_type_category_id, g.code as gender_id, DATEDIFF(t.time_started, p.birth_date)/365.25 as age_at_test, e.location_id FROM patients p, tests t, encounters e, genders g, test_types tt, test_type_categories ttc WHERE p.id = e.patient_id AND t.encounter_id=e.id AND t.tested_by >= 1 AND g.id = p.gender_id AND tt.id = t.test_type_id AND tt.test_type_category_id = ttc.id');
+        if ($request->query('user_id')) {
+            $tests = DB::select("SELECT t.id, t.tested_by, DATE(t.time_started) as test_started_at, t.test_status_id, t.test_type_id, ttc.id as test_type_category_id, g.code as gender_id, DATEDIFF(t.time_started, p.birth_date)/365.25 as age_at_test, e.location_id FROM patients p, tests t, encounters e, genders g, test_types tt, test_type_categories ttc WHERE p.id = e.patient_id AND t.encounter_id=e.id AND t.tested_by =". intval($request->query('user_id'))." AND g.id = p.gender_id AND tt.id = t.test_type_id AND tt.test_type_category_id = ttc.id");
+        }
+        else{
+            $tests = DB::select('SELECT t.id, t.tested_by, DATE(t.time_started) as test_started_at, t.test_status_id, t.test_type_id, ttc.id as test_type_category_id, g.code as gender_id, DATEDIFF(t.time_started, p.birth_date)/365.25 as age_at_test, e.location_id FROM patients p, tests t, encounters e, genders g, test_types tt, test_type_categories ttc WHERE p.id = e.patient_id AND t.encounter_id=e.id AND t.tested_by >= 1 AND g.id = p.gender_id AND tt.id = t.test_type_id AND tt.test_type_category_id = ttc.id');
+        }
         return response()->json($tests);
     }
     public function testsVerified(Request $request)
@@ -58,16 +63,18 @@ class UserStatisticsController extends Controller
         $test_types = DB::select("SELECT id, name, test_type_category_id as ttc_id FROM test_types");
         return response()->json($test_types);
     }
+    // get the bare ne
     public function testTypeCategories(){
         $test_type_categories = DB::select("SELECT id, name FROM test_type_categories");
         return response()->json($test_type_categories);
     }
-
+    // get the total number of tests done grouped by whom they were done by
     public function testsDoneTotals(){
         // $tests = Test::count()->values('id')->groupBy('id');
         $tests = DB::select('SELECT COUNT(*) as total, tested_by FROM tests GROUP BY tested_by');
         return response()->json($tests);
     }
+    // get the total number of tests verified grouped by whom they were verified by
     public function testsVerifiedTotals(){
         $tests = DB::select('SELECT COUNT(*) as total, verified_by FROM tests GROUP BY verified_by');
         return response()->json($tests);
