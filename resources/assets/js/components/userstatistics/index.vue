@@ -133,31 +133,37 @@ export default {
             apiCall({url:this.url_prefix+"tests/types?"+this.query, method:"GET"})
             .then(resp=>{
                 Vue.set(this.tests, 'types', resp)
+                console.log("Test types are ", resp)
             })
             .catch(error => {
                 console.log(error.response)
             })
-            apiCall({url:this.url_prefix+"tests/type-categories?"+this.query, method:"GET"})
+            apiCall({url:this.url_prefix+"tests/type-categories", method:"GET"})
             .then(resp=>{
                 Vue.set(this.tests, 'categories', resp)
+                console.log("Test categories are ", resp)
             })
             .catch(error => {
                 console.log(error.response)
             })
-            apiCall({url:this.url_prefix+"tests/done/totals?"+this.query, method:"GET"})
+            apiCall({url:this.url_prefix+"tests/done/totals", method:"GET"})
             .then(resp=>{
                 resp.forEach(element => {
-                    Vue.set(this.users[element.tested_by],'tests_done',element.total)  
+                    if(element.tested_by){
+                        Vue.set(this.users[element.tested_by],'tests_done',element.total)  
+                    }
                 });
                 console.log("User Details with tests done are ", this.users)
             })
             .catch(error => {
                 console.log(error.response)
             })
-            apiCall({url:this.url_prefix+"tests/verified/totals?"+this.query, method:"GET"})
+            apiCall({url:this.url_prefix+"tests/verified/totals", method:"GET"})
             .then(resp=>{
                 resp.forEach(element => {
-                    Vue.set(this.users[element.verified_by],'tests_verified',element.total) 
+                    if(element.verified_by){
+                        Vue.set(this.users[element.verified_by],'tests_verified',element.total) 
+                    }
                 });
                 console.log("User Details with tests verified are ", this.users)
             })

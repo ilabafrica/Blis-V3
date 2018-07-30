@@ -145,7 +145,7 @@ export default new Router({
     {
       path: '/stats/user/:id',
       name: 'single_user_stats',
-      component: require('../components/userstatistics/single'),
+      component: require('../components/userstatistics/single1'),
       beforeEnter: ifAuthenticated,
     },
   ],
