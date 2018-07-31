@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-layout row wrap v-if="tests.cur">            
+        <v-layout row wrap v-if="counts.date_counts">
             <v-flex xs12 sm4 md3 lg2 class="blis-stats-card-parent">
                 <div class="elevation-1 blis-grid blis-stats-card">
                     <span class="blis-stats-num"> {{totalTestsRequested()}} </span>
@@ -26,6 +26,16 @@
                 </div>
             </div>
         </v-layout>
+        <v-tabs color="blue" dark slider-color="blue lighten-3">
+            <v-tab v-for="n in 3" :key="n" ripple>
+                Item {{ n }}
+            </v-tab>
+            <v-tab-item v-for="n in 3" :key="n">
+                <v-card flat>
+                    <v-card-text>{{ 2*n}}</v-card-text>
+                </v-card>
+            </v-tab-item>
+        </v-tabs>
         <v-layout row wrap style="margin:20px;">
             <v-flex xs12 sm6 md4 lg4 style="padding:10px;">
                 <v-card>
@@ -75,7 +85,6 @@ import apiCall from "../../utils/api";
 import Chart from "chart.js";
 export default {
   data: () => ({
-    url_prefix: "/api/stats/",
     search: "",
     query: "",
     pagination: {
@@ -127,7 +136,7 @@ export default {
             this.query = this.query + "&search=" + this.search;
         }
 
-        apiCall({url:this.url_prefix+"tests/statuses?"+this.query, method:"GET"})
+        apiCall({url:"/api/test-statuses?"+this.query, method:"GET"})
         .then(resp=>{
             Vue.set(this.tests, 'statuses', resp)
             console.log("Test Statuses are ", this.tests.statuses)
@@ -135,14 +144,14 @@ export default {
         .catch(error => {
             console.log(error.response)
         })
-        apiCall({url:this.url_prefix+"tests/types?"+this.query, method:"GET"})
+        apiCall({url:"/api/test-types?"+this.query, method:"GET"})
         .then(resp=>{
             Vue.set(this.tests, 'types', resp)
         })
         .catch(error => {
             console.log(error.response)
         })
-        apiCall({url:this.url_prefix+"tests/type-categories?"+this.query, method:"GET"})
+        apiCall({url:"/api/test-type-categories?"+this.query, method:"GET"})
         .then(resp=>{
             Vue.set(this.tests, 'categories', resp)
         })
@@ -150,9 +159,9 @@ export default {
             console.log(error.response)
         })
 
-        apiCall({url:this.url_prefix+"tests/done/full?user_id="+this.$route.params.id, method:"GET"})
+        apiCall({url:"/api/tests-done/full?"+this.query, method:"GET"})
         .then(resp=>{
-            // console.log("Full tests are",resp)   
+            console.log(resp)   
             // let gender_counts = {'1':0, '2':0, '3':0,'4':0}
             let gender_counts = {}
             let date_counts = {}
@@ -168,7 +177,7 @@ export default {
                 status_counts[x.test_status_id] = status_counts[x.test_status_id] ? status_counts[x.test_status_id] + 1 : 1 
                 
                 // float comparison is buggy so Math.round(age *100) before comparison this means a calculated age comparison of (1.258>2.578) years would be calculated as (125>257) which would return false
-                // console.log(x.age_at_test, youngest_patient_tested.age_at_test, oldest_patient_tested.age_at_test)
+                //console.log(x.age_at_test, youngest_patient_tested.age_at_test, oldest_patient_tested.age_at_test)
                 if(typeof youngest_patient_tested.age_at_test === 'undefined' || Math.round(youngest_patient_tested.age_at_test * 100)>=Math.round(x.age_at_test * 100)){
                     youngest_patient_tested =  x
                 }
@@ -320,7 +329,7 @@ export default {
                 }
             }
         }
-        console.log("Counts under total tests requested ",this.tests.cur)
+        console.log(this.tests.cur)
         return count;
     },
 

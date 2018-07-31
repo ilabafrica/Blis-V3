@@ -17,19 +17,21 @@ Route::post('/login', 'Auth\APIController@login');
 
 Route::group(['prefix' => 'stats'], function () {
     Route::group(['prefix' => 'tests'], function () {
-        Route::get('/totals', 'UserStatisticsController@testsTotals');
-        Route::get('/done', 'UserStatisticsController@testsDone');
-        Route::get('/done/totals', 'UserStatisticsController@testsDoneTotals');
-        Route::get('/done/gender', 'UserStatisticsController@testsDoneByGender');
-        Route::get('/done/full', 'UserStatisticsController@testsDonePlusPatient');
-        Route::get('/verified', 'UserStatisticsController@testsVerified');
-        Route::get('/verified/totals', 'UserStatisticsController@testsVerifiedTotals');
-        Route::get('/statuses', 'UserStatisticsController@testStatuses');
-        Route::get('/types', 'UserStatisticsController@testTypes');
-        Route::get('/type-categories', 'UserStatisticsController@testTypeCategories');
+        Route::get('/totals', 'Statistics\TestStatisticsController@testsTotals');
+        Route::get('/done', 'Statistics\TestStatisticsController@testsDone');
+        Route::get('/done/totals', 'Statistics\TestStatisticsController@testsDoneTotals');
+        Route::get('/done/gender', 'Statistics\TestStatisticsController@testsDoneByGender');
+        Route::get('/done/full', 'Statistics\TestStatisticsController@testsDonePlusPatient');
+        Route::get('/verified', 'Statistics\TestStatisticsController@testsVerified');
+        Route::get('/verified/totals', 'Statistics\TestStatisticsController@testsVerifiedTotals');
+        Route::get('/statuses', 'Statistics\TestStatisticsController@testStatuses');
+        Route::get('/types', 'Statistics\TestStatisticsController@testTypes');
+        Route::get('/type-categories', 'Statistics\TestStatisticsController@testTypeCategories');
     });
-    Route::get('/logins', 'UserStatisticsController@logins2');
-    Route::get('/users', 'UserStatisticsController@getUsers');
+    Route::get('/logins', 'Statistics\UserStatisticsController@logins2');
+    Route::get('/users', 'Statistics\UserStatisticsController@getUsers');
+    Route::get('/users/count', 'Statistics\UserStatisticsController@countUsers');
+    Route::get('/genders', 'GenderController@index');
 
 });
 

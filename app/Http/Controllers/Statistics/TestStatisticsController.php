@@ -1,30 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Statistics;
 
 use App\User;
-use App\Models\Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
-class UserStatisticsController extends Controller
+class TestStatisticsController extends Controller
 {
-    public function getUsers(){        
-        $users = User::select('id','name','created_at')->get();
-        return response()->json($users);
-    }
-    public function logins(){
-        $logins = DB::table('oauth_access_tokens')->groupBy('timing')->selectRaw('count(*) as total, DATE(created_at) as timing')->where('user_id','=',1)->get();
-        return response()->json($logins);
-    }
-    public function logins2(){
-        $logins = DB::table('oauth_access_tokens')->groupBy('user_id')->selectRaw('user_id, count(*) as total, MAX(created_at) as last_login, MIN(created_at) as first_login')->get();        
-        return response()->json($logins);
-    }
-    public function getGenders(){
-        $genders = DB::select("SELECT * FROM genders WHERE 1");        
-        return response()->json($genders);
-    }
     //
     public function testsDoneByGender(Request $request)
     {
@@ -58,12 +42,9 @@ class UserStatisticsController extends Controller
         return response()->json($tests);
     }
     public function testsVerified(Request $request)
-    {
-        //$tests = User::find(1)->first()->testsVerified()->get();     
+    { 
         //SELECT t.test_type_id, p.gender_id, COUNT(DISTINCT t.id) FROM patients p, tests t, encounters e WHERE DATEDIFF(CURDATE(), p.`birth_date`)/365.25<5 AND t.tested_by=1 AND p.id = e.patient_id AND t.encounter_id=e.id GROUP BY t.test_type_id, p.gender_id   
 
-        // SELECT t.tested_by, COUNT(DISTINCT t.id) FROM patients p, tests t, encounters e WHERE p.id = e.patient_id AND t.encounter_id=e.id GROUP BY t.tested_by
-        // $tests = User::find(1)->first()->testsVerified()->groupBy('timing')->select(DB::raw('count(*) as total, DATE(time_started) as timing'))->get();        
         $tests = DB::select("SELECT count(*) as total, DATE(time_started) as timing FROM tests WHERE verified_by=1");
         return response()->json($tests);
     }
@@ -161,6 +142,4 @@ class UserStatisticsController extends Controller
         }        
         return response()->json($tests);
     }
-    
 }
-

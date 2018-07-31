@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import apiCall from "../../utils/api";
+import apiCall from "../../../utils/api";
 import Chart from "chart.js";
 export default {
   data: () => ({
@@ -53,15 +53,6 @@ export default {
     },
     users:{},
     logins:[],
-    headers: [
-      { text: "Time Ordered", value: "created_at" },
-      { text: "Patient", value: "patient" },
-      { text: "Specimen ID", value: "specimen_id" },
-      { text: "Test", value: "test_type" },
-      { text: "Visit", value: "encounter" },
-      { text: "Status", value: "test_status" },
-      { text: "Actions", value: "actions", sortable: false }
-    ],
     tests: {
         cur:[],
         statuses:[],

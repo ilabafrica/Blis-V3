@@ -71,7 +71,7 @@
     </div>
 </template>
 <script>
-import apiCall from "../../utils/api";
+import apiCall from "../../../utils/api";
 import Chart from "chart.js";
 export default {
   data: () => ({
@@ -84,15 +84,6 @@ export default {
       total: 0,
       visible: 10
     },
-    headers: [
-      { text: "Time Ordered", value: "created_at" },
-      { text: "Patient", value: "patient" },
-      { text: "Specimen ID", value: "specimen_id" },
-      { text: "Test", value: "test_type" },
-      { text: "Visit", value: "encounter" },
-      { text: "Status", value: "test_status" },
-      { text: "Actions", value: "actions", sortable: false }
-    ],
     tests: {
         cur:[],
         statuses:[],
@@ -109,6 +100,7 @@ export default {
         status_counts:{},
         type_category_counts:{}
     },
+    genders:{},
     oldest_patient_tested:{},
     youngest_patient_tested:{}
   }),
@@ -140,27 +132,30 @@ export default {
         if (this.search != "") {
             this.query = this.query + "&search=" + this.search;
         }
-        apiCall({url:this.url_prefix+"tests/statuses?"+this.query, method:"GET"})
-        .then(resp=>{
-            Vue.set(this.tests, 'statuses', resp)
+        let statuses_req = apiCall({url:this.url_prefix+"tests/statuses?"+this.query, method:"GET"})
+        let genders_req = apiCall({url:this.url_prefix+"genders", method:"GET"})
+        let types_req = apiCall({url:this.url_prefix+"tests/types?"+this.query, method:"GET"})
+        let categories_req = apiCall({url:this.url_prefix+"tests/type-categories?"+this.query, method:"GET"})
+        Promise.all([
+            statuses_req.catch(error => {console.log(error.response)}),
+            genders_req.catch(error => {console.log(error.response)}),
+            types_req.catch(error => {console.log(error.response)}),
+            categories_req.catch(error => {console.log(error.response)}),
+        ]).then(values =>{
+            Vue.set(this.tests, 'statuses', values[0])
             console.log("Test Statuses are ", this.tests.statuses)
-        })
-        .catch(error => {
-            console.log(error.response)
-        })
-        apiCall({url:this.url_prefix+"tests/types?"+this.query, method:"GET"})
-        .then(resp=>{
-            Vue.set(this.tests, 'types', resp)
-        })
-        .catch(error => {
-            console.log(error.response)
-        })
-        apiCall({url:this.url_prefix+"tests/type-categories?"+this.query, method:"GET"})
-        .then(resp=>{
-            Vue.set(this.tests, 'categories', resp)
-        })
-        .catch(error => {
-            console.log(error.response)
+
+            //  genders
+            let genders = {}
+            values[1].forEach(element => {
+                genders[element.id] = {name:element.name, code:element.code}
+            });
+            Vue.set(this, 'genders', genders)
+            console.log("Genders are ", this.genders)
+
+            //  types and categories
+            Vue.set(this.tests, 'types', values[2])
+            Vue.set(this.tests, 'categories', values[3])
         })
         apiCall({url:this.url_prefix+"tests/totals?user_id="+this.$route.params.id, method:"GET"})
         .then(resp=>{
@@ -280,7 +275,12 @@ export default {
         .then(resp=>{
             let gender_count = {} 
             resp.forEach(element => {
-                gender_count[element.gender_id] =  element.total
+                if(this.genders){
+                    gender_count[this.genders[element.gender_id].code] =  element.total
+                }
+                else{
+                    gender_count[element.gender_id] =  element.total
+                }
             });
             Vue.set(this.counts, 'gender_counts', gender_count)
             var ctx = document.getElementById("myChart");

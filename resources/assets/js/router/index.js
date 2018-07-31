@@ -134,18 +134,25 @@ export default new Router({
       component: require('../components/qualitycontrol/lot'),
       beforeEnter: ifAuthenticated,
     },
-    //Stats
+    // General Stats
     {
       path: '/stats/',
       name: 'Stats',
-      component: require('../components/userstatistics/index'),
+      component: require('../components/statistics/system/index'),
+      beforeEnter: ifAuthenticated,
+    },
+    // Stats
+    {
+      path: '/stats/users',
+      name: 'user_stats',
+      component: require('../components/statistics/users/index'),
       beforeEnter: ifAuthenticated,
     },
     //User Stats
     {
-      path: '/stats/user/:id',
+      path: '/stats/users/:id',
       name: 'single_user_stats',
-      component: require('../components/userstatistics/single1'),
+      component: require('../components/statistics/users/single1'),
       beforeEnter: ifAuthenticated,
     },
   ],
