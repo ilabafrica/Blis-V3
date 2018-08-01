@@ -7,7 +7,7 @@
             <div v-if="logins" class="flex blis-stats-card-parent xs12 sm6 md4 lg3">
                 <v-card >
                     <v-card-title class="headline blue-text">
-                        {{users.length}} Registered Users
+                        <span class="grey--text">Registered Users: </span>{{counts.user_counts}} 
                     </v-card-title>
                     <v-card-text>
                         <span class="grey--text">Account Created: </span> {{"N/A"}} <br>                      
@@ -20,12 +20,10 @@
             <div v-if="logins" class="flex blis-stats-card-parent xs12 sm6 md4 lg3">
                 <v-card >
                     <v-card-title class="headline blue-text">
-                        {{counts.status_counts.total}}<span class="grey--text"> Tests</span>
+                        <span class="grey--text">Tests Recorded: </span> {{tests.total}}
                     </v-card-title>
                     <v-card-text>
-                        <span  v-for="status in tests.statuses" :key=status.id>
-                            <span class="grey--text">Tests {{status.name || ""}}: </span> {{counts.status_counts[status.id]||0}} <br>
-                        </span>
+                        <canvas id="ttChart" width="400" height="400"></canvas>
                     </v-card-text>
                     <v-card-actions style="padding:0">                        
                         <v-btn :to="{name:'user_stats'}" block class="blue--text white" style="margin:0">View All</v-btn>
@@ -58,9 +56,11 @@ export default {
         cur:[],
         statuses:[],
         types:[],
-        categories:[]
+        categories:[],
+        total:0
     },
     counts:{
+        user_counts:0,
         date_counts: {},
         status_counts: {},
         gender_counts : {},
@@ -68,7 +68,8 @@ export default {
         type_category_counts:{}
     },
     oldest_patient_tested:{},
-    youngest_patient_tested:{}
+    youngest_patient_tested:{},
+    basicBackgroundColors:['#1976d2', '#a6e1fa', '#0a2472', '#395C6B', '#EAD2AC', '#D1DEDE','#1D201F']
   }),
 
   computed: {
@@ -101,29 +102,54 @@ export default {
         if (this.search != "") {
             this.query = this.query + "&search=" + this.search;
         }
-        apiCall({url:this.url_prefix+"tests/statuses", method:"GET"})
+        apiCall({url:this.url_prefix+"users/count", method:"GET"})
         .then(resp=>{
-            Vue.set(this.tests, 'statuses', resp)
-            console.log("Statuses ",this.tests.statuses)
+            Vue.set(this.counts, 'user_counts', resp)
         })
         .catch(error => {
             console.log(error.response)
         })
-        apiCall({url:this.url_prefix+"tests/totals?by_status=true", method:"GET"})
-        .then(resp=>{
+        let statuses_req = apiCall({url:this.url_prefix+"tests/statuses", method:"GET"})
+        let totals_by_status_req = apiCall({url:this.url_prefix+"tests/totals?by_status=true", method:"GET"})
+
+        Promise.all([statuses_req,totals_by_status_req])
+        .then(values=>{
+            Vue.set(this.tests, 'statuses', values[0])
+            console.log("Statuses ",this.tests.statuses)
+
             let status_count = {} , total = 0
-            resp.forEach(element => {
+            values[1].forEach(element => {
                 status_count[element.test_status_id] =  element.total
                 total += element.total
             });
-            status_count.total=total
-            Vue.set(this.counts, 'status_counts', status_count)
             
+            Vue.set(this.tests, 'total', total)
+            Vue.set(this.counts, 'status_counts', status_count)
             console.log("Status counts are ", status_count)
-        })
-        .catch(error => {
+            this.generateStatusCountsGraph(status_count)
+        }).catch(error => {
             console.log(error.response)
         })
+        
+    },
+    generateStatusCountsGraph(status_count){
+        var ctx_ttChart = document.getElementById("ttChart");
+        var my_ttChart = new Chart(ctx_ttChart, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(status_count).map(x=>{
+                            return this.tests.statuses.filter(y =>{
+                                return y.id == x
+                            })[0].name
+                        }),
+                datasets: [{
+                        data: Object.values(status_count),
+                        label: 'Total Test Per Status',
+                        backgroundColor: this.basicBackgroundColors
+                    }
+                ]
+            }
+        });
     }
   }
 };

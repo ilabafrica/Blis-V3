@@ -108,38 +108,100 @@ class TestStatisticsController extends Controller
         else{
             $tests = DB::select("SELECT COUNT(*) as total FROM tests");
         }
-        return $tests;
+        return response()->json($tests);
     }
     // get the total number of tests done grouped 
     public function testsDoneTotals(Request $request){
-        if ($request->query('user_id') && $request->query('by_type')) { // of a particular user id and grouped by a type
-            $tests = DB::select("SELECT COUNT(*) as total, tested_by, test_type_id FROM tests WHERE tested_by=".$request->query('user_id')." GROUP BY tested_by, test_type_id");
+        if ($request->query('by_user') && $request->query('by_type')) { // grouped by user then by type
+            $tests = DB::select("SELECT COUNT(*) as total, tested_by, test_type_id FROM tests WHERE test_status_id>=3 GROUP BY tested_by, test_type_id");
         }
-        else if ($request->query('by_user') && $request->query('by_type')) { // grouped by user then by type
-            $tests = DB::select("SELECT COUNT(*) as total, tested_by, test_type_id FROM tests WHERE tested_by=".$request->query('user_id')." GROUP BY tested_by,test_type_id");
+        else if ($request->query('user_id') && $request->query('by_status')) { // All of particular user, grouped by status
+            $tests = DB::select("SELECT COUNT(*) as total, test_status_id FROM tests WHERE tested_by=".$request->query('user_id')." GROUP BY test_status_id");
         }
-        else if ($request->query('user_id')) { // by a particular user id
+        else if ($request->query('user_id') && $request->query('by_type')) { // All of particular user, grouped by type
+            $tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests WHERE tested_by=".$request->query('user_id')." GROUP BY test_type_id");
+        }
+        else if ($request->query('user_id') && $request->query('by_gender')) { // All of particular user, grouped by gender
+            //$tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests t, encounters e, patients p  WHERE tested_by=".$request->query('user_id')." GROUP BY test_type_id");
+            $tests = DB::select("SELECT COUNT(*) as total, p.gender_id FROM tests t, encounters e, patients p  WHERE t.tested_by=".$request->query('user_id')." AND t.encounter_id=e.id AND e.patient_id = p.id GROUP BY p.gender_id");
+        }
+        else if ($request->query('user_id') && $request->query('by_category')) { // All of particular user, grouped by test category
+            $tests = DB::select("SELECT COUNT(*) as total, tt.test_type_category_id as ttc_id FROM tests t, test_types tt WHERE tested_by=".$request->query('user_id')." AND t.test_type_id=tt.id GROUP BY ttc_id");
+        }
+        else if ($request->query('user_id') && $request->query('by_date')) { // All of particular user, grouped by date
+            $tests = DB::select("SELECT COUNT(*) as total, DATE(time_started) as timing FROM tests t WHERE tested_by=".$request->query('user_id')." GROUP BY timing");
+        }
+        else if ($request->query('by_user')) { // grouped by user
+            $tests = DB::select("SELECT COUNT(*) as total, tested_by FROM tests WHERE test_status_id>=3 GROUP BY tested_by");
+        }
+        else if ($request->query('by_type')) { // grouped by type
+            $tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests WHERE test_status_id>=3 GROUP BY test_type_id");
+        }
+        else if ($request->query('by_date')) { // grouped by type
+            $tests = DB::select("SELECT COUNT(*) as total, DATE(time_started) as timing FROM tests WHERE test_status_id>=3 GROUP BY timing");
+        }
+        else if ($request->query('user_id')) { // grouped by particular user
             $tests = DB::select("SELECT COUNT(*) as total, tested_by FROM tests WHERE tested_by=".$request->query('user_id')." GROUP BY tested_by");
         }
-        else{ // by whom they were done by
-            $tests = DB::select("SELECT COUNT(*) as total, tested_by FROM tests GROUP BY tested_by");
-        }        
+        else if ($request->query('by_status')) { // grouped by type
+            $tests = DB::select("SELECT COUNT(*) as total, test_status_id FROM tests WHERE test_status_id>=3 GROUP BY test_status_id");
+        }
+        else if ($request->query('by_gender')) { // grouped by gender
+            $tests = DB::select("SELECT COUNT(*) as total, p.gender_id FROM tests t, encounters e, patients p  WHERE t.test_status_id>=3 AND t.encounter_id=e.id AND e.patient_id = p.id GROUP BY p.gender_id");
+        }
+        else if ($request->query('by_category')) { // grouped by category
+            $tests = DB::select("SELECT COUNT(*) as total, tt.test_type_category_id FROM tests t, test_types tt WHERE t.test_type_id=tt.id AND t.test_status_id>=3 GROUP BY tt.test_type_category_id");
+        }
+        else{
+            $tests = DB::select("SELECT COUNT(*) as total, tested_by FROM tests WHERE test_status_id>=3 GROUP BY tested_by");
+        }     
         return response()->json($tests);
     }
     // get the total number of tests verified grouped by whom they were verified by
     public function testsVerifiedTotals(Request $request){
-        if ($request->query('user_id') && $request->query('by_type')) { // of a particular user id and grouped by a type
-            $tests = DB::select("SELECT COUNT(*) as total, verified_by, test_type_id FROM tests WHERE verified_by=".$request->query('user_id')." GROUP BY verified_by, test_type_id");
+        if ($request->query('by_user') && $request->query('by_type')) { // grouped by user then by type
+            $tests = DB::select("SELECT COUNT(*) as total, verified_by, test_type_id FROM tests WHERE test_status_id=4 GROUP BY verified_by, test_type_id");
         }
-        else if ($request->query('by_user') && $request->query('by_type')) { // grouped by user then by type
-            $tests = DB::select("SELECT COUNT(*) as total, verified_by, test_type_id FROM tests WHERE verified_by=".$request->query('user_id')." GROUP BY verified_by,test_type_id");
+        else if ($request->query('user_id') && $request->query('by_status')) { // All of particular user, grouped by status
+            $tests = DB::select("SELECT COUNT(*) as total, test_status_id FROM tests WHERE verified_by=".$request->query('user_id')." GROUP BY test_status_id");
         }
-        else if ($request->query('user_id')) { // by a particular user id
+        else if ($request->query('user_id') && $request->query('by_type')) { // All of particular user, grouped by type
+            $tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests WHERE verified_by=".$request->query('user_id')." GROUP BY test_type_id");
+        }
+        else if ($request->query('user_id') && $request->query('by_gender')) { // All of particular user, grouped by gender
+            //$tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests t, encounters e, patients p  WHERE verified_by=".$request->query('user_id')." GROUP BY test_type_id");
+            $tests = DB::select("SELECT COUNT(*) as total, p.gender_id FROM tests t, encounters e, patients p  WHERE t.verified_by=".$request->query('user_id')." AND t.encounter_id=e.id AND e.patient_id = p.id GROUP BY p.gender_id");
+        }
+        else if ($request->query('user_id') && $request->query('by_category')) { // All of particular user, grouped by test category
+            $tests = DB::select("SELECT COUNT(*) as total, tt.test_type_category_id as ttc_id FROM tests t, test_types tt WHERE verified_by=".$request->query('user_id')." AND t.test_type_id=tt.id GROUP BY ttc_id");
+        }
+        else if ($request->query('user_id') && $request->query('by_date')) { // All of particular user, grouped by date
+            $tests = DB::select("SELECT COUNT(*) as total, DATE(time_started) as timing FROM tests t WHERE verified_by=".$request->query('user_id')." GROUP BY timing");
+        }
+        else if ($request->query('by_user')) { // grouped by user
+            $tests = DB::select("SELECT COUNT(*) as total, verified_by FROM tests WHERE test_status_id=4 GROUP BY verified_by");
+        }
+        else if ($request->query('by_type')) { // grouped by type
+            $tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests WHERE test_status_id=4 GROUP BY test_type_id");
+        }
+        else if ($request->query('by_date')) { // grouped by type
+            $tests = DB::select("SELECT COUNT(*) as total, DATE(time_started) as timing FROM tests WHERE test_status_id=4 GROUP BY timing");
+        }
+        else if ($request->query('user_id')) { // grouped by particular user
             $tests = DB::select("SELECT COUNT(*) as total, verified_by FROM tests WHERE verified_by=".$request->query('user_id')." GROUP BY verified_by");
         }
-        else{ // by whom they were done by
-            $tests = DB::select("SELECT COUNT(*) as total, verified_by FROM tests GROUP BY verified_by");
-        }        
+        else if ($request->query('by_status')) { // grouped by type
+            $tests = DB::select("SELECT COUNT(*) as total, test_status_id FROM tests WHERE test_status_id=4 GROUP BY test_status_id");
+        }
+        else if ($request->query('by_gender')) { // grouped by gender
+            $tests = DB::select("SELECT COUNT(*) as total, p.gender_id FROM tests t, encounters e, patients p  WHERE t.test_status_id=4 AND t.encounter_id=e.id AND e.patient_id = p.id GROUP BY p.gender_id");
+        }
+        else if ($request->query('by_category')) { // grouped by category
+            $tests = DB::select("SELECT COUNT(*) as total, tt.test_type_category_id FROM tests t, test_types tt WHERE t.test_type_id=tt.id AND t.test_status_id=4 GROUP BY tt.test_type_category_id");
+        }
+        else{
+            $tests = DB::select("SELECT COUNT(*) as total, verified_by FROM tests WHERE test_status_id=4 GROUP BY verified_by");
+        }     
         return response()->json($tests);
     }
 }
