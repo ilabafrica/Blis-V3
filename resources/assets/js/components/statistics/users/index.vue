@@ -112,31 +112,6 @@ export default {
                 console.log("Logins are ", this.logins)
                 console.log("User Details are ", this.users)
             })
-
-            apiCall({url:this.url_prefix+"tests/statuses?"+this.query, method:"GET"})
-            .then(resp=>{
-                Vue.set(this.tests, 'statuses', resp)
-                console.log("Test Statuses are ", this.tests.statuses)
-            })
-            .catch(error => {
-                console.log(error.response)
-            })
-            apiCall({url:this.url_prefix+"tests/types?"+this.query, method:"GET"})
-            .then(resp=>{
-                Vue.set(this.tests, 'types', resp)
-                console.log("Test types are ", resp)
-            })
-            .catch(error => {
-                console.log(error.response)
-            })
-            apiCall({url:this.url_prefix+"tests/type-categories", method:"GET"})
-            .then(resp=>{
-                Vue.set(this.tests, 'categories', resp)
-                console.log("Test categories are ", resp)
-            })
-            .catch(error => {
-                console.log(error.response)
-            })
             apiCall({url:this.url_prefix+"tests/done/totals", method:"GET"})
             .then(resp=>{
                 resp.forEach(element => {

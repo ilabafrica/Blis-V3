@@ -141,7 +141,7 @@ class TestStatisticsController extends Controller
             $tests = DB::select("SELECT COUNT(*) as total, DATE(time_started) as timing FROM tests WHERE test_status_id>=3 GROUP BY timing");
         }
         else if ($request->query('user_id')) { // grouped by particular user
-            $tests = DB::select("SELECT COUNT(*) as total, tested_by FROM tests WHERE tested_by=".$request->query('user_id')." GROUP BY tested_by");
+            $tests = DB::select("SELECT COUNT(*) as total, tested_by FROM tests WHERE tested_by=".$request->query('user_id')." AND test_status_id>=3 GROUP BY tested_by");
         }
         else if ($request->query('by_status')) { // grouped by type
             $tests = DB::select("SELECT COUNT(*) as total, test_status_id FROM tests WHERE test_status_id>=3 GROUP BY test_status_id");
@@ -188,7 +188,7 @@ class TestStatisticsController extends Controller
             $tests = DB::select("SELECT COUNT(*) as total, DATE(time_started) as timing FROM tests WHERE test_status_id=4 GROUP BY timing");
         }
         else if ($request->query('user_id')) { // grouped by particular user
-            $tests = DB::select("SELECT COUNT(*) as total, verified_by FROM tests WHERE verified_by=".$request->query('user_id')." GROUP BY verified_by");
+            $tests = DB::select("SELECT COUNT(*) as total, verified_by FROM tests WHERE verified_by=".$request->query('user_id')." AND test_status_id=4 GROUP BY verified_by");
         }
         else if ($request->query('by_status')) { // grouped by type
             $tests = DB::select("SELECT COUNT(*) as total, test_status_id FROM tests WHERE test_status_id=4 GROUP BY test_status_id");

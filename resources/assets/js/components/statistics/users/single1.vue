@@ -22,24 +22,29 @@
                     <span class="blis-stats-num"> {{tests.total_created}} </span>
                     <span class="blis-stats-num-label">Total Tests requested</span>
                 </div>
+                <v-btn :to="{name:'single_user_stats'}" block class="blue--text white" style="margin:0">View Stats</v-btn>
             </v-flex>
             <div v-if="counts.created.by_status" class="flex blis-stats-card-parent xs12 sm4 md3 lg2" v-for="status in tests.statuses" :key=status.id>
                 <div class="elevation-1 blis-grid blis-stats-card">
                     <span class="blis-stats-num"> {{counts.created.by_status[status.id]||0}} </span>
                     <span class="blis-stats-num-label">Requested Tests {{status.name || ""}}</span>
                 </div>
+                <v-btn v-if="counts.created.by_status[status.id]>0" :to="{name:'single_user_stats'}" block class="green--text white" style="margin:0">View Tests</v-btn>
+                <v-btn v-else block class="grey--text white" style="margin:0">View Tests</v-btn>
             </div>
             <div class="flex blis-stats-card-parent xs12 sm4 md3 lg2">
                 <div class="elevation-1 blis-grid blis-stats-card">
                     <span class="blis-stats-num"> {{tests.total_done||"N/A"}} </span>
                     <span class="blis-stats-num-label">Tests Done By This User</span>
                 </div>
+                <v-btn @click.native="setStats('done')" block class="blue--text white" style="margin:0">View Stats</v-btn>
             </div>
             <div class="flex blis-stats-card-parent xs12 sm4 md3 lg2">
                 <div class="elevation-1 blis-grid blis-stats-card">
                     <span class="blis-stats-num"> {{tests.total_verified||"N/A"}} </span>
-                    <span class="blis-stats-num-label">Tests Verified By This User</span>
+                    <span class="blis-stats-num-label">Tests Verified By This User</span>                                        
                 </div>
+                <v-btn :to="{name:'single_user_stats'}" block class="blue--text white" style="margin:0">View Stats</v-btn>
             </div>
         </v-layout>
         <v-layout row wrap style="margin:20px;">
@@ -294,6 +299,80 @@ export default {
                 }
             });
             Vue.set(this.counts.created, 'by_gender', gender_count)
+            this.generateGenderCountsGraph(gender_count)
+            console.log("Gender counts are ", gender_count)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+    },
+    setStats(status){
+        switch (status) {
+            case "done":
+                this.getTestsDone()
+                break;
+        
+            case "verified":
+                
+                break;
+        
+            default:
+                break;
+        }
+    },
+    getTestsDone(){        
+        apiCall({url:this.url_prefix+"tests/done/totals?user_id="+this.$route.params.id+"&by_status=true", method:"GET"})
+        .then(resp=>{
+            let status_count = {} 
+            resp.forEach(element => {
+                status_count[element.test_status_id] =  element.total
+            });
+            Vue.set(this.counts.done, 'by_status', status_count)
+            this.generateStatusCountsGraph(status_count)
+            console.log("Status counts are ", status_count)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+        apiCall({url:this.url_prefix+"tests/done/totals?user_id="+this.$route.params.id+"&by_date=true", method:"GET"})
+        .then(resp=>{
+            let date_count = {} 
+            resp.forEach(element => {
+                date_count[element.timing] =  element.total
+            });
+            Vue.set(this.counts.done, 'by_date', date_count)
+
+            this.generateDateCountsGraph(this.counts.done.by_date)
+            console.log("Date counts are ", this.counts.done.by_date)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+        apiCall({url:this.url_prefix+"tests/done/totals?user_id="+this.$route.params.id+"&by_category=true", method:"GET"})
+        .then(resp=>{
+            let category_count = {} 
+            resp.forEach(element => {
+                category_count[element.ttc_id] =  element.total
+            });
+            Vue.set(this.counts.created, 'by_category', category_count)
+            this.generateCategoryCountsGraph(category_count)
+            console.log("Category counts are ", category_count)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+        apiCall({url:this.url_prefix+"tests/done/totals?user_id="+this.$route.params.id+"&by_gender=true", method:"GET"})
+        .then(resp=>{
+            let gender_count = {} 
+            resp.forEach(element => {
+                if(this.genders){
+                    gender_count[this.genders[element.gender_id].code] =  element.total
+                }
+                else{
+                    gender_count[element.gender_id] =  element.total
+                }
+            });
+            Vue.set(this.counts.done, 'by_gender', gender_count)
             this.generateGenderCountsGraph(gender_count)
             console.log("Gender counts are ", gender_count)
         })

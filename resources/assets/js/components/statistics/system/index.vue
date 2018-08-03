@@ -7,10 +7,12 @@
             <div v-if="logins" class="flex blis-stats-card-parent xs12 sm6 md4 lg3">
                 <v-card >
                     <v-card-title class="headline blue-text">
-                        <span class="grey--text">Registered Users: </span>{{counts.user_counts}} 
+                        <span class="grey--text">Registered Users: </span>{{counts.user_counts.total}} 
                     </v-card-title>
                     <v-card-text>
-                        <span class="grey--text">Account Created: </span> {{"N/A"}} <br>                      
+                        <p v-for="role in counts.user_counts.by_role" :key=role.id>
+                            <span class="grey--text"># of {{role.name}}s: </span> {{role.total}}
+                        </p>
                     </v-card-text>
                     <v-card-actions style="padding:0">                        
                         <v-btn :to="{name:'user_stats'}" block class="blue--text white" style="margin:0">View All</v-btn>
@@ -60,7 +62,7 @@ export default {
         total:0
     },
     counts:{
-        user_counts:0,
+        user_counts:{},
         date_counts: {},
         status_counts: {},
         gender_counts : {},
@@ -104,7 +106,14 @@ export default {
         }
         apiCall({url:this.url_prefix+"users/count", method:"GET"})
         .then(resp=>{
-            Vue.set(this.counts, 'user_counts', resp)
+            Vue.set(this.counts.user_counts, 'total', resp)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+        apiCall({url:this.url_prefix+"users/count?by_role=true", method:"GET"})
+        .then(resp=>{
+            Vue.set(this.counts.user_counts, 'by_role', resp)
         })
         .catch(error => {
             console.log(error.response)

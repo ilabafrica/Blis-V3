@@ -18,8 +18,12 @@ class UserStatisticsController extends Controller
         }
         return response()->json($users);
     }
-    public function countUsers(){        
-        $users = User::count();
+    public function countUsers(Request $request){   
+        if($request->query('by_role')){
+            $users = DB::select("SELECT COUNT(*) as total, r.name, r.id FROM roles r, role_user ru WHERE r.id=ru.role_id GROUP BY r.id, r.name");
+        }else{
+            $users = User::count();
+        }
         return response()->json($users);
     }
     public function logins(){
@@ -34,6 +38,5 @@ class UserStatisticsController extends Controller
         }
         return response()->json($logins);
     } 
-    
 }
 
