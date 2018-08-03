@@ -21,4 +21,46 @@ class MeasureType extends Model
     const free_text = 4;
 
     public $timestamps = false;
+
+	/**
+	 *  Check to if the Measure Type is Numeric
+	 *
+	 * @return boolean
+	 */
+	public function isNumeric()
+	{
+		return ($this->id == MeasureType::numeric) ? true : false ;
+	}
+
+	/**
+	 *  Check to if the Measure Type is Alphanumeric
+	 *
+	 * @return boolean
+	 */
+	public function isAlphanumeric()
+	{
+		return ($this->id == MeasureType::alphanumeric) ? true : false ;
+	}
+
+	/**
+	 *  Check to if the Measure Type is Autocomplete
+	 *
+	 * @return boolean
+	 */
+	public function isMultiAlphanumeric()
+	{
+		return ($this->id == MeasureType::multi_alphanumeric) ? true : false ;
+	}
+
+	/**
+	 *  Check to if the Measure Type is Free Text
+	 *
+	 * @return boolean
+	 */
+	public function isFreeText()
+	{
+		return ($this->id == MeasureType::free_text) ? true : false ;
+	}
+
+
 }

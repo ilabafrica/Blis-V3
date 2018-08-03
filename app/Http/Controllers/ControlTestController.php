@@ -11,7 +11,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ControlTest;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
+use Auth;
 
 class ControlTestController extends Controller
 {
@@ -21,11 +21,25 @@ class ControlTestController extends Controller
             $search = $request->query('search');
             $controlTest = ControlTest::whereHas('name', function ($query) use ($search) {
                 $query->where('name', 'LIKE', "%{$search}%");
-            })->with('lot.instrument')->with('testType.measures')
-                ->paginate(10);
+            })->with(
+                'lot.instrument',
+                'controlTestStatus',
+                'testType.measures.measureType',
+                'testType.measures.measureRanges',
+                'testType.measures.controlResults',
+                'controlResults.measure.measureType',
+                'controlResults.measure.measureRanges'
+            )->paginate(10);
         } else {
-            $controlTest = ControlTest::with('lot.instrument')->with('testType.measures.measureRanges')
-            ->with('testType.measures.measureType')->with('testType.measures.controlResults')->orderBy('id', 'ASC')->paginate(10);
+            $controlTest = ControlTest::with(
+                'lot.instrument',
+                'controlTestStatus',
+                'testType.measures.measureType',
+                'testType.measures.measureRanges',
+                'testType.measures.controlResults',
+                'controlResults.measure.measureType',
+                'controlResults.measure.measureRanges'
+            )->orderBy('id', 'ASC')->paginate(10);
         }
         return response()->json($controlTest);
     }
@@ -40,9 +54,7 @@ class ControlTestController extends Controller
     {   
         $rules = [
             'lot_id' => 'required',
-            /*'tested_by' => 'required',
-            'control_id' => 'required',
-            'control_type_id' => 'required',*/
+            'test_type_id' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
@@ -51,15 +63,12 @@ class ControlTestController extends Controller
         } else {
             $controlTest = new ControlTest;
             $controlTest->lot_id = $request->input('lot_id');
-            $controlTest->tested_by = $request->input('tested_by');
+            $controlTest->tested_by = Auth::user()->id;
             $controlTest->test_type_id = $request->input('test_type_id');
-            /*$controlTest->control_id = $request->input('control_id');
-            $controlTest->control_type_id = $request->input('control_type_id');*/
-
             try {
                 $controlTest->save();
 
-                return response()->json($controlTest);
+                return response()->json($controlTest->load('lot.instrument','controlTestStatus'));
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -76,7 +85,7 @@ class ControlTestController extends Controller
     {
         $controlTest = ControlTest::findOrFail($id);
 
-        return response()->json($controlTest);
+        return response()->json($controlTest->load('lot.instrument','controlTestStatus'));
     }
 
     /**
@@ -90,9 +99,7 @@ class ControlTestController extends Controller
     {   
         $rules = [
             'lot_id' => 'required',
-            /*'tested_by' => 'required',
-            'control_id' => 'required',
-            'control_type_id' => 'required',*/
+            'test_type_id' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
@@ -101,18 +108,13 @@ class ControlTestController extends Controller
         } else {
             $controlTest = ControlTest::findOrFail($id);
             $controlTest->lot_id = $request->input('lot_id');
-            $controlTest->tested_by = $request->input('tested_by');
+            $controlTest->tested_by = Auth::user()->id;
             $controlTest->test_status_id = $request->input('test_status_id');
-            if($request->input('time_started') == 0){
-                $controlTest->time_started =  Carbon::now()->toDateTimeString();;
-            }
-            /*$controlTest->control_id = $request->input('control_id');
-            $controlTest->control_type_id = $request->input('control_type_id');*/
 
             try {
                 $controlTest->save();
 
-                return response()->json($controlTest);
+                return response()->json($controlTest->load('lot.instrument','controlTestStatus'));
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

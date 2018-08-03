@@ -136,7 +136,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('result', 'ResultController');
         Route::resource('specimen', 'SpecimenController');
         Route::resource('test', 'TestController');
-        Route::resource('controlresult', 'ControlResultController');
+        Route::post('controlresult', 'ControlResultController@save');
+        Route::get('controlresult/{id}', 'ControlResultController@show');
         Route::resource('controltest', 'ControlTestController');
         Route::resource('controlmeasurerange', 'ControlMeasureRangeController');
         Route::resource('controlmeasure', 'ControlMeasureController');

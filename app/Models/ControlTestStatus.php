@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Models;
+
+/*
+ * (c) @iLabAfrica
+ * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead	 - Emmanuel Kweyu.
+ */
+
+use Illuminate\Database\Eloquent\Model;
+
+class ControlTestStatus extends Model
+{
+	const pending = 1;
+	const passed = 2;
+	const failed = 3;
+    public $timestamps = false;
+}

@@ -18,7 +18,7 @@ class ControlTest extends Model
      */
     public function controlResults()
     {
-        return $this->hasMany('ControlMeasureResult');
+        return $this->hasMany('App\Models\ControlResult');
     }
 
     /**
@@ -26,7 +26,7 @@ class ControlTest extends Model
      */
     public function controlType()
     {
-        return $this->belongsTo('ControlType');
+        return $this->belongsTo('App\Models\ControlType');
     }
 
     /**
@@ -34,11 +34,16 @@ class ControlTest extends Model
      */
     public function lot()
     {
-        return $this->hasOne('App\Models\Lot', 'id', 'lot_id');
+        return $this->belongsTo('App\Models\Lot');
     }
 
     public function testType()
     {
-        return $this->hasOne('App\Models\TestType', 'id', 'test_type_id');
+        return $this->belongsTo('App\Models\TestType');
+    }
+
+    public function controlTestStatus()
+    {
+        return $this->belongsTo('App\Models\ControlTestStatus');
     }
 }
