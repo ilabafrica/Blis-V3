@@ -168,6 +168,11 @@
           label: 'Lots',
           icon: 'layers'
         },
+        {
+          path: '/qualitycontrol/controltest',
+          label: 'Tests',
+          icon: 'assessment'
+        },
       ]
     })
   }

@@ -16,7 +16,7 @@ class MeasureRange extends Model
 {
     public $timestamps = false;
 
-        public function gender()
+    public function gender()
     {
         return $this->belongsTo('App\Models\Gender');
     }

@@ -274,7 +274,7 @@ class CreateBlisTables extends Migration
             $table->string('description', 100)->nullable();
             $table->integer('test_type_category_id')->unsigned();
             $table->string('targetTAT', 50)->nullable();
-            $table->boolean('active')->default(1);
+            $table->boolean('active')->default(0);
 
             $table->foreign('test_type_category_id')
                 ->references('id')->on('test_type_categories');
@@ -331,6 +331,14 @@ class CreateBlisTables extends Migration
             $table->integer('test_phase_id')->unsigned();
 
             $table->foreign('test_phase_id')->references('id')->on('test_phases');
+        });
+
+        /*
+         * @system blis.v3 defined
+         */
+        Schema::create('control_test_statuses', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name', 45);
         });
 
         /*
@@ -622,9 +630,8 @@ class CreateBlisTables extends Migration
             $table->string('number', 100)->unique();
             $table->string('description', 400)->nullable();
             $table->date('expiry');
-            $table->integer('instrument_id')->unsigned();
+            $table->integer('instrument_id')->unsigned()->nullable();
 
-            $table->foreign('instrument_id')->references('id')->on('instruments');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -634,26 +641,28 @@ class CreateBlisTables extends Migration
             $table->integer('lot_id')->unsigned();
             $table->integer('tested_by')->unsigned()->nullable();
             $table->integer('test_type_id')->unsigned();
-            $table->integer('test_status_id')->unsigned()->default(\App\Models\TestStatus::pending);
+            $table->integer('control_test_status_id')->unsigned()->default(\App\Models\ControlTestStatus::pending);
             $table->timestamp('time_started')->nullable();
             $table->timestamp('time_completed')->nullable();
             $table->timestamp('time_verified')->nullable();
 
             $table->foreign('test_type_id')->references('id')->on('test_types');
             $table->foreign('lot_id')->references('id')->on('lots');
-            $table->foreign('test_status_id')->references('id')->on('test_statuses');
+            $table->foreign('control_test_status_id')->references('id')->on('control_test_statuses');
             $table->timestamps();
         });
 
         Schema::create('control_results', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('result');
+            $table->string('result')->nullable();
             $table->integer('measure_id')->unsigned();
             $table->integer('control_test_id')->unsigned();
             $table->integer('measure_range_id')->unsigned()->nullable();
 
             $table->foreign('control_test_id')->references('id')->on('control_tests');
             $table->foreign('measure_id')->references('id')->on('measures');
+            // todo: try with controls... only at the back and see
+            // $table->unique(['control_test_id', 'measure_id', 'measure_range_id']);
             $table->timestamps();
         });
 
@@ -707,20 +716,30 @@ class CreateBlisTables extends Migration
 
         /* Test Status table */
         $test_statuses = [
-          ['id' => '1', 'name' => 'pending', 'test_phase_id' => '1'], //PreAnalytical
-          ['id' => '2', 'name' => 'started', 'test_phase_id' => '2'], //Analytical
-          ['id' => '3', 'name' => 'completed', 'test_phase_id' => '3'], //PostAnalytical
-          ['id' => '4', 'name' => 'verified', 'test_phase_id' => '3'], //PostAnalytical
+          ['id' => '1', 'name' => 'Pending', 'test_phase_id' => '1'], //PreAnalytical
+          ['id' => '2', 'name' => 'Started', 'test_phase_id' => '2'], //Analytical
+          ['id' => '3', 'name' => 'Completed', 'test_phase_id' => '3'], //PostAnalytical
+          ['id' => '4', 'name' => 'Verified', 'test_phase_id' => '3'], //PostAnalytical
         ];
         foreach ($test_statuses as $test_status) {
             \App\Models\TestStatus::create($test_status);
         }
 
+        /* Control Test Status table */
+        $test_statuses = [
+          ['id' => '1', 'name' => 'Pending'],
+          ['id' => '2', 'name' => 'Passed'],
+          ['id' => '3', 'name' => 'Failed'],
+        ];
+        foreach ($test_statuses as $test_status) {
+            \App\Models\ControlTestStatus::create($test_status);
+        }
+
         /* Specimen Status table */
         $specimen_statuses = [
-          ['id' => '1', 'name' => 'pending'],// mostly redandant status, only if implementation is requested
-          ['id' => '2', 'name' => 'received'],
-          ['id' => '3', 'name' => 'rejected'],
+          ['id' => '1', 'name' => 'Pending'],// mostly redandant status, only if implementation is requested
+          ['id' => '2', 'name' => 'Received'],
+          ['id' => '3', 'name' => 'Rejected'],
         ];
         foreach ($specimen_statuses as $specimen_status) {
             \App\Models\SpecimenStatus::create($specimen_status);

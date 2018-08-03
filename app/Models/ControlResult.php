@@ -13,14 +13,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class ControlResult extends Model
 {
+    protected $fillable = ['control_test_id', 'measure_id', 'measure_range_id'];
     /**
      * Relationship between result and measure.
      *
      * @return relationship
      */
-    public function controlMeasures()
+    public function measure()
     {
-        return $this->belongsTo('ControlMeasure');
+        return $this->belongsTo('App\Models\Measure');
     }
 
     /**
@@ -30,6 +31,6 @@ class ControlResult extends Model
      */
     public function controlTest()
     {
-        return $this->belongsTo('ControlTest');
+        return $this->belongsTo('App\Models\ControlTest');
     }
 }
