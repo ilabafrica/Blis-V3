@@ -141,18 +141,25 @@ export default new Router({
       component: require('../components/statistics/system/index'),
       beforeEnter: ifAuthenticated,
     },
-    // Stats
+    //All Users Stats
     {
       path: '/stats/users',
       name: 'user_stats',
       component: require('../components/statistics/users/index'),
       beforeEnter: ifAuthenticated,
     },
-    //User Stats
+    //Single User Stats
     {
       path: '/stats/users/:id',
       name: 'single_user_stats',
       component: require('../components/statistics/users/single1'),
+      beforeEnter: ifAuthenticated,
+    },
+    //All Tests Stats
+    {
+      path: '/tests/users',
+      name: 'tests_stats',
+      component: require('../components/statistics/tests/index'),
       beforeEnter: ifAuthenticated,
     },
   ],

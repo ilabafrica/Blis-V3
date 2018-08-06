@@ -28,7 +28,7 @@
                         <canvas id="ttChart" width="400" height="400"></canvas>
                     </v-card-text>
                     <v-card-actions style="padding:0">                        
-                        <v-btn :to="{name:'user_stats'}" block class="blue--text white" style="margin:0">View All</v-btn>
+                        <v-btn :to="{name:'tests_stats'}" block class="blue--text white" style="margin:0">View All</v-btn>
                     </v-card-actions>                    
                 </v-card>
             </div>
