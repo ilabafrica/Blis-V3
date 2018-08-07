@@ -204,4 +204,121 @@ class TestStatisticsController extends Controller
         }     
         return response()->json($tests);
     }
+
+    // get the total number of tests grouped Query experiment
+    public function testsTotalsExp(Request $request){
+        $selects = 'COUNT(*) as total'; $tables = 'tests t'; $wheres = '1'; $group_bys='';
+        // By Users
+        if ($request->query('user_id')) { // grouped by particular user
+            $selects = $selects. ", t.created_by";
+            $wheres = $wheres . " AND t.created_by=".$request->query('user_id');
+            $group_bys = $group_bys. ", t.created_by";
+        }
+        else if ($request->query('by_user')) { // grouped by users
+            $selects = $selects. ", t.created_by";
+            $group_bys = $group_bys. ", t.created_by";
+        }
+        // By Status
+        if ($request->query('test_status')) { // grouped by particular status
+            $selects = $selects. ", t.test_status_id";
+            $wheres = $wheres . " AND t.test_status_id=".$request->query('test_status');
+            $group_bys = $group_bys. ", t.test_status_id";
+        }
+        else if ($request->query('by_status')) { // grouped by status
+            $selects = $selects. ", t.test_status_id";
+            $group_bys = $group_bys. ", t.test_status_id";
+        }
+        // By Type
+        if ($request->query('test_type')) { // grouped by type
+            $selects = $selects. ", t.test_type_id";
+            $wheres = $wheres . " AND t.test_type_id=".$request->query('test_type');
+            $group_bys = $group_bys. ", t.test_type_id";
+        }
+        else if ($request->query('by_type')) { // grouped by type
+            $selects = $selects. ", t.test_type_id";
+            $group_bys = $group_bys. ", t.test_type_id";
+        }
+        // By Date
+        if($request->query('before_date') || $request->query('at_date') || $request->query('after_date')){ // group by particular date(s)
+            if($request->query('at_date') && $this->checkmydate($request->query('at_date'))){ //group by particular date
+                $selects = $selects. ", DATE(t.time_started) as timing";
+                $wheres = $wheres . " AND DATE(t.time_started)='".$request->query('at_date')."'";
+                $group_bys = $group_bys. ", timing";
+            }else{
+                if($request->query('before_date') && $this->checkmydate($request->query('before_date')) && $request->query('after_date') && $this->checkmydate($request->query('after_date'))){
+                    $selects = $selects. ", DATE(t.time_started) as timing";
+                    $wheres = $wheres . " AND DATE(t.time_started)<'".$request->query('before_date')."' AND DATE(t.time_started)>'".$request->query('after_date')."'";
+                    $group_bys = $group_bys. ", timing";
+                }
+                else{
+                    if($request->query('before_date') && $this->checkmydate($request->query('before_date'))){
+                        $selects = $selects. ", DATE(t.time_started) as timing";
+                        $wheres = $wheres . " AND DATE(t.time_started)<'".$request->query('before_date')."'";
+                        $group_bys = $group_bys. ", timing";
+                    }
+                    else if($request->query('after_date') && $this->checkmydate($request->query('after_date'))){
+                        $selects = $selects. ", DATE(t.time_started) as timing";
+                        $wheres = $wheres . " AND DATE(t.time_started)>'".$request->query('after_date')."'";
+                        $group_bys = $group_bys. ", timing";
+                    }
+                }
+            }
+        }
+        else if ($request->query('by_date')) { // grouped by date
+            $selects = $selects. ", DATE(t.time_started) as timing";
+            $group_bys = $group_bys. ", timing";
+        }
+        // By Gender
+        if ($request->query('gender_id')) { // grouped by particular gender
+            $selects = $selects. ", p.gender_id";
+            $tables = $tables. ", encounters e, patients p";
+            $wheres = $wheres . " AND t.encounter_id=e.id AND e.patient_id = p.id AND p.gender_id=".$request->query('gender_id');
+            $group_bys = $group_bys. ", p.gender_id";
+        }
+        else if ($request->query('by_gender')) { // grouped by gender
+            $selects = $selects. ", p.gender_id";
+            $tables = $tables. ", encounters e, patients p";
+            $wheres = $wheres . " AND t.encounter_id=e.id AND e.patient_id = p.id";
+            $group_bys = $group_bys. ", p.gender_id";
+        }
+        // By Category
+        if ($request->query('category_id')) { // grouped by particular test category
+            $selects = $selects. ", tt.test_type_category_id as ttc_id";
+            $tables = $tables. ", test_types tt";
+            $wheres = $wheres . " AND t.test_type_id=tt.id AND tt.test_type_category_id=".$request->query('category_id');
+            $group_bys = $group_bys. ", ttc_id";
+        }        
+        else if ($request->query('by_category')) { // grouped by test category
+            $selects = $selects. ", tt.test_type_category_id as ttc_id";
+            $tables = $tables. ", test_types tt";
+            $wheres = $wheres . " AND t.test_type_id=tt.id";
+            $group_bys = $group_bys. ", ttc_id";
+        }        
+        if($group_bys){ // is there anything to group by? if yes then
+            $tests = DB::select("SELECT ".$selects." FROM ".$tables." WHERE ".$wheres." GROUP BY ".substr($group_bys, 1));
+        }else{
+            $tests = DB::select("SELECT ".$selects." FROM ".$tables." WHERE ".$wheres);
+        }
+        return response()->json($tests);
+    }
+
+    public function checkmydate($date) { // date passed in yyyy-mm-dd or yyyy/mm/dd format
+        $tempDate = explode('-', $date); // try date format seperated by - i.e. yyyy-mm-dd
+        // checkdate(month, day, year)
+        if(count($tempDate)!=3){
+            $tempDate = explode('/', $date); // try format seperated by / i.e.  yyyy/mm/dd
+            if(count($tempDate)!=3){
+                return false;                
+            }
+        }
+        return checkdate($tempDate[1], $tempDate[2], $tempDate[0]);
+    }
+
+    public function isdateGreaterThan($before_date, $after_date){
+        $date1=date_create($before_date);
+        $date2=date_create($after_date);
+        $diff=date_diff($date1,$date2);
+
+        return $diff->format("%R%a days");
+    }
 }
