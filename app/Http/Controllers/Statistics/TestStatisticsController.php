@@ -268,17 +268,32 @@ class TestStatisticsController extends Controller
             $selects = $selects. ", DATE(t.time_started) as timing";
             $group_bys = $group_bys. ", timing";
         }
+        if($request->query('location_id')||$request->query('by_location') || $request->query('gender_id') || $request->query('by_gender')){
+            $tables = $tables. ", encounters e";
+            $wheres = $wheres . " AND t.encounter_id=e.id";
+        }
+        // By Location
+        if ($request->query('location_id')) { // grouped by particular test category
+            $selects = $selects. ", e.location_id";
+            $wheres = $wheres . " AND t.encounter_id = e.id AND e.location_id=".$request->query('location_id');
+            $group_bys = $group_bys. ", e.location_id";
+        }        
+        else if ($request->query('by_location')) { // grouped by test category
+            $selects = $selects. ", e.location_id";
+            $wheres = $wheres . " AND t.encounter_id = e.id";
+            $group_bys = $group_bys. ", e.location_id";
+        }  
         // By Gender
         if ($request->query('gender_id')) { // grouped by particular gender
             $selects = $selects. ", p.gender_id";
-            $tables = $tables. ", encounters e, patients p";
-            $wheres = $wheres . " AND t.encounter_id=e.id AND e.patient_id = p.id AND p.gender_id=".$request->query('gender_id');
+            $tables = $tables. ", patients p";
+            $wheres = $wheres . " AND e.patient_id = p.id AND p.gender_id=".$request->query('gender_id');
             $group_bys = $group_bys. ", p.gender_id";
         }
         else if ($request->query('by_gender')) { // grouped by gender
             $selects = $selects. ", p.gender_id";
-            $tables = $tables. ", encounters e, patients p";
-            $wheres = $wheres . " AND t.encounter_id=e.id AND e.patient_id = p.id";
+            $tables = $tables. ", patients p";
+            $wheres = $wheres . " AND e.patient_id = p.id";
             $group_bys = $group_bys. ", p.gender_id";
         }
         // By Category
@@ -293,7 +308,11 @@ class TestStatisticsController extends Controller
             $tables = $tables. ", test_types tt";
             $wheres = $wheres . " AND t.test_type_id=tt.id";
             $group_bys = $group_bys. ", ttc_id";
-        }        
+        }  
+        if($request->query('with_ids')){
+            $selects = $selects. ", GROUP_CONCAT(t.id) as ids";            
+        }     
+        // return response()->json("SELECT ".$selects." FROM ".$tables." WHERE ".$wheres);
         if($group_bys){ // is there anything to group by? if yes then
             $tests = DB::select("SELECT ".$selects." FROM ".$tables." WHERE ".$wheres." GROUP BY ".substr($group_bys, 1));
         }else{
