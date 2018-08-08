@@ -268,9 +268,14 @@ class TestStatisticsController extends Controller
             $selects = $selects. ", DATE(t.time_started) as timing";
             $group_bys = $group_bys. ", timing";
         }
-        if($request->query('location_id')||$request->query('by_location') || $request->query('gender_id') || $request->query('by_gender')){
+        // Encounters table addition into query with where class in relation to tests table
+        if($request->query('location_id')||$request->query('by_location') || $request->query('gender_id') || $request->query('by_gender') || $request->query('by_age') || $request->query('age_group')){
             $tables = $tables. ", encounters e";
             $wheres = $wheres . " AND t.encounter_id=e.id";
+            if($request->query('gender_id') || $request->query('by_gender') || $request->query('by_age') || $request->query('age_group')){ //  Patients table addition into query with where class in relation to encounters table
+                $tables = $tables. ", patients p";
+                $wheres = $wheres . " AND e.patient_id = p.id";
+            }
         }
         // By Location
         if ($request->query('location_id')) { // grouped by particular test category
@@ -286,15 +291,24 @@ class TestStatisticsController extends Controller
         // By Gender
         if ($request->query('gender_id')) { // grouped by particular gender
             $selects = $selects. ", p.gender_id";
-            $tables = $tables. ", patients p";
-            $wheres = $wheres . " AND e.patient_id = p.id AND p.gender_id=".$request->query('gender_id');
+            $wheres = $wheres . " AND p.gender_id=".$request->query('gender_id');
             $group_bys = $group_bys. ", p.gender_id";
         }
         else if ($request->query('by_gender')) { // grouped by gender
             $selects = $selects. ", p.gender_id";
-            $tables = $tables. ", patients p";
-            $wheres = $wheres . " AND e.patient_id = p.id";
             $group_bys = $group_bys. ", p.gender_id";
+        }
+        // By Patient age
+        if ($request->query('by_age')) { // grouped by patient ages
+            $selects = $selects. ",  SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 <= 5,1,0)) as 'Under 5', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 BETWEEN 5 and 20,1,0)) as '5 - 20', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25>=20,1,0)) as 'Over 20'";            
+        }else if ($request->query('age_group')) { // grouped by patient ages
+            $ages = explode(',', $request->query('age_group'));
+            if(count($ages)==2 && is_numeric($ages[0]) && is_numeric($ages[1])){
+                $ages[0] = intval($ages[0]);
+                $ages[1] = intval($ages[1]);
+                // dd($ages);
+                $selects = $selects. ",  SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 <=".$ages[0].",1,0)) as 'Under ".$ages[0]."', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 BETWEEN ".$ages[0]." and ".$ages[1].",1,0)) as '".$ages[0]." - ".$ages[1]."', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25>=".$ages[1].",1,0)) as 'Over ".$ages[1]."'";            
+            }
         }
         // By Category
         if ($request->query('category_id')) { // grouped by particular test category
