@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Model;
 class ControlTestStatus extends Model
 {
 	const pending = 1;
-	const passed = 2;
-	const failed = 3;
+	const completed = 2;
     public $timestamps = false;
 }

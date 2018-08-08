@@ -10,18 +10,15 @@ namespace App\Http\Controllers;
  * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
  */
 
+use Auth;
+use EMR;
+use App\Models\Test;
 use App\Models\Result;
+use App\Models\TestStatus;
 use Illuminate\Http\Request;
 
 class ResultController extends Controller
 {
-    public function index()
-    {
-        $result = Result::orderBy('id', 'ASC')->paginate(10);
-
-        return response()->json($result);
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -32,95 +29,70 @@ class ResultController extends Controller
     {
         $rules = [
             'test_id' => 'required',
-            'measure_id' => 'required',
-            'time_entered' => 'required',
-
+            'measures' => 'required',
         ];
         $validator = \Validator::make($request->all(), $rules);
+
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
+
         } else {
-            $result = new Result;
-            $result->test_id = $request->input('test_id');
-            $result->measure_id = $request->input('measure_id');
-            $result->result = $request->input('result');
-            $result->measure_range_id = $request->input('measure_range_id');
-            $result->time_entered = $request->input('time_entered');
 
-            try {
-                $result->save();
+            $test = Test::find($request->input('test_id'));
+            $test->test_status_id = TestStatus::completed;
+            $test->tested_by = Auth::user()->id;
+            $results = $request->input('measures');
+            foreach ($test->testType->measures as $measure) {
 
-                return response()->json($result);
-            } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                if($measure->measureType->isMultiAlphanumeric()){
+                    // multi alphanumeric
+                    foreach ($results[$measure->id]['measureRanges'] as $measureRange) {
+
+                        $result = Result::updateOrCreate([
+                            'test_id' => $request->input('test_id'),
+                            'measure_range_id' => $measureRange['measure_range_id'],
+                            'measure_id' => $measure->id,
+                        ]);
+                        $result->time_entered = date('Y-m-d H:i:s');
+                        $result->save();
+                    }
+
+                }else if($measure->measureType->isAlphanumeric()){
+                    // alphanumeric
+                    $result = Result::updateOrCreate([
+                        'measure_id' => $measure->id,
+                        'test_id' => $request->input('test_id'),
+                    ]);
+                    $result->time_entered = date('Y-m-d H:i:s');
+                    $result->measure_range_id = $results[$measure->id]['measure_range_id'];
+                    $result->save();
+
+                }else if($measure->measureType->isFreeText()||
+                    $measure->measureType->isNumeric()){
+                    // free text | numeric
+                    $result = Result::updateOrCreate([
+                        'measure_id' => $measure->id,
+                        'test_id' => $request->input('test_id'),
+                    ]);
+                    $result->time_entered = date('Y-m-d H:i:s');
+                    $result->result = $results[$measure->id]['result'];
+                    $result->save();
+                }
             }
-        }
-    }
+            $test->save();
+            // sending to emr on completion for now
+            EMR::sendTestResults($test->id);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $result = Result::findOrFail($id);
-
-        return response()->json($result);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  request
-     * @param  int  id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $rules = [
-            'test_id' => 'required',
-            'measure_id' => 'required',
-            'time_entered' => 'required',
-
-        ];
-        $validator = \Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json($validator, 422);
-        } else {
-            $result = Result::findOrFail($id);
-            $result->test_id = $request->input('test_id');
-            $result->measure_id = $request->input('measure_id');
-            $result->result = $request->input('result');
-            $result->measure_range_id = $request->input('measure_range_id');
-            $result->time_entered = $request->input('time_entered');
-
-            try {
-                $result->save();
-
-                return response()->json($result);
-            } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-            }
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        try {
-            $result = Result::findOrFail($id);
-            $result->delete();
-
-            return response()->json($result, 200);
-        } catch (\Illuminate\Database\QueryException $e) {
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            return response()->json(Test::find($test->id)->load(
+                'testStatus',
+                'specimen.specimenType',
+                'testType.specimenTypes',
+                'testType.measures.results',
+                'results.measure.measureType',
+                'results.measure.measureRanges',
+                'testType.measures.measureType',
+                'testType.measures.measureRanges'
+            ));
         }
     }
 }

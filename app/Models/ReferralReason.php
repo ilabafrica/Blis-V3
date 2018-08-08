@@ -15,4 +15,9 @@ use Illuminate\Database\Eloquent\Model;
 class ReferralReason extends Model
 {
     public $timestamps = false;
+
+    public function referral()
+    {
+        return $this->belongsToMany('App\Models\Referral','reason_referral');
+    }
 }

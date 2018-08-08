@@ -37,7 +37,7 @@ class NameController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $name = new Name;
             $name->use = $request->input('use');

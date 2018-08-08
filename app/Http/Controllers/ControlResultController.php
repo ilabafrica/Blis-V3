@@ -22,21 +22,21 @@ class ControlResultController extends Controller
      * @param  \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
-    public function save(Request $request)
+    public function store(Request $request)
     {
         $rules = [
             'control_test_id' => 'required',
             'measures' => 'required',
         ];
 
-\Log::info($request->all());
         $validator = \Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
 
         } else {
             $controlTest = ControlTest::find($request->input('control_test_id'));
+            $controlTest->control_test_status_id = ControlTestStatus::completed;
             $results = $request->input('measures');
             foreach ($controlTest->testType->measures as $measure) {
 
@@ -44,7 +44,7 @@ class ControlResultController extends Controller
                     // multi alphanumeric
                     foreach ($results[$measure->id]['measureRanges'] as $measureRange) {
 
-                        $controlResult = ControlResult::firstOrCreate([
+                        $controlResult = ControlResult::updateOrCreate([
                             'control_test_id' => $request->input('control_test_id'),
                             'measure_range_id' => $measureRange['measure_range_id'],
                             'measure_id' => $measure->id,
@@ -53,7 +53,7 @@ class ControlResultController extends Controller
 
                 }else if($measure->measureType->isAlphanumeric()){
                     // alphanumeric
-                    $controlResult = ControlResult::firstOrCreate([
+                    $controlResult = ControlResult::updateOrCreate([
                         'control_test_id' => $request->input('control_test_id'),
                         'measure_id' => $measure->id
                     ]);
@@ -63,7 +63,7 @@ class ControlResultController extends Controller
                 }else if($measure->measureType->isFreeText()||
                     $measure->measureType->isNumeric()){
                     // free text | numeric
-                    $controlResult = ControlResult::firstOrCreate([
+                    $controlResult = ControlResult::updateOrCreate([
                         'control_test_id' => $request->input('control_test_id'),
                         'measure_id' => $measure->id
                     ]);
@@ -72,24 +72,17 @@ class ControlResultController extends Controller
 
                 }
             }
-            // give lot the expected result, for numeric, alphanumeric and free text... would be completed, manully passed, manual verification
-            $controlTest->control_test_status_id = ControlTestStatus::passed;
             $controlTest->save();
 
-            return response()->json($controlTest);
+            return response()->json(ControlTest::find($controlTest->id)->load(
+                'lot.instrument',
+                'controlTestStatus',
+                'testType.measures.measureType',
+                'testType.measures.measureRanges',
+                'testType.measures.controlResults',
+                'controlResults.measure.measureType',
+                'controlResults.measure.measureRanges'
+            ));
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $controlResult = ControlResult::findOrFail($id);
-
-        return response()->json($controlResult);
     }
 }
