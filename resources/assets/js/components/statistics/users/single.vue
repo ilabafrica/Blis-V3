@@ -1,73 +1,95 @@
 <template>
     <div>
         <v-layout row wrap v-if="tests.cur">            
+            <v-flex xs12>
+                <v-card>
+                    <v-card-title class="headline blue-text">
+                        <span class="grey--text">Registered Name:  </span> {{user.name}}
+                    </v-card-title>
+                    <v-card-text>
+                        <span class="grey--text">Account Created: </span> {{user.created_at || "N/A"}} <br>
+                        <span class="grey--text">First Logged Access: </span> {{user.first_login || "N/A"}}<br>
+                        <span class="grey--text">Last Logged Access: </span> {{user.last_login || "N/A"}}<br>
+                        <span class="grey--text">Total Logged Accesses: </span> {{user.total || "N/A"}} <br>                       
+                    </v-card-text>
+                    <v-card-actions style="padding:0">                        
+                        
+                    </v-card-actions>                    
+                </v-card>
+            </v-flex>
             <v-flex xs12 sm4 md3 lg2 class="blis-stats-card-parent">
                 <div class="elevation-1 blis-grid blis-stats-card">
-                    <span class="blis-stats-num"> {{totalTestsRequested()}} </span>
+                    <span class="blis-stats-num"> {{tests.total_created}} </span>
                     <span class="blis-stats-num-label">Total Tests requested</span>
                 </div>
+                <v-btn :to="{name:'single_user_stats'}" block class="blue--text white" style="margin:0">View Stats</v-btn>
             </v-flex>
-            <div class="flex blis-stats-card-parent xs12 sm4 md3 lg2" v-for="status in tests.statuses" :key=status.id>
+            <div v-if="counts.created.by_status" class="flex blis-stats-card-parent xs12 sm4 md3 lg2" v-for="status in tests.statuses" :key=status.id>
                 <div class="elevation-1 blis-grid blis-stats-card">
-                    <span class="blis-stats-num"> {{totalTestsStatus(status.id).length}} </span>
-                    <span class="blis-stats-num-label">Total Tests {{status.name}}</span>
+                    <span class="blis-stats-num"> {{counts.created.by_status[status.id]||0}} </span>
+                    <span class="blis-stats-num-label">Requested Tests {{status.name || ""}}</span>
                 </div>
+                <v-btn v-if="counts.created.by_status[status.id]>0" :to="{name:'single_user_stats'}" block class="green--text white" style="margin:0">View Tests</v-btn>
+                <v-btn v-else block class="grey--text white" style="margin:0">View Tests</v-btn>
             </div>
-            <div class="flex blis-stats-card-parent xs12 sm4 md3 lg2" v-if="oldest_patient_tested">
+            <div class="flex blis-stats-card-parent xs12 sm4 md3 lg2">
                 <div class="elevation-1 blis-grid blis-stats-card">
-                    <span class="blis-stats-num"> {{oldest_patient_tested.age_at_test}} </span>
-                    <span class="blis-stats-num-label">Oldest Patient Tested</span>
+                    <span class="blis-stats-num"> {{tests.total_done||"N/A"}} </span>
+                    <span class="blis-stats-num-label">Tests Done By This User</span>
                 </div>
+                <v-btn @click.native="setStats('done')" block class="blue--text white" style="margin:0">View Stats</v-btn>
             </div>
-            <div class="flex blis-stats-card-parent xs12 sm4 md3 lg2" v-if="youngest_patient_tested">
+            <div class="flex blis-stats-card-parent xs12 sm4 md3 lg2">
                 <div class="elevation-1 blis-grid blis-stats-card">
-                    <span class="blis-stats-num"> {{youngest_patient_tested.age_at_test}} </span>
-                    <span class="blis-stats-num-label">Youngest Patient Tested</span>
+                    <span class="blis-stats-num"> {{tests.total_verified||"N/A"}} </span>
+                    <span class="blis-stats-num-label">Tests Verified By This User</span>                                        
                 </div>
+                <v-btn :to="{name:'single_user_stats'}" block class="blue--text white" style="margin:0">View Stats</v-btn>
             </div>
         </v-layout>
         <v-layout row wrap style="margin:20px;">
             <v-flex xs12 sm6 md4 lg4 style="padding:10px;">
                 <v-card>
                     <v-card-title class="headline grey lighten-2" primary-title>
-                        Total Tests Done Per Gender
+                        Tests Created Per Category
                     </v-card-title>
                     <v-card-text>
-                        <canvas id="myChart" width="400" height="400"></canvas>
+                        <canvas id="cpcChart" width="400" height="400"></canvas>
                     </v-card-text>
                 </v-card>
             </v-flex>
             <v-flex xs12 sm6 md4 lg4 style="padding:10px;">
                 <v-card>
                     <v-card-title class="headline grey lighten-2" primary-title>
-                        Total Tests Per Day
+                        Tests Created Per Day
                     </v-card-title>
                     <v-card-text>
-                        <canvas id="myChart2" width="400" height="400"></canvas>
+                        <canvas id="cpdChart" width="400" height="400"></canvas>
                     </v-card-text>
                 </v-card>
             </v-flex>
             <v-flex xs12 sm6 md4 lg4 style="padding:10px;">
                 <v-card>
                     <v-card-title class="headline grey lighten-2" primary-title>
-                        Total Tests Per Status
+                        Tests Created Per Status
                     </v-card-title>
                     <v-card-text>
-                        <canvas id="myChart3" width="400" height="400"></canvas>
+                        <canvas id="cpsChart" width="400" height="400"></canvas>
                     </v-card-text>
                 </v-card>
             </v-flex>
             <v-flex xs12 sm6 md4 lg4 style="padding:10px;">
                 <v-card>
                     <v-card-title class="headline grey lighten-2" primary-title>
-                        Total Tests Per Category
+                        Tests Created Per Gender
                     </v-card-title>
                     <v-card-text>
-                        <canvas id="myChart4" width="400" height="400"></canvas>
+                        <canvas id="cpgChart" width="400" height="400"></canvas>
                     </v-card-text>
                 </v-card>
             </v-flex>
         </v-layout>
+        
     </div>
 </template>
 <script>
@@ -84,20 +106,57 @@ export default {
       total: 0,
       visible: 10
     },
+    user:{},
     tests: {
         cur:[],
         statuses:[],
         types:[],
-        categories:[]
+        categories:[],
+        total_created: 0,
+        total_done: 0,
+        total_verified: 0
     },
     counts:{
+        created:{
+            total:0,
+            by_date:{},
+            by_gender:{},
+            by_category:{},
+            by_type:{}
+        },
+        done:{
+            total:0,
+            by_date:{},
+            by_gender:{},
+            by_category:{},
+            by_type:{}
+        },
+        verified:{
+            total:0,
+            by_date:{},
+            by_gender:{},
+            by_category:{},
+            by_type:{}
+        },
         date_counts: {},
         gender_counts : {},
         type_counts:{},
+        status_counts:{},
         type_category_counts:{}
     },
+    genders:{},
     oldest_patient_tested:{},
-    youngest_patient_tested:{}
+    youngest_patient_tested:{},
+    basicLineGraphOptions:{
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    },
+    basicBackgroundColors:['#1976d2', '#a6e1fa', '#0a2472', '#395C6B', '#EAD2AC', '#D1DEDE','#1D201F']
   }),
 
   computed: {
@@ -114,226 +173,294 @@ export default {
   methods: {
     initialize() {
         this.query = "page=" + this.pagination.page;
+               
         if (this.search != "") {
             this.query = this.query + "&search=" + this.search;
         }
-
-        apiCall({url:this.url_prefix+"tests/statuses?"+this.query, method:"GET"})
+        apiCall({url:this.url_prefix+"users?user_id="+this.$route.params.id, method:"GET"})
         .then(resp=>{
-            Vue.set(this.tests, 'statuses', resp)
+            console.log("User is ",resp[0])
+            if(resp[0]){
+                Vue.set(this.user,"name",resp[0].name)
+                Vue.set(this.user,"created_at",resp[0].created_at)
+            }
+        })
+        .catch(error=>{
+            console.log(error.response)
+        })
+        apiCall({url:this.url_prefix+"logins?user_id="+this.$route.params.id, method:"GET"})
+        .then(resp=>{
+            console.log("Logins are ",resp[0])
+            if(resp[0]){
+                Vue.set(this.user,"total",resp[0].total)
+                Vue.set(this.user,"last_login",resp[0].last_login)
+                Vue.set(this.user,"first_login",resp[0].first_login)
+            }
+        })
+        .catch(error=>{
+            console.log(error.response)
+        })
+        let statuses_req = apiCall({url:this.url_prefix+"tests/statuses?"+this.query, method:"GET"})
+        let genders_req = apiCall({url:this.url_prefix+"genders", method:"GET"})
+        let types_req = apiCall({url:this.url_prefix+"tests/types?"+this.query, method:"GET"})
+        let categories_req = apiCall({url:this.url_prefix+"tests/type-categories?"+this.query, method:"GET"})
+        Promise.all([
+            statuses_req.catch(error => {console.log(error.response)}),
+            genders_req.catch(error => {console.log(error.response)}),
+            types_req.catch(error => {console.log(error.response)}),
+            categories_req.catch(error => {console.log(error.response)}),
+        ]).then(values =>{
+            Vue.set(this.tests, 'statuses', values[0])
             console.log("Test Statuses are ", this.tests.statuses)
+
+            //  genders
+            let genders = {}
+            values[1].forEach(element => {
+                genders[element.id] = {name:element.name, code:element.code}
+            });
+            Vue.set(this, 'genders', genders)
+            console.log("Genders are ", this.genders)
+
+            //  types and categories
+            Vue.set(this.tests, 'types', values[2])
+            Vue.set(this.tests, 'categories', values[3])
+        })
+        apiCall({url:this.url_prefix+"tests/totals?user_id="+this.$route.params.id, method:"GET"})
+        .then(resp=>{
+            Vue.set(this.tests, 'total_created', resp[0].total)
         })
         .catch(error => {
             console.log(error.response)
         })
-        apiCall({url:this.url_prefix+"tests/types?"+this.query, method:"GET"})
+        apiCall({url:this.url_prefix+"tests/totals?tested_by="+this.$route.params.id, method:"GET"})
         .then(resp=>{
-            Vue.set(this.tests, 'types', resp)
+            Vue.set(this.tests, 'total_done', resp[0].total)
         })
         .catch(error => {
             console.log(error.response)
         })
-        apiCall({url:this.url_prefix+"tests/type-categories?"+this.query, method:"GET"})
+        apiCall({url:this.url_prefix+"tests/totals?verified_by="+this.$route.params.id, method:"GET"})
         .then(resp=>{
-            Vue.set(this.tests, 'categories', resp)
+            Vue.set(this.tests, 'total_verified', resp[0].total)
         })
         .catch(error => {
             console.log(error.response)
         })
-
-        apiCall({url:this.url_prefix+"tests/done/full?user_id="+this.$route.params.id, method:"GET"})
+        
+        apiCall({url:this.url_prefix+"tests/totals?user_id="+this.$route.params.id+"&by_status=true", method:"GET"})
         .then(resp=>{
-            // console.log("Full tests are",resp)   
-            // let gender_counts = {'1':0, '2':0, '3':0,'4':0}
-            let gender_counts = {}
-            let date_counts = {}
-            let status_counts = {}, type_counts = {}, type_category_counts = {}
-            let youngest_patient_tested = {}, oldest_patient_tested = {}
-            resp.map(x =>{
-                // For each iteration check if a gender index has been instanitated matching the current gender id and add 1 to it else assign the new gender count index a value of 1 
-                gender_counts[x.gender_id] ? true : gender_counts[x.gender_id]={}
-                gender_counts[x.gender_id].total = gender_counts[x.gender_id].total ? gender_counts[x.gender_id].total + 1 : 1;
-                gender_counts[x.gender_id][x.test_status_id]  = gender_counts[x.gender_id][x.test_status_id] ? gender_counts[x.gender_id][x.test_status_id] + 1 : 1                
-
-                date_counts[x.test_started_at] = date_counts[x.test_started_at] ? date_counts[x.test_started_at] + 1 : 1 
-                status_counts[x.test_status_id] = status_counts[x.test_status_id] ? status_counts[x.test_status_id] + 1 : 1 
-                
-                // float comparison is buggy so Math.round(age *100) before comparison this means a calculated age comparison of (1.258>2.578) years would be calculated as (125>257) which would return false
-                // console.log(x.age_at_test, youngest_patient_tested.age_at_test, oldest_patient_tested.age_at_test)
-                if(typeof youngest_patient_tested.age_at_test === 'undefined' || Math.round(youngest_patient_tested.age_at_test * 100)>=Math.round(x.age_at_test * 100)){
-                    youngest_patient_tested =  x
-                }
-                if(typeof oldest_patient_tested.age_at_test === 'undefined' || Math.round(oldest_patient_tested.age_at_test * 100)<=Math.round(x.age_at_test * 100)){
-                    oldest_patient_tested =  x
-                }
-                // type_counts[x.test_type_id]? true : type_counts[x.test_type_id] = {}
-                // type_counts[x.test_type_id].name = x.test_type_name
-                // type_counts[x.test_type_id].total = type_counts[x.test_type_id].total ? type_counts[x.test_type_id].total + 1 : 1 
-                
-                type_counts[x.test_type_id] = type_counts[x.test_type_id] ? type_counts[x.test_type_id] + 1 : 1 
-                type_category_counts[x.test_type_category_id] = type_category_counts[x.test_type_category_id] ? type_category_counts[x.test_type_category_id] + 1 : 1 
-            })
-            console.log("Gender Counts are" ,gender_counts)
-            console.log("Date Counts are",date_counts)
-            console.log("Status Counts are",status_counts)
-            console.log("Youngest Patient Tested",youngest_patient_tested)
-            console.log("Oldest Patient Tested",oldest_patient_tested)
-            console.log("Type Counts are",type_counts)
-            console.log("Type Category Counts are",type_category_counts)
-
-            let labels = [], gender_count_totals = [], gender_count_totals_done = []
-            for (const key in gender_counts) {
-                if (gender_counts.hasOwnProperty(key)) {
-                    const element = gender_counts[key];
-                    labels.push(key)
-                    gender_count_totals.push(element.total)
-                    gender_count_totals_done.push(element['3'])
-                    console.log(element.total,key)
-                }
-            }
-            let basicLineGraphOptions = {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero:true
-                            }
-                        }]
-                    }
-                };
-           
-            let basicBackgroundColors = ['#1976d2', '#a6e1fa', '#0a2472', '#395C6B', '#EAD2AC', '#D1DEDE','#1D201F']
-            
-            var ctx = document.getElementById("myChart");
-            var myRadarChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels,
-                    datasets: [{
-                            data: gender_count_totals,
-                            label: 'Total Per Gender',
-                            backgroundColor: basicBackgroundColors
-                        }
-                    ]
-                },
-                options:{
-                    onClick: (e,i)=>{
-                        console.log(e)
-                        console.log(i)
-                    }
-                }
+            let status_count = {} 
+            resp.forEach(element => {
+                status_count[element.test_status_id] =  element.total
             });
-
-            let ordered_date_counts = {};
-            Object.keys(date_counts).sort().forEach(function(key) {
-                ordered_date_counts[key] = date_counts[key];
-            });
-            let ordered_status_counts = {};
-            Object.keys(status_counts).sort().forEach(function(key) {
-                ordered_status_counts[key] = status_counts[key];
-            });
-            let ordered_type_category_counts = {};
-            Object.keys(type_category_counts).sort().forEach(function(key) {
-                ordered_type_category_counts[key] = type_category_counts[key];
-            });
-            var ctx2 = document.getElementById("myChart2");
-            var myRadarChart = new Chart(ctx2, {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(ordered_date_counts),
-                    datasets: [{
-                            data: Object.values(ordered_date_counts),
-                            label: 'Total Per Date'
-                        }
-                    ]
-                },
-                options: basicLineGraphOptions
-            });
-
-            var ctx3 = document.getElementById("myChart3");
-            var mydoughnutChart = new Chart(ctx3, {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(ordered_status_counts).map(x=>{
-                                return this.tests.statuses.filter(y =>{
-                                    return y.id == x
-                                })[0].name
-                            }),
-                    datasets: [{
-                            data: Object.values(ordered_status_counts),
-                            label: 'Total Test Per Status',
-                            backgroundColor: basicBackgroundColors
-                        }
-                    ]
-                }
-            });
-
-            var ctx4 = document.getElementById("myChart4");
-            var mydoughnutChart2 = new Chart(ctx4, {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(ordered_type_category_counts).map(x=>{
-                                return this.tests.categories.filter(y =>{
-                                    return y.id == x
-                                })[0].name
-                            }),
-                    datasets: [{
-                            data: Object.values(ordered_type_category_counts),
-                            label: 'Total Test Per Category',
-                            backgroundColor: basicBackgroundColors
-                        }
-                    ]
-                }
-            });
-            
-            
-            Vue.set(this.tests,'cur',resp)
-            Vue.set(this,'youngest_patient_tested',youngest_patient_tested)
-            Vue.set(this,'oldest_patient_tested',oldest_patient_tested)
-            
-            Vue.set(this.counts, 'gender_counts', gender_counts)
-            Vue.set(this.counts, 'date_counts', ordered_date_counts)
-            Vue.set(this.counts, 'type_counts', type_counts)
+            Vue.set(this.counts.created, 'by_status', status_count)
+            this.generateStatusCountsGraph(status_count)
+            console.log("Status counts are ", status_count)
         })
-        .catch(error =>{
+        .catch(error => {
+            console.log(error.response)
+        })
+        apiCall({url:this.url_prefix+"tests/totals?user_id="+this.$route.params.id+"&by_date=true", method:"GET"})
+        .then(resp=>{
+            let date_count = {} 
+            resp.forEach(element => {
+                date_count[element.test_created_at] =  element.total
+            });
+            Vue.set(this.counts.created, 'by_date', date_count)
+
+            this.generateDateCountsGraph(this.counts.created.by_date)
+            console.log("Date counts are ", this.counts.created.by_date)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+        apiCall({url:this.url_prefix+"tests/totals?user_id="+this.$route.params.id+"&by_category=true", method:"GET"})
+        .then(resp=>{
+            let category_count = {} 
+            resp.forEach(element => {
+                category_count[element.ttc_id] =  element.total
+            });
+            Vue.set(this.counts.created, 'by_category', category_count)
+            this.generateCategoryCountsGraph(category_count)
+            console.log("Category counts are ", category_count)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+        apiCall({url:this.url_prefix+"tests/totals?user_id="+this.$route.params.id+"&by_gender=true", method:"GET"})
+        .then(resp=>{
+            let gender_count = {} 
+            resp.forEach(element => {
+                if(this.genders){
+                    gender_count[this.genders[element.gender_id].code] =  element.total
+                }
+                else{
+                    gender_count[element.gender_id] =  element.total
+                }
+            });
+            Vue.set(this.counts.created, 'by_gender', gender_count)
+            this.generateGenderCountsGraph(gender_count)
+            console.log("Gender counts are ", gender_count)
+        })
+        .catch(error => {
             console.log(error.response)
         })
     },
-
-    totalTestsRequested(){
-        let count = 0;      
-        if(this.counts && this.counts.gender_counts){    
-            let gcounts = this.counts.gender_counts
-                  
-            for (const key in gcounts) {
-                if (gcounts.hasOwnProperty(key)) {
-                    const element =gcounts[key];
-                    count += element.total
-                }
-            }
-        }
-        console.log("Counts under total tests requested ",this.tests.cur)
-        return count;
-    },
-
-    totalTestsStatus(status){
-        return this.tests.cur.filter((x)=>{
-            return x.test_status_id===status
-        })
-    },
-    testsPerType(testType){
-        for (const key in this.tests.type_counts) {
-            if (this.tests.type_counts.hasOwnProperty(key)) {
-                const element = this.tests.type_counts[key];
+    setStats(status){
+        switch (status) {
+            case "done":
+                this.getTestsDone()
+                break;
+        
+            case "verified":
                 
-            }
+                break;
+        
+            default:
+                break;
         }
     },
-    getTestTypes(){        
-        return Object.keys(this.tests.type_counts)
-    },
+    getTestsDone(){        
+        apiCall({url:this.url_prefix+"tests/totals?tested_by="+this.$route.params.id+"&by_status=true", method:"GET"})
+        .then(resp=>{
+            let status_count = {} 
+            resp.forEach(element => {
+                status_count[element.test_status_id] =  element.total
+            });
+            Vue.set(this.counts.done, 'by_status', status_count)
+            this.generateStatusCountsGraph(status_count)
+            console.log("Status counts are ", status_count)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+        apiCall({url:this.url_prefix+"tests/totals?tested_by="+this.$route.params.id+"&by_date=true", method:"GET"})
+        .then(resp=>{
+            let date_count = {} 
+            resp.forEach(element => {
+                date_count[element.test_created_at] =  element.total
+            });
+            Vue.set(this.counts.done, 'by_date', date_count)
 
-    getAge(birthday) {
-      return ~~((Date.now() - Date.parse(birthday)) / 31557600000);
+            this.generateDateCountsGraph(this.counts.done.by_date)
+            console.log("Date counts are ", this.counts.done.by_date)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+        apiCall({url:this.url_prefix+"tests/totals?tested_by="+this.$route.params.id+"&by_category=true", method:"GET"})
+        .then(resp=>{
+            let category_count = {} 
+            resp.forEach(element => {
+                category_count[element.ttc_id] =  element.total
+            });
+            Vue.set(this.counts.created, 'by_category', category_count)
+            this.generateCategoryCountsGraph(category_count)
+            console.log("Category counts are ", category_count)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+        apiCall({url:this.url_prefix+"tests/totals?tested_by="+this.$route.params.id+"&by_gender=true", method:"GET"})
+        .then(resp=>{
+            let gender_count = {} 
+            resp.forEach(element => {
+                if(this.genders){
+                    gender_count[this.genders[element.gender_id].code] =  element.total
+                }
+                else{
+                    gender_count[element.gender_id] =  element.total
+                }
+            });
+            Vue.set(this.counts.done, 'by_gender', gender_count)
+            this.generateGenderCountsGraph(gender_count)
+            console.log("Gender counts are ", gender_count)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+    },
+    generateDateCountsGraph(date_count){        
+        let ordered_date_counts = {};
+        Object.keys(date_count).sort().forEach(function(key) {
+            ordered_date_counts[key] = date_count[key];
+        });
+        var ctx_cpdChart = document.getElementById("cpdChart");
+        var my_cpdChart = new Chart(ctx_cpdChart, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(ordered_date_counts),
+                datasets: [{
+                        data: Object.values(ordered_date_counts),
+                        label: 'Total Per Date'
+                    }
+                ]
+            },
+            options: this.basicLineGraphOptions
+        });
+    },
+    generateStatusCountsGraph(status_count){
+        var ctx_cpsChart = document.getElementById("cpsChart");
+        var my_cpsChart = new Chart(ctx_cpsChart, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(status_count).map(x=>{
+                            return this.tests.statuses.filter(y =>{
+                                return y.id == x
+                            })[0].name
+                        }),
+                datasets: [{
+                        data: Object.values(status_count),
+                        label: 'Total Test Per Status',
+                        backgroundColor: this.basicBackgroundColors
+                    }
+                ]
+            }
+        });
+    },
+    generateCategoryCountsGraph(category_count){            
+        let ordered_type_category_counts = {};
+        Object.keys(category_count).sort().forEach(function(key) {
+            ordered_type_category_counts[key] = category_count[key];
+        });    
+        var ctx_cpcChart = document.getElementById("cpcChart");
+        var my_cpcChart = new Chart(ctx_cpcChart, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(ordered_type_category_counts).map(x=>{
+                            return this.tests.categories.filter(y =>{
+                                return y.id == x
+                            })[0].name
+                        }),
+                datasets: [{
+                        data: Object.values(ordered_type_category_counts),
+                        label: 'Total Test Per Category',
+                        backgroundColor: this.basicBackgroundColors
+                    }
+                ]
+            }
+        });
+    },
+    generateGenderCountsGraph(gender_count){
+        var ctx_cpgChart = document.getElementById("cpgChart");
+        var my_cpgChart = new Chart(ctx_cpgChart, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(gender_count),
+                datasets: [{
+                        data: Object.values(gender_count),
+                        label: 'Total Per Gender',
+                        backgroundColor: this.basicBackgroundColors
+                    }
+                ]
+            },
+            options:{
+                onClick: (e,i)=>{
+                    console.log(e)
+                    console.log(i)
+                }
+            }
+        });
     }
   }
 };

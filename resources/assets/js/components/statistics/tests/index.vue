@@ -181,14 +181,14 @@ export default {
         .catch(error => {
             console.log(error.response)
         })
-        apiCall({url:this.url_prefix+"tests/done/totals", method:"GET"})
+        apiCall({url:this.url_prefix+"tests/totals?test_status=3", method:"GET"})
         .then(resp=>{
             Vue.set(this.tests, 'total_done', resp[0].total)
         })
         .catch(error => {
             console.log(error.response)
         })
-        apiCall({url:this.url_prefix+"tests/verified/totals", method:"GET"})
+        apiCall({url:this.url_prefix+"tests/totals?test_status=4", method:"GET"})
         .then(resp=>{
             Vue.set(this.tests, 'total_verified', resp[0].total)
         })
@@ -209,11 +209,11 @@ export default {
         .catch(error => {
             console.log(error.response)
         })
-        apiCall({url:this.url_prefix+"tests/totals?by_date=true", method:"GET"})
+        apiCall({url:this.url_prefix+"tests/totals?by_date_created=true", method:"GET"})
         .then(resp=>{
             let date_count = {} 
             resp.forEach(element => {
-                date_count[element.timing] =  element.total
+                date_count[element.test_created_at] =  element.total
             });
             Vue.set(this.counts.created, 'by_date', date_count)
 
@@ -227,7 +227,7 @@ export default {
         .then(resp=>{
             let category_count = {} 
             resp.forEach(element => {
-                category_count[element.test_type_category_id] =  element.total
+                category_count[element.ttc_id] =  element.total
             });
             Vue.set(this.counts.created, 'by_category', category_count)
             this.generateCategoryCountsGraph(category_count)
@@ -301,7 +301,7 @@ export default {
         .then(resp=>{
             let category_count = {} 
             resp.forEach(element => {
-                category_count[element.test_type_category_id] =  element.total
+                category_count[element.ttc_id] =  element.total
             });
             Vue.set(this.counts.created, 'by_category', category_count)
             this.generateCategoryCountsGraph(category_count)

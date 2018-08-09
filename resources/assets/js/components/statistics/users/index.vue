@@ -112,7 +112,7 @@ export default {
                 console.log("Logins are ", this.logins)
                 console.log("User Details are ", this.users)
             })
-            apiCall({url:this.url_prefix+"tests/done/totals", method:"GET"})
+            apiCall({url:this.url_prefix+"tests/totals?by_tester=true", method:"GET"})
             .then(resp=>{
                 resp.forEach(element => {
                     if(element.tested_by){
@@ -124,7 +124,7 @@ export default {
             .catch(error => {
                 console.log(error.response)
             })
-            apiCall({url:this.url_prefix+"tests/verified/totals", method:"GET"})
+            apiCall({url:this.url_prefix+"tests/totals?by_verifier=true", method:"GET"})
             .then(resp=>{
                 resp.forEach(element => {
                     if(element.verified_by){

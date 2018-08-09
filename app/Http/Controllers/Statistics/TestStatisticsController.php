@@ -8,46 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 class TestStatisticsController extends Controller
-{
-    //
-    public function testsDoneByGender(Request $request)
-    {
-        if($request->query('by_date')){
-            $tests = DB::select("SELECT t.tested_by, p.gender_id, COUNT(DISTINCT t.id) as total, DATE(t.time_started) as timing FROM patients p, tests t, encounters e WHERE p.id = e.patient_id AND t.encounter_id=e.id GROUP BY t.tested_by, p.gender_id, timing");
-        }
-        if($request->query('by_user')){
-            $tests = DB::select("SELECT t.tested_by, p.gender_id, COUNT(DISTINCT t.id) as total FROM patients p, tests t, encounters e WHERE p.id = e.patient_id AND t.encounter_id=e.id GROUP BY t.tested_by, p.gender_id");
-        }else{
-            $tests = DB::select("SELECT p.gender_id, COUNT(DISTINCT t.id) as total FROM patients p, tests t, encounters e WHERE p.id = e.patient_id AND t.encounter_id=e.id GROUP BY p.gender_id");
-        }
-        return response()->json($tests);
-    }
-    //
-    public function testsDone(Request $request)
-    {
-        $tests = User::find(1)->first()->testsDone()->get();        
-        return response()->json($tests);
-    }
-    //
-    public function testsDonePlusPatient(Request $request)
-    {
-        // $tests = DB::select('SELECT t.id, t.tested_by, DATE(t.time_started) as test_started_at, t.test_status_id, t.test_type_id, tt.name as test_type_name, g.code as gender_id, DATEDIFF(t.time_started, p.birth_date)/365.25 as age_at_test, e.location_id FROM patients p, tests t, encounters e, genders g, test_types tt WHERE p.id = e.patient_id AND t.encounter_id=e.id AND t.tested_by > 1 AND g.id = p.gender_id AND tt.id = t.test_type_id');
-        // $tests = DB::select('SELECT t.id, t.tested_by, DATE(t.time_started) as test_started_at, t.test_status_id, t.test_type_id, g.code as gender_id, DATEDIFF(t.time_started, p.birth_date)/365.25 as age_at_test, e.location_id FROM patients p, tests t, encounters e, genders g WHERE p.id = e.patient_id AND t.encounter_id=e.id AND t.tested_by > 1 AND g.id = p.gender_id');
-        if ($request->query('user_id')) {
-            $tests = DB::select("SELECT t.id, t.tested_by, DATE(t.time_started) as test_started_at, t.test_status_id, t.test_type_id, ttc.id as test_type_category_id, g.code as gender_id, DATEDIFF(t.time_started, p.birth_date)/365.25 as age_at_test, e.location_id FROM patients p, tests t, encounters e, genders g, test_types tt, test_type_categories ttc WHERE p.id = e.patient_id AND t.encounter_id=e.id AND t.tested_by =". intval($request->query('user_id'))." AND g.id = p.gender_id AND tt.id = t.test_type_id AND tt.test_type_category_id = ttc.id");
-        }
-        else{
-            $tests = DB::select('SELECT t.id, t.tested_by, DATE(t.time_started) as test_started_at, t.test_status_id, t.test_type_id, ttc.id as test_type_category_id, g.code as gender_id, DATEDIFF(t.time_started, p.birth_date)/365.25 as age_at_test, e.location_id FROM patients p, tests t, encounters e, genders g, test_types tt, test_type_categories ttc WHERE p.id = e.patient_id AND t.encounter_id=e.id AND t.tested_by >= 1 AND g.id = p.gender_id AND tt.id = t.test_type_id AND tt.test_type_category_id = ttc.id');
-        }
-        return response()->json($tests);
-    }
-    public function testsVerified(Request $request)
-    { 
-        //SELECT t.test_type_id, p.gender_id, COUNT(DISTINCT t.id) FROM patients p, tests t, encounters e WHERE DATEDIFF(CURDATE(), p.`birth_date`)/365.25<5 AND t.tested_by=1 AND p.id = e.patient_id AND t.encounter_id=e.id GROUP BY t.test_type_id, p.gender_id   
-
-        $tests = DB::select("SELECT count(*) as total, DATE(time_started) as timing FROM tests WHERE verified_by=1");
-        return response()->json($tests);
-    }
+{    
     // get the basic information per test type status
     public function testStatuses(){
         $test_statuses = DB::select("SELECT id, name, test_phase_id FROM test_statuses");
@@ -62,151 +23,9 @@ class TestStatisticsController extends Controller
     public function testTypeCategories(){
         $test_type_categories = DB::select("SELECT id, name FROM test_type_categories");
         return response()->json($test_type_categories);
-    }
-    // get the total number of tests grouped 
+    } 
+    // get the total number of tests grouped Query
     public function testsTotals(Request $request){
-        if ($request->query('by_user') && $request->query('by_type')) { // grouped by user then by type
-            $tests = DB::select("SELECT COUNT(*) as total, created_by, test_type_id FROM tests GROUP BY created_by, test_type_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_status')) { // All of particular user, grouped by status
-            $tests = DB::select("SELECT COUNT(*) as total, test_status_id FROM tests WHERE created_by=".$request->query('user_id')." GROUP BY test_status_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_type')) { // All of particular user, grouped by type
-            $tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests WHERE created_by=".$request->query('user_id')." GROUP BY test_type_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_gender')) { // All of particular user, grouped by gender
-            //$tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests t, encounters e, patients p  WHERE created_by=".$request->query('user_id')." GROUP BY test_type_id");
-            $tests = DB::select("SELECT COUNT(*) as total, p.gender_id FROM tests t, encounters e, patients p  WHERE t.created_by=".$request->query('user_id')." AND t.encounter_id=e.id AND e.patient_id = p.id GROUP BY p.gender_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_category')) { // All of particular user, grouped by test category
-            $tests = DB::select("SELECT COUNT(*) as total, tt.test_type_category_id as ttc_id FROM tests t, test_types tt WHERE created_by=".$request->query('user_id')." AND t.test_type_id=tt.id GROUP BY ttc_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_date')) { // All of particular user, grouped by date
-            $tests = DB::select("SELECT COUNT(*) as total, DATE(time_started) as timing FROM tests t WHERE created_by=".$request->query('user_id')." GROUP BY timing");
-        }
-        else if ($request->query('by_user')) { // grouped by user
-            $tests = DB::select("SELECT COUNT(*) as total, created_by FROM tests GROUP BY created_by");
-        }
-        else if ($request->query('by_type')) { // grouped by type
-            $tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests GROUP BY test_type_id");
-        }
-        else if ($request->query('by_date')) { // grouped by type
-            $tests = DB::select("SELECT COUNT(*) as total, DATE(time_started) as timing FROM tests GROUP BY timing");
-        }
-        else if ($request->query('user_id')) { // grouped by particular user
-            $tests = DB::select("SELECT COUNT(*) as total, created_by FROM tests WHERE created_by=".$request->query('user_id')." GROUP BY created_by");
-        }
-        else if ($request->query('by_status')) { // grouped by type
-            $tests = DB::select("SELECT COUNT(*) as total, test_status_id FROM tests GROUP BY test_status_id");
-        }
-        else if ($request->query('by_gender')) { // grouped by gender
-            $tests = DB::select("SELECT COUNT(*) as total, p.gender_id FROM tests t, encounters e, patients p  WHERE t.encounter_id=e.id AND e.patient_id = p.id GROUP BY p.gender_id");
-        }
-        else if ($request->query('by_category')) { // grouped by category
-            $tests = DB::select("SELECT COUNT(*) as total, tt.test_type_category_id FROM tests t, test_types tt WHERE t.test_type_id=tt.id GROUP BY tt.test_type_category_id");
-        }
-        else{
-            $tests = DB::select("SELECT COUNT(*) as total FROM tests");
-        }
-        return response()->json($tests);
-    }
-    // get the total number of tests done grouped 
-    public function testsDoneTotals(Request $request){
-        if ($request->query('by_user') && $request->query('by_type')) { // grouped by user then by type
-            $tests = DB::select("SELECT COUNT(*) as total, tested_by, test_type_id FROM tests WHERE test_status_id>=3 GROUP BY tested_by, test_type_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_status')) { // All of particular user, grouped by status
-            $tests = DB::select("SELECT COUNT(*) as total, test_status_id FROM tests WHERE tested_by=".$request->query('user_id')." GROUP BY test_status_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_type')) { // All of particular user, grouped by type
-            $tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests WHERE tested_by=".$request->query('user_id')." GROUP BY test_type_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_gender')) { // All of particular user, grouped by gender
-            //$tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests t, encounters e, patients p  WHERE tested_by=".$request->query('user_id')." GROUP BY test_type_id");
-            $tests = DB::select("SELECT COUNT(*) as total, p.gender_id FROM tests t, encounters e, patients p  WHERE t.tested_by=".$request->query('user_id')." AND t.encounter_id=e.id AND e.patient_id = p.id GROUP BY p.gender_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_category')) { // All of particular user, grouped by test category
-            $tests = DB::select("SELECT COUNT(*) as total, tt.test_type_category_id as ttc_id FROM tests t, test_types tt WHERE tested_by=".$request->query('user_id')." AND t.test_type_id=tt.id GROUP BY ttc_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_date')) { // All of particular user, grouped by date
-            $tests = DB::select("SELECT COUNT(*) as total, DATE(time_started) as timing FROM tests t WHERE tested_by=".$request->query('user_id')." GROUP BY timing");
-        }
-        else if ($request->query('by_user')) { // grouped by user
-            $tests = DB::select("SELECT COUNT(*) as total, tested_by FROM tests WHERE test_status_id>=3 GROUP BY tested_by");
-        }
-        else if ($request->query('by_type')) { // grouped by type
-            $tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests WHERE test_status_id>=3 GROUP BY test_type_id");
-        }
-        else if ($request->query('by_date')) { // grouped by type
-            $tests = DB::select("SELECT COUNT(*) as total, DATE(time_started) as timing FROM tests WHERE test_status_id>=3 GROUP BY timing");
-        }
-        else if ($request->query('user_id')) { // grouped by particular user
-            $tests = DB::select("SELECT COUNT(*) as total, tested_by FROM tests WHERE tested_by=".$request->query('user_id')." AND test_status_id>=3 GROUP BY tested_by");
-        }
-        else if ($request->query('by_status')) { // grouped by type
-            $tests = DB::select("SELECT COUNT(*) as total, test_status_id FROM tests WHERE test_status_id>=3 GROUP BY test_status_id");
-        }
-        else if ($request->query('by_gender')) { // grouped by gender
-            $tests = DB::select("SELECT COUNT(*) as total, p.gender_id FROM tests t, encounters e, patients p  WHERE t.test_status_id>=3 AND t.encounter_id=e.id AND e.patient_id = p.id GROUP BY p.gender_id");
-        }
-        else if ($request->query('by_category')) { // grouped by category
-            $tests = DB::select("SELECT COUNT(*) as total, tt.test_type_category_id FROM tests t, test_types tt WHERE t.test_type_id=tt.id AND t.test_status_id>=3 GROUP BY tt.test_type_category_id");
-        }
-        else{
-            $tests = DB::select("SELECT COUNT(*) as total, tested_by FROM tests WHERE test_status_id>=3 GROUP BY tested_by");
-        }     
-        return response()->json($tests);
-    }
-    // get the total number of tests verified grouped by whom they were verified by
-    public function testsVerifiedTotals(Request $request){
-        if ($request->query('by_user') && $request->query('by_type')) { // grouped by user then by type
-            $tests = DB::select("SELECT COUNT(*) as total, verified_by, test_type_id FROM tests WHERE test_status_id=4 GROUP BY verified_by, test_type_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_status')) { // All of particular user, grouped by status
-            $tests = DB::select("SELECT COUNT(*) as total, test_status_id FROM tests WHERE verified_by=".$request->query('user_id')." GROUP BY test_status_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_type')) { // All of particular user, grouped by type
-            $tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests WHERE verified_by=".$request->query('user_id')." GROUP BY test_type_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_gender')) { // All of particular user, grouped by gender
-            //$tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests t, encounters e, patients p  WHERE verified_by=".$request->query('user_id')." GROUP BY test_type_id");
-            $tests = DB::select("SELECT COUNT(*) as total, p.gender_id FROM tests t, encounters e, patients p  WHERE t.verified_by=".$request->query('user_id')." AND t.encounter_id=e.id AND e.patient_id = p.id GROUP BY p.gender_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_category')) { // All of particular user, grouped by test category
-            $tests = DB::select("SELECT COUNT(*) as total, tt.test_type_category_id as ttc_id FROM tests t, test_types tt WHERE verified_by=".$request->query('user_id')." AND t.test_type_id=tt.id GROUP BY ttc_id");
-        }
-        else if ($request->query('user_id') && $request->query('by_date')) { // All of particular user, grouped by date
-            $tests = DB::select("SELECT COUNT(*) as total, DATE(time_started) as timing FROM tests t WHERE verified_by=".$request->query('user_id')." GROUP BY timing");
-        }
-        else if ($request->query('by_user')) { // grouped by user
-            $tests = DB::select("SELECT COUNT(*) as total, verified_by FROM tests WHERE test_status_id=4 GROUP BY verified_by");
-        }
-        else if ($request->query('by_type')) { // grouped by type
-            $tests = DB::select("SELECT COUNT(*) as total, test_type_id FROM tests WHERE test_status_id=4 GROUP BY test_type_id");
-        }
-        else if ($request->query('by_date')) { // grouped by type
-            $tests = DB::select("SELECT COUNT(*) as total, DATE(time_started) as timing FROM tests WHERE test_status_id=4 GROUP BY timing");
-        }
-        else if ($request->query('user_id')) { // grouped by particular user
-            $tests = DB::select("SELECT COUNT(*) as total, verified_by FROM tests WHERE verified_by=".$request->query('user_id')." AND test_status_id=4 GROUP BY verified_by");
-        }
-        else if ($request->query('by_status')) { // grouped by type
-            $tests = DB::select("SELECT COUNT(*) as total, test_status_id FROM tests WHERE test_status_id=4 GROUP BY test_status_id");
-        }
-        else if ($request->query('by_gender')) { // grouped by gender
-            $tests = DB::select("SELECT COUNT(*) as total, p.gender_id FROM tests t, encounters e, patients p  WHERE t.test_status_id=4 AND t.encounter_id=e.id AND e.patient_id = p.id GROUP BY p.gender_id");
-        }
-        else if ($request->query('by_category')) { // grouped by category
-            $tests = DB::select("SELECT COUNT(*) as total, tt.test_type_category_id FROM tests t, test_types tt WHERE t.test_type_id=tt.id AND t.test_status_id=4 GROUP BY tt.test_type_category_id");
-        }
-        else{
-            $tests = DB::select("SELECT COUNT(*) as total, verified_by FROM tests WHERE test_status_id=4 GROUP BY verified_by");
-        }     
-        return response()->json($tests);
-    }
-
-    // get the total number of tests grouped Query experiment
-    public function testsTotalsExp(Request $request){
         $selects = 'COUNT(*) as total'; $tables = 'tests t'; $wheres = '1'; $group_bys='';
         // By Users
         if ($request->query('user_id')) { // grouped by particular user
@@ -217,6 +36,26 @@ class TestStatisticsController extends Controller
         else if ($request->query('by_user')) { // grouped by users
             $selects = $selects. ", t.created_by";
             $group_bys = $group_bys. ", t.created_by";
+        }
+        // By User who tested it
+        if ($request->query('tested_by')) { // grouped by particular user
+            $selects = $selects. ", t.tested_by";
+            $wheres = $wheres . " AND t.tested_by=".$request->query('tested_by');
+            $group_bys = $group_bys. ", t.tested_by";
+        }
+        else if ($request->query('by_tester')) { // grouped by user who tested 
+            $selects = $selects. ", t.tested_by";
+            $group_bys = $group_bys. ", t.tested_by";
+        }
+        // By User who verified it
+        if ($request->query('verified_by')) { // grouped by particular user
+            $selects = $selects. ", t.verified_by";
+            $wheres = $wheres . " AND t.verified_by=".$request->query('verified_by');
+            $group_bys = $group_bys. ", t.verified_by";
+        }
+        else if ($request->query('by_verifier')) { // grouped by user who tested 
+            $selects = $selects. ", t.verified_by";
+            $group_bys = $group_bys. ", t.verified_by";
         }
         // By Status
         if ($request->query('test_status')) { // grouped by particular status
@@ -238,41 +77,136 @@ class TestStatisticsController extends Controller
             $selects = $selects. ", t.test_type_id";
             $group_bys = $group_bys. ", t.test_type_id";
         }
-        // By Date
-        if($request->query('before_date') || $request->query('at_date') || $request->query('after_date')){ // group by particular date(s)
-            if($request->query('at_date') && $this->checkmydate($request->query('at_date'))){ //group by particular date
-                $selects = $selects. ", DATE(t.time_started) as timing";
-                $wheres = $wheres . " AND DATE(t.time_started)='".$request->query('at_date')."'";
-                $group_bys = $group_bys. ", timing";
+        // By Date Created
+        if($request->query('created_before_date') || $request->query('created_at_date') || $request->query('created_after_date')){ // group by particular date(s)
+            if($request->query('created_at_date') && $this->checkmydate($request->query('created_at_date'))){ //group by particular date
+                $selects = $selects. ", DATE(t.created_at) as test_created_at";
+                $wheres = $wheres . " AND DATE(t.created_at)='".$request->query('at_date')."'";
+                $group_bys = $group_bys. ", test_created_at";
             }else{
-                if($request->query('before_date') && $this->checkmydate($request->query('before_date')) && $request->query('after_date') && $this->checkmydate($request->query('after_date'))){
-                    $selects = $selects. ", DATE(t.time_started) as timing";
-                    $wheres = $wheres . " AND DATE(t.time_started)<'".$request->query('before_date')."' AND DATE(t.time_started)>'".$request->query('after_date')."'";
-                    $group_bys = $group_bys. ", timing";
+                if($request->query('created_before_date') && $this->checkmydate($request->query('created_before_date')) && $request->query('created_after_date') && $this->checkmydate($request->query('created_after_date'))){
+                    $selects = $selects. ", DATE(t.created_at) as test_created_at";
+                    $wheres = $wheres . " AND DATE(t.created_at)<'".$request->query('created_before_date')."' AND DATE(t.created_at)>'".$request->query('created_after_date')."'";
+                    $group_bys = $group_bys. ", test_created_at";
                 }
                 else{
-                    if($request->query('before_date') && $this->checkmydate($request->query('before_date'))){
-                        $selects = $selects. ", DATE(t.time_started) as timing";
-                        $wheres = $wheres . " AND DATE(t.time_started)<'".$request->query('before_date')."'";
-                        $group_bys = $group_bys. ", timing";
+                    if($request->query('created_before_date') && $this->checkmydate($request->query('created_before_date'))){
+                        $selects = $selects. ", DATE(t.created_at) as test_created_at";
+                        $wheres = $wheres . " AND DATE(t.created_at)<'".$request->query('created_before_date')."'";
+                        $group_bys = $group_bys. ", test_created_at";
                     }
-                    else if($request->query('after_date') && $this->checkmydate($request->query('after_date'))){
-                        $selects = $selects. ", DATE(t.time_started) as timing";
-                        $wheres = $wheres . " AND DATE(t.time_started)>'".$request->query('after_date')."'";
-                        $group_bys = $group_bys. ", timing";
+                    else if($request->query('created_after_date') && $this->checkmydate($request->query('created_after_date'))){
+                        $selects = $selects. ", DATE(t.created_at) as test_created_at";
+                        $wheres = $wheres . " AND DATE(t.created_at)>'".$request->query('created_after_date')."'";
+                        $group_bys = $group_bys. ", test_created_at";
                     }
                 }
             }
         }
-        else if ($request->query('by_date')) { // grouped by date
-            $selects = $selects. ", DATE(t.time_started) as timing";
-            $group_bys = $group_bys. ", timing";
+        else if ($request->query('by_date_created')) { // grouped by date created
+            $selects = $selects. ", DATE(t.created_at) as test_created_at";
+            $group_bys = $group_bys. ", test_created_at";
+        }
+        // By Date Started
+        if($request->query('started_before_date') || $request->query('started_at_date') || $request->query('started_after_date')){ // group by particular date(s)
+            if($request->query('started_at_date') && $this->checkmydate($request->query('started_at_date'))){ //group by particular date
+                $selects = $selects. ", DATE(t.time_started) as test_started_at";
+                $wheres = $wheres . " AND DATE(t.time_started)='".$request->query('started_at_date')."'";
+                $group_bys = $group_bys. ", test_started_at";
+            }else{
+                if($request->query('before_date') && $this->checkmydate($request->query('started_before_date')) && $request->query('started_after_date') && $this->checkmydate($request->query('started_after_date'))){
+                    $selects = $selects. ", DATE(t.time_started) as test_started_at";
+                    $wheres = $wheres . " AND DATE(t.time_started)<'".$request->query('started_before_date')."' AND DATE(t.time_started)>'".$request->query('started_after_date')."'";
+                    $group_bys = $group_bys. ", test_started_at";
+                }
+                else{
+                    if($request->query('started_before_date') && $this->checkmydate($request->query('started_before_date'))){
+                        $selects = $selects. ", DATE(t.time_started) as test_started_at";
+                        $wheres = $wheres . " AND DATE(t.time_started)<'".$request->query('started_before_date')."'";
+                        $group_bys = $group_bys. ", test_started_at";
+                    }
+                    else if($request->query('started_after_date') && $this->checkmydate($request->query('started_after_date'))){
+                        $selects = $selects. ", DATE(t.time_started) as test_started_at";
+                        $wheres = $wheres . " AND DATE(t.time_started)>'".$request->query('started_after_date')."'";
+                        $group_bys = $group_bys. ", test_started_at";
+                    }
+                }
+            }
+        }
+        else if ($request->query('by_date_started')) { // grouped by date started
+            $selects = $selects. ", DATE(t.time_started) as test_started_at";
+            $group_bys = $group_bys. ", test_started_at";
+        }
+        // By Date Completed
+        if($request->query('completed_before_date') || $request->query('completed_at_date') || $request->query('completed_after_date')){ // group by particular date(s)
+            if($request->query('completed_at_date') && $this->checkmydate($request->query('completed_at_date'))){ //group by particular date
+                $selects = $selects. ", DATE(t.time_completed) as test_completed_at";
+                $wheres = $wheres . " AND DATE(t.time_completed)='".$request->query('completed_at_date')."'";
+                $group_bys = $group_bys. ", test_completed_at";
+            }else{
+                if($request->query('completed_before_date') && $this->checkmydate($request->query('completed_before_date')) && $request->query('completed_after_date') && $this->checkmydate($request->query('completed_after_date'))){
+                    $selects = $selects. ", DATE(t.time_completed) as test_completed_at";
+                    $wheres = $wheres . " AND DATE(t.time_completed)<'".$request->query('completed_before_date')."' AND DATE(t.time_completed)>'".$request->query('completed_after_date')."'";
+                    $group_bys = $group_bys. ", test_completed_at";
+                }
+                else{
+                    if($request->query('completed_before_date') && $this->checkmydate($request->query('completed_before_date'))){
+                        $selects = $selects. ", DATE(t.time_completed) as test_completed_at";
+                        $wheres = $wheres . " AND DATE(t.time_completed)<'".$request->query('completed_before_date')."'";
+                        $group_bys = $group_bys. ", test_completed_at";
+                    }
+                    else if($request->query('completed_after_date') && $this->checkmydate($request->query('completed_after_date'))){
+                        $selects = $selects. ", DATE(t.time_completed) as test_completed_at";
+                        $wheres = $wheres . " AND DATE(t.time_completed)>'".$request->query('completed_after_date')."'";
+                        $group_bys = $group_bys. ", test_completed_at";
+                    }
+                }
+            }
+        }
+        else if ($request->query('by_date_completed')) { // grouped by date completed
+            $selects = $selects. ", DATE(t.time_completed) as test_completed_at";
+            $group_bys = $group_bys. ", test_completed_at";
+        }
+        // By Date Verified
+        if($request->query('verified_before_date') || $request->query('verified_at_date') || $request->query('verified_after_date')){ // group by particular date(s)
+            if($request->query('verified_at_date') && $this->checkmydate($request->query('verified_at_date'))){ //group by particular date
+                $selects = $selects. ", DATE(t.time_verified) as test_verified_at";
+                $wheres = $wheres . " AND DATE(t.time_verified)='".$request->query('verified_at_date')."'";
+                $group_bys = $group_bys. ", test_verified_at";
+            }else{
+                if($request->query('verified_before_date') && $this->checkmydate($request->query('verified_before_date')) && $request->query('verified_after_date') && $this->checkmydate($request->query('verified_after_date'))){
+                    $selects = $selects. ", DATE(t.time_verified) as test_verified_at";
+                    $wheres = $wheres . " AND DATE(t.time_verified)<'".$request->query('verified_before_date')."' AND DATE(t.time_verified)>'".$request->query('verified_after_date')."'";
+                    $group_bys = $group_bys. ", test_verified_at";
+                }
+                else{
+                    if($request->query('verified_before_date') && $this->checkmydate($request->query('verified_before_date'))){
+                        $selects = $selects. ", DATE(t.time_verified) as test_verified_at";
+                        $wheres = $wheres . " AND DATE(t.time_verified)<'".$request->query('verified_before_date')."'";
+                        $group_bys = $group_bys. ", test_verified_at";
+                    }
+                    else if($request->query('verified_after_date') && $this->checkmydate($request->query('verified_after_date'))){
+                        $selects = $selects. ", DATE(t.time_verified) as test_verified_at";
+                        $wheres = $wheres . " AND DATE(t.time_verified)>'".$request->query('verified_after_date')."'";
+                        $group_bys = $group_bys. ", test_verified_at";
+                    }
+                }
+            }
+        }
+        else if ($request->query('by_date_verified')) { // grouped by date verified
+            $selects = $selects. ", DATE(t.time_verified) as test_verified_at";
+            $group_bys = $group_bys. ", test_verified_at";
+        }
+        
+        // By TurnAround Time
+        if ($request->query('with_tat')) { // grouped by patient ages
+            $selects = $selects. ", AVG(TIMESTAMPDIFF(MINUTE,t.time_started,t.time_completed)) as avg_tat,  SUM(IF(TIMESTAMPDIFF(MINUTE,t.time_started,t.time_completed) <= 20,1,0)) as 'lte_20', SUM(IF( TIMESTAMPDIFF(MINUTE,t.time_started,t.time_completed) BETWEEN 20 and 60,1,0)) as '20_to_60', SUM(IF( TIMESTAMPDIFF(MINUTE,t.time_started,t.time_completed)>=60,1,0)) as 'gte_60'";
         }
         // Encounters table addition into query with where class in relation to tests table
-        if($request->query('location_id')||$request->query('by_location') || $request->query('gender_id') || $request->query('by_gender') || $request->query('by_age') || $request->query('age_group')){
+        if($request->query('location_id')||$request->query('by_location') || $request->query('gender_id') || $request->query('by_gender') || $request->query('by_age') || $request->query('age_group') || $request->query('patient_id') || $request->query('by_patient')){
             $tables = $tables. ", encounters e";
             $wheres = $wheres . " AND t.encounter_id=e.id";
-            if($request->query('gender_id') || $request->query('by_gender') || $request->query('by_age') || $request->query('age_group')){ //  Patients table addition into query with where class in relation to encounters table
+            if($request->query('gender_id') || $request->query('by_gender') || $request->query('by_age') || $request->query('age_group') || $request->query('patient_id') || $request->query('by_patient')){ //  Patients table addition into query with where class in relation to encounters table
                 $tables = $tables. ", patients p";
                 $wheres = $wheres . " AND e.patient_id = p.id";
             }
@@ -288,6 +222,16 @@ class TestStatisticsController extends Controller
             $wheres = $wheres . " AND t.encounter_id = e.id";
             $group_bys = $group_bys. ", e.location_id";
         }  
+        // By Patient
+        if ($request->query('patient_id')) { // grouped by particular gender
+            $selects = $selects. ", p.id as patient_id";
+            $wheres = $wheres . " AND p.id=".$request->query('patient_id');
+            $group_bys = $group_bys. ", p.id";
+        }
+        else if ($request->query('by_patient')) { // grouped by gender
+            $selects = $selects. ", p.id as patient_id";
+            $group_bys = $group_bys. ", p.id";
+        }
         // By Gender
         if ($request->query('gender_id')) { // grouped by particular gender
             $selects = $selects. ", p.gender_id";

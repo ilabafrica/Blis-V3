@@ -152,12 +152,12 @@ export default new Router({
     {
       path: '/stats/users/:id',
       name: 'single_user_stats',
-      component: require('../components/statistics/users/single1'),
+      component: require('../components/statistics/users/single'),
       beforeEnter: ifAuthenticated,
     },
     //All Tests Stats
     {
-      path: '/tests/users',
+      path: '/stats/tests',
       name: 'tests_stats',
       component: require('../components/statistics/tests/index'),
       beforeEnter: ifAuthenticated,
