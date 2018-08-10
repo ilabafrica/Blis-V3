@@ -26,7 +26,7 @@ class SpecimenTest extends TestCase
 			"received_by"=>1,
 			"collected_by"=>1,
 			"time_collected"=>'Sample String',
-			"received_time"=>'Sample String',
+			"time_received"=>'Sample String',
 		);
 		$this->updatedSpecimenData=array(
 			"identifier"=>'Sample updated String',
@@ -37,7 +37,7 @@ class SpecimenTest extends TestCase
 			"received_by"=>1,
 			"collected_by"=>1,
 			"time_collected"=>'Sample updated String',
-			"received_time"=>'Sample updated String',
+			"time_received"=>'Sample updated String',
 		);
 	}
 
@@ -45,7 +45,7 @@ class SpecimenTest extends TestCase
 	{
 		$response=$this->post('/api/specimen',$this->specimenData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("received_time",$response->original);
+		$this->assertArrayHasKey("time_received",$response->original);
 	}
 
 	public function testListSpecimen()
@@ -59,7 +59,7 @@ class SpecimenTest extends TestCase
 		$response=$this->post('/api/specimen',$this->specimenData);
 		$response=$this->get('/api/specimen/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("received_time",$response->original);
+		$this->assertArrayHasKey("time_received",$response->original);
 	}
 
 	public function testUpdateSpecimen()
@@ -67,7 +67,7 @@ class SpecimenTest extends TestCase
 		$response=$this->post('/api/specimen',$this->specimenData);
 		$response=$this->put('/api/specimen/1',$this->updatedSpecimenData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("received_time",$response->original);
+		$this->assertArrayHasKey("time_received",$response->original);
 	}
 
 	public function testDeleteSpecimen()

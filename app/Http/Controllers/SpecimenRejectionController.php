@@ -10,6 +10,8 @@ namespace App\Http\Controllers;
  * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
  */
 
+use Auth;
+use App\Models\TestPhase;
 use Illuminate\Http\Request;
 use App\Models\SpecimenRejection;
 
@@ -28,37 +30,49 @@ class SpecimenRejectionController extends Controller
      * @param  \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
         $rules = [
-            'test_id' => 'required',
+            'rejection_reason_ids' => 'required',
+            'reject_explained_to' => 'required',
             'specimen_id' => 'required',
-            'test_phase_id' => 'required',
-            'rejected_by' => 'required',
-
         ];
-        $validator = \Validator::make($request->all(), $rules);
+
+        $validator = \Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
+
         } else {
-            $specimenRejection = new SpecimenRejection;
-            $specimenRejection->test_id = $request->input('test_id');
-            $specimenRejection->specimen_id = $request->input('specimen_id');
-            $specimenRejection->test_phase_id = $request->input('test_phase_id');
-            $specimenRejection->rejected_by = $request->input('rejected_by');
-            $specimenRejection->rejection_reason_id = $request->input('rejection_reason_id');
-            $specimenRejection->reject_explained_to = $request->input('reject_explained_to');
-            $specimenRejection->time_rejected = $request->input('time_rejected');
 
-            try {
-                $specimenRejection->save();
+            $rejection = new SpecimenRejection;
+            $rejection->specimen_id = $request->input('specimen_id');
 
-                return response()->json($specimenRejection);
-            } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            // if it is analytic rejection test_id is submitted
+            if ($request->input('test_id')) {
+                // to reject specimen only for a particular test
+                $rejection->test_phase_id = TestPhase::analytical;
+                $rejection->test_id = $request->input('test_id');
+
+            } else {
+
+                $rejection->test_phase_id = TestPhase::pre_analytical;
             }
+            $rejection->rejection_reason_id = $request->input('rejection_reason_id');
+            $rejection->reject_explained_to = $request->input('reject_explained_to');
+            $rejection->rejected_by = Auth::user()->id;
+            $rejection->time_rejected = date('Y-m-d H:i:s');
+            $rejection->save();
+
+            foreach ($request->input('rejection_reason_ids') as $rejectionReasonId) {
+                // $specimenRejection = SpecimenRejection::find($rejection->id);
+                $rejectionReason = RejectionReason::find($rejectionReasonId);
+                // $specimenRejection->attach($rejectionReason);
+                $rejection->attach($rejectionReason);
+            }
+            return response()->json($rejection);
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -127,6 +141,54 @@ class SpecimenRejectionController extends Controller
             return response()->json($specimenRejection, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function attachReason(Request $request)
+    {
+        $rules = [
+            'rejection_reason_id' => 'required',
+            'specimen_rejection_id' => 'required',
+        ];
+
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator,422);
+        } else {
+
+                $specimenRejection = SpecimenRejection::find($request->input('specimen_rejection_id'));
+                $rejectionReason = RejectionReason::find($request->input('rejection_reason_id'));
+            try {
+                $specimenRejection->attach($rejectionReason);
+
+                return response()->json(['message' => 'Item Successfully Created']);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
+
+    public function detachReason(Request $request)
+    {
+        $rules = [
+            'rejection_reason_id' => 'required',
+            'specimen_rejection_id' => 'required',
+        ];
+
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator,422);
+        } else {
+            $specimenRejection = SpecimenRejection::find($request->input('specimen_rejection_id'));
+            $rejectionReason = RejectionReason::find($request->input('rejection_reason_id'));
+
+            try {
+                $specimenRejection->detach($rejectionReason);
+
+                return response()->json(['message' => 'Item Successfully deleted']);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
         }
     }
 }

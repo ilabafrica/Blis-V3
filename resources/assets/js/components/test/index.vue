@@ -1,5 +1,10 @@
 <template>
   <div>
+    <specimencollection ref="specimenCollectionForm"></specimencollection>
+    <result ref="resultForm"></result>
+    <specimenrejection ref="specimenRejectionForm"></specimenrejection>
+    <referral ref="referralForm"></referral>
+    <testdetail ref="testDetailForm"></testdetail>
     <v-card-title>
       Tests
       <v-spacer></v-spacer>
@@ -41,56 +46,85 @@
                 small
                 title="Details"
                 color="green"
+                flat
                 @click="detail(props.item)">
                 Details
+                <!-- v-if="props.item.test_status.code === 'pending'" -->
+                <!-- has permission to view -->
+                <v-icon right dark>visibility</v-icon>
               </v-btn>
               <v-btn
                 outline
                 small
-                title="Collect"
+                title="Collect Specimen"
                 color="deep-purple"
-                @click="collect(props.item)">
+                flat
+                @click="collectSpecimen(props.item)">
+                <!-- v-if="props.item.test_status.code === 'pending'" -->
+                <!-- not collected specimen pending/ or not there... -->
                 Collect
+                <v-icon right dark>gradient</v-icon>
               </v-btn>
               <v-btn
                 outline
                 small
                 title="Start"
                 color="blue"
+                flat
                 @click="start(props.item)">
+                <!-- v-if="props.item.test_status.code === 'pending'" -->
                 Start
+                <v-icon right dark>play_arrow</v-icon>
               </v-btn>
               <v-btn
                 outline
                 small
                 title="Enter"
                 color="light-blue"
-                @click="enter(props.item)">
+                flat
+                @click="enterResults(props.item)">
+                <!-- v-if="props.item.test_status.code === 'completed'" -->
+                <!-- has right to entere pending and below -->
+
                 Enter
+                <v-icon right dark>library_books</v-icon>
               </v-btn>
               <v-btn
                 outline
                 small
                 title="Edit"
                 color="teal"
-                @click="edit(props.item)">
+                flat
+                @click="enterResults(props.item)">
                 Edit
+                <!-- v-if="props.item.test_status.code === 'completed'" -->
+                <!-- has right to entere results and completed and above -->
+                <v-icon right dark>edit</v-icon>
               </v-btn>
               <v-btn
                 outline
                 small
                 title="Reject"
                 color="red"
-                @click="reject(props.item)">
+                flat
+                @click="rejectSpecimen(props.item)">
+                <!-- v-if="props.item.test_status.code === 'completed'" -->
+                <!-- has right to reject -->
+
                 Reject
+                <v-icon right dark>block</v-icon>
               </v-btn>
               <v-btn
                 outline
                 small
                 title="Refer"
                 color="amber"
+                flat
                 @click="refer(props.item)">
+                <!-- v-if="props.item.test_status.code === 'completed'" -->
+                <!-- has right to refer -->
                 Refer
+                <v-icon right dark>arrow_forward</v-icon>
               </v-btn>
             <!-- Verify(Details) -->
               <v-btn
@@ -98,10 +132,13 @@
                 small
                 title="Verify"
                 color="green"
-                @click="verify(props.item)">
+                flat
+                v-if="props.item.test_status.code === 'completed'"
+                @click="detail(props.item)">
+                <!-- has right to verify -->
                 Verify
+                <v-icon right dark>check_circle_outline</v-icon>
               </v-btn>
-
         </td>
       </template>
     </v-data-table>
@@ -117,8 +154,22 @@
   </div>
 </template>
 <script>
+  import { EventBus } from './../../app.js';
   import apiCall from '../../utils/api'
+  import specimencollection from './specimencollection'
+  import specimenrejection from './specimenrejection'
+  import testdetail from './testdetail'
+  import referral from './referral'
+  import result from './result'
+
   export default {
+    components: {
+      specimencollection,
+      result,
+      specimenrejection,
+      referral,
+      testdetail,
+    },
     data: () => ({
       search: '',
       query: '',
@@ -147,8 +198,22 @@
       },
     },
 
+    watch: {
+      dialog (val) {
+        val || this.close()
+      }
+    },
+
     created () {
       this.initialize()
+    },
+
+    mounted() {
+      // Listen for the update-test-list event and its payload.
+      EventBus.$on('update-test-list', data => {
+        console.log('update-test-list')
+        Object.assign(this.tests[this.editedIndex], data)
+      });
     },
 
     methods: {
@@ -188,7 +253,53 @@
         }
 
           return ~~((Date.now() - Date.parse(birthday)) / (31557600000));
-      }
+      },
+
+      collectSpecimen (test) {
+        this.$refs.specimenCollectionForm.modal(test);
+      },
+
+      start (test) {
+
+        apiCall({url: '/api/test/start/' + test.id, method: 'GET' })
+        .then(resp => {
+          console.log(resp)
+          Object.assign(this.tests[this.editedIndex], resp)
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+
+      },
+
+      verify (test) {
+
+        apiCall({url: '/api/test/verify/' + test.id, method: 'GET' })
+        .then(resp => {
+          console.log(resp)
+          Object.assign(this.tests[this.editedIndex], resp)
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+      },
+
+      enterResults (test) {
+        this.editedIndex = this.tests.indexOf(test)
+        this.$refs.resultForm.modal(test);
+      },
+
+      rejectSpecimen (test) {
+        this.$refs.specimenRejectionForm.modal(test);
+      },
+
+      refer (test) {
+        this.$refs.referralForm.modal(test);
+      },
+
+      detail (test) {
+        this.$refs.testDetailForm.modal(test);
+      },
     }
   }
 </script>

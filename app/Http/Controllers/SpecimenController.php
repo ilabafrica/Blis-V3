@@ -9,6 +9,7 @@ namespace App\Http\Controllers;
  * Devs			 - Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use Auth;
 use App\Models\Specimen;
 use Illuminate\Http\Request;
 
@@ -30,17 +31,14 @@ class SpecimenController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'accession_identifier' => 'required',
             'specimen_type_id' => 'required',
-            'parent_id' => 'required',
-            'specimen_status_id' => 'required',
             'received_by' => 'required',
             'collected_by' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $specimen = new Specimen;
             $specimen->identifier = $request->input('identifier');
@@ -48,10 +46,10 @@ class SpecimenController extends Controller
             $specimen->specimen_type_id = $request->input('specimen_type_id');
             $specimen->parent_id = $request->input('parent_id');
             $specimen->specimen_status_id = $request->input('specimen_status_id');
-            $specimen->received_by = $request->input('received_by');
+            $specimen->received_by = Auth::user()->id;
             $specimen->collected_by = $request->input('collected_by');
             $specimen->time_collected = $request->input('time_collected');
-            $specimen->received_time = $request->input('received_time');
+            $specimen->time_received = $request->input('time_received');
 
             try {
                 $specimen->save();
@@ -107,7 +105,7 @@ class SpecimenController extends Controller
             $specimen->received_by = $request->input('received_by');
             $specimen->collected_by = $request->input('collected_by');
             $specimen->time_collected = $request->input('time_collected');
-            $specimen->received_time = $request->input('received_time');
+            $specimen->time_received = $request->input('time_received');
 
             try {
                 $specimen->save();

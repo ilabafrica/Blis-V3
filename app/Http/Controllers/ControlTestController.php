@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
  */
 
 use App\Models\ControlTest;
+use App\Models\ControlTestStatus;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -59,7 +60,7 @@ class ControlTestController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $controlTest = new ControlTest;
             $controlTest->lot_id = $request->input('lot_id');
@@ -68,7 +69,16 @@ class ControlTestController extends Controller
             try {
                 $controlTest->save();
 
-                return response()->json($controlTest->load('lot.instrument','controlTestStatus'));
+                return response()->json(
+                    ControlTest::find($controlTest->id)->load(
+                        'lot.instrument',
+                        'controlTestStatus',
+                        'testType.measures.measureType',
+                        'testType.measures.measureRanges',
+                        'testType.measures.controlResults',
+                        'controlResults.measure.measureType',
+                        'controlResults.measure.measureRanges'
+                    ));
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -85,7 +95,16 @@ class ControlTestController extends Controller
     {
         $controlTest = ControlTest::findOrFail($id);
 
-        return response()->json($controlTest->load('lot.instrument','controlTestStatus'));
+        return response()->json(
+            $controlTest->load(
+                'lot.instrument',
+                'controlTestStatus',
+                'testType.measures.measureType',
+                'testType.measures.measureRanges',
+                'testType.measures.controlResults',
+                'controlResults.measure.measureType',
+                'controlResults.measure.measureRanges'
+            ));
     }
 
     /**
@@ -109,12 +128,21 @@ class ControlTestController extends Controller
             $controlTest = ControlTest::findOrFail($id);
             $controlTest->lot_id = $request->input('lot_id');
             $controlTest->tested_by = Auth::user()->id;
-            $controlTest->test_status_id = $request->input('test_status_id');
 
             try {
                 $controlTest->save();
 
-                return response()->json($controlTest->load('lot.instrument','controlTestStatus'));
+                return response()->json(
+                    ControlTest::find($controlTest->id)->load(
+                        'lot.instrument',
+                        'controlTestStatus',
+                        'testType.measures.measureType',
+                        'testType.measures.measureRanges',
+                        'testType.measures.controlResults',
+                        'controlResults.measure.measureType',
+                        'controlResults.measure.measureRanges'
+                    ));
+
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

@@ -37,7 +37,7 @@ class SusceptibilityBreakPointController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $susceptibilityBreakPoint = new SusceptibilityBreakPoint;
             $susceptibilityBreakPoint->antibiotic_id = $request->input('antibiotic_id');

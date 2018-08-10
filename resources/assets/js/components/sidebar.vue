@@ -98,11 +98,6 @@
           icon: 'domain'
         },
         {
-          path: '/',
-          label: 'Barcode Settings',
-          icon: 'build'
-        },
-        {
           path: '/labconfiguration/interfacedequipment',
           label: 'Interfaced Equipment',
           icon: 'devices'

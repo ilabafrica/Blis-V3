@@ -42,7 +42,7 @@ class AntibioticController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $antibiotic = new Antibiotic;
             $antibiotic->code = $request->input('code');

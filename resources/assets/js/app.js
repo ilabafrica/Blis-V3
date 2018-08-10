@@ -10,6 +10,7 @@ import Vuetify from 'vuetify';
 import store from './store'
 import router from './router';
 import VueRouter from 'vue-router';
+export const EventBus = new Vue();
 
 window.Vue = require('vue');
 

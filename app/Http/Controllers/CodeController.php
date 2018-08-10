@@ -38,7 +38,7 @@ class CodeController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $code = new Code;
             $code->code_system_id = $request->input('code_system_id');

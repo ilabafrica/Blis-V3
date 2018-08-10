@@ -45,7 +45,7 @@ class UserController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $user = new User;
             $user->name = $request->input('name');

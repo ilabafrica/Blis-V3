@@ -133,12 +133,17 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('specimenrejection', 'SpecimenRejectionController');
         Route::resource('antibioticsusceptibility', 'AntibioticSusceptibilityController');
         Route::resource('referral', 'ReferralController');
-        Route::resource('result', 'ResultController');
         Route::resource('specimen', 'SpecimenController');
+        Route::post('test/specimencollection', 'TestController@specimenCollection');
+        Route::post('test/specimenreferral', 'TestController@specimenReferral');
+        Route::post('test/specimenrejection', 'TestController@specimenRejection');
+        Route::get('test/start/{test_id}', 'TestController@start');
+        Route::get('test/verify/{test_id}', 'TestController@verify');
         Route::resource('test', 'TestController');
-        Route::post('controlresult', 'ControlResultController@save');
-        Route::get('controlresult/{id}', 'ControlResultController@show');
+
+        Route::post('result', 'ResultController@store');
         Route::resource('controltest', 'ControlTestController');
+        Route::post('controlresult', 'ControlResultController@store');
         Route::resource('controlmeasurerange', 'ControlMeasureRangeController');
         Route::resource('controlmeasure', 'ControlMeasureController');
         Route::resource('controltype', 'ControlTypeController');
