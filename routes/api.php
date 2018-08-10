@@ -18,12 +18,6 @@ Route::post('/login', 'Auth\APIController@login');
 Route::group(['prefix' => 'stats'], function () {
     Route::group(['prefix' => 'tests'], function () {
         Route::get('/totals', 'Statistics\TestStatisticsController@testsTotals');
-        Route::get('/done', 'Statistics\TestStatisticsController@testsDone');
-        Route::get('/done/totals', 'Statistics\TestStatisticsController@testsDoneTotals');
-        Route::get('/done/gender', 'Statistics\TestStatisticsController@testsDoneByGender');
-        Route::get('/done/full', 'Statistics\TestStatisticsController@testsDonePlusPatient');
-        Route::get('/verified', 'Statistics\TestStatisticsController@testsVerified');
-        Route::get('/verified/totals', 'Statistics\TestStatisticsController@testsVerifiedTotals');
         Route::get('/statuses', 'Statistics\TestStatisticsController@testStatuses');
         Route::get('/types', 'Statistics\TestStatisticsController@testTypes');
         Route::get('/type-categories', 'Statistics\TestStatisticsController@testTypeCategories');

@@ -40,21 +40,23 @@ class TestStatisticsController extends Controller
         // By User who tested it
         if ($request->query('tested_by')) { // grouped by particular user
             $selects = $selects. ", t.tested_by";
-            $wheres = $wheres . " AND t.tested_by=".$request->query('tested_by');
+            $wheres = $wheres . " AND t.test_status_id>=3 AND t.tested_by=".$request->query('tested_by');
             $group_bys = $group_bys. ", t.tested_by";
         }
         else if ($request->query('by_tester')) { // grouped by user who tested 
             $selects = $selects. ", t.tested_by";
+            $wheres = $wheres . " AND t.test_status_id>=3";
             $group_bys = $group_bys. ", t.tested_by";
         }
         // By User who verified it
         if ($request->query('verified_by')) { // grouped by particular user
             $selects = $selects. ", t.verified_by";
-            $wheres = $wheres . " AND t.verified_by=".$request->query('verified_by');
+            $wheres = $wheres . " AND t.test_status_id=4 AND t.verified_by=".$request->query('verified_by');
             $group_bys = $group_bys. ", t.verified_by";
         }
         else if ($request->query('by_verifier')) { // grouped by user who tested 
             $selects = $selects. ", t.verified_by";
+            $wheres = $wheres . " AND t.test_status_id=4";
             $group_bys = $group_bys. ", t.verified_by";
         }
         // By Status
@@ -244,14 +246,14 @@ class TestStatisticsController extends Controller
         }
         // By Patient age
         if ($request->query('by_age')) { // grouped by patient ages
-            $selects = $selects. ",  SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 <= 5,1,0)) as 'Under 5', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 BETWEEN 5 and 20,1,0)) as '5 - 20', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25>=20,1,0)) as 'Over 20'";            
+            $selects = $selects. ",  SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 <= 5,1,0)) as 'under_5', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 BETWEEN 5 and 20,1,0)) as '5_to_20', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25>=20,1,0)) as 'over_20'";            
         }else if ($request->query('age_group')) { // grouped by patient ages
             $ages = explode(',', $request->query('age_group'));
             if(count($ages)==2 && is_numeric($ages[0]) && is_numeric($ages[1])){
                 $ages[0] = intval($ages[0]);
                 $ages[1] = intval($ages[1]);
                 // dd($ages);
-                $selects = $selects. ",  SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 <=".$ages[0].",1,0)) as 'Under ".$ages[0]."', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 BETWEEN ".$ages[0]." and ".$ages[1].",1,0)) as '".$ages[0]." - ".$ages[1]."', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25>=".$ages[1].",1,0)) as 'Over ".$ages[1]."'";            
+                $selects = $selects. ",  SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 <=".$ages[0].",1,0)) as 'under_".$ages[0]."', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 BETWEEN ".$ages[0]." and ".$ages[1].",1,0)) as '".$ages[0]."_to_".$ages[1]."', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25>=".$ages[1].",1,0)) as 'over_".$ages[1]."'";            
             }
         }
         // By Category
