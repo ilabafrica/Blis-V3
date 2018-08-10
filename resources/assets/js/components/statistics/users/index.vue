@@ -1,8 +1,8 @@
 <template>
     <div>
         <v-layout row wrap>   
-            <p class="flex xs12" style="font-size:2rem; font-weight:100">User Statistics</p>
-            <v-flex xs12>
+            <p class="flex xs12 md6 lg4" style="font-size:2rem; font-weight:100">User Statistics</p>
+            <v-flex xs12 md6 lg8>
                 <v-text-field
                     v-model="search"
                     append-icon="search"
@@ -13,11 +13,12 @@
             </v-flex>
         </v-layout>
         <v-layout row wrap>   
-            <div v-if="logins" class="flex blis-stats-card-parent xs12 sm6 md4 lg3" v-for="(x,i) in filteredUsers" :key ="i">
+            <div v-if="logins" class="flex blis-stats-card-parent xs12 sm6 md4 lg4" v-for="(x,i) in filteredUsers" :key ="i">
                 <v-card >
                     <v-card-title class="headline blue-text">
                         {{x.name}}
                     </v-card-title>
+                    <hr>
                     <v-card-text>
                         <span class="grey--text">Account Created: </span> {{x.created_at || "N/A"}} <br>
                         <span class="grey--text">First Logged Access: </span> {{x.first_login || "N/A"}}<br>

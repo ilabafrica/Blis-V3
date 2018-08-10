@@ -1,15 +1,8 @@
 <template>
     <div>
-        <v-layout row wrap>   
-            <p class="flex xs12" style="font-size:2rem; font-weight:100">Test Statistics</p>
-            <v-flex xs12 sm4 md3 lg2 class="blis-stats-card-parent">
-                <div class="elevation-1 blis-grid blis-stats-card">
-                    <span class="blis-stats-num"> {{tests.total_created}} </span>
-                    <span class="blis-stats-num-label">Total Tests requested</span>
-                </div>
-                <v-btn block class="blue--text white" style="margin:0">View Stats</v-btn>
-            </v-flex>
-            <div v-if="counts.created.by_status" class="flex blis-stats-card-parent xs12 sm4 md3 lg2" v-for="status in tests.statuses" :key=status.id>
+        <v-layout row wrap>
+            <p class="flex xs12" style="font-size:2rem; font-weight:100">Test Statistics ({{tests.total_created}} <small class="grey--text">Tests requested</small>)</p>            
+            <div v-if="counts.created.by_status" class="flex blis-stats-card-parent xs12 sm6 md3 lg3" v-for="status in tests.statuses" :key=status.id>
                 <div class="elevation-1 blis-grid blis-stats-card">
                     <span class="blis-stats-num"> {{counts.created.by_status[status.id]||0}} </span>
                     <span class="blis-stats-num-label">Requested Tests {{status.name || ""}}</span>
@@ -56,6 +49,26 @@
                     </v-card-title>
                     <v-card-text>
                         <canvas id="cpgChart" width="400" height="400"></canvas>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+            <v-flex xs12 sm6 md4 lg4 style="padding:10px;">
+                <v-card>
+                    <v-card-title class="headline grey lighten-2" primary-title>
+                        Tests Created Per Age Group
+                    </v-card-title>
+                    <v-card-text>
+                        <canvas id="cpaChart" width="400" height="400"></canvas>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+            <v-flex xs12 sm6 md4 lg4 style="padding:10px;">
+                <v-card>
+                    <v-card-title class="headline grey lighten-2" primary-title>
+                        Turn Around Time Stats for Tests Created
+                    </v-card-title>
+                    <v-card-text>
+                        <div id="tat_stats"></div>
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -254,6 +267,36 @@ export default {
         .catch(error => {
             console.log(error.response)
         })
+        apiCall({url:this.url_prefix+"tests/totals?by_age=true", method:"GET"})
+        .then(resp=>{
+            let ages_count = {} 
+            resp.forEach(element => {
+                ages_count["Under 5"] = element.under_5
+                ages_count["5 to 20"] = element["5_to_20"]
+                ages_count["Over 20"] = element["over_20"]
+            });
+            Vue.set(this.counts.created, 'by_patient_age', ages_count)
+            this.generateAgeCountsGraph(ages_count)
+            console.log("Gender counts are ", ages_count)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+        apiCall({url:this.url_prefix+"tests/totals?with_tat=true", method:"GET"})
+        .then(resp=>{
+            let tat = {} 
+            resp.forEach(element => {
+                tat["Average TAT"] = element.avg_tat+" minutes"
+                tat["# of Tests with TAT > 20 minutes"] = element.lte_20 
+                tat["# of Tests with TAT between 20 to 60"] = element["20_to_60"]
+                tat["# of Tests with TAT Over 60 minutes"] = element["over_20"]
+            });
+            Vue.set(this.counts.done, 'tat', tat)
+            this.displayTatStats(tat)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
     },
     setStats(status){
         switch (status) {
@@ -411,6 +454,33 @@ export default {
                 }
             }
         });
+    },
+    generateAgeCountsGraph(ages_count){
+        let chartParent = document.getElementById("cpaChart").parentElement;
+        chartParent.innerHTML ='<canvas id="cpaChart" width="400" height="400"></canvas>';
+        var ctx_cpaChart = document.getElementById("cpaChart");
+        var my_cpaChart = new Chart(ctx_cpaChart, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(ages_count),
+                datasets: [{
+                        data: Object.values(ages_count),
+                        label: `Total ${this.active_stats} Per Ages`,
+                        backgroundColor: this.basicBackgroundColors.slice().reverse()
+                    }
+                ]
+            }
+        });
+    },
+    displayTatStats(stats){
+        let statsHTML = ''
+        for (const key in stats) {
+            if (stats.hasOwnProperty(key)) {
+                const element = stats[key];
+                statsHTML +=`<p><span class="grey--text">${key}:  </span>${stats[key]}</p>`
+            }
+        }
+        document.getElementById("tat_stats").innerHTML = statsHTML;
     }
   }
 };

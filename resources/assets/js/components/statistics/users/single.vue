@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-layout row wrap v-if="tests.cur">            
-            <v-flex xs12>
+        <v-layout row wrap v-if="tests.cur">
+            <v-flex xs12 sm8 md9 l10 class="blis-stats-card-parent">
                 <v-card>
                     <v-card-title class="headline blue-text">
                         <span class="grey--text">Registered Name:  </span> {{user.name}}
@@ -17,40 +17,38 @@
                     </v-card-actions>                    
                 </v-card>
             </v-flex>
-            <v-flex xs12 sm4 md3 lg2 class="blis-stats-card-parent">
+        </v-layout>
+        <v-layout row wrap v-if="tests.cur">
+            <v-flex xs12 sm4 md4 lg4 class="blis-stats-card-parent">
                 <div class="elevation-1 blis-grid blis-stats-card">
                     <span class="blis-stats-num"> {{tests.total_created}} </span>
                     <span class="blis-stats-num-label">Total Tests requested</span>
                 </div>
-                <v-btn :to="{name:'single_user_stats'}" block class="blue--text white" style="margin:0">View Stats</v-btn>
-            </v-flex>
-            <div v-if="counts.created.by_status" class="flex blis-stats-card-parent xs12 sm4 md3 lg2" v-for="status in tests.statuses" :key=status.id>
-                <div class="elevation-1 blis-grid blis-stats-card">
-                    <span class="blis-stats-num"> {{counts.created.by_status[status.id]||0}} </span>
-                    <span class="blis-stats-num-label">Requested Tests {{status.name || ""}}</span>
-                </div>
-                <v-btn v-if="counts.created.by_status[status.id]>0" :to="{name:'single_user_stats'}" block class="green--text white" style="margin:0">View Tests</v-btn>
-                <v-btn v-else block class="grey--text white" style="margin:0">View Tests</v-btn>
-            </div>
-            <div class="flex blis-stats-card-parent xs12 sm4 md3 lg2">
+                <v-btn @click.native="setStats('created')" block class="blue--text white" style="margin:0">View Stats</v-btn>
+            </v-flex>            
+            <div class="flex blis-stats-card-parent xs12 sm4 md4 lg4">
                 <div class="elevation-1 blis-grid blis-stats-card">
                     <span class="blis-stats-num"> {{tests.total_done||"N/A"}} </span>
                     <span class="blis-stats-num-label">Tests Done By This User</span>
                 </div>
                 <v-btn @click.native="setStats('done')" block class="blue--text white" style="margin:0">View Stats</v-btn>
             </div>
-            <div class="flex blis-stats-card-parent xs12 sm4 md3 lg2">
+            <div class="flex blis-stats-card-parent xs12 sm4 md4 lg4">
                 <div class="elevation-1 blis-grid blis-stats-card">
                     <span class="blis-stats-num"> {{tests.total_verified||"N/A"}} </span>
                     <span class="blis-stats-num-label">Tests Verified By This User</span>                                        
                 </div>
                 <v-btn @click.native="setStats('verified')" :to="{name:'single_user_stats'}" block class="blue--text white" style="margin:0">View Stats</v-btn>
             </div>
-            <div class="flex blis-stats-card-parent xs12 sm8 md6 lg4">
+        </v-layout>
+        <v-layout row wrap>
+            <div v-if="counts.created.by_status" class="flex blis-stats-card-parent xs12 sm4 md4 lg3" v-for="status in tests.statuses" :key=status.id>
                 <div class="elevation-1 blis-grid blis-stats-card">
-                    <span class="blis-stats-num-label">Turn Around Times Stats for Tests {{active_stats}} by User</span>                    
-                    <div id="tat_stats"></div>
+                    <span class="blis-stats-num"> {{counts.created.by_status[status.id]||0}} </span>
+                    <span class="blis-stats-num-label">Requested Tests {{status.name || ""}}</span>
                 </div>
+                <v-btn v-if="counts.created.by_status[status.id]>0" :to="{name:'single_user_stats'}" block class="green--text white" style="margin:0">View Tests</v-btn>
+                <v-btn v-else block class="grey--text white" style="margin:0">View Tests</v-btn>
             </div>
         </v-layout>
         <v-layout row wrap style="margin:20px;">
@@ -101,6 +99,16 @@
                     </v-card-title>
                     <v-card-text>
                         <canvas id="cpaChart" width="400" height="400"></canvas>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+            <v-flex xs12 sm6 md4 lg4 style="padding:10px;">
+                <v-card>
+                    <v-card-title class="headline grey lighten-2" primary-title>
+                        Turn Around Times Stats for Tests {{active_stats}} by User
+                    </v-card-title>
+                    <v-card-text>
+                        <div id="tat_stats"></div>
                     </v-card-text>
                 </v-card>
             </v-flex>

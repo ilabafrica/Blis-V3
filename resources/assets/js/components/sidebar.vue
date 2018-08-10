@@ -80,6 +80,17 @@
         <v-list-tile-title v-text="quality_control.label"></v-list-tile-title>
       </v-list-tile>
     </v-list-group>
+    <v-list-group prepend-icon="dashboard" value="true">
+      <v-list-tile slot="activator">
+        <v-list-tile-title>Statistics</v-list-tile-title>
+      </v-list-tile>
+      <v-list-tile v-for="(stat, i) in stats" :key="i" :to="{path:stat.path}">
+        <v-list-tile-action>
+          <v-icon v-text="stat.icon"></v-icon>
+        </v-list-tile-action>
+        <v-list-tile-title v-text="stat.label"></v-list-tile-title>
+      </v-list-tile>
+    </v-list-group>
   </v-list>
   </div>
 </template>
@@ -167,6 +178,18 @@
           path: '/qualitycontrol/lot',
           label: 'Lots',
           icon: 'layers'
+        },
+      ],
+      stats: [
+        {
+          path: '/stats/users',
+          label: 'User Stats',
+          icon: 'people'
+        },
+        {
+          path: '/stats/tests',
+          label: 'Test Stats',
+          icon: 'assignment_turned_in'
         },
       ]
     })
