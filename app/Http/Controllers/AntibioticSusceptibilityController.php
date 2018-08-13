@@ -39,7 +39,7 @@ class AntibioticSusceptibilityController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $antibioticSusceptibility = new AntibioticSusceptibility;
             $antibioticSusceptibility->user_id = $request->input('user_id');

@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Result extends Model
 {
+    protected $fillable = ['test_id', 'measure_id', 'measure_range_id', 'result', 'time_entered'];
+
     public $timestamps = false;
 
     public function measure()

@@ -110,7 +110,7 @@ class CreateBlisTables extends Migration
         Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('identifier')->nullable();
-            $table->integer('created_by')->unsigned()->references('id')->on('users');
+            $table->integer('created_by')->unsigned();
             $table->boolean('active')->default(1);
             $table->string('name');
             $table->string('description')->nullable();
@@ -274,7 +274,7 @@ class CreateBlisTables extends Migration
             $table->string('description', 100)->nullable();
             $table->integer('test_type_category_id')->unsigned();
             $table->string('targetTAT', 50)->nullable();
-            $table->boolean('active')->default(1);
+            $table->boolean('active')->default(0);
 
             $table->foreign('test_type_category_id')
                 ->references('id')->on('test_type_categories');
@@ -319,7 +319,8 @@ class CreateBlisTables extends Migration
          */
         Schema::create('test_phases', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 45);
+            $table->string('code', 45);
+            $table->string('display', 45);
         });
 
         /*
@@ -327,10 +328,20 @@ class CreateBlisTables extends Migration
          */
         Schema::create('test_statuses', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('code', 45);
             $table->string('name', 45);
             $table->integer('test_phase_id')->unsigned();
 
             $table->foreign('test_phase_id')->references('id')->on('test_phases');
+        });
+
+        /*
+         * @system blis.v3 defined
+         */
+        Schema::create('control_test_statuses', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('code', 45);
+            $table->string('name', 45);
         });
 
         /*
@@ -401,6 +412,7 @@ class CreateBlisTables extends Migration
         Schema::create('rejection_reasons', function (Blueprint $table) {
             $table->increments('id');
             $table->string('display', 100);
+            $table->softDeletes();
         });
 
         /*
@@ -409,6 +421,7 @@ class CreateBlisTables extends Migration
         Schema::create('referral_reasons', function (Blueprint $table) {
             $table->increments('id');
             $table->string('display', 100);
+            $table->softDeletes();
         });
 
         /*
@@ -416,23 +429,31 @@ class CreateBlisTables extends Migration
          */
         Schema::create('referrals', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamp('time_dispatch')->nullable();
-            $table->string('storage_condition', 20);
-            $table->string('transport_type', 20);
-            $table->integer('referral_reason_id')->unsigned()->nullable();
-            $table->string('priority_specimen', 20);
-            $table->integer('organization_id')->unsigned();
-            $table->string('person', 500);
-            $table->text('contacts');
+            $table->timestamp('time_dispatched_to')->nullable();
+            $table->timestamp('time_dispatched_from')->nullable();
+            $table->timestamp('time_receiveded_from')->nullable();
+            $table->integer('specimen_id')->unsigned();
+            $table->integer('referred_from')->unsigned()->nullable();
+            $table->integer('referred_to')->unsigned()->nullable();
             $table->integer('user_id')->unsigned();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('organization_id')
-                ->references('id')->on('organizations');
-            $table->foreign('referral_reason_id')
-                ->references('id')->on('referral_reasons');
 
             $table->timestamps();
+        });
+
+        /*
+         * Create table for associating referral_reasons to referrals (Many-to-Many)
+         */
+        Schema::create('reason_referral', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('referral_id')->unsigned();
+            $table->integer('referral_reason_id')->unsigned();
+
+            $table->foreign('referral_id')->references('id')->on('referrals')
+                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('referral_reason_id')->references('id')->on('referral_reasons')
+                ->onUpdate('cascade')->onDelete('cascade');
         });
 
         /*
@@ -452,9 +473,8 @@ class CreateBlisTables extends Migration
             $table->integer('received_by')->unsigned();
             $table->string('collected_by')->nullable();
             $table->timestamp('time_collected')->nullable();
-            $table->timestamp('received_time')->nullable();
+            $table->timestamp('time_received')->nullable();
 
-            $table->index('received_by');
             $table->foreign('specimen_type_id')->references('id')->on('specimen_types');
             $table->foreign('specimen_status_id')->references('id')->on('specimen_statuses');
             $table->foreign('received_by')->references('id')->on('users');
@@ -497,19 +517,30 @@ class CreateBlisTables extends Migration
         Schema::create('specimen_rejections', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('specimen_id')->unsigned();
-            $table->integer('test_phase_id')->unsigned();
-            $table->integer('test_id')->unsigned()->nullable();// determined by the phase: do a write up
+            $table->integer('test_phase_id')->unsigned();// identifies whether its preanalytic or analytic rejection
+            $table->integer('test_id')->unsigned()->nullable();// applicable only for analytic
+            $table->integer('authorized_person_informed')->unsigned()->nullable();
             $table->integer('rejected_by')->unsigned();
-            $table->integer('rejection_reason_id')->unsigned()->nullable();
-            $table->string('reject_explained_to', 100)->nullable();
-            $table->timestamp('time_rejected')->nullable();
+            $table->timestamp('time_rejected');
 
             $table->index('rejected_by');
             $table->foreign('test_id')->references('id')->on('tests');
             $table->foreign('test_phase_id')->references('id')->on('test_phases');
             $table->foreign('specimen_id')->references('id')->on('specimens');
-            $table->foreign('rejection_reason_id')
-                ->references('id')->on('rejection_reasons');
+        });
+
+        /*
+         * Create table for associating rejection_reasons to specimen_rejections (Many-to-Many)
+         */
+        Schema::create('reason_specimen_rejection', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('specimen_rejection_id')->unsigned();
+            $table->integer('rejection_reason_id')->unsigned();
+
+            $table->foreign('specimen_rejection_id')->references('id')->on('specimen_rejections')
+                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('rejection_reason_id')->references('id')->on('rejection_reasons')
+                ->onUpdate('cascade')->onDelete('cascade');
         });
 
         /*
@@ -578,30 +609,6 @@ class CreateBlisTables extends Migration
 
         /*
          * @system blis.v3 defined
-         * @example asscession_identifier|patient_report|monthly_report
-         */
-        Schema::create('adhoc_categories', function ($table) {
-            $table->increments('id');
-            $table->string('code', 60)->nullable();
-            $table->string('display');
-        });
-
-        /*
-         * @system blis.v3 defined
-         * @example monthly-reset-ulin|kayunga_iso|standard
-         */
-        Schema::create('adhoc_options', function ($table) {
-            $table->increments('id');
-            $table->integer('adhoc_category_id')->unsigned();
-            $table->string('code', 60)->nullable();
-            $table->string('display');
-
-            $table->foreign('adhoc_category_id')
-                ->references('id')->on('adhoc_categories');
-        });
-
-        /*
-         * @system blis.v3 defined
          * @description incrementing and resetting patient accession_identifier
          */
         Schema::create('counter', function (Blueprint $table) {
@@ -622,9 +629,8 @@ class CreateBlisTables extends Migration
             $table->string('number', 100)->unique();
             $table->string('description', 400)->nullable();
             $table->date('expiry');
-            $table->integer('instrument_id')->unsigned();
+            $table->integer('instrument_id')->unsigned()->nullable();
 
-            $table->foreign('instrument_id')->references('id')->on('instruments');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -634,27 +640,29 @@ class CreateBlisTables extends Migration
             $table->integer('lot_id')->unsigned();
             $table->integer('tested_by')->unsigned()->nullable();
             $table->integer('test_type_id')->unsigned();
-            $table->integer('test_status_id')->unsigned()->default(\App\Models\TestStatus::pending);
+            $table->integer('control_test_status_id')->unsigned()->default(\App\Models\ControlTestStatus::pending);
             $table->timestamp('time_started')->nullable();
             $table->timestamp('time_completed')->nullable();
             $table->timestamp('time_verified')->nullable();
 
             $table->foreign('test_type_id')->references('id')->on('test_types');
             $table->foreign('lot_id')->references('id')->on('lots');
-            $table->foreign('test_status_id')->references('id')->on('test_statuses');
+            $table->foreign('control_test_status_id')->references('id')->on('control_test_statuses');
             $table->timestamps();
         });
 
         Schema::create('control_results', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('result');
+            $table->string('result')->nullable();
             $table->integer('measure_id')->unsigned();
             $table->integer('control_test_id')->unsigned();
             $table->integer('measure_range_id')->unsigned()->nullable();
-            $table->unique(['control_test_id', 'measure_id', 'measure_range_id']);
 
             $table->foreign('control_test_id')->references('id')->on('control_tests');
             $table->foreign('measure_id')->references('id')->on('measures');
+// introduce restriction rename control_test to control and check if its not too long????
+// $table->unique(['control_id', 'measure_id', 'measure_range_id']);
+
             $table->timestamps();
         });
 
@@ -670,10 +678,26 @@ class CreateBlisTables extends Migration
 
         /* Measure Types */
         $measureTypes = [
-            ['id' => '1', 'name' => 'Numeric'],
-            ['id' => '2', 'name' => 'Alphanumeric'],
-            ['id' => '3', 'name' => 'Multi Alphanumeric'],
-            ['id' => '4', 'name' => 'Free Text'],
+            [
+                'id' => '1',
+                'code' => 'numeric',
+                'name' => 'Numeric'
+            ],
+            [
+                'id' => '2',
+                'code' => 'alphanumeric',
+                'name' => 'Alphanumeric'
+            ],
+            [
+                'id' => '3',
+                'code' => 'multi_alphanumeric',
+                'name' => 'Multi Alphanumeric'
+            ],
+            [
+                'id' => '4',
+                'code' => 'free_text',
+                'name' => 'Free Text'
+            ],
         ];
 
         foreach ($measureTypes as $measureType) {
@@ -682,9 +706,21 @@ class CreateBlisTables extends Migration
 
         /* Test Phase table */
         $test_phases = [
-          ['id' => '1', 'name' => 'PreAnalytical'],
-          ['id' => '2', 'name' => 'Analytical'],
-          ['id' => '3', 'name' => 'PostAnalytical'],
+            [
+                'id' => '1',
+                'code' => 'pre_analytical',
+                'display' => 'Pre Analytical',
+            ],
+            [
+                'id' => '2',
+                'code' => 'analytical',
+                'display' => 'Analytical',
+            ],
+            [
+                'id' => '3',
+                'code' => 'post_analytical',
+                'display' => 'Post Analytical',
+            ],
         ];
         foreach ($test_phases as $test_phase) {
             \App\Models\TestPhase::create($test_phase);
@@ -692,20 +728,29 @@ class CreateBlisTables extends Migration
 
         /* Test Status table */
         $test_statuses = [
-          ['id' => '1', 'name' => 'pending', 'test_phase_id' => '1'], //PreAnalytical
-          ['id' => '2', 'name' => 'started', 'test_phase_id' => '2'], //Analytical
-          ['id' => '3', 'name' => 'completed', 'test_phase_id' => '3'], //PostAnalytical
-          ['id' => '4', 'name' => 'verified', 'test_phase_id' => '3'], //PostAnalytical
+          ['id' => '1', 'code' => 'pending', 'name' => 'Pending', 'test_phase_id' => '1'], //PreAnalytical
+          ['id' => '2', 'code' => 'started', 'name' => 'Started', 'test_phase_id' => '2'], //Analytical
+          ['id' => '3', 'code' => 'completed', 'name' => 'Completed', 'test_phase_id' => '3'], //PostAnalytical
+          ['id' => '4', 'code' => 'verified', 'name' => 'Verified', 'test_phase_id' => '3'], //PostAnalytical
         ];
         foreach ($test_statuses as $test_status) {
             \App\Models\TestStatus::create($test_status);
         }
 
+        /* Control Test Status table */
+        $control_test_statuses = [
+          ['id' => '1', 'code' => 'pending', 'name' => 'Pending'],
+          ['id' => '2', 'code' => 'completed', 'name' => 'Completed'],
+        ];
+        foreach ($control_test_statuses as $control_test_status) {
+            \App\Models\ControlTestStatus::create($control_test_status);
+        }
+
         /* Specimen Status table */
         $specimen_statuses = [
-          ['id' => '1', 'name' => 'pending'],// mostly redandant status, only if implementation is requested
-          ['id' => '2', 'name' => 'received'],
-          ['id' => '3', 'name' => 'rejected'],
+          ['id' => '1', 'name' => 'Pending'],// mostly redandant status, only if implementation is requested
+          ['id' => '2', 'name' => 'Received'],
+          ['id' => '3', 'name' => 'Rejected'],
         ];
         foreach ($specimen_statuses as $specimen_status) {
             \App\Models\SpecimenStatus::create($specimen_status);
@@ -782,7 +827,7 @@ class CreateBlisTables extends Migration
             // biosafty and biosecurity
             ['name' => 'manage_biosafty_biosecurity', 'display_name' => 'Can manage biosafty-biosecurity'],
 
-            // biosafty and biosecurity
+            // inventory
             ['name' => 'manage_blood_bank', 'display_name' => 'Can manage blood bank'],
             ['name' => 'view_blood_bank', 'display_name' => 'Can view blood bank'],
         ];

@@ -112,7 +112,7 @@ class TestTypeMappingController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $specimenType = SpecimenType::find($request->input('specimen_type_id'));
             $testType = TestType::find($request->input('test_type_id'));
@@ -136,7 +136,7 @@ class TestTypeMappingController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $specimenType = SpecimenType::find($request->input('specimen_type_id'));
             $testType = TestType::find($request->input('test_type_id'));

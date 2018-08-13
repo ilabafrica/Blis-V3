@@ -29,15 +29,17 @@ class MeasureController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         $rules = [
-            /*'measure_type_id' => 'required',
-            'measure_name' => 'required',*/
+            'name' => 'required',
+            'test_type_id' => 'required',
+            'measure_type_id' => 'required',
 
         ];
+
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $input = $request->all();
             $measureData = [];

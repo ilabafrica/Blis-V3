@@ -17,7 +17,7 @@ class ReferralReasonController extends Controller
 {
     public function index()
     {
-        $referralReason = ReferralReason::orderBy('id', 'ASC')->paginate(10);
+        $referralReason = ReferralReason::all();
 
         return response()->json($referralReason);
     }
@@ -36,7 +36,7 @@ class ReferralReasonController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $referralReason = new ReferralReason;
             $referralReason->display = $request->input('display');

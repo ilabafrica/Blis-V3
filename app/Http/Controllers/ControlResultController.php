@@ -11,16 +11,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ControlResult;
+use App\Models\ControlTest;
+use App\Models\ControlTestStatus;
 
 class ControlResultController extends Controller
 {
-    public function index()
-    {
-        $controlResult = ControlResult::orderBy('id', 'ASC')->paginate(10);
-
-        return response()->json($controlResult);
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -30,92 +25,64 @@ class ControlResultController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'results' => 'required',
-            'control_measure_id' => 'required',
             'control_test_id' => 'required',
+            'measures' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
+
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
+
         } else {
-            $controlResult = new ControlResult;
-            $controlResult->results = $request->input('results');
-            $controlResult->control_measure_id = $request->input('control_measure_id');
-            $controlResult->control_test_id = $request->input('control_test_id');
+            $controlTest = ControlTest::find($request->input('control_test_id'));
+            $controlTest->control_test_status_id = ControlTestStatus::completed;
+            $results = $request->input('measures');
+            foreach ($controlTest->testType->measures as $measure) {
 
-            try {
-                $controlResult->save();
+                if($measure->measureType->isMultiAlphanumeric()){
+                    // multi alphanumeric
+                    foreach ($results[$measure->id]['measureRanges'] as $measureRange) {
 
-                return response()->json($controlResult);
-            } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                        $controlResult = ControlResult::updateOrCreate([
+                            'control_test_id' => $request->input('control_test_id'),
+                            'measure_range_id' => $measureRange['measure_range_id'],
+                            'measure_id' => $measure->id,
+                        ]);
+                    }
+
+                }else if($measure->measureType->isAlphanumeric()){
+                    // alphanumeric
+                    $controlResult = ControlResult::updateOrCreate([
+                        'control_test_id' => $request->input('control_test_id'),
+                        'measure_id' => $measure->id
+                    ]);
+                    $controlResult->measure_range_id = $results[$measure->id]['measure_range_id'];
+                    $controlResult->save();
+
+                }else if($measure->measureType->isFreeText()||
+                    $measure->measureType->isNumeric()){
+                    // free text | numeric
+                    $controlResult = ControlResult::updateOrCreate([
+                        'control_test_id' => $request->input('control_test_id'),
+                        'measure_id' => $measure->id
+                    ]);
+                    $controlResult->result = $results[$measure->id]['result'];
+                    $controlResult->save();
+
+                }
             }
-        }
-    }
+            $controlTest->save();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $controlResult = ControlResult::findOrFail($id);
-
-        return response()->json($controlResult);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  request
-     * @param  int  id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $rules = [
-            'results' => 'required',
-            'control_measure_id' => 'required',
-            'control_test_id' => 'required',
-        ];
-
-        $validator = \Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json($validator, 422);
-        } else {
-            $controlResult = ControlResult::findOrFail($id);
-            $controlResult->results = $request->input('results');
-            $controlResult->control_measure_id = $request->input('control_measure_id');
-            $controlResult->control_test_id = $request->input('control_test_id');
-
-            try {
-                $controlResult->save();
-
-                return response()->json($controlResult);
-            } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-            }
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        try {
-            $controlResult = ControlResult::findOrFail($id);
-            $controlResult->delete();
-
-            return response()->json($controlResult, 200);
-        } catch (\Illuminate\Database\QueryException $e) {
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            return response()->json(ControlTest::find($controlTest->id)->load(
+                'lot.instrument',
+                'controlTestStatus',
+                'testType.measures.measureType',
+                'testType.measures.measureRanges',
+                'testType.measures.controlResults',
+                'controlResults.measure.measureType',
+                'controlResults.measure.measureRanges'
+            ));
         }
     }
 }

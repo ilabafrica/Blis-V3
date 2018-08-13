@@ -40,11 +40,12 @@ class TestTypeController extends Controller
         $rules = [
             'name' => 'required',
             'test_type_category_id' => 'required',
+
         ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $testType = new TestType;
             $testType->name = $request->input('name');
@@ -74,9 +75,10 @@ class TestTypeController extends Controller
     public function show($id)
     {
         $testType = TestType::find($id)->load(
+            'measures.measureType',
+            'measures.measureRanges.gender',
             'testTypeCategory',
-            'specimenTypes',
-            'measures'
+            'specimenTypes'
         );
 
         return response()->json($testType);

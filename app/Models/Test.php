@@ -79,12 +79,17 @@ class Test extends Model
     public static function search($searchString = '', $testStatusId = 0, $dateFrom = NULL, $dateTo = NULL)
     {
         $tests = Test::with(
-            'testType',
             'encounter',
             'testStatus',
             'specimen.specimenType',
             'encounter.patient.name',
-            'encounter.patient.gender'
+            'testType.specimenTypes',
+            'encounter.patient.gender',
+            'testType.measures.results',
+            'results.measure.measureType',
+            'testType.measures.measureType',
+            'results.measure.measureRanges',
+            'testType.measures.measureRanges'
         )
             ->where(function($q) use ($searchString){
 

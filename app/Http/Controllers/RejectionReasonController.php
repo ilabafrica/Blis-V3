@@ -17,7 +17,7 @@ class RejectionReasonController extends Controller
 {
     public function index()
     {
-        $rejectionReason = RejectionReason::orderBy('id', 'ASC')->paginate(10);
+        $rejectionReason = RejectionReason::all();
 
         return response()->json($rejectionReason);
     }
@@ -36,7 +36,7 @@ class RejectionReasonController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $rejectionReason = new RejectionReason;
             $rejectionReason->display = $request->input('display');

@@ -14,7 +14,9 @@ use App\Models\Instrument;
 use App\Models\MeasureType;
 use App\Models\MeasureRange;
 use App\Models\SpecimenType;
+use App\Models\Organization;
 use App\Models\SpecimenStatus;
+use App\Models\ReferralReason;
 use App\Models\TestTypeCategory;
 use App\Models\GramStainRange;
 use App\Models\RejectionReason;
@@ -31,6 +33,16 @@ class DevSeeder extends Seeder
      */
     public function run()
     {
+        $organizations = [
+          ["name" => "Coolest Clinic in Town", "created_by" => 1],
+          ["name" => "iLabAfrica Fantasy Hospital", "created_by" => 1],
+        ];
+        foreach ($organizations as $organization)
+        {
+            Organization::create($organization);
+        }
+        $this->command->info("rejection_reasons seeded");
+
         $rejection_reasons_array = [
           ["display" => "Inadequate sample volume"],
           ["display" => "Haemolysed sample"],
@@ -50,9 +62,20 @@ class DevSeeder extends Seeder
         ];
         foreach ($rejection_reasons_array as $rejection_reason)
         {
-            $rejection_reasons[] = RejectionReason::create($rejection_reason);
+            RejectionReason::create($rejection_reason);
         }
         $this->command->info("rejection_reasons seeded");
+
+        $referralReasons = [
+          ["display" => "QA"],
+          ["display" => "Relayed"],
+          ["display" => "Beyond Facility"],
+        ];
+        foreach ($referralReasons as $referralReason)
+        {
+            ReferralReason::create($referralReason);
+        }
+        $this->command->info("referral reasons seeded");
 
         /* Specimen Types table */
         $specimenTypeAsciticTap = SpecimenType::create(["name" => "Ascitic Tap"]);
@@ -8320,18 +8343,18 @@ class DevSeeder extends Seeder
         $this->command->info("Susceptibility Break Points Seeded");
 
         // create users, tobe used randomly
-        factory(\App\User::class, 20)->create();
+        factory(\App\User::class, 10)->create();
         $this->command->info("Users Seeded");
 
         // create locations, tobe used randomly
-        factory(\App\Models\Location::class, 100)->create();
+        factory(\App\Models\Location::class, 10)->create();
         $this->command->info("Locations Seeded");
 
         // create tests with all its dependencies from results to patient
 
         $this->command->info("Tests Seeding...");
 
-        factory(\App\Models\Test::class, (int)env('DEV_TEST_NO',1000))->create();
+        factory(\App\Models\Test::class, (int)env('DEV_TEST_NO',10))->create();
         $this->command->info("Tests Seeded");
 
         // create results

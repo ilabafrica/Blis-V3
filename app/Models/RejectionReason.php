@@ -15,4 +15,9 @@ use Illuminate\Database\Eloquent\Model;
 class RejectionReason extends Model
 {
     public $timestamps = false;
+
+    public function specimenRejection()
+    {
+        return $this->belongsToMany('App\Models\SpecimenRejection','reason_specimen_rejection');
+    }
 }

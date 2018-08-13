@@ -10,7 +10,6 @@ namespace App\Http\Controllers;
  */
 
 use App\Models\Lot;
-use App\Models\Instrument;
 use Illuminate\Http\Request;
 
 class LotController extends Controller
@@ -44,7 +43,7 @@ class LotController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $lot = new Lot;
             $lot->number = $request->input('number');

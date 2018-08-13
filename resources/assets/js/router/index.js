@@ -160,6 +160,11 @@ export default new Router({
       path: '/stats/tests',
       name: 'tests_stats',
       component: require('../components/statistics/tests/index'),
+    },
+    {
+      path: '/qualitycontrol/controltest',
+      name: 'ControlTest',
+      component: require('../components/qualitycontrol/controltest'),
       beforeEnter: ifAuthenticated,
     },
   ],

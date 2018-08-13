@@ -69,7 +69,7 @@
           Tests
       </v-list-tile-title>
     </v-list-tile>
-    <v-list-group prepend-icon="sync" value="true">
+    <v-list-group prepend-icon="sync_problem" value="true">
       <v-list-tile slot="activator">
         <v-list-tile-title>Quality Controls</v-list-tile-title>
       </v-list-tile>
@@ -107,11 +107,6 @@
           path: '/labconfiguration/facility',
           label: 'Facility',
           icon: 'domain'
-        },
-        {
-          path: '/',
-          label: 'Barcode Settings',
-          icon: 'build'
         },
         {
           path: '/labconfiguration/interfacedequipment',
@@ -178,6 +173,11 @@
           path: '/qualitycontrol/lot',
           label: 'Lots',
           icon: 'layers'
+        },
+        {
+          path: '/qualitycontrol/controltest',
+          label: 'Tests',
+          icon: 'assessment'
         },
       ],
       stats: [

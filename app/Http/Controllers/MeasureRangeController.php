@@ -30,81 +30,57 @@ class MeasureRangeController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            //'measure_id' => 'required',
+            'measure_id' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator);
+            return response()->json($validator,422);
         } else {
             $input = $request->all();
-            for ($i = 0; $i < count($input); $i++) {
-                $measureRange = new MeasureRange;
-                $measureRange->measure_id = $input[$i]["measure_id"];
+            $measureRange = new MeasureRange;
+            $measureRange->measure_id = $request->input("measure_id");
 
-                //Numeric Range
-                if (isset($input[$i]["age_min"])) {
-                        //if Months is selected
-                        if($input[$i]["age_range"]=="Months"){
-                            $input[$i]["age_min"] /= 12;
-                            $input[$i]["age_max"] /= 12;
-                        }
+            //Numeric Range
+            if ($request->input("age_min")) {
 
-                        //if Days is selected
-                        elseif ($input[$i]["age_range"]=="Days") {
-                            $input[$i]["age_min"] /= 365;
-                            $input[$i]["age_max"] /= 365;
-                        }
-                        
-                    $measureRange->age_min = $input[$i]["age_min"];
-                    $measureRange->age_max = $input[$i]["age_max"];
-                    $measureRange->gender_id = $input[$i]["gender_id"];
-                    $measureRange->low = $input[$i]["low"];
-                    $measureRange->high = $input[$i]["high"];
+                $ageMin = $request->input("age_min");
+                $ageMax = $request->input("age_max");
+                //if Months is selected
+                if($request->input("age_range")=="Months"){
+                    $ageMin /= 12;
+                    $ageMax /= 12;
                 }
 
-            $display = $request->input('display');
-            $age_min = $request->input('age_min');
-            $age_max = $request->input('age_max');
-            //Numeric Range
-            if (isset($age_min)) {
-                    //if Months is selected
-                    if($request->input('age_range')=="Months"){
-                        $age_min /=12;
-                        $age_max /=12;
-                    }
+                //if Days is selected
+                elseif ($request->input("age_range")=="Days") {
+                    $ageMin /= 365;
+                    $ageMax /= 365;
+                }
 
-                    //if Days is selected
-                    elseif ($request->input('age_range')=="Days") {
-                        $age_min /=365;
-                        $age_max /=365;
-                    }
-                    
-                $measureRange->age_min = $age_min;
-                $measureRange->age_max = $age_max;
-                $measureRange->gender_id = $request->input('gender_id');
-                $measureRange->low = $request->input('low');
-                $measureRange->high = $request->input('high');
-            }
+                $measureRange->age_min = $ageMin;
+                $measureRange->age_max = $ageMax;
+                $measureRange->gender_id = $request->input("gender_id");
+                $measureRange->low = $request->input("low");
+                $measureRange->high = $request->input("high");
+                $measureRange->low_critical = $request->input('low_critical');
+                $measureRange->high_critical = $request->input('high_critical');
 
             //Alphanumeric Range
-            else if(isset($display)){
-                $measureRange->display = $display;
+            } else if($request->input('display')){
+                $measureRange->display = $request->input('display');
                 $measureRange->interpretation_id = $request->input('interpretation_id');
             }
-            else{
-                //$measureRange->low_critical = $request->input('low_critical');
-                //$measureRange->high_critical = $request->input('high_critical');
-            }
-        try {
-            $measureRange->save();
 
-        } catch (\Illuminate\Database\QueryException $e) {
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-        }
-            
+            try {
+                $measureRange->save();
+
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+
+            }
             return response()->json($measureRange);
-        }
+
         }
     }
 
