@@ -22,7 +22,7 @@ Route::group(['prefix' => 'stats'], function () {
         Route::get('/types', 'Statistics\TestStatisticsController@testTypes');
         Route::get('/type-categories', 'Statistics\TestStatisticsController@testTypeCategories');
     });
-    Route::get('/logins', 'Statistics\UserStatisticsController@logins2');
+    Route::get('/logins', 'Statistics\UserStatisticsController@logins');
     Route::get('/users', 'Statistics\UserStatisticsController@getUsers');
     Route::get('/users/count', 'Statistics\UserStatisticsController@countUsers');
     Route::get('/genders', 'GenderController@index');

@@ -26,11 +26,7 @@ class UserStatisticsController extends Controller
         }
         return response()->json($users);
     }
-    public function logins(){
-        $logins = DB::table('oauth_access_tokens')->groupBy('timing')->selectRaw('count(*) as total, DATE(created_at) as timing')->where('user_id','=',1)->get();
-        return response()->json($logins);
-    }
-    public function logins2(Request $request){
+    public function logins(Request $request){
         if ($request->query('user_id')) {
             $logins = DB::select("SELECT count(*) as total, MAX(created_at) as last_login, MIN(created_at) as first_login FROM oauth_access_tokens WHERE user_id=".$request->query('user_id'));
         }else{

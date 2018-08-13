@@ -52,6 +52,14 @@
             </div>
         </v-layout>
         <v-layout row wrap style="margin:20px;">
+            <v-dialog v-model="dialog" hide-overlay persistent width="300" >
+                <v-card color="primary" dark >
+                    <v-card-text>
+                    Loading Stats, Please stand by
+                    <v-progress-linear indeterminate color="white" class="mb-0" ></v-progress-linear>
+                    </v-card-text>
+                </v-card>
+            </v-dialog>
             <v-flex xs12 sm6 md4 lg4 style="padding:10px;">
                 <v-card>
                     <v-card-title class="headline grey lighten-2" primary-title>
@@ -108,6 +116,7 @@
                         Turn Around Times Stats for Tests {{active_stats}} by User
                     </v-card-title>
                     <v-card-text>
+                        <p>Calculation of TAT is only done on completed tests that fit within the rest of the parameters</p>
                         <div id="tat_stats"></div>
                     </v-card-text>
                 </v-card>
@@ -124,6 +133,7 @@ export default {
     url_prefix: "/api/stats/",
     search: "",
     query: "",
+    dialog: false,
     pagination: {
       page: 1,
       per_page: 0,
@@ -350,13 +360,7 @@ export default {
         })
         apiCall({url:this.url_prefix+"tests/totals?user_id="+this.$route.params.id+"&with_tat=true", method:"GET"})
         .then(resp=>{
-            let tat = {} 
-            resp.forEach(element => {
-                tat["Average TAT"] = element.avg_tat+" minutes"
-                tat["# of Tests with TAT > 20 minutes"] = element.lte_20 
-                tat["# of Tests with TAT between 20 to 60"] = element["20_to_60"]
-                tat["# of Tests with TAT Over 60 minutes"] = element["over_20"]
-            });
+            let tat = this.extractWithTAT(resp)
             Vue.set(this.counts.created, 'tat', tat)
             this.displayTatStats(tat)
         })
@@ -365,6 +369,7 @@ export default {
         })
     },
     setStats(status){
+        Vue.set(this,"dialog",true)
         switch (status) {
             case "done":
                 this.getTestsDone()                         
@@ -383,6 +388,7 @@ export default {
                 this.generateCategoryCountsGraph(created_counts.by_category)
                 this.generateGenderCountsGraph(created_counts.by_gender)
                 this.displayTatStats(created_counts.tat)
+                Vue.set(this,"dialog",false)
                 break;
         
             default:
@@ -465,13 +471,7 @@ export default {
         })
         apiCall({url:this.url_prefix+"tests/totals?tested_by="+this.$route.params.id+"&with_tat=true", method:"GET"})
         .then(resp=>{
-            let tat = {} 
-            resp.forEach(element => {
-                tat["Average TAT"] = element.avg_tat+" minutes"
-                tat["# of Tests with TAT > 20 minutes"] = element.lte_20 
-                tat["# of Tests with TAT between 20 to 60"] = element["20_to_60"]
-                tat["# of Tests with TAT Over 60 minutes"] = element["over_20"]
-            });
+            let tat = this.extractWithTAT(resp)
             Vue.set(this.counts.done, 'tat', tat)
             this.displayTatStats(tat)
         })
@@ -555,13 +555,7 @@ export default {
         })
         apiCall({url:this.url_prefix+"tests/totals?verified_by="+this.$route.params.id+"&with_tat=true", method:"GET"})
         .then(resp=>{
-            let tat = {} 
-            resp.forEach(element => {
-                tat["Average TAT"] = element.avg_tat+" minutes"
-                tat["# of Tests with TAT > 20 minutes"] = element.lte_20 
-                tat["# of Tests with TAT between 20 to 60"] = element["20_to_60"]
-                tat["# of Tests with TAT Over 60 minutes"] = element["over_20"]
-            });
+            let tat = this.extractWithTAT(resp)
             Vue.set(this.counts.verified, 'tat', tat)
             this.displayTatStats(tat)
         })
@@ -676,6 +670,18 @@ export default {
                 ]
             }
         });
+        Vue.set(this,"dialog",false)
+    },
+    extractWithTAT(resp){
+        let tat = {}
+        resp.forEach(element => {
+            tat["# of Tests Used"] = element.total
+            tat["Average TAT"] = element.avg_tat+" minutes"
+            tat["# of Tests with TAT > 20 minutes"] = element.lte_20 
+            tat["# of Tests with TAT between 20 to 60"] = element["20_to_60"]
+            tat["# of Tests with TAT Over 60 minutes"] = element.gte_60
+        });
+        return tat;
     },
     displayTatStats(stats){
         let statsHTML = ''

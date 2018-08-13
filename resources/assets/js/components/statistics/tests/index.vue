@@ -68,6 +68,7 @@
                         Turn Around Time Stats for Tests Created
                     </v-card-title>
                     <v-card-text>
+                        <p>Calculation of TAT is only done on completed tests that fit within the rest of the parameters</p>
                         <div id="tat_stats"></div>
                     </v-card-text>
                 </v-card>
@@ -286,10 +287,11 @@ export default {
         .then(resp=>{
             let tat = {} 
             resp.forEach(element => {
+                tat["# of Tests Used"] = element.total
                 tat["Average TAT"] = element.avg_tat+" minutes"
                 tat["# of Tests with TAT > 20 minutes"] = element.lte_20 
                 tat["# of Tests with TAT between 20 to 60"] = element["20_to_60"]
-                tat["# of Tests with TAT Over 60 minutes"] = element["over_20"]
+                tat["# of Tests with TAT Over 60 minutes"] = element.gte_60
             });
             Vue.set(this.counts.done, 'tat', tat)
             this.displayTatStats(tat)

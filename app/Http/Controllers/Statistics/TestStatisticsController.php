@@ -203,6 +203,7 @@ class TestStatisticsController extends Controller
         // By TurnAround Time
         if ($request->query('with_tat')) { // grouped by patient ages
             $selects = $selects. ", AVG(TIMESTAMPDIFF(MINUTE,t.time_started,t.time_completed)) as avg_tat,  SUM(IF(TIMESTAMPDIFF(MINUTE,t.time_started,t.time_completed) <= 20,1,0)) as 'lte_20', SUM(IF( TIMESTAMPDIFF(MINUTE,t.time_started,t.time_completed) BETWEEN 20 and 60,1,0)) as '20_to_60', SUM(IF( TIMESTAMPDIFF(MINUTE,t.time_started,t.time_completed)>=60,1,0)) as 'gte_60'";
+            $wheres = $wheres . " AND t.time_completed IS NOT NULL";
         }
         // Encounters table addition into query with where class in relation to tests table
         if($request->query('location_id')||$request->query('by_location') || $request->query('gender_id') || $request->query('by_gender') || $request->query('by_age') || $request->query('age_group') || $request->query('patient_id') || $request->query('by_patient')){
