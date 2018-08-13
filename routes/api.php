@@ -15,6 +15,20 @@
 Route::post('/register', 'Auth\APIController@register');
 Route::post('/login', 'Auth\APIController@login');
 
+Route::group(['prefix' => 'stats'], function () {
+    Route::group(['prefix' => 'tests'], function () {
+        Route::get('/totals', 'Statistics\TestStatisticsController@testsTotals');
+        Route::get('/statuses', 'Statistics\TestStatisticsController@testStatuses');
+        Route::get('/types', 'Statistics\TestStatisticsController@testTypes');
+        Route::get('/type-categories', 'Statistics\TestStatisticsController@testTypeCategories');
+    });
+    Route::get('/logins', 'Statistics\UserStatisticsController@logins');
+    Route::get('/users', 'Statistics\UserStatisticsController@getUsers');
+    Route::get('/users/count', 'Statistics\UserStatisticsController@countUsers');
+    Route::get('/genders', 'GenderController@index');
+
+});
+
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', 'Auth\APIController@logout');
     Route::get('/get-user', 'Auth\APIController@getUser');
