@@ -40,7 +40,6 @@
         <td class="text-xs-right">{{ props.item.encounter.identifier }}</td>
         <td class="text-xs-right">{{ props.item.test_status.name }}</td>
         <td class="justify-left layout px-0">
-            <!-- Details(Verify) -->
               <v-btn
                 outline
                 small
@@ -49,8 +48,6 @@
                 flat
                 @click="detail(props.item)">
                 Details
-                <!-- v-if="props.item.test_status.code === 'pending'" -->
-                <!-- has permission to view -->
                 <v-icon right dark>visibility</v-icon>
               </v-btn>
               <v-btn
@@ -59,9 +56,8 @@
                 title="Collect Specimen"
                 color="deep-purple"
                 flat
+                v-if="!props.item.specimen && $can('accept_test_specimen')"
                 @click="collectSpecimen(props.item)">
-                <!-- v-if="props.item.test_status.code === 'pending'" -->
-                <!-- not collected specimen pending/ or not there... -->
                 Collect
                 <v-icon right dark>gradient</v-icon>
               </v-btn>
@@ -71,8 +67,8 @@
                 title="Start"
                 color="blue"
                 flat
+                v-if="props.item.test_status.code === 'pending' && $can('start_test')"
                 @click="start(props.item)">
-                <!-- v-if="props.item.test_status.code === 'pending'" -->
                 Start
                 <v-icon right dark>play_arrow</v-icon>
               </v-btn>
@@ -82,10 +78,8 @@
                 title="Enter"
                 color="light-blue"
                 flat
+                v-if="props.item.test_status.code === 'started' && $can('enter_test_result')"
                 @click="enterResults(props.item)">
-                <!-- v-if="props.item.test_status.code === 'completed'" -->
-                <!-- has right to entere pending and below -->
-
                 Enter
                 <v-icon right dark>library_books</v-icon>
               </v-btn>
@@ -95,10 +89,9 @@
                 title="Edit"
                 color="teal"
                 flat
+                v-if="props.item.test_status.code === 'completed' && $can('enter_test_result')"
                 @click="enterResults(props.item)">
                 Edit
-                <!-- v-if="props.item.test_status.code === 'completed'" -->
-                <!-- has right to entere results and completed and above -->
                 <v-icon right dark>edit</v-icon>
               </v-btn>
               <v-btn
@@ -107,10 +100,8 @@
                 title="Reject"
                 color="red"
                 flat
+                v-if="props.item.test_status.test_phase.code === 'analytical' && $can('reject_test_specimen')"
                 @click="rejectSpecimen(props.item)">
-                <!-- v-if="props.item.test_status.code === 'completed'" -->
-                <!-- has right to reject -->
-
                 Reject
                 <v-icon right dark>block</v-icon>
               </v-btn>
@@ -120,22 +111,19 @@
                 title="Refer"
                 color="amber"
                 flat
+                v-if="props.item.specimen && $can('refer_test_specimen')"
                 @click="refer(props.item)">
-                <!-- v-if="props.item.test_status.code === 'completed'" -->
-                <!-- has right to refer -->
                 Refer
                 <v-icon right dark>arrow_forward</v-icon>
               </v-btn>
-            <!-- Verify(Details) -->
               <v-btn
                 outline
                 small
                 title="Verify"
                 color="green"
                 flat
-                v-if="props.item.test_status.code === 'completed'"
+                v-if="props.item.test_status.code === 'completed' && $can('verify_test_result')"
                 @click="detail(props.item)">
-                <!-- has right to verify -->
                 Verify
                 <v-icon right dark>check_circle_outline</v-icon>
               </v-btn>

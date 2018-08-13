@@ -498,7 +498,6 @@ class CreateBlisTables extends Migration
             $table->timestamp('time_started')->nullable();
             $table->timestamp('time_completed')->nullable();
             $table->timestamp('time_verified')->nullable();
-            $table->timestamp('time_sent')->nullable();
             $table->timestamps();
 
             $table->index('created_by');
@@ -810,10 +809,10 @@ class CreateBlisTables extends Migration
             ['name' => 'reject_test_specimen', 'display_name' => 'Can reject test specimen'],
             ['name' => 'change_test_specimen', 'display_name' => 'Can change test specimen'],
             ['name' => 'start_test', 'display_name' => 'Can start tests'],
-            ['name' => 'enter_test_results', 'display_name' => 'Can enter tests results'],
-            ['name' => 'edit_test_results', 'display_name' => 'Can edit test results'],
-            ['name' => 'verify_test_results', 'display_name' => 'Can verify test results'],
-            ['name' => 'refer_test_specimens', 'display_name' => 'Can refer specimens'],
+            ['name' => 'enter_test_result', 'display_name' => 'Can enter tests results'],
+            ['name' => 'edit_test_result', 'display_name' => 'Can edit test results'],
+            ['name' => 'verify_test_result', 'display_name' => 'Can verify test results'],
+            ['name' => 'refer_test_specimen', 'display_name' => 'Can refer specimens'],
             ['name' => 'manage_quality_control', 'display_name' => 'Can manage Quality Control'],
 
             // reporting

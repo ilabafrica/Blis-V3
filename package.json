@@ -17,6 +17,8 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
+        "@casl/ability": "^2.4.2",
+        "@casl/vue": "^0.4.3",
         "chart.js": "^2.7.2",
         "vue-router": "^3.0.1",
         "vuetify": "^1.0.18",

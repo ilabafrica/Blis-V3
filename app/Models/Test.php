@@ -67,6 +67,21 @@ class Test extends Model
         return $this->belongsTo('App\Models\Encounter');
     }
 
+    public function loader()
+    {
+        return $this->load(
+            'encounter',
+            'testStatus.testPhase',
+            'specimen.specimenType',
+            'testType.specimenTypes',
+            'testType.measures.measureType',
+            'testType.measures.measureRanges',
+            'testType.measures.results',
+            'results.measure.measureType',
+            'results.measure.measureRanges'
+        );
+    }
+
    /*
     * Search for tests meeting the given criteria
     *
@@ -80,7 +95,7 @@ class Test extends Model
     {
         $tests = Test::with(
             'encounter',
-            'testStatus',
+            'testStatus.testPhase',
             'specimen.specimenType',
             'encounter.patient.name',
             'testType.specimenTypes',

@@ -84,7 +84,7 @@ class ResultController extends Controller
             EMR::sendTestResults($test->id);
 
             return response()->json(Test::find($test->id)->load(
-                'testStatus',
+                'testStatus.testPhase',
                 'specimen.specimenType',
                 'testType.specimenTypes',
                 'testType.measures.results',
