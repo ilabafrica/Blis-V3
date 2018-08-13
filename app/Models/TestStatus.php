@@ -19,4 +19,9 @@ class TestStatus extends Model
 	const completed = 3;
 	const verified = 4;
     public $timestamps = false;
+
+    public function testPhase()
+    {
+        return $this->belongsTo('App\Models\TestPhase');
+    }
 }

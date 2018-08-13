@@ -75,7 +75,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('testtypemapping/create', 'TestTypeMappingController@create');
 
         Route::resource('testphase', 'TestPhaseController');
-        Route::resource('teststatus', 'TestStatusController');
+        Route::resource('testStatus', 'TestStatusController');
         Route::resource('testtypecategory', 'TestTypeCategoryController');
         Route::get('specimentypetesttype', 'SpecimenTypeTestTypeController@index');
         Route::get('specimentypetesttype/attach', 'TestTypeMappingController@attach');
@@ -109,7 +109,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('susceptibilityrange', 'SusceptibilityRangeController');
         Route::resource('testmapping', 'TestMappingController');
         Route::resource('testphase', 'TestPhaseController');
-        Route::resource('teststatus', 'TestStatusController');
+        Route::resource('testStatus', 'TestStatusController');
         Route::resource('testtypecategory', 'TestTypeCategoryController');
         Route::resource('testtype', 'TestTypeController');
         Route::resource('rejectionreason', 'RejectionReasonController');
@@ -138,10 +138,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         'reject_test_specimen|'.
         'change_test_specimen|'.
         'start_test|'.
-        'enter_test_results|'.
-        'edit_test_results|'.
-        'verify_test_results|'.
-        'refer_test_specimens|'.
+        'enter_test_result|'.
+        'edit_test_result|'.
+        'verify_test_result|'.
+        'refer_test_specimen|'.
         'manage_quality_control', ],
     ], function () {
         Route::resource('specimenrejection', 'SpecimenRejectionController');

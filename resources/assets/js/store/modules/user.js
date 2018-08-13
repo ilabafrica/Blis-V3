@@ -1,9 +1,9 @@
-import { USER_REQUEST, USER_ERROR, USER_SUCCESS } from '../actions/user'
-import apiCall from '../../utils/api'
 import Vue from 'vue'
+import apiCall from '../../utils/api'
 import { AUTH_LOGOUT } from '../actions/auth'
+import { USER_REQUEST, USER_ERROR, USER_SUCCESS } from '../actions/user'
 
-const state = { status: '', profile: {} }
+const state = { status: '', profile: {}}
 
 const getters = {
   getProfile: state => state.profile,

@@ -44,7 +44,7 @@ class TestController extends Controller
         } else {
             $tests = Test::with(
                 'encounter',
-                'testStatus',
+                'testStatus.testPhase',
                 'specimen.specimenType',
                 'testType.specimenTypes',
                 'encounter.patient.name',
@@ -104,7 +104,7 @@ class TestController extends Controller
 
                 return response()->json(
                     Test::find($test->id)->load(
-                        'testStatus',
+                        'testStatus.testPhase',
                         'specimen.specimenType',
                         'testType.specimenTypes',
                         'testType.measures.measureType',
@@ -128,7 +128,7 @@ class TestController extends Controller
     public function show($id)
     {
         $test = Test::find($id)->load(
-            'testStatus',
+            'testStatus.testPhase',
             'specimen.specimenType',
             'testType.specimenTypes',
             'testType.testTypeCategory',
@@ -185,7 +185,7 @@ class TestController extends Controller
 
                 return response()->json(
                     Test::find($test->id)->load(
-                        'testStatus',
+                        'testStatus.testPhase',
                         'specimen.specimenType',
                         'testType.specimenTypes',
                         'testType.measures.measureType',
@@ -234,7 +234,7 @@ class TestController extends Controller
 
                 return response()->json(
                     Test::find($test->id)->load(
-                        'testStatus',
+                        'testStatus.testPhase',
                         'specimen.specimenType',
                         'testType.specimenTypes',
                         'testType.measures.measureType',
@@ -281,7 +281,7 @@ class TestController extends Controller
 
                 return response()->json(
                     Test::find($request->input('test_id'))->load(
-                        'testStatus',
+                        'testStatus.testPhase',
                         'specimen.specimenType',
                         'testType.specimenTypes',
                         'testType.measures.measureType',
@@ -327,7 +327,7 @@ class TestController extends Controller
 
                 return response()->json(
                     Test::find($request->input('test_id'))->load(
-                        'testStatus',
+                        'testStatus.testPhase',
                         'specimen.specimenType',
                         'testType.specimenTypes',
                         'testType.measures.measureType',
@@ -358,7 +358,7 @@ class TestController extends Controller
 
         return response()->json(
             Test::find($id)->load(
-                'testStatus',
+                'testStatus.testPhase',
                 'specimen.specimenType',
                 'testType.specimenTypes',
                 'testType.measures.measureType',
@@ -388,7 +388,7 @@ class TestController extends Controller
 
         return response()->json(
             Test::find($id)->load(
-                'testStatus',
+                'testStatus.testPhase',
                 'specimen.specimenType',
                 'testType.specimenTypes',
                 'testType.measures.measureType',
