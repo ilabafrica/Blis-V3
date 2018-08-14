@@ -34,9 +34,10 @@ $factory->define(\App\Models\Patient::class, function (Faker\Generator $faker) {
         'created_by' => \App\User::inRandomOrder()->first()->id,
         'identifier' => $faker->unique()->safeEmail,
         'name_id' => factory(\App\Models\Name::class)->create()->id,
-        'gender_id' => \App\Models\Gender::inRandomOrder()->first()->id,
+        'gender_id' => rand(1,2),
         'birth_date' => \Faker\Factory::create()->date(),
         'marital_status' => $faker->word,// todo: create something relevant
+        'created_at' => date('Y-m-d H:i:s',strtotime("-10 days"))
     ];
 });
 
@@ -68,24 +69,74 @@ $factory->define(\App\Models\Specimen::class, function (Faker\Generator $faker) 
 
 $factory->define(\App\Models\Test::class, function (Faker\Generator $faker) {
     $testTypeId = \App\Models\TestType::inRandomOrder()->first()->id;
-    $userId = \App\User::inRandomOrder()->first()->id;
+    $user_id = \App\User::inRandomOrder()->first()->id;
     $specimenTypeId = \App\Models\TestTypeMapping::where('test_type_id',$testTypeId)->first()->specimen_type_id;
     $specimen = factory(App\Models\Specimen::class)->create([
         'specimen_type_id' => $specimenTypeId,
     ]);
+    $test_status = rand(1,4);
+    $created_at = date('Y-m-d H:i:s',strtotime("-".rand(0,10)." days"));
+    switch ($test_status) {
+        case 1: //pending
+            $tested_by = NULL;
+            $verified_by = NULL;
+            $time_started = NULL;
+            $specimen_id = NULL;
+            $time_completed = NULL;
+            $time_verified = NULL;
+            break;
+        
+        case 2: //started
+            $tested_by = NULL;
+            $verified_by = NULL;
+            $time_started = date('Y-m-d H:i:s',strtotime($created_at."+".rand(20,1800)." minutes"));
+            $specimen_id = $specimen->id;
+            $time_completed = NULL;
+            $time_verified = NULL;
+            break;
+        
+        case 3: //completed
+            $tested_by = \App\User::inRandomOrder()->first()->id;
+            $verified_by = NULL;
+            $time_started = date($created_at,strtotime("+".rand(20,1800)." minutes"));
+            $specimen_id = $specimen->id;
+            $time_completed = date('Y-m-d H:i:s',strtotime($time_started."+".rand(10,3600)." minutes"));
+            $time_verified = NULL;
+            break;
+        
+        case 4: //verified
+            $tested_by = \App\User::inRandomOrder()->first()->id;
+            $verified_by = \App\User::where("id","!=",$tested_by)->inRandomOrder()->first()->id;
+            $time_started = date('Y-m-d H:i:s',strtotime($created_at."+".rand(20,1800)." minutes"));
+            $specimen_id = $specimen->id;
+            $time_completed = date('Y-m-d H:i:s',strtotime($time_started."+".rand(20,3600)." minutes"));
+            $time_verified = date('Y-m-d H:i:s',strtotime($time_completed."+".rand(5,3600)." minutes"));;
+            break;
+        
+        default:
+            $tested_by = NULL;
+            $verified_by = NULL;
+            $time_started = NULL;
+            $specimen_id = NULL;
+            $time_completed = NULL;
+            $time_verified = NULL;            
+            break;
+    }
 
     return [
         'encounter_id' => factory(\App\Models\Encounter::class)->create()->id,
         'identifier' => $faker->word,
         'test_type_id' => $testTypeId,
-        'specimen_id' => $specimen->id,
-        'test_status_id' => \App\Models\TestStatus::completed,// todo: create the others as well, start with this one
-        'tested_by' => $userId,
-        'verified_by' => $userId,
+        'specimen_id' => $specimen_id,
+        'test_status_id' => $test_status,
+        'created_by' => $user_id,
+        'tested_by' => $tested_by,
+        'verified_by' => $verified_by,
         'requested_by' => $faker->word,
-        'time_started' => date('Y-m-d H:i:s'),// todo: reduce time now some how
-        'time_completed' => date('Y-m-d H:i:s'),
-        'time_verified' => date('Y-m-d H:i:s'),
+        'time_started' => $time_started,
+        'time_completed' => $time_completed,
+        'time_verified' => $time_verified,
+        'created_at' => $created_at,
         'time_sent' => date('Y-m-d H:i:s'),
     ];
 });

@@ -279,6 +279,9 @@ class TestStatisticsController extends Controller
         }else{
             $tests = DB::select("SELECT ".$selects." FROM ".$tables." WHERE ".$wheres);
         }
+        // $time_started =  date('Y-m-d H:i:s',strtotime("-".rand(1,10)." days"));
+        // return date('Y-m-d H:i:s',strtotime($time_started."+".rand(10,3600)." minutes"));
+        // return date('Y-m-d H:i:s',strtotime("+".rand(10,1000)." minutes"));
         return response()->json($tests);
     }
 
