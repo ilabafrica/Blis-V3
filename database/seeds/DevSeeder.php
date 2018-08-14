@@ -8354,7 +8354,7 @@ class DevSeeder extends Seeder
 
         $this->command->info("Tests Seeding...");
 
-        factory(\App\Models\Test::class, (int)env('DEV_TEST_NO',10))->create();
+        factory(\App\Models\Test::class, (int)env('DEV_TEST_NO',100))->create();
         $this->command->info("Tests Seeded");
 
         // create results
