@@ -1,5 +1,6 @@
 <template>
   <div>
+    <testrequest ref="testRequestForm"></testrequest>
     <v-dialog v-model="dialog" max-width="500px">
       <v-btn slot="activator" color="primary" dark class="mb-2">New Patient</v-btn>
       <v-card>
@@ -104,16 +105,57 @@
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.identifier }}</td>
-        <td class="text-xs-left"> {{ props.item.name.given }}
-                                  {{ props.item.name.family }}</td>
+        <td class="text-xs-left">
+          {{ props.item.name.given }}
+          {{ props.item.name.family }}
+        </td>
         <td class="text-xs-left">{{ props.item.gender.display }}</td>
         <td class="text-xs-left">{{ props.item.birth_date }}</td>
         <td class="justify-left layout px-0">
-          <v-btn icon class="mx-0" @click="editItem(props.item)">
-            <v-icon color="teal">edit</v-icon>
+          <v-btn
+            outline
+            small
+            title="Edit"
+            color="blue"
+            flat
+            v-if="$can('request_test')"
+            @click="requestTest(props.item)">
+            New Test
+            <v-icon right dark>playlist_add</v-icon>
           </v-btn>
-          <v-btn icon class="mx-0" @click="deleteItem(props.item)">
-            <v-icon color="pink">delete</v-icon>
+          <v-btn
+            outline
+            small
+            title="View Patient History"
+            color="green"
+            flat
+            v-if="$can('view_reports')"
+            @click="getReport(props.item)">
+            <!-- user new view_patient_report -->
+            Report
+            <v-icon right dark>list_alt</v-icon>
+          </v-btn>
+          <v-btn
+            outline
+            small
+            title="Edit"
+            color="teal"
+            flat
+            v-if="$can('manage_patients')"
+            @click="editItem(props.item)">
+            Edit
+            <v-icon right dark>edit</v-icon>
+          </v-btn>
+          <v-btn
+            outline
+            small
+            title="Edit"
+            color="pink"
+            flat
+            v-if="$can('manage_patients')"
+            @click="deleteItem(props.item)">
+            Delete
+            <v-icon right dark>delete</v-icon>
           </v-btn>
         </td>
       </template>
@@ -131,7 +173,13 @@
 </template>
 <script>
   import apiCall from '../../utils/api'
+  import testrequest from './testrequest'
+  import { EventBus } from './../../app.js';
+
   export default {
+    components: {
+      testrequest,
+    },
     data: () => ({
       calendar: false,
       valid: true,
@@ -191,6 +239,14 @@
 
     created () {
       this.initialize()
+    },
+
+    mounted() {
+      // Listen for the update-patient-list event and its payload.
+      EventBus.$on('update-patient-list', data => {
+        console.log('update-patient-list')
+        Object.assign(this.tests[this.editedIndex], data)
+      });
     },
 
     methods: {
@@ -255,6 +311,10 @@
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
         this.calendar = false
+      },
+
+      requestTest (patient) {
+        this.$refs.testRequestForm.modal(patient);
       },
 
       save () {

@@ -127,6 +127,12 @@ export default new Router({
       component: require('../components/test/index'),
       beforeEnter: ifAuthenticated,
     },
+    {
+      path: '/encounter/index',
+      name: 'Encounter',
+      component: require('../components/encounter/index'),
+      beforeEnter: ifAuthenticated,
+    },
     //Quality Control
     {
       path: '/qualitycontrol/lot',

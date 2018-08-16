@@ -10,8 +10,11 @@ namespace App\Http\Controllers;
  */
 
 use Auth;
+use App\Models\Test;
 use App\Models\Name;
 use App\Models\Patient;
+use App\Models\Encounter;
+use App\Models\TestStatus;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
@@ -156,4 +159,56 @@ class PatientController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+
+
+    /**
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function testRequest(Request $request)
+    {
+
+
+        $rules = [
+            'patient_id' => 'required',
+            'location_id'    => 'required',
+            'encounter_class_id'  => 'required',
+            'practitioner_name'  => 'required',
+            'testTypeIds' => 'required',
+        ];
+
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            $encounter = new Encounter;
+            $encounter->patient_id = $request->input('patient_id');
+            $encounter->location_id = $request->input('location_id');
+            $encounter->practitioner_name = $request->input('practitioner_name');
+            $encounter->encounter_class_id = $request->input('encounter_class_id');
+            $encounter->bed_no = $request->input('bed_no');
+            $encounter->save();
+
+            foreach ($request->input('testTypeIds') as $testTypeId) {
+
+                // save order items in tests
+                $test = new Test;
+                $test->encounter_id = $encounter->id;
+                $test->test_type_id = $testTypeId;
+                $test->test_status_id = TestStatus::pending;
+                $test->created_by = Auth::user()->id;
+                $test->requested_by = $request->input('practitioner_name');
+                $test->save();
+            }
+
+            try {
+                $patient = Patient::find($request->input('patient_id'));
+
+                return response()->json($patient, 200);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
+
 }
