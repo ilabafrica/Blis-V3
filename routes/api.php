@@ -77,7 +77,6 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('testphase', 'TestPhaseController');
         Route::resource('testStatus', 'TestStatusController');
         Route::resource('testtypecategory', 'TestTypeCategoryController');
-        Route::get('specimentypetesttype', 'SpecimenTypeTestTypeController@index');
         Route::get('specimentypetesttype/attach', 'TestTypeMappingController@attach');
         Route::get('specimentypetesttype/detach', 'TestTypeMappingController@detach');
 
@@ -124,17 +123,20 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 
     // Registration
-    Route::group(['middleware' => ['permission:manage_patients|view_patient_names']], function () {
+    Route::group(['middleware' => ['permission:manage_patients|view_patient_names|request_test']], function () {
         Route::resource('encounterclass', 'EncounterClassController');
         Route::resource('encounterstatus', 'EncounterStatusController');
         Route::resource('encounter', 'EncounterController');
+        Route::resource('patient/testrequest', 'PatientController');
         Route::resource('gender', 'GenderController');
         Route::resource('name', 'NameController');
         Route::resource('patient', 'PatientController');
+        Route::post('patient/testrequest', 'PatientController@testRequest');
     });
 
     // Routine and Reference Testing
-    Route::group(['middleware' => ['permission:accept_test_specimen|'.
+    Route::group(['middleware' => [
+        'permission:accept_test_specimen|'.
         'reject_test_specimen|'.
         'change_test_specimen|'.
         'start_test|'.
@@ -142,7 +144,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         'edit_test_result|'.
         'verify_test_result|'.
         'refer_test_specimen|'.
-        'manage_quality_control', ],
+        'manage_quality_control'],
     ], function () {
         Route::resource('specimenrejection', 'SpecimenRejectionController');
         Route::resource('antibioticsusceptibility', 'AntibioticSusceptibilityController');
@@ -155,6 +157,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('test/verify/{test_id}', 'TestController@verify');
         Route::resource('test', 'TestController');
 
+        Route::post('encounter/addtests', 'EncounterController@addTests');
+        Route::post('encounter/specimencollection', 'EncounterController@specimenCollection');
         Route::post('result', 'ResultController@store');
         Route::resource('controltest', 'ControlTestController');
         Route::post('controlresult', 'ControlResultController@store');

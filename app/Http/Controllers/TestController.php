@@ -43,17 +43,16 @@ class TestController extends Controller
 
         } else {
             $tests = Test::with(
-                'encounter',
-                'testStatus.testPhase',
-                'specimen.specimenType',
-                'testType.specimenTypes',
                 'encounter.patient.name',
                 'encounter.patient.gender',
+                'results.measure.measureType',
+                'results.measure.measureRanges',
+                'specimen.specimenType',
+                'testStatus.testPhase',
+                'testType.measures.results',
                 'testType.measures.measureType',
                 'testType.measures.measureRanges',
-                'testType.measures.results',
-                'results.measure.measureType',
-                'results.measure.measureRanges'
+                'testType.specimenTypes'
             )->orderBy('created_at', 'DESC')->paginate(10);
         }
 
@@ -102,17 +101,7 @@ class TestController extends Controller
             try {
                 $test->save();
 
-                return response()->json(
-                    Test::find($test->id)->load(
-                        'testStatus.testPhase',
-                        'specimen.specimenType',
-                        'testType.specimenTypes',
-                        'testType.measures.measureType',
-                        'testType.measures.measureRanges',
-                        'testType.measures.results',
-                        'results.measure.measureType',
-                        'results.measure.measureRanges'
-                    ));
+                return response()->json($test->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -183,17 +172,7 @@ class TestController extends Controller
             try {
                 $test->save();
 
-                return response()->json(
-                    Test::find($test->id)->load(
-                        'testStatus.testPhase',
-                        'specimen.specimenType',
-                        'testType.specimenTypes',
-                        'testType.measures.measureType',
-                        'testType.measures.measureRanges',
-                        'testType.measures.results',
-                        'results.measure.measureType',
-                        'results.measure.measureRanges'
-                    ));
+                return response()->json($test->loader());
 
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -232,17 +211,7 @@ class TestController extends Controller
             try {
                 $specimen->save();
 
-                return response()->json(
-                    Test::find($test->id)->load(
-                        'testStatus.testPhase',
-                        'specimen.specimenType',
-                        'testType.specimenTypes',
-                        'testType.measures.measureType',
-                        'testType.measures.measureRanges',
-                        'testType.measures.results',
-                        'results.measure.measureType',
-                        'results.measure.measureRanges'
-                    ));
+                return response()->json($test->loader());
 
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -279,17 +248,7 @@ class TestController extends Controller
                         ->attach($specimenRejection);
                 }
 
-                return response()->json(
-                    Test::find($request->input('test_id'))->load(
-                        'testStatus.testPhase',
-                        'specimen.specimenType',
-                        'testType.specimenTypes',
-                        'testType.measures.measureType',
-                        'testType.measures.measureRanges',
-                        'testType.measures.results',
-                        'results.measure.measureType',
-                        'results.measure.measureRanges'
-                    ));
+                return response()->json($test->loader());
 
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -325,17 +284,7 @@ class TestController extends Controller
                         ->attach($referral);
                 }
 
-                return response()->json(
-                    Test::find($request->input('test_id'))->load(
-                        'testStatus.testPhase',
-                        'specimen.specimenType',
-                        'testType.specimenTypes',
-                        'testType.measures.measureType',
-                        'testType.measures.measureRanges',
-                        'testType.measures.results',
-                        'results.measure.measureType',
-                        'results.measure.measureRanges'
-                    ));
+                return response()->json($test->loader());
 
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -356,17 +305,7 @@ class TestController extends Controller
         $test->time_started = date('Y-m-d H:i:s');
         $test->save();
 
-        return response()->json(
-            Test::find($id)->load(
-                'testStatus.testPhase',
-                'specimen.specimenType',
-                'testType.specimenTypes',
-                'testType.measures.measureType',
-                'testType.measures.measureRanges',
-                'testType.measures.results',
-                'results.measure.measureType',
-                'results.measure.measureRanges'
-        ));
+        return response()->json($test->loader());
     }
 
     /**
@@ -386,16 +325,6 @@ class TestController extends Controller
         // sending to emr on verification
         EMR::sendTestResults($id);
 
-        return response()->json(
-            Test::find($id)->load(
-                'testStatus.testPhase',
-                'specimen.specimenType',
-                'testType.specimenTypes',
-                'testType.measures.measureType',
-                'testType.measures.measureRanges',
-                'testType.measures.results',
-                'results.measure.measureType',
-                'results.measure.measureRanges'
-        ));
+        return response()->json($test->loader());
     }
 }

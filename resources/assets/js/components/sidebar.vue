@@ -61,6 +61,14 @@
         <v-list-tile-title v-text="access_control.label"></v-list-tile-title>
       </v-list-tile>
     </v-list-group>
+    <v-list-tile to="/encounter/index">
+      <v-list-tile-action>
+        <v-icon>directions_walk</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-title>
+          Visits
+      </v-list-tile-title>
+    </v-list-tile>
     <v-list-tile to="/test/index">
       <v-list-tile-action>
         <v-icon>vertical_split</v-icon>

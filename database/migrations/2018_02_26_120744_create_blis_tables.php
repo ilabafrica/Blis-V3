@@ -127,6 +127,7 @@ class CreateBlisTables extends Migration
          */
         Schema::create('genders', function (Blueprint $table) {
             $table->increments('id');
+            $table->boolean('active')->default(0);
             $table->string('code', 10);
             $table->string('display', 10);
         });
@@ -198,7 +199,7 @@ class CreateBlisTables extends Migration
 
         /*
          * @system blis.v3 defined
-         * @example Malaria Microscopy|Organisms|Gram Stains|Stool Microscopy
+         * @example WBC|RBC
          */
         Schema::create('measures', function (Blueprint $table) {
             $table->increments('id');
@@ -377,6 +378,7 @@ class CreateBlisTables extends Migration
          */
         Schema::create('encounter_classes', function (Blueprint $table) {
             $table->increments('id');
+            $table->boolean('active')->default(0);
             $table->string('code', 20)->nullable();
             $table->string('display', 45);
         });
@@ -770,10 +772,10 @@ class CreateBlisTables extends Migration
 
         /* gender table */
         $genders = [
-          ['id' => '1', 'code' => 'male', 'display' => 'Male'],
-          ['id' => '2', 'code' => 'female', 'display' => 'Female'],
-          ['id' => '3', 'code' => 'both', 'display' => 'Both'],
-          ['id' => '4', 'code' => 'unknown', 'display' => 'Unknown'],
+          ['id' => '1', 'active'=>'1', 'code' => 'male', 'display' => 'Male'],
+          ['id' => '2', 'active'=>'1', 'code' => 'female', 'display' => 'Female'],
+          ['id' => '3', 'active'=>'0', 'code' => 'both', 'display' => 'Both'],
+          ['id' => '4', 'active'=>'0', 'code' => 'unknown', 'display' => 'Unknown'],
         ];
         foreach ($genders as $gender) {
             \App\Models\Gender::create($gender);
@@ -781,8 +783,8 @@ class CreateBlisTables extends Migration
 
         /* encounter class table */
         $encounterClasses = [
-          ['id' => '1', 'code' => 'inpatient', 'display' => 'In Patient'],
-          ['id' => '2', 'code' => 'outpatient', 'display' => 'Out Patient'],
+          ['id' => '1', 'active'=>'1', 'code' => 'inpatient', 'display' => 'In Patient'],
+          ['id' => '2', 'active'=>'1', 'code' => 'outpatient', 'display' => 'Out Patient'],
         ];
         foreach ($encounterClasses as $encounterClass) {
             \App\Models\EncounterClass::create($encounterClass);

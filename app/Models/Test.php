@@ -69,16 +69,17 @@ class Test extends Model
 
     public function loader()
     {
-        return $this->load(
-            'encounter',
-            'testStatus.testPhase',
+        return Test::find($this->id)->load(
+            'encounter.patient.name',
+            'encounter.patient.gender',
+            'results.measure.measureType',
+            'results.measure.measureRanges',
             'specimen.specimenType',
-            'testType.specimenTypes',
+            'testStatus.testPhase',
+            'testType.measures.results',
             'testType.measures.measureType',
             'testType.measures.measureRanges',
-            'testType.measures.results',
-            'results.measure.measureType',
-            'results.measure.measureRanges'
+            'testType.specimenTypes'
         );
     }
 
@@ -94,17 +95,16 @@ class Test extends Model
     public static function search($searchString = '', $testStatusId = 0, $dateFrom = NULL, $dateTo = NULL)
     {
         $tests = Test::with(
-            'encounter',
-            'testStatus.testPhase',
-            'specimen.specimenType',
             'encounter.patient.name',
-            'testType.specimenTypes',
             'encounter.patient.gender',
-            'testType.measures.results',
             'results.measure.measureType',
-            'testType.measures.measureType',
             'results.measure.measureRanges',
-            'testType.measures.measureRanges'
+            'specimen.specimenType',
+            'testStatus.testPhase',
+            'testType.measures.results',
+            'testType.measures.measureType',
+            'testType.measures.measureRanges',
+            'testType.specimenTypes'
         )
             ->where(function($q) use ($searchString){
 
@@ -142,7 +142,7 @@ class Test extends Model
         if ($testStatusId > 0) {
             $tests = $tests->where(function($q) use ($testStatusId)
             {
-                $q->whereHas('testStatus', function($q) use ($testStatusId){
+                $q->whereHas('testStatus.testPhase', function($q) use ($testStatusId){
                     $q->where('id','=', $testStatusId);//Filter by test status
                 });
             });
