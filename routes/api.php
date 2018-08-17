@@ -22,6 +22,11 @@ Route::group(['prefix' => 'stats'], function () {
         Route::get('/types', 'Statistics\TestStatisticsController@testTypes');
         Route::get('/type-categories', 'Statistics\TestStatisticsController@testTypeCategories');
     });
+    Route::group(['prefix' => 'specimen'], function () {
+        Route::get('/totals', 'Statistics\SpecimenStatisticsController@specimenTotals');
+        Route::get('/statuses', 'Statistics\SpecimenStatisticsController@specimenStatuses');
+        Route::get('/types', 'Statistics\SpecimenStatisticsController@specimenTypes');
+    });
     Route::get('/logins', 'Statistics\UserStatisticsController@logins');
     Route::get('/users', 'Statistics\UserStatisticsController@getUsers');
     Route::get('/users/count', 'Statistics\UserStatisticsController@countUsers');

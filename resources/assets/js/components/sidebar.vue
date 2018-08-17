@@ -189,6 +189,11 @@
         {
           path: '/stats/tests',
           label: 'Test Stats',
+          icon: 'assessment'
+        },
+        {
+          path: '/stats/specimen',
+          label: 'Specimen Stats',
           icon: 'assignment_turned_in'
         },
       ]
