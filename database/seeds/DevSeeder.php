@@ -8350,6 +8350,13 @@ class DevSeeder extends Seeder
         factory(\App\Models\Location::class, 10)->create();
         $this->command->info("Locations Seeded");
 
+        // create patient
+
+        $this->command->info("Patient Seeding...");
+
+        factory(\App\Models\Patient::class, ((int)env('DEV_TEST_NO',100))/2)->create();
+        $this->command->info("Patients Seeded");
+
         // create tests with all its dependencies from results to patient
 
         $this->command->info("Tests Seeding...");

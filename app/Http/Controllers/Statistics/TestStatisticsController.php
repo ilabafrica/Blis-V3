@@ -83,7 +83,7 @@ class TestStatisticsController extends Controller
         if($request->query('created_before_date') || $request->query('created_at_date') || $request->query('created_after_date')){ // group by particular date(s)
             if($request->query('created_at_date') && $this->checkmydate($request->query('created_at_date'))){ //group by particular date
                 $selects = $selects. ", DATE(t.created_at) as test_created_at";
-                $wheres = $wheres . " AND DATE(t.created_at)='".$request->query('at_date')."'";
+                $wheres = $wheres . " AND DATE(t.created_at)='".$request->query('created_at_date')."'";
                 $group_bys = $group_bys. ", test_created_at";
             }else{
                 if($request->query('created_before_date') && $this->checkmydate($request->query('created_before_date')) && $request->query('created_after_date') && $this->checkmydate($request->query('created_after_date'))){
@@ -269,7 +269,36 @@ class TestStatisticsController extends Controller
             $tables = $tables. ", test_types tt";
             $wheres = $wheres . " AND t.test_type_id=tt.id";
             $group_bys = $group_bys. ", ttc_id";
-        }  
+        } 
+        // Specimen table addition into query with where class in relation to tests table
+        if($request->query('by_specimen')|| $request->query('specimen_id') || $request->query('by_specimen_type') || $request->query('specimen_type_id')){
+            $tables = $tables. ", specimens s";
+            $wheres = $wheres . " AND t.specimen_id=s.id";
+            if($request->query('by_specimen_type') || $request->query('specimen_type_id')){ //  Specimen table addition into query with where class in relation to encounters table
+                $tables = $tables. ", specimen_types st";
+                $wheres = $wheres . " AND s.specimen_type_id = st.id";
+            }
+        }
+        // By Specimen
+        if($request->query('specimen_id')){
+            $selects = $selects. ", s.id as specimen_id";
+            $wheres = $wheres . " AND s.id=".$request->query('specimen_id');
+            $group_bys = $group_bys. ", s.id";
+        }
+        else if($request->query('by_specimen')){
+            $selects = $selects. ", s.id as specimen_id";
+            $group_bys = $group_bys. ", s.id";
+        }
+        // By Specimen Type
+        if($request->query('specimen_type_id')){
+            $selects = $selects. ", s.specimen_type_id";
+            $wheres = $wheres . " AND s.specimen_type_id=".$request->query('specimen_type_id');
+            $group_bys = $group_bys. ", s.specimen_type_id";
+        }
+        else if($request->query('by_specimen_type')){
+            $selects = $selects. ", s.specimen_type_id";
+            $group_bys = $group_bys. ", s.specimen_type_id";
+        }
         if($request->query('with_ids')){
             $selects = $selects. ", GROUP_CONCAT(t.id) as ids";            
         }     

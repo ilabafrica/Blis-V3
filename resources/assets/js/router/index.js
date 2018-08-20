@@ -167,6 +167,12 @@ export default new Router({
       name: 'tests_stats',
       component: require('../components/statistics/tests/index'),
     },
+    //All Specimen Stats
+    {
+      path: '/stats/specimen',
+      name: 'specimen_stats',
+      component: require('../components/statistics/specimen/index'),
+    },
     {
       path: '/qualitycontrol/controltest',
       name: 'ControlTest',

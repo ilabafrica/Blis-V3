@@ -9,6 +9,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
+        'created_at' => date('Y-m-d H:i:s',strtotime("-10 days"))
     ];
 });
 
@@ -44,7 +45,7 @@ $factory->define(\App\Models\Patient::class, function (Faker\Generator $faker) {
 $factory->define(\App\Models\Encounter::class, function (Faker\Generator $faker) {
     return [
         'identifier' => $faker->word,
-        'patient_id' => factory(\App\Models\Patient::class)->create()->id,
+        'patient_id' => \App\Models\Patient::inRandomOrder()->first()->id,
         'location_id' => \App\Models\Location::inRandomOrder()->first()->id,
         'encounter_class_id' => \App\Models\EncounterClass::outpatient,
         'encounter_status_id' => null,
@@ -57,13 +58,17 @@ $factory->define(\App\Models\Encounter::class, function (Faker\Generator $faker)
 
 $factory->define(\App\Models\Specimen::class, function (Faker\Generator $faker) {
     $userId = \App\User::inRandomOrder()->first()->id;
-
+    $collected_at = date('Y-m-d H:i:s',strtotime("-".rand(0,10)." days"));
+    $received_at = date('Y-m-d H:i:s',strtotime($collected_at."+".rand(20,900)." minutes"));
     return [
         'identifier' => $faker->word,
         'accession_identifier' => $faker->word,
         'specimen_type_id' => null,
         'received_by' => $userId,
         'collected_by' => $userId,
+        'time_collected' => $collected_at,
+        'time_received' => $received_at,
+
     ];
 });
 
@@ -136,8 +141,7 @@ $factory->define(\App\Models\Test::class, function (Faker\Generator $faker) {
         'time_started' => $time_started,
         'time_completed' => $time_completed,
         'time_verified' => $time_verified,
-        'created_at' => $created_at,
-        'time_sent' => date('Y-m-d H:i:s'),
+        'created_at' => $created_at
     ];
 });
 
@@ -160,6 +164,6 @@ $factory->define(\App\Models\Organization::class, function (Faker\Generator $fak
         'telecom' => $faker->randomNumber(),
         'address' => $faker->randomNumber(),
         'part_of' => $faker->randomNumber(),
-        'end_point' => $faker->word,
+        'end_point' => $faker->word
     ];
 });
