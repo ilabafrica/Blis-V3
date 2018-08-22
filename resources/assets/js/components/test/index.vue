@@ -217,6 +217,7 @@
         .then(resp => {
           console.log(resp)
           this.tests = resp.data;
+          this.pagination.per_page = resp.per_page;
           this.pagination.total = resp.total;
         })
         .catch(error => {

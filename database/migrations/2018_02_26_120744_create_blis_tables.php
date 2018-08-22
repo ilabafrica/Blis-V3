@@ -496,8 +496,10 @@ class CreateBlisTables extends Migration
             $table->uuid('created_by')->nullable();
             $table->integer('tested_by')->unsigned()->nullable();
             $table->integer('verified_by')->unsigned()->nullable();
+            $table->integer('cancelled_by')->unsigned()->nullable();
             $table->string('requested_by', 60);
             $table->timestamp('time_started')->nullable();
+            $table->timestamp('time_cancelled')->nullable();
             $table->timestamp('time_completed')->nullable();
             $table->timestamp('time_verified')->nullable();
             $table->timestamps();
@@ -733,6 +735,7 @@ class CreateBlisTables extends Migration
           ['id' => '2', 'code' => 'started', 'name' => 'Started', 'test_phase_id' => '2'], //Analytical
           ['id' => '3', 'code' => 'completed', 'name' => 'Completed', 'test_phase_id' => '3'], //PostAnalytical
           ['id' => '4', 'code' => 'verified', 'name' => 'Verified', 'test_phase_id' => '3'], //PostAnalytical
+          ['id' => '5', 'code' => 'cancelled', 'name' => 'Cancelled', 'test_phase_id' => '1'], //PreAnalytical
         ];
         foreach ($test_statuses as $test_status) {
             \App\Models\TestStatus::create($test_status);

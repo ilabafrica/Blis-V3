@@ -12,13 +12,6 @@
             <v-layout wrap>
               <v-flex xs12 sm12 md12>
                 <v-text-field
-                  v-model="editedItem.code"
-                  :rules="[v => !!v || 'Name is Required']"
-                  label="Code">
-                </v-text-field>
-              </v-flex>
-              <v-flex xs12 sm12 md12>
-                <v-text-field
                   v-model="editedItem.name"
                   :rules="[v => !!v || 'Name is Required']"
                   label="Name">
@@ -56,7 +49,6 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.code }}</td>
         <td class="text-xs-left">{{ props.item.name }}</td>
         <td class="justify-left layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
@@ -96,7 +88,6 @@
         visible: 10
       },
       headers: [
-        { text: 'Code', value: 'code' },
         { text: 'Name', value: 'names' },
         { text: 'Actions', value: 'name', sortable: false }
       ],
@@ -118,7 +109,7 @@
       },
 
       length: function() {
-        return Math.ceil(this.pagination.total / 10);
+        return Math.ceil(this.pagination.total / this.pagination.per_page);
       },
     },
 
@@ -145,6 +136,7 @@
         .then(resp => {
           console.log(resp)
           this.specimentype = resp.data;
+          this.pagination.per_page = resp.per_page;
           this.pagination.total = resp.total;
         })
         .catch(error => {

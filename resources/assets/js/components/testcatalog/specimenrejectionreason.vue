@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-dialog v-model="dialog" max-width="500px">
-      <v-btn slot="activator" color="primary" dark class="mb-2">New Facility</v-btn>
+      <v-btn slot="activator" color="primary" dark class="mb-2">New Specimen Rejection Reason</v-btn>
       <v-card>
         <v-card-title>
           <span class="headline">{{ formTitle }}</span>
@@ -12,7 +12,7 @@
             <v-layout wrap>
               <v-flex xs12 sm12 md12>
                 <v-text-field
-                  v-model="editedItem.name"
+                  v-model="editedItem.display"
                   :rules="[v => !!v || 'Name is Required']"
                   label="Name">
                 </v-text-field>
@@ -30,7 +30,7 @@
     </v-dialog>
 
     <v-card-title>
-      Facility
+      Specimen Rejection Reasons
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -44,13 +44,12 @@
 
     <v-data-table
       :headers="headers"
-      :items="organization"
+      :items="rejectionReasons"
       hide-actions
-      class="elevation-1"
-    >
+      class="elevation-1">
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.name }}</td>
-        <td class="justify-center layout px-0">
+        <td>{{ props.item.display }}</td>
+        <td class="justify-left layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
             <v-icon color="teal">edit</v-icon>
           </v-btn>
@@ -60,15 +59,6 @@
         </td>
       </template>
     </v-data-table>
-    <div class="text-xs-center">
-      <v-pagination
-        :length="length"
-        :total-visible="pagination.visible"
-        v-model="pagination.page"
-        @input="initialize"
-        circle>
-      </v-pagination>
-    </div>
   </div>
 </template>
 <script>
@@ -91,23 +81,19 @@
         { text: 'Name', value: 'name' },
         { text: 'Actions', value: 'name', sortable: false }
       ],
-      organization: [],
+      rejectionReasons: [],
       editedIndex: -1,
       editedItem: {
-        name: '',
+        display: '',
       },
       defaultItem: {
-        name: '',
+        display: '',
       }
     }),
 
     computed: {
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-      },
-
-      length: function() {
-        return Math.ceil(this.pagination.total / this.pagination.per_page);
       },
     },
 
@@ -130,12 +116,10 @@
             this.query = this.query+'&search='+this.search;
         }
 
-        apiCall({url: '/api/organization?' + this.query, method: 'GET' })
+        apiCall({url: '/api/rejectionreason?' + this.query, method: 'GET' })
         .then(resp => {
           console.log(resp)
-          this.organization = resp.data;
-          this.pagination.per_page = resp.per_page;
-          this.pagination.total = resp.total;
+          this.rejectionReasons = resp;
         })
         .catch(error => {
           console.log(error.response)
@@ -143,7 +127,7 @@
       },
 
       editItem (item) {
-        this.editedIndex = this.organization.indexOf(item)
+        this.editedIndex = this.rejectionReasons.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
@@ -153,9 +137,9 @@
         confirm('Are you sure you want to delete this item?') && (this.delete = true)
 
         if (this.delete) {
-          const index = this.organization.indexOf(item)
-          this.organization.splice(index, 1)
-          apiCall({url: '/api/organization/'+item.id, method: 'DELETE' })
+          const index = this.rejectionReasons.indexOf(item)
+          this.rejectionReasons.splice(index, 1)
+          apiCall({url: '/api/rejectionreason/'+item.id, method: 'DELETE' })
           .then(resp => {
             console.log(resp)
           })
@@ -186,9 +170,9 @@
         // update
         if (this.editedIndex > -1) {
 
-          apiCall({url: '/api/organization/'+this.editedItem.id, data: this.editedItem, method: 'PUT' })
+          apiCall({url: '/api/rejectionreason/'+this.editedItem.id, data: this.editedItem, method: 'PUT' })
           .then(resp => {
-            Object.assign(this.organization[this.editedIndex], this.editedItem)
+            Object.assign(this.rejectionReasons[this.editedIndex], this.editedItem)
             console.log(resp)
             this.resetDialogReferences();
             this.saving = false;
@@ -200,9 +184,9 @@
         // store
         } else {
 
-          apiCall({url: '/api/organization', data: this.editedItem, method: 'POST' })
+          apiCall({url: '/api/rejectionreason', data: this.editedItem, method: 'POST' })
           .then(resp => {
-            this.organization.push(this.editedItem)
+            this.rejectionReasons.push(this.editedItem)
             console.log(resp)
             this.resetDialogReferences();
             this.saving = false;

@@ -72,7 +72,7 @@
     computed: {
 
       length: function() {
-        return Math.ceil(this.pagination.total / 10);
+        return Math.ceil(this.pagination.total / this.pagination.per_page);
       },
     },
 
@@ -121,6 +121,7 @@
           console.log(resp.data)
           this.permissions = resp.data;
           this.pagination.total = resp.total;
+          this.pagination.per_page = resp.per_page;
         })
         .catch(error => {
           console.log(error.response)

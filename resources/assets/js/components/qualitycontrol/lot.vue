@@ -149,7 +149,7 @@
       },
 
       length: function() {
-        return Math.ceil(this.pagination.total / 10);
+        return Math.ceil(this.pagination.total / this.pagination.per_page);
       },
     },
 
@@ -176,6 +176,7 @@
         .then(resp => {
           console.log(resp)
           this.lot = resp.data;
+          this.pagination.per_page = resp.per_page;
           this.pagination.total = resp.total;
         })
         .catch(error => {

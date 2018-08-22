@@ -23,47 +23,42 @@
           <v-card-text>
 
             <!-- list of measure ranges -->
-            <div  v-if="measure.measure_type">
-              <v-card v-if="measure.measure_type.code === 'numeric'">
-                <v-card-title>
-                  <v-btn color="info" dark @click="dialogNumericRange = !dialogNumericRange">
-                    Add New Range
-                  </v-btn>
-                </v-card-title>
-                <v-layout>
-                  <v-data-table
-                    :headers="rangeheaders"
-                    :items="measure.measure_ranges"
-                    max-width="900px"
-                    hide-actions >
-                    <template slot="items" slot-scope="row">
-                      <tr :key="row.item.id">
-                        <td>{{row.item.age_min}}</td>
-                        <td>{{row.item.age_max}}</td>
-                        <td>{{row.item.gender.display}}</td>
-                        <td>{{row.item.low}}</td>
-                        <td>{{row.item.high}}</td>
-                        <td class="justify-left layout px-0">
-                          <v-btn icon class="mx-0" @click="deleteItem(row.item)">
-                            <v-icon color="pink">delete</v-icon>
-                          </v-btn>
-                        </td>
-                      </tr>
-                    </template>
-                  </v-data-table>
-                </v-layout>
-              </v-card>
-            <v-card v-if="measure.measure_type.code != 'numeric'">
-              <v-card-title>
-                <v-btn color="info" dark @click="dialogAlphanumericRange = !dialogAlphanumericRange">
-                  Add New Range
-                </v-btn>
-              </v-card-title>
-              <v-layout>
+            <div>
+              <v-btn
+                v-if="measure.measure_type.code === 'numeric'"
+                color="info" dark @click="dialogNumericRange = !dialogNumericRange">
+                Add New Range
+              </v-btn>
+              <v-btn
+                else
+                color="info" dark @click="dialogAlphanumericRange = !dialogAlphanumericRange">
+                Add New Range
+              </v-btn>
+              <v-layout v-if="measure.measure_type.code === 'numeric'">
+                <v-data-table
+                  :headers="rangeheaders"
+                  :items="measure.measure_ranges"
+                  hide-actions >
+                  <template slot="items" slot-scope="row">
+                    <tr :key="row.item.id">
+                      <td>{{row.item.age_min}}</td>
+                      <td>{{row.item.age_max}}</td>
+                      <td>{{row.item.gender.display}}</td>
+                      <td>{{row.item.low}}</td>
+                      <td>{{row.item.high}}</td>
+                      <td class="justify-left layout px-0">
+                        <v-btn icon class="mx-0" @click="deleteItem(row.item)">
+                          <v-icon color="pink">delete</v-icon>
+                        </v-btn>
+                      </td>
+                    </tr>
+                  </template>
+                </v-data-table>
+              </v-layout>
+              <v-layout v-if="measure.measure_type.code != 'numeric'">
                 <v-data-table
                   :headers="alpharangeheaders"
                   :items="measure.measure_ranges"
-                  max-width="900px"
                   hide-actions>
                   <template slot="items" slot-scope="row">
                     <tr :key="row.item.id">
@@ -78,9 +73,7 @@
                   </template>
                 </v-data-table>
               </v-layout>
-            </v-card>
             </div>
-
             <v-container>
               <v-layout child-flex row wrap>
                 <v-dialog v-model="dialogMeasure" max-width="500px">

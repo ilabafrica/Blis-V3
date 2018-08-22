@@ -72,12 +72,6 @@ export default new Router({
       beforeEnter: ifAuthenticated,
     },
     {
-      path: '/testcatalog/drug',
-      name: 'Antibiotic',
-      component: require('../components/testcatalog/antibiotic'),
-      beforeEnter: ifAuthenticated,
-    },
-    {
       path: '/testcatalog/specimentype',
       name: 'SpecimenType',
       component: require('../components/testcatalog/specimentype'),
@@ -90,9 +84,21 @@ export default new Router({
       beforeEnter: ifAuthenticated,
     },
     {
-      path: '/testcatalog/testtype/:id',
+      path: '/testcatalog/measures/:id/',
       name: 'Measure',
       component: require('../components/testcatalog/testtype/measure'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/testcatalog/specimenrejectionreason',
+      name: 'RejectionReason',
+      component: require('../components/testcatalog/specimenrejectionreason'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/testcatalog/antibiotic',
+      name: 'Antibiotic',
+      component: require('../components/testcatalog/testtype/antibiotic'),
       beforeEnter: ifAuthenticated,
     },
     // Access Control
