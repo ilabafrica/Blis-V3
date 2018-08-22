@@ -112,7 +112,7 @@
           icon: 'add_circle'
         },
         {
-          path: '/labconfiguration/facility',
+          path: '/labconfiguration/organization',
           label: 'Facility',
           icon: 'domain'
         },
@@ -134,8 +134,8 @@
           icon: 'assignment_turned_in'
         },
         {
-          path: '/',
-          label: 'Specimen Rejection',
+          path: '/testcatalog/specimenrejectionreason',
+          label: 'Rejection Reason',
           icon: 'assignment_late'
         },
         {
@@ -147,12 +147,7 @@
           path: '/testcatalog/antibiotic',
           label: 'Antibiotics',
           icon: 'opacity'
-        },
-        {
-          path: '/',
-          label: 'Organisms',
-          icon: 'bug_report'
-        },
+        }
       ],
       access_controls: [
         {

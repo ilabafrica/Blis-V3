@@ -74,7 +74,7 @@
           <v-btn icon class="mx-0" @click="editItem(props.item)">
             <v-icon color="teal">edit</v-icon>
           </v-btn>
-          <v-btn icon class="mx-0" :to="'/testcatalog/testtype/'+props.item.id">
+          <v-btn icon class="mx-0" :to="'/testcatalog/measures/'+props.item.id">
             <v-icon color="green">list</v-icon>
           </v-btn>
           <v-btn icon class="mx-0" @click="deleteItem(props.item)">
@@ -152,7 +152,7 @@
       },
 
       length: function() {
-        return Math.ceil(this.pagination.total / 10);
+        return Math.ceil(this.pagination.total / this.pagination.per_page);
       },
     },
 
@@ -188,6 +188,7 @@
         .then(resp => {
           console.log(resp)
           this.testtypes = resp.data;
+          this.pagination.per_page = resp.per_page;
           this.pagination.total = resp.total;
         })
         .catch(error => {

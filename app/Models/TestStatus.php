@@ -18,6 +18,7 @@ class TestStatus extends Model
 	const started = 2;
 	const completed = 3;
 	const verified = 4;
+	const cancelled = 5;
     public $timestamps = false;
 
     public function testPhase()

@@ -19,16 +19,8 @@
               </v-flex>
               <v-flex xs12 sm12 md12>
                 <v-text-field
-                  v-model="editedItem.abbreviation"
-                  :rules="[v => !!v || 'Abbreviation is Required']"
-                  label="Abbreviation">
-                </v-text-field>
-              </v-flex>
-              <v-flex xs12 sm12 md12>
-                <v-text-field
-                  v-model="editedItem.description"
-                  :rules="[v => !!v || 'Description is Required']"
-                  label="Description">
+                  v-model="editedItem.code"
+                  label="Code">
                 </v-text-field>
               </v-flex>
             </v-layout>
@@ -58,14 +50,13 @@
 
     <v-data-table
       :headers="headers"
-      :items="antibiotic"
+      :items="antibiotics"
       hide-actions
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>
-        <td class="text-xs-left">{{ props.item.abbreviation }}</td>
-        <td class="text-xs-left">{{ props.item.description }}</td>
+        <td class="text-xs-left">{{ props.item.code }}</td>
         <td class="justify-left layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
             <v-icon color="teal">edit</v-icon>
@@ -88,7 +79,7 @@
   </div>
 </template>
 <script>
-  import apiCall from '../../utils/api'
+  import apiCall from '../../../utils/api'
   export default {
     data: () => ({
       valid: true,
@@ -105,21 +96,18 @@
       },
       headers: [
         { text: 'Name', value: 'name' },
-        { text: 'Abbreviation', value: 'abbreviation' },
-        { text: 'Description', value: 'description' },
+        { text: 'Code', value: 'code' },
         { text: 'Actions', value: 'name', sortable: false }
       ],
       antibiotics: [],
       editedIndex: -1,
       editedItem: {
         name: '',
-        abbreviation: '',
-        description: '',
+        code: '',
       },
       defaultItem: {
         name: '',
-        abbreviation: '',
-        description: '',
+        code: '',
       }
     }),
 
@@ -129,7 +117,7 @@
       },
 
       length: function() {
-        return Math.ceil(this.pagination.total / 10);
+        return Math.ceil(this.pagination.total / this.pagination.per_page);
       },
     },
 
@@ -156,6 +144,7 @@
         .then(resp => {
           console.log(resp)
           this.antibiotics = resp.data;
+          this.pagination.per_page = resp.per_page;
           this.pagination.total = resp.total;
         })
         .catch(error => {
