@@ -72,9 +72,11 @@
                 </v-text-field>
                 <v-date-picker v-show="calendar" v-model="editedItem.birth_date" :landscape="landscape" :reactive="reactive"></v-date-picker>
               </v-flex>
+               <v-flex xs3 offset-xs9 text-xs-right>
               <v-btn round outline xs12 sm6 color="blue darken-1" :disabled="!valid" @click.native="save">
                 Save <v-icon right dark>cloud_upload</v-icon>
               </v-btn>
+               </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
@@ -83,7 +85,6 @@
         </v-form>
       </v-card>
     </v-dialog>
-
     <v-card-title>
       Patients
       <v-spacer></v-spacer>
@@ -96,7 +97,6 @@
         hide-details>
       </v-text-field>
     </v-card-title>
-
     <v-data-table
       :headers="headers"
       :items="patient"

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" max-width="500px">
+    <v-dialog v-model="dialog" max-width="400px">
       <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
       <v-card>
         <v-toolbar dark color="primary" class="elevation-0">
@@ -29,20 +29,20 @@
                   label="Code">
                 </v-text-field>
               </v-flex>
+                <v-flex xs3 offset-xs9 text-xs-right>
             <v-btn round outline xs12 sm6 color="blue darken-1" :disabled="!valid" @click.native="save">
               Save <v-icon right dark>cloud_upload</v-icon>
             </v-btn>
+          </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
         <v-card-actions>
-          
-        </v-card-actions>
+          </v-card-actions>
         </v-form>
       </v-card>
     </v-dialog>
-
-    <v-card-title>
+<v-card-title>
       Health Units
       <v-spacer></v-spacer>
       <v-text-field
@@ -54,22 +54,35 @@
         hide-details>
       </v-text-field>
     </v-card-title>
-
-    <v-data-table
+<v-data-table
       :headers="headers"
       :items="locations"
       hide-actions
       class="elevation-1"
     >
-      <template slot="items" slot-scope="props">
+<template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>
         <td class="text-xs-right">{{ props.item.identifier }}</td>
         <td class="justify-center layout px-0">
-          <v-btn icon class="mx-0" @click="editItem(props.item)">
-            <v-icon color="teal">edit</v-icon>
+      <v-btn
+            outline
+            small
+            title="Edit"
+            color="teal"
+            flat
+            @click="editItem(props.item)">
+            Edit
+            <v-icon right dark>edit</v-icon>
           </v-btn>
-          <v-btn icon class="mx-0" @click="deleteItem(props.item)">
-            <v-icon color="pink">delete</v-icon>
+           <v-btn
+            outline
+            small
+            title="Edit"
+            color="pink"
+            flat
+            @click="deleteItem(props.item)">
+            Delete
+            <v-icon right dark>delete</v-icon>
           </v-btn>
         </td>
       </template>

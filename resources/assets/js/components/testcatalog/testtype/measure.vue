@@ -21,7 +21,6 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-card-text>
-
             <!-- list of measure ranges -->
             <div  v-if="measure.measure_type">
               <v-card v-if="measure.measure_type.code === 'numeric'">
@@ -80,7 +79,6 @@
               </v-layout>
             </v-card>
             </div>
-
             <v-container>
               <v-layout child-flex row wrap>
                 <v-dialog v-model="dialogMeasure" max-width="500px">
@@ -127,7 +125,6 @@
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
-
                 <v-dialog v-model="dialogNumericRange" max-width="500px">
                   <v-card>
                     <v-card-title>
@@ -185,7 +182,6 @@
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
-
                 <v-dialog v-model="dialogAlphanumericRange" max-width="500px">
                   <v-card>
                     <v-card-title>
@@ -222,7 +218,6 @@
         </v-card>
       </v-dialog>
     </v-layout>
-
     <v-card-title>
       {{testType.name}}
     </v-card-title>
@@ -242,7 +237,6 @@
         </tr>
       </template>
     </v-data-table>
-
     <v-list-tile-title>Measures</v-list-tile-title>
       <v-btn color="info" dark @click.stop="dialogMeasure = true">
         Add New Measure
@@ -255,7 +249,7 @@
           hide-actions
           class="elevation-1"
         >
-          <template slot="items" slot-scope="props">
+                  <template slot="items" slot-scope="props">
             <td>{{ props.item.name }}</td>
             <td class="text-xs-left">{{ props.item.unit }}</td>
             <td class="justify-left layout px-0">
@@ -276,8 +270,7 @@
 </template>
 <script>
   import apiCall from '../../../utils/api'
-
-  export default {
+export default {
     data: () => ({
       dialog: false,
       dialogMeasure: false,
