@@ -21,6 +21,7 @@ Route::group(['prefix' => 'stats'], function () {
         Route::get('/statuses', 'Statistics\TestStatisticsController@testStatuses');
         Route::get('/types', 'Statistics\TestStatisticsController@testTypes');
         Route::get('/type-categories', 'Statistics\TestStatisticsController@testTypeCategories');
+        Route::get('/fetch', 'Statistics\TestStatisticsController@fetchTests');
     });
     Route::get('/logins', 'Statistics\UserStatisticsController@logins');
     Route::get('/users', 'Statistics\UserStatisticsController@getUsers');
