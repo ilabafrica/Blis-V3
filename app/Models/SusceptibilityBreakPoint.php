@@ -15,4 +15,9 @@ use Illuminate\Database\Eloquent\Model;
 class SusceptibilityBreakPoint extends Model
 {
     public $timestamps = false;
+
+    public function antibiotic()
+    {
+        return $this->belongsTo('App\Models\Antibiotic');
+    }
 }

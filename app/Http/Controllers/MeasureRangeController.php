@@ -92,7 +92,7 @@ class MeasureRangeController extends Controller
      */
     public function show($id)
     {
-        $measureRange = MeasureRange::findOrFail($id);
+        $measureRange = MeasureRange::find($id)->load('susceptibilityBreakPoints.antibiotic');
 
         return response()->json($measureRange);
     }

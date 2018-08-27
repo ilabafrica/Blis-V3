@@ -116,18 +116,8 @@ class TestController extends Controller
      */
     public function show($id)
     {
-        $test = Test::find($id)->load(
-            'testStatus.testPhase',
-            'specimen.specimenType',
-            'testType.specimenTypes',
-            'testType.testTypeCategory',
-            'testType.measures.measureType',
-            'testType.measures.results',
-            'results.measure.measureType',
-            'results.measure.measureRanges',
-            'testType.measures.measureRanges.gender'
-        );
-        return response()->json($test);
+        return response()->json(Test::find($id)->loader());
+
     }
 
     /**

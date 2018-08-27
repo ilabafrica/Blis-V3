@@ -78,15 +78,33 @@ export default new Router({
       beforeEnter: ifAuthenticated,
     },
     {
-      path: '/testcatalog/testtype',
-      name: 'TestType',
-      component: require('../components/testcatalog/testtype/index'),
+      path: '/testcatalog/testtype/:testTypeId/measure/:measureId/measurerange/:measureRangeId/breakpoint',
+      name: 'BreakPoint',
+      component: require('../components/testcatalog/testtype/measure/measurerange/breakpoint'),
       beforeEnter: ifAuthenticated,
     },
     {
-      path: '/testcatalog/measures/:id/',
+      path: '/testcatalog/testtype/:testTypeId/measure/:measureId/measurerange',
+      name: 'MeasureRange',
+      component: require('../components/testcatalog/testtype/measure/measurerange/index'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/testcatalog/testtype/:testTypeId/specimentype',
+      name: 'TestTypeSpecimenType',
+      component: require('../components/testcatalog/testtype/specimentype'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/testcatalog/testtype/:testTypeId/measure',
       name: 'Measure',
-      component: require('../components/testcatalog/testtype/measure'),
+      component: require('../components/testcatalog/testtype/measure/index'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/testcatalog/testtype',
+      name: 'TestType',
+      component: require('../components/testcatalog/testtype/index'),
       beforeEnter: ifAuthenticated,
     },
     {
