@@ -280,12 +280,6 @@
             </v-container>
         </v-slide-y-transition>
         <v-layout row wrap>
-            <v-flex>
-                <v-btn @click.native="fetchTests()" v-if="total_tests && total_tests>0" color="success">Fetch Test Details</v-btn>
-            </v-flex>
-            {{total_tests}}
-        </v-layout>
-        <v-layout row wrap>
             <v-data-table
                 :headers="headers"
                 :items="tests"
@@ -602,14 +596,17 @@ export default {
             console.log("Ids are ", ids)
             Vue.set(this, 'total_tests', total)
             Vue.set(this, 'test_ids', ids)
-            Vue.set(this, 'toggle_filter_options', false)            
+            Vue.set(this, 'toggle_filter_options', false)               
+            Vue.set(this, 'tests', [])               
+            this.pagination.page = 1 //sets the value without refreshing the view
+            this.fetchTests()
         })
         .catch(error => {
             console.log(error.response)
         })
     },
     fetchTests(){
-        if(this.total_tests && this.test_ids && this.total_tests>0){
+        if(this.total_tests && this.test_ids && this.total_tests>0){ // make sure there actually is something to be fetched
             apiCall({url:this.url_prefix+"tests/fetch?test_ids="+this.test_ids.join()+"&page="+this.pagination.page, method:"GET"})
             .then(resp=>{
                 console.log("Tests fetched request response is, ",resp)

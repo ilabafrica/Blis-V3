@@ -28,6 +28,9 @@ Route::group(['prefix' => 'stats'], function () {
         Route::get('/statuses', 'Statistics\SpecimenStatisticsController@specimenStatuses');
         Route::get('/types', 'Statistics\SpecimenStatisticsController@specimenTypes');
     });
+    Route::group(['prefix' => 'results'], function () {
+        Route::get('/totals', 'Statistics\ResultsStatisticsController@alphanumericCounts');
+    });
     Route::get('/logins', 'Statistics\UserStatisticsController@logins');
     Route::get('/users', 'Statistics\UserStatisticsController@getUsers');
     Route::get('/users/count', 'Statistics\UserStatisticsController@countUsers');

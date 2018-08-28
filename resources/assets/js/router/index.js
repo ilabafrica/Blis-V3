@@ -174,15 +174,12 @@ export default new Router({
       component: require('../components/statistics/tests/index'),
       beforeEnter: ifAuthenticated,
     },
-<<<<<<< HEAD
     //All Specimen Stats
     {
       path: '/stats/specimen',
       name: 'specimen_stats',
       component: require('../components/statistics/specimen/index'),
     },
-=======
->>>>>>> a248c6265e7fc0598f7261510f1175fa38a62fac
     //Search Tests Stats
     {
       path: '/stats/tests/search',
