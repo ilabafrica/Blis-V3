@@ -158,4 +158,12 @@ class MeasureRangeController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+
+    public function getByMeasureId($id)
+    {
+        $measureRanges = measure::find($id)->measureRanges;
+
+        return response()->json($measureRanges);
+    }
+
 }

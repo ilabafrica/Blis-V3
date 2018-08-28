@@ -90,6 +90,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('interpretation', 'InterpretationController');
         Route::resource('measurerange', 'MeasureRangeController');
         Route::resource('measuretype', 'MeasureTypeController');
+        Route::get('measure/{id}/measurerange', 'MeasureController@getByMeasureId');
         Route::resource('measure', 'MeasureController');
         Route::resource('referralreason', 'ReferralReasonController');
         Route::resource('rejectionreason', 'RejectionReasonController');

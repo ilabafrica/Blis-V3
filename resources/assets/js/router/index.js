@@ -146,6 +146,12 @@ export default new Router({
     },
     //Routine and Reference Testing
     {
+      path: '/test/:id/culture',
+      name: 'TestCulture',
+      component: require('../components/test/culture/index'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
       path: '/test/index',
       name: 'Test',
       component: require('../components/test/index'),

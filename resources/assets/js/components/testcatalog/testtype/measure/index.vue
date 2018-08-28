@@ -47,7 +47,7 @@
                 flat
                 @click="deleteMeasure(props.item)">
                 Delete
-                <v-icon right dark>edit</v-icon>
+                <v-icon right dark>delete</v-icon>
               </v-btn>
             </td>
           </template>
