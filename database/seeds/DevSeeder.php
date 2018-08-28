@@ -10,6 +10,7 @@ use App\Models\TestType;
 use App\Models\TestPhase;
 use App\Models\TestStatus;
 use App\Models\Antibiotic;
+use App\Models\Interpretation;
 use App\Models\Instrument;
 use App\Models\MeasureType;
 use App\Models\MeasureRange;
@@ -262,26 +263,37 @@ class DevSeeder extends Seeder
             "name" => "BS for mps",
             "unit" => ""]);
 
+
+
+        $positive = Interpretation::create([
+            "code" => 'positive',
+            "name" => "Positive",
+        ]);
+        $negative = Interpretation::create([
+            "code" => 'negative',
+            "name" => "Negative",
+        ]);
+
         MeasureRange::create([
             "measure_id" => $measureBSforMPS->id,
             "display" => "No mps seen",
-            // "interpretation" => "Negative",// todo: adapt to handle interpretation_id
+            "interpretation_id" => $negative->id,
         ]);
         MeasureRange::create([
             "measure_id" => $measureBSforMPS->id,
             "display" => "+",
-            // "interpretation" => "Positive",// todo: adapt to handle interpretation_id
+            "interpretation_id" => $positive->id,
         ]);
         MeasureRange::create([
             "measure_id" => $measureBSforMPS->id,
             "display" => "++",
-            // "interpretation" => "Positive",// todo: adapt to handle interpretation_id
+            "interpretation_id" => $positive->id,
         ]);
         MeasureRange::create([
             "measure_id" => $measureBSforMPS->id,
 
             "display" => "+++",
-            // "interpretation" => "Positive",// todo: adapt to handle interpretation_id
+            "interpretation_id" => $positive->id,
         ]);
 
         /* test_type_mappings table */
@@ -687,6 +699,7 @@ class DevSeeder extends Seeder
         ]);
         $testTypeCultureAndSensitivity = TestType::create([
             "name" => "Culture and Sensitivity",
+            "culture" => 1,
             "test_type_category_id" => $testTypeCategoryMicrobiology->id
         ]);
         $testTypeGramStain = TestType::create([

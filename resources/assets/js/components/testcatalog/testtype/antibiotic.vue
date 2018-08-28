@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-dialog v-model="dialog" max-width="500px">
-      <v-btn slot="activator" color="primary" dark class="mb-2">New Drug</v-btn>
+      <v-btn slot="activator" color="primary" dark class="mb-2">New Antibiotic</v-btn>
       <v-card>
         <v-card-title>
           <span class="headline">{{ formTitle }}</span>
@@ -36,7 +36,7 @@
     </v-dialog>
 
     <v-card-title>
-      Drugs
+      Antibiotics
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"

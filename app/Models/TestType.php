@@ -37,4 +37,15 @@ class TestType extends Model
     {
         return $this->hasMany('App\Models\Measure');
     }
+
+    public function loader()
+    {
+        return TestType::find($this->id)->load(
+            'measures.measureType',
+            'measures.measureRanges.gender',
+            'testTypeCategory',
+            'specimenTypes'
+        );
+    }
+
 }

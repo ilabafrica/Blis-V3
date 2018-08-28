@@ -71,7 +71,7 @@ class MeasureController extends Controller
      */
     public function show($id)
     {
-        $measure = Measure::findOrFail($id);
+        $measure = Measure::find($id)->load('testType','measureType','measureRanges');
 
         return response()->json($measure);
     }

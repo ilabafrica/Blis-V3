@@ -20,4 +20,9 @@ class MeasureRange extends Model
     {
         return $this->belongsTo('App\Models\Gender');
     }
+
+    public function susceptibilityBreakPoints()
+    {
+        return $this->hasMany('App\Models\SusceptibilityBreakPoint');
+    }
 }
