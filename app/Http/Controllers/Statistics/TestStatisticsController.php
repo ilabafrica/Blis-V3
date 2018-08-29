@@ -249,6 +249,7 @@ class TestStatisticsController extends Controller
         // By Patient age
         if ($request->query('by_age')) { // grouped by patient ages
             $selects = $selects. ",  SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 <= 5,1,0)) as 'under_5', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 BETWEEN 5 and 20,1,0)) as '5_to_20', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25>=20,1,0)) as 'over_20'";            
+            $wheres = $wheres . " AND t.test_status_id>2"; //the test needs to have been started in order to get the age of patient at test status. This may be changed later to reflect specimen collection date
         }else if ($request->query('age_group')) { // grouped by patient ages
             $ages = explode(',', $request->query('age_group'));
             if(count($ages)==2 && is_numeric($ages[0]) && is_numeric($ages[1])){
@@ -256,6 +257,7 @@ class TestStatisticsController extends Controller
                 $ages[1] = intval($ages[1]);
                 // dd($ages);
                 $selects = $selects. ",  SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 <=".$ages[0].",1,0)) as 'under_".$ages[0]."', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 BETWEEN ".$ages[0]." and ".$ages[1].",1,0)) as '".$ages[0]."_to_".$ages[1]."', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25>=".$ages[1].",1,0)) as 'over_".$ages[1]."'";            
+                $wheres = $wheres . " AND t.test_status_id>2"; //the test needs to have been started in order to get the age of patient at test status. This may be changed later to reflect specimen collection date
             }
         }
         // By Category
@@ -302,7 +304,7 @@ class TestStatisticsController extends Controller
         }
         if($request->query('with_ids')){
             $selects = $selects. ", GROUP_CONCAT(t.id) as ids";            
-        }     
+        }        
         if($request->query('full_values')){
             $tests= DB::table(DB::raw($tables))->select(DB::raw('t.*'))->whereRaw($wheres)->paginate(10);
         }  
