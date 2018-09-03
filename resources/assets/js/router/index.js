@@ -194,6 +194,13 @@ export default new Router({
       component: require('../components/statistics/tests/type'),
       beforeEnter: ifAuthenticated,
     },
+    //Result Stats
+    {
+      path: '/stats/results',
+      name: 'results_stats_type',
+      component: require('../components/statistics/tests/result'),
+      beforeEnter: ifAuthenticated,
+    },
     {
       path: '/qualitycontrol/controltest',
       name: 'ControlTest',

@@ -519,6 +519,7 @@ export default {
                 }
             });
             console.log("Set This ", setThis)
+            setThis = []
             console.log("Clean Array is ", cleanArray)
             Vue.set(this, 'total_tests', total)
             Vue.set(this, 'toggle_filter_options', false)               
@@ -531,14 +532,14 @@ export default {
     addTestTypeData(element){
         let formattedTestTypeData = {}
         formattedTestTypeData['under_5'] = parseInt(element['under_5'], 10)
-        formattedTestTypeData['5_to_10'] = parseInt(element['5_to_10'], 10)
+        formattedTestTypeData['5_to_20'] = parseInt(element['5_to_20'], 10)
         formattedTestTypeData['over_20'] = parseInt(element['over_20'], 10)
         formattedTestTypeData['total'] = element.total
         return formattedTestTypeData
     },
-    addTestTypeDataNew(current, addition){
+    addTestTypeDataNew(current, addition){ //adding an 
         current['under_5'] += parseInt(addition['under_5'], 10)
-        current['5_to_10'] += parseInt(addition['5_to_10'], 10)
+        current['5_to_20'] += parseInt(addition['5_to_20'], 10)
         current['over_20'] += parseInt(addition['over_20'], 10)
         current['total'] += addition.total
         return current
