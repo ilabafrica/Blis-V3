@@ -7,91 +7,24 @@
             </v-btn>
         </v-layout>
         <v-layout row wrap>
+            {{ tableData || "N/a"}}
             <v-data-table
                 :headers="headers"
-                :items="tests"
+                :items="formattedTests"
                 hide-actions
                 class="elevation-1"
             >
                 <template slot="items" slot-scope="props">
-                    <tr>
-                        <td class="text-xs-right">{{ props.item.name }}</td>
-                        <td class="text-xs-right">
-                            <tr v-for="measure in props.item.measures" :key="measure.id">
-                                <td :rowspan="measure.ranges.length">{{measure.name}}</td>
-                            </tr>
-                        </td>
-                        <td>
-                            <tr v-for="measure in props.item.measures" :key="measure.id">
-                                <td>
-                                    <tr v-for="range in measure.ranges" :key="range.id">
-                                        <td>{{range.display}}</td>
-                                    </tr>
-                                </td>
-                            </tr>
-                        </td>
-                        <td>
-                            <tr v-for="measure in props.item.measures" :key="measure.id">
-                                <td>
-                                    <tr v-for="range in measure.ranges" :key="range.id">
-                                        <td>
-                                            <tr><td>Male</td></tr>
-                                            <tr><td>Female</td></tr>
-                                        </td>                                        
-                                    </tr>
-                                </td>
-                            </tr>
-                        </td>
-                        <td>
-                            <tr v-for="measure in props.item.measures" :key="measure.id">
-                                <td>
-                                    <tr v-for="range in measure.ranges" :key="range.id">
-                                        <td>
-                                            <tr><td>{{ range.male.under_5 }}</td></tr>
-                                            <tr><td>{{ range.female.under_5 }}</td></tr>
-                                        </td>                                        
-                                    </tr>
-                                </td>
-                            </tr>
-                        </td>
-                        <td>
-                            <tr v-for="measure in props.item.measures" :key="measure.id">
-                                <td>
-                                    <tr v-for="range in measure.ranges" :key="range.id">
-                                        <td>
-                                            <tr><td>{{ range.male["5_to_20"] }}</td></tr>
-                                            <tr><td>{{ range.female["5_to_20"] }}</td></tr>
-                                        </td>                                        
-                                    </tr>
-                                </td>
-                            </tr>
-                        </td>
-                        <td>
-                            <tr v-for="measure in props.item.measures" :key="measure.id">
-                                <td>
-                                    <tr v-for="range in measure.ranges" :key="range.id">
-                                        <td>
-                                            <tr><td>{{ range.male.over_20 }}</td></tr>
-                                            <tr><td>{{ range.female.over_20 }}</td></tr>
-                                        </td>                                        
-                                    </tr>
-                                </td>
-                            </tr>
-                        </td>
-                        <td>
-                            <tr v-for="measure in props.item.measures" :key="measure.id">
-                                <td>
-                                    <tr v-for="range in measure.ranges" :key="range.id">
-                                        <td>
-                                            <tr><td>{{ range.male.total }}</td></tr>
-                                            <tr><td>{{ range.female.total }}</td></tr>
-                                        </td>                                       
-                                    </tr>
-                                </td>
-                            </tr>
-                        </td>
-                        
-                        <td class="text-xs-right">{{ props.item.total }}</td>
+                    <tr v-for="(row, ind) in props.item">
+                        <td v-if="row.tt" :rowspan="row.tt.rc">{{row.tt.value}}</td>
+                        <td v-if="row.measure" :rowspan="row.measure.rc">{{row.measure.value}}</td>
+                        <td v-if="row.measure_range" :rowspan="row.measure_range.rc">{{row.measure_range.value}}</td>
+                        <td v-if="row.gender" :rowspan="row.gender.rc">{{row.gender.value}}</td>
+                        <td v-if="row.under_5" :rowspan="row.under_5.rc">{{row.under_5.value}}</td>
+                        <td v-if="row['5_to_20']" :rowspan="row['5_to_20'].rc">{{row['5_to_20'].value}}</td>
+                        <td v-if="row.over_20" :rowspan="row.over_20.rc">{{row.over_20.value}}</td>
+                        <td v-if="row.total" :rowspan="row.total.rc">{{row.total.value}}</td>
+                        <td v-if="row.main_total" :rowspan="row.main_total.rc">{{row.main_total.value}}</td>
                     </tr>
                 </template>
             </v-data-table>
@@ -137,11 +70,62 @@ export default {
     types: {},
     
     tests:[],
+    formattedTests: []
   }),
 
   computed: {
     length: function() {
       return Math.ceil(this.pagination.total / this.pagination.visible);
+    },
+    tableData: function() {
+        let formattedData = []
+        this.tests.forEach((testtype, tt_index) => { // test type loop
+            console.log("Test Type is: ", testtype)
+            let row = []
+            let measure_count = 0;
+            for (const key1 in testtype.measures) { // measures loop
+                if (testtype.measures.hasOwnProperty(key1)) {
+                    const measure = testtype.measures[key1];
+                    console.log("Measure is: ", measure)
+                    let range_count = 0;
+                    for (const key2 in measure.ranges) { //ranges loop
+                        if (measure.ranges.hasOwnProperty(key2)) {
+                            const range_result = measure.ranges[key2];
+                            console.log("Range is:",range_result)                               
+                            let rowMale =this.formatForTable(range_result.male)
+                            rowMale.gender = {value: "Male", rc:1}
+                            let rowFemale = this.formatForTable(range_result.female)
+                            rowFemale.gender = {value: "Female", rc:1}
+                            if(measure_count == 0 && range_count==0){
+                                let tt_h = 0, m_h = 0
+                                for (const key in testtype.measures) {
+                                    if (testtype.measures.hasOwnProperty(key)) {
+                                        const element = testtype.measures[key];
+                                        let r_h = Object.keys(element.ranges).length*2
+                                        tt_h += r_h
+                                    }
+                                }
+                                rowMale.measure = {value: measure.name, rc:Object.keys(measure.ranges).length*2}
+                                rowMale.tt = {value: testtype.name, rc:tt_h}
+                                rowMale.main_total = {value: testtype.total, rc: tt_h}
+                            }else if (range_count==0){
+                                rowMale.measure = {value: measure.name, rc:Object.keys(measure.ranges).length*2}                                
+                            }
+                            rowMale.measure_range = {value: range_result.display, rc:2}
+                            console.log("Male row ",rowMale)
+                            console.log("Female row ",rowFemale)
+                            row.push(rowMale)
+                            row.push(rowFemale)
+                        }
+                        range_count += 1
+                    }
+                }
+                measure_count +=1
+            }
+            formattedData.push(row)
+        });
+        console.log("Formated Tests ", formattedData)
+        Vue.set(this,'formattedTests', formattedData)
     }
     
   },
@@ -213,6 +197,7 @@ export default {
             let total = 0
             let setThis = []
             let cleanArray = []
+            let formattedData = []
             console.log("Result response is ", resp)
             resp.forEach(element => { // loop through all the responses,
                 total += element.total
@@ -223,7 +208,7 @@ export default {
                         measures : {}, // each test type may have various measures, thus initialize an object with the following structure. Using object instead of array to void holes in the array that would need to be cleaned up later                            
                         total: 0
                     }
-                    console.log("A new Entry is, ",setThis)
+                    //console.log("A new Entry is, ",setThis)
                 }
                 if(!setThis[element.test_type_id].measures[element.measure_id]){ 
                     setThis[element.test_type_id].measures[element.measure_id] = {
@@ -289,6 +274,16 @@ export default {
         current['total'] += addition.total
         return current
     },
+    formatForTable(object){
+        let formatedObject ={}
+        for (const key in object) {
+            if (object.hasOwnProperty(key)) {
+                const element = object[key];
+                formatedObject[key] = {value: element, rc:1}
+            }
+        }
+        return formatedObject
+    }
   }
 };
 </script>
