@@ -31,6 +31,20 @@
                   label="Email Address">
                 </v-text-field>
               </v-flex>
+              <div>
+                <v-btn small color="primary" dark @click.native="passordReset">Reset Password</v-btn>
+              </div>
+              <v-flex xs12 sm12 md12
+                v-if="showPasswordField">
+                <v-text-field
+                  v-model="password"
+                  :rules="[v => !!v || 'New Password is Required']"
+                  type = "text"
+                  append-icon="autorenew"
+                  @click:append="generate"
+                  label="New Password">
+                </v-text-field>
+              </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
@@ -107,8 +121,12 @@
       dialog: false,
       delete: false,
       saving: false,
+      size: 32,
+      characters: 'a-z,A-Z,0-9,#',
+      showPasswordField: false,
       search: '',
       query: '',
+      password: '',
       pagination: {
         page: 1,
         per_page: 0,
@@ -177,7 +195,29 @@
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
-
+      generate: function() {
+        let charactersArray = this.characters.split(',');  
+        let CharacterSet = '';
+        let password = '';
+        
+        if( charactersArray.indexOf('a-z') >= 0) {
+          CharacterSet += 'abcdefghijklmnopqrstuvwxyz';
+        }
+        if( charactersArray.indexOf('A-Z') >= 0) {
+          CharacterSet += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        }
+        if( charactersArray.indexOf('0-9') >= 0) {
+          CharacterSet += '0123456789';
+        }
+        if( charactersArray.indexOf('#') >= 0) {
+          CharacterSet += '![]{}()%&*$#^<>~@|';
+        }
+        
+        for(let i=0; i < this.size; i++) {
+          password += CharacterSet.charAt(Math.floor(Math.random() * CharacterSet.length));
+        }
+        this.password = password;
+      },
       deleteItem (item) {
         confirm('Are you sure you want to delete this user?') && (this.delete = true)
         if (this.delete) {
@@ -206,6 +246,17 @@
       resetDialogReferences() {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
+        this.showPasswordField = false
+        this.password = ''
+      },
+
+      passordReset () {
+        if (this.showPasswordField){
+          this.showPasswordField = false
+          this.password = ''
+        }else{
+          this.showPasswordField = true;
+        }
       },
 
       save () {
@@ -213,6 +264,10 @@
         this.saving = true;
         // update
         if (this.editedIndex > -1) {
+          if(this.showPasswordField){
+            this.editedItem.adminPasswordChange = true
+            this.editedItem.password = this.password
+          }
           apiCall({url: '/api/user/'+this.editedItem.id, data: this.editedItem, method: 'PUT' })
           .then(resp => {
             Object.assign(this.user[this.editedIndex], this.editedItem)

@@ -27,6 +27,11 @@ class Gender extends Model
         return $this->belongsTo('App\Models\Patient');
     }
 
+    public function User()
+    {
+        return $this->belongsTo('App\User');
+    }
+
     public function MeasureRange()
     {
         return $this->belongsTo('App\Models\MeasureRange');

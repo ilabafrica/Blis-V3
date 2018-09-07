@@ -45,6 +45,13 @@ export default new Router({
       component: require('../components/patients/patient'),
       beforeEnter: ifAuthenticated,
     },
+    // User Profile
+    {
+      path: '/account/profile',
+      name: 'Profile',
+      component: require('../components/account/profile'),
+      beforeEnter: ifAuthenticated,
+    },
     // Lab Configurations
     {
       path: '/labconfiguration/healthunit',

@@ -10,6 +10,11 @@
       <v-menu offset-y>
         <v-btn primary flat slot="activator"><v-icon left>developer_board</v-icon> {{name}}</v-btn>
         <v-list>
+          <v-list-tile to="/account/profile">
+            <v-list-tile>
+              <v-list-tile-title>Edit Profile</v-list-tile-title>
+            </v-list-tile>
+          </v-list-tile>
             <v-list-tile @click="logout">
               <v-list-tile-title>Logout</v-list-tile-title>
             </v-list-tile>

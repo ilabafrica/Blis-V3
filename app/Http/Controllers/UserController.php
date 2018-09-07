@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
  */
 
 use App\User;
+use Auth;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -77,6 +78,13 @@ class UserController extends Controller
         return response()->json($user);
     }
 
+    /*public function profile()
+    {
+        $user = Auth::user();
+
+        return response()->json($user);
+    }*/
+
     /**
      * Update the specified resource in storage.
      *
@@ -85,7 +93,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
+    {   
         $rules = [
             'name' => 'required',
             'email' => 'required',
@@ -100,9 +108,55 @@ class UserController extends Controller
             $user->name = $request->input('name');
             $user->username = $request->input('username');
             $user->email = $request->input('email');
-            //$user->password = $request->input('password');
+            if($request->input('passwordChange')){
+                if (! \Hash::check(request('password'), $user->password)) {
+                    return response()->json([
+                        'message' => 'Wrong password',
+                        'status' => 422,
+                    ], 422);
+                }
+            $user->password = bcrypt($request->input('newpassword'));
+            
+            }
+            if($request->input('adminPasswordChange')){
+                $user->password = bcrypt($request->input('password'));
+            }
+            if($request->input('removePic')){
+                $user->profile_picture = null;
+            }
+            //$user->remember_token = $request->input('remember_token');
             //$user->remember_token = $request->input('remember_token');
 
+            try {
+                $user->save();
+
+                return response()->json($user);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
+
+    public function profilepic (Request $request)
+    {
+        $rules = [
+            'file' => 'image:jpeg,jpg,png',
+            'id' => 'required',
+            'name' => 'required'
+
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            if ($request->file('file')->isValid()) {
+                $destinationPath = 'uploads/profile_pictures';
+                $extension = $request->file('file')->getClientOriginalExtension();
+                $fileName = rand(11111,99999).'.'.$extension;
+                $request->file('file')->move($destinationPath, $fileName);
+                }  
+            $user = User::findOrFail($request->input('id'));
+            $user->profile_picture = $fileName;
             try {
                 $user->save();
 
