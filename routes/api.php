@@ -60,7 +60,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('roleuser/attach', 'RoleUserController@attach');
         Route::get('roleuser/detach', 'RoleUserController@detach');
         Route::get('roleuser', 'RoleUserController@index');
+        Route::post('user/image', 'UserController@profilepic');
     });
+        //Route::get('profile', 'UserController@profile');
 
     // Health Units|Instrument|Reports|Barcode
     Route::group(['middleware' => ['permission:manage_configurations']], function () {
