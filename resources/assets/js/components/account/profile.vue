@@ -105,10 +105,19 @@
 				          <v-flex xs12 sm12 md12>
 				            Gender
 				            <v-radio-group
-				              v-model="editedItem.gender" row
+				              row
+				              v-model="editedItem.gender_id"
 				              >
-				              <v-radio label="Male" value="2"></v-radio>
-				              <v-radio label="Female" value="1"></v-radio>
+				              <v-radio
+				              label="Male"
+				              :value="1"
+				              >
+				              </v-radio>
+				              <v-radio 
+				              label="Female" 
+				              :value="2"
+				              >
+				              </v-radio>
 				            </v-radio-group>
 				          </v-flex>
 				           <v-flex xs3 offset-xs9 text-xs-right>
@@ -129,7 +138,7 @@
 	      <v-card>
 	        <img
 	          position
-	          :src="'uploads/profile_pictures/' +editedItem.profile_picture"
+	          :src="'storage/profile_pictures/' +editedItem.profile_picture"
 	          height = "320"
 	          width = "320"
 	        ></img>

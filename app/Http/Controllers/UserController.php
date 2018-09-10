@@ -12,6 +12,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Auth;
+use Storage;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -23,7 +24,7 @@ class UserController extends Controller
             $user = User::where('username', 'LIKE', "%{$search}%")
                 ->paginate(10);
         } else {
-            $user = User::paginate(10);
+            $user = User::with('gender')->paginate(10);
         }
 
         return response()->json($user);
@@ -108,6 +109,7 @@ class UserController extends Controller
             $user->name = $request->input('name');
             $user->username = $request->input('username');
             $user->email = $request->input('email');
+            $user->gender_id = $request->input('gender_id');
             if($request->input('passwordChange')){
                 if (! \Hash::check(request('password'), $user->password)) {
                     return response()->json([
@@ -138,9 +140,9 @@ class UserController extends Controller
     }
 
     public function profilepic (Request $request)
-    {
+    { 
         $rules = [
-            'file' => 'image:jpeg,jpg,png',
+            'file' => 'image:jpeg,jpg,png|required|file',
             'id' => 'required',
             'name' => 'required'
 
@@ -150,10 +152,9 @@ class UserController extends Controller
             return response()->json($validator, 422);
         } else {
             if ($request->file('file')->isValid()) {
-                $destinationPath = 'uploads/profile_pictures';
                 $extension = $request->file('file')->getClientOriginalExtension();
                 $fileName = rand(11111,99999).'.'.$extension;
-                $request->file('file')->move($destinationPath, $fileName);
+                $request->file('file')->storeAs('profile_pictures', $fileName);
                 }  
             $user = User::findOrFail($request->input('id'));
             $user->profile_picture = $fileName;

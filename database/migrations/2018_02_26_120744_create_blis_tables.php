@@ -677,6 +677,7 @@ class CreateBlisTables extends Migration
             'name' => 'BLIS Super Admin',
             'username' => 'admin@blis.local',
             'email' => 'admin@blis.local',
+            'gender_id' => 1,
             'password' =>  bcrypt('password'),
         ]);
 
