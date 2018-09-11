@@ -4,15 +4,37 @@ namespace App\Http\Controllers\Statistics;
 
 use App\User;
 use App\Models\Test;
+use App\Models\Result;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 class ResultsStatisticsController extends Controller
 {
+    // get the patient history
+    public function patientHistory(Request $request){
+        if ($request->query('by_patient')) { // grouped by particular patient
+            // return Patient::find(315)->tests()->get();
+            $patient = Patient::find(315);
+            if($patient){
+                $tests = $patient->tests()->get();
+                $encounters = [];
+                $results = [];
+                $specimen = [];
+                foreach ($tests as $key => $value) {
+                    $value->encounters = $value->encounter()->get();
+                    $value->results = $value->results()->get();               
+                    $value->specimen = $value->specimen()->get(); 
+                }
+                $patient->tests = $tests;
+            }
+            return $patient;
+        }
+    }
     // get the alphanumeric counts
     public function alphanumericCounts(Request $request){
-        $selects = 'COUNT(DISTINCT r.id) as total'; $tables = 'results r'; $wheres = '1'; $group_bys='';
+        $selects = 'COUNT(DISTINCT r.id) as total'; $tables = 'results r'; $wheres = '1'; $group_bys='';        
         // By Measure
         if ($request->query('measure_id')) { // grouped by particular measure
             $selects = $selects. ", r.measure_id";
@@ -85,7 +107,6 @@ class ResultsStatisticsController extends Controller
             if(count($ages)==2 && is_numeric($ages[0]) && is_numeric($ages[1])){
                 $ages[0] = intval($ages[0]);
                 $ages[1] = intval($ages[1]);
-                // dd($ages);
                 $selects = $selects. ",  SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 <=".$ages[0].",1,0)) as 'under_".$ages[0]."', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 BETWEEN ".$ages[0]." and ".$ages[1].",1,0)) as '".$ages[0]."_to_".$ages[1]."', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25>=".$ages[1].",1,0)) as 'over_".$ages[1]."'";            
                 $wheres = $wheres . " AND t.test_status_id>2"; //the test needs to have been started in order to get the age of patient at test status. This may be changed later to reflect specimen collection date
             }
@@ -100,16 +121,42 @@ class ResultsStatisticsController extends Controller
             $selects = $selects. ", p.gender_id";
             $group_bys = $group_bys. ", p.gender_id";
         }
+        // By Date entered
+        if($request->query('entered_before_date') || $request->query('entered_at_date') || $request->query('entered_after_date')){ // group by particular date(s)
+            if($request->query('entered_at_date') && $this->checkmydate($request->query('entered_at_date'))){ //group by particular date
+                $selects = $selects. ", DATE(r.time_entered) as result_entered_at";
+                $wheres = $wheres . " AND DATE(r.time_entered)='".$request->query('entered_at_date')."'";
+                $group_bys = $group_bys. ", result_entered_at";
+            }else{
+                if($request->query('entered_before_date') && $this->checkmydate($request->query('entered_before_date')) && $request->query('entered_after_date') && $this->checkmydate($request->query('entered_after_date'))){
+                    $selects = $selects. ", DATE(r.time_entered) as result_entered_at";
+                    $wheres = $wheres . " AND DATE(r.time_entered)<'".$request->query('entered_before_date')."' AND DATE(r.time_entered)>'".$request->query('entered_after_date')."'";
+                    $group_bys = $group_bys. ", result_entered_at";
+                }
+                else{
+                    if($request->query('entered_before_date') && $this->checkmydate($request->query('entered_before_date'))){
+                        $selects = $selects. ", DATE(r.time_entered) as result_entered_at";
+                        $wheres = $wheres . " AND DATE(r.time_entered)<'".$request->query('entered_before_date')."'";
+                        $group_bys = $group_bys. ", result_entered_at";
+                    }
+                    else if($request->query('entered_after_date') && $this->checkmydate($request->query('entered_after_date'))){
+                        $selects = $selects. ", DATE(r.time_entered) as result_entered_at";
+                        $wheres = $wheres . " AND DATE(r.time_entered)>'".$request->query('entered_after_date')."'";
+                        $group_bys = $group_bys. ", result_entered_at";
+                    }
+                }
+            }
+        }
+        else if ($request->query('by_date_entered')) { // grouped by date entered
+            $selects = $selects. ", DATE(r.time_entered) as result_entered_at";
+            $group_bys = $group_bys. ", result_entered_at";
+        }
         // encounters e, tests t, results r, measures m, measure_ranges mr, test_types tt, test_type_categories ttc
         //  WHERE t.encounter_id = e.id and r.test_id=t.id and r.measure_id = m.id and m.measure_type_id = 2 and mr.display = r.result and t.test_type_id=tt.id and tt.test_type_category_id = ttc.id
         if($request->query('with_ids')){
             $selects = $selects. ", GROUP_CONCAT(t.id) as ids";            
         }  
-        if($request->query('with_categories')){
-            $alphanumeric_counts = DB::select("SELECT COUNT(DISTINCT e.id) as total_encounters,COUNT(DISTINCT r.id) as total_results, COUNT(DISTINCT t.id) as total_tests, m.name as measure_name, m.id as measure_id, mr.display, ttc.name as categoryName FROM encounters e, tests t, results r, measures m, measure_ranges mr, test_types tt, test_type_categories ttc WHERE t.encounter_id = e.id and r.test_id=t.id and r.measure_id = m.id and m.measure_type_id = 2 and mr.display = r.result and t.test_type_id=tt.id and tt.test_type_category_id = ttc.id GROUP BY ttc.name, mr.display, m.id, m.name");   
-        }else if($request->query('plain')){
-            $alphanumeric_counts = DB::select("SELECT COUNT(DISTINCT e.id) as total_encounters,COUNT(DISTINCT r.id) as total_results, COUNT(DISTINCT t.id) as total_tests, m.name as measure_name, m.id as measure_id, mr.display FROM encounters e, tests t, results r, measures m, measure_ranges mr WHERE t.encounter_id = e.id and r.test_id=t.id and r.measure_id = m.id and m.measure_type_id = 2 and mr.display = r.result GROUP BY mr.display, m.id, m.name");
-        }else if($request->query('full_values')){
+        if($request->query('full_values')){
             $results= DB::table(DB::raw($tables))->select(DB::raw('r.*'))->whereRaw($wheres)->paginate(10);
         }  
         else{   

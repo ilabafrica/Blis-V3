@@ -18,6 +18,10 @@ class Result extends Model
 
     public $timestamps = false;
 
+    public function test()
+    {
+        return $this->belongsTo('App\Models\Test');
+    }
     public function measure()
     {
         return $this->belongsTo('App\Models\Measure');

@@ -1,21 +1,20 @@
 <template>
     <div>
         <v-layout row wrap>
-            <p class="flex xs11" style="font-size:2rem; font-weight:100">Test Search (<small class="grey--text">{{total_tests}} Tests Matched</small>)</p>            
+            <p class="flex xs11" style="font-size:2rem; font-weight:100">Infection Report (<small class="grey--text">{{total_tests}} Tests Matched</small>)</p>            
             <v-btn icon @click="toggle_filter_options = !toggle_filter_options">
                 <v-icon>{{ toggle_filter_options ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
             </v-btn>
         </v-layout>
         <v-layout row wrap>
-            {{ tableData || "N/a"}}
             <v-data-table
                 :headers="headers"
-                :items="formattedTests"
+                :items="tableData"
                 hide-actions
                 class="elevation-1"
             >
                 <template slot="items" slot-scope="props">
-                    <tr v-for="(row, ind) in props.item">
+                    <tr v-for="row in props.item" :key="row.uniqueKey">
                         <td v-if="row.tt" :rowspan="row.tt.rc">{{row.tt.value}}</td>
                         <td v-if="row.measure" :rowspan="row.measure.rc">{{row.measure.value}}</td>
                         <td v-if="row.measure_range" :rowspan="row.measure_range.rc">{{row.measure_range.value}}</td>
@@ -79,6 +78,7 @@ export default {
     },
     tableData: function() {
         let formattedData = []
+        let uniqueKey = 0;
         this.tests.forEach((testtype, tt_index) => { // test type loop
             console.log("Test Type is: ", testtype)
             let row = []
@@ -111,7 +111,11 @@ export default {
                             }else if (range_count==0){
                                 rowMale.measure = {value: measure.name, rc:Object.keys(measure.ranges).length*2}                                
                             }
-                            rowMale.measure_range = {value: range_result.display, rc:2}
+                            rowMale.measure_range = {value: range_result.display, rc:2}                            
+                            rowMale.uniqueKey = uniqueKey
+                            uniqueKey +=1
+                            rowFemale.uniqueKey = uniqueKey
+                            uniqueKey +=1
                             console.log("Male row ",rowMale)
                             console.log("Female row ",rowFemale)
                             row.push(rowMale)
@@ -125,7 +129,8 @@ export default {
             formattedData.push(row)
         });
         console.log("Formated Tests ", formattedData)
-        Vue.set(this,'formattedTests', formattedData)
+        return formattedData
+        // Vue.set(this,'formattedTests', formattedData)
     }
     
   },

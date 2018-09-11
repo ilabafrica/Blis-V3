@@ -53,7 +53,7 @@ class Test extends Model
     {
         return $this->hasMany('App\Models\Result');
     }
-
+    
     /*
      * Test Status relationship
      */
