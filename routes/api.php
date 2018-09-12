@@ -51,7 +51,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Access Control|Accounts|Permissions|Roles|Assign Permissions|Assign Roles
     Route::group(['middleware' => ['permission:manage_users']], function () {
         Route::resource('address', 'AddressController');
-        Route::resource('user', 'UserController');
+        
         Route::resource('permission', 'PermissionController');
         Route::resource('role', 'RoleController');
         Route::get('permissionrole/attach', 'PermissionRoleController@attach');
@@ -59,9 +59,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('permissionrole', 'PermissionRoleController@index');
         Route::get('roleuser/attach', 'RoleUserController@attach');
         Route::get('roleuser/detach', 'RoleUserController@detach');
-        Route::get('roleuser', 'RoleUserController@index');
-        Route::post('user/image', 'UserController@profilepic');
+        Route::get('roleuser', 'RoleUserController@index');    
     });
+    Route::resource('user', 'UserController');
+    Route::post('user/image', 'UserController@profilepic');
         //Route::get('profile', 'UserController@profile');
 
     // Health Units|Instrument|Reports|Barcode

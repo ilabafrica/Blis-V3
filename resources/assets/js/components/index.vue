@@ -8,7 +8,25 @@
       <v-toolbar-title>BLISv3.0</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu offset-y>
-        <v-btn primary flat slot="activator"><v-icon left>developer_board</v-icon> {{name}}</v-btn>
+        <v-btn primary flat slot="activator">
+          <v-flex
+            xs12
+            sm6
+            md8
+            align-center
+            justify-center
+            layout
+            text-xs-center
+          >
+            <v-avatar
+              :size="45"
+              color="grey lighten-4"
+            >
+              <img :src="'storage/profile_pictures/'+pic" alt="">
+            </v-avatar>
+          </v-flex>
+          {{name}}
+        </v-btn>
         <v-list>
           <v-list-tile to="/account/profile">
             <v-list-tile>
@@ -46,6 +64,7 @@
     created: function () {
       if (this.$store.getters.isAuthenticated) {
         this.$store.dispatch(USER_REQUEST)
+        
       }
     },
     data: () => ({
@@ -62,6 +81,7 @@
       ...mapState({
         authLoading: state => state.auth.status === 'loading',
         name: state => `${state.user.profile.name}`,
+        pic: state =>  `${state.user.profile.profile_picture}`,
       })
     },
   }
