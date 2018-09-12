@@ -24,6 +24,11 @@ class Encounter extends Model
         return $this->hasMany('App\Models\Test');
     }
 
+    public function specimens()
+    {
+        return $this->hasMany('App\Models\Specimen');
+    }
+
     public function loader()
     {
         return Encounter::find($this->id)->load(

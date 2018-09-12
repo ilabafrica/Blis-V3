@@ -1,6 +1,9 @@
 <template>
   <div v-if='isAuthenticated && isProfileLoaded'>
-    Dashboard{blis generic flow}
+    <!--
+      Dashboard
+      {blis generic flow}
+    -->
   </div>
 </template>
 

@@ -275,9 +275,10 @@
 
       enterResults (test) {
         if (test.test_type.culture == 1) {
-console.log(test)
-console.log('This should happen')
-          this.$router.push({name:'TestCulture',params:{id:test.id}})
+          this.$router.push({
+            name:'TestCulture',
+            params:{testId:test.id,measureId:test.test_type.measures[0].id}
+          })
         }else{
           this.$refs.resultForm.modal(test);
         }

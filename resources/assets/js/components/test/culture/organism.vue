@@ -16,10 +16,10 @@
                 <v-layout wrap>
                   <v-flex xs12 sm12 md12>
                     <v-select
-                      :items="organisms"
-                      v-model="isolatedOrganism.organism_id"
+                      :items="measureRanges"
+                      v-model="result.measure_range_id"
                       overflow
-                      item-text="name"
+                      item-text="display"
                       :rules="[v => !!v || 'Isolated Organism by is Required']"
                       item-value="id"
                       label="Isolated Organism">
@@ -47,11 +47,13 @@
       valid: true,
       dialog: false,
       saving: false,
-      organisms: [],
+      measureRanges: [],
       measure: {},
-      isolatedOrganism: {
-        organism_id: '',
-      }
+      result: {
+        test_id: '',
+        measure_id: '',
+        measure_range_id: '',
+      },
     }),
 
     watch: {
@@ -62,20 +64,18 @@
 
     methods: {
 
-      initialize () {
-        apiCall({url: '/api/measure/'+this.measure.id+'/measurerange', method: 'GET' })
+      modal (measureId,testId) {
+        this.result.test_id = testId;
+        this.result.measure_id = measureId;
+
+        apiCall({url: '/api/measure/'+measureId+'/measurerange', method: 'GET' })
           .then(resp => {
-            this.organisms = resp;
             console.log(resp)
+            this.measureRanges = resp;
+            this.dialog = true;
         }).catch(error => {
             console.log(error.response)
         })
-      },
-
-      modal (measure) {
-        this.measure = measure;
-        this.initialize()
-        this.dialog = true;
       },
 
       close () {
@@ -86,13 +86,15 @@
 
         this.saving = true;
 
-        apiCall({url: '/api/test/specimencollection', data: this.specimenCollection, method: 'POST' })
-        .then(resp => {
-          console.log(resp)
-          this.saving = false;
+        apiCall({url: '/api/result', data: this.result, method: 'POST' })
+          .then(resp => {
+            console.log('resp')
+            console.log(resp)
+            EventBus.$emit('update-isolated-organism-list', resp);
+            this.dialog = false;
         })
-        .catch(error => {
-          console.log(error.response)
+          .catch(error => {
+            console.log(error.response)
         })
         this.close()
       }

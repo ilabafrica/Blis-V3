@@ -105,8 +105,7 @@ class Test extends Model
             'testType.measures.measureType',
             'testType.measures.measureRanges',
             'testType.specimenTypes'
-        )
-            ->where(function($q) use ($searchString){
+        )->where(function($q) use ($searchString){
 
             $q->whereHas('encounter', function($q) use ($searchString)
             {

@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">Refer</span>
+          <span class="headline">Test Request</span>
         </v-card-title>
         <v-form ref="form" v-model="valid" lazy-validation>
             <v-card-text>
@@ -78,7 +78,7 @@
       locations: [],
       testRequest: {
         patient_id: '',
-        bed_no: {},
+        bed_no: '',
         location_id: '',
         practitioner_name: '',
         encounter_class_id: '',
@@ -95,10 +95,10 @@
     methods: {
 
       initialize () {
-        apiCall({url: '/api/testtype', method: 'GET' })
+        apiCall({url: '/api/testtype?fetch=all', method: 'GET' })
           .then(resp => {
-            this.testTypes = resp.data;
             console.log(resp)
+            this.testTypes = resp;
         }).catch(error => {
             console.log(error.response)
         })
