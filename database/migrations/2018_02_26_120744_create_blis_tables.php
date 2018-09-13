@@ -579,7 +579,7 @@ class CreateBlisTables extends Migration
          */
         Schema::create('antibiotic_susceptibilities', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned()->nullable();
+            $table->integer('user_id')->unsigned();
             $table->integer('antibiotic_id')->unsigned();
             $table->integer('result_id')->unsigned();
             $table->integer('susceptibility_range_id')->unsigned();

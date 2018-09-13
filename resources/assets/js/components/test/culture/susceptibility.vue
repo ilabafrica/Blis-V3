@@ -124,6 +124,7 @@
       antibiotics: [],
       susceptibilityRanges: {},
       editedItem: {
+        antibiotic_susceptibility_id: '',
         result_id: '',
         antibiotic_id: '',
         zone_diameter: '',
@@ -188,6 +189,8 @@
       },
 
       editItem (item) {
+
+        this.editedItem.antibiotic_susceptibility_id = item.id
         this.editedIndex = this.susceptibilities.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
@@ -233,36 +236,22 @@
 
         this.saving = true;
         this.editedItem.result_id = this.$route.params.resultId;
-        // update
-        if (this.editedIndex > -1) {
 
-          apiCall({url: '/api/result/susceptibility', data: this.editedItem, method: 'POST' })
-          .then(resp => {
+        apiCall({url: '/api/result/susceptibility', data: this.editedItem, method: 'POST' })
+        .then(resp => {
+          if (this.editedIndex > -1) {
             Object.assign(this.susceptibilities[this.editedIndex], this.editedItem)
-            console.log(resp)
-            this.resetDialogReferences();
-            this.saving = false;
-          })
-          .catch(error => {
-            console.log(error.response)
-          })
-
-        // store
-        } else {
-
-          apiCall({url: '/api/result/susceptibility', data: this.editedItem, method: 'POST' })
-          .then(resp => {
+          } else {
             this.susceptibilities.push(this.editedItem)
-            console.log(resp)
-            this.resetDialogReferences();
-            this.saving = false;
-          })
-          .catch(error => {
-            console.log(error.response)
-          })
-        }
+          }
+          console.log(resp)
+          this.resetDialogReferences();
+          this.saving = false;
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
         this.close()
-
       }
     }
   }

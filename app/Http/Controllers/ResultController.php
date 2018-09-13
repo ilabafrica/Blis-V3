@@ -21,12 +21,9 @@ use Illuminate\Http\Request;
 
 class ResultController extends Controller
 {
-    public function index(Request $request)
+    public function show($id)
     {
-        $result = Result::with('measureRange')
-            ->where('measure_id', $request->query('measure_id'))
-            ->where('test_id', $request->query('test_id'))
-            ->get();
+        $result = Result::find($id)->load('measureRange');
 
         return response()->json($result);
     }
@@ -151,11 +148,22 @@ class ResultController extends Controller
             $susceptibilityZoneDiameter = null;
         }
 
+
+        if ($request->input('antibiotic_susceptibility_id')!= '') {
+
+            $antibioticSusceptibility = AntibioticSusceptibility::find($request->input('antibiotic_susceptibility_id'));
+        } else{
+
+            $antibioticSusceptibility = new AntibioticSusceptibility;
+        }
         $antibioticSusceptibility = AntibioticSusceptibility::updateOrCreate([
             'antibiotic_id' => $request->input('antibiotic_id'),
             'result_id' => $request->input('result_id'),
         ]);
 
+
+        $antibioticSusceptibility->antibiotic_id = $request->input('antibiotic_id');
+        $antibioticSusceptibility->result_id = $request->input('result_id');
         $antibioticSusceptibility->susceptibility_range_id = $susceptibilityRangeId;
         $antibioticSusceptibility->user_id = Auth::user()->id;
         $antibioticSusceptibility->zone_diameter = $susceptibilityZoneDiameter;

@@ -73,7 +73,7 @@ class Test extends Model
             'encounter.patient.name',
             'encounter.patient.gender',
             'results.measure.measureType',
-            'results.measure.measureRanges',
+            'results.measureRange',
             'specimen.specimenType',
             'testStatus.testPhase',
             'testType.measures.results',

@@ -91,16 +91,15 @@
       initialize () {
 
         apiCall({
-          url: '/api/result?measure_id=' + this.$route.params.measureId+'&&test_id=' + this.$route.params.testId,
-          method: 'GET' 
+          url: '/api/test/' + this.$route.params.testId,
+          method: 'GET'
         }).then(resp => {
           console.log(resp)
-          this.results = resp;
+          this.results = resp.results;
         })
         .catch(error => {
           console.log(error.response)
         })
-
       },
 
       organism () {

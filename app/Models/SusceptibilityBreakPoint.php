@@ -16,7 +16,6 @@ class SusceptibilityBreakPoint extends Model
 {
     public $timestamps = false;
 
-    // todo: move to a place where the seeding will use the same resource
     const SENSITIVE = 1;
     const INTERMEDIATE = 2;
     const RESISTANT = 3;

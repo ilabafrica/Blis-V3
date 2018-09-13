@@ -274,6 +274,7 @@
       },
 
       enterResults (test) {
+
         if (test.test_type.culture == 1) {
           this.$router.push({
             name:'TestCulture',
