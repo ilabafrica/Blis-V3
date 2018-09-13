@@ -167,8 +167,6 @@ class PatientController extends Controller
      */
     public function testRequest(Request $request)
     {
-
-
         $rules = [
             'patient_id' => 'required',
             'location_id'    => 'required',

@@ -56,13 +56,26 @@
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }}</td>
-        <td class="text-xs-left">{{ props.item.code }}</td>
         <td class="justify-left layout px-0">
-          <v-btn icon class="mx-0" @click="editItem(props.item)">
-            <v-icon color="teal">edit</v-icon>
+          <v-btn
+            outline
+            small
+            title="Edit"
+            color="teal"
+            flat
+            @click="editItem(props.item)">
+            Edit
+            <v-icon right dark>edit</v-icon>
           </v-btn>
-          <v-btn icon class="mx-0" @click="deleteItem(props.item)">
-            <v-icon color="pink">delete</v-icon>
+          <v-btn
+            outline
+            small
+            title="Delete"
+            color="pink"
+            flat
+            @click="deleteItem(props.item)">
+            Delete
+            <v-icon right dark>delete</v-icon>
           </v-btn>
         </td>
       </template>
@@ -96,7 +109,6 @@
       },
       headers: [
         { text: 'Name', value: 'name' },
-        { text: 'Code', value: 'code' },
         { text: 'Actions', value: 'name', sortable: false }
       ],
       antibiotics: [],

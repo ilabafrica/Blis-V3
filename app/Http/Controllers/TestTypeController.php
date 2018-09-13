@@ -25,6 +25,14 @@ class TestTypeController extends Controller
                 'testTypeCategory',
                 'specimenTypes'
             )->paginate(10);
+        } else if($request->query('fetch')) {
+            $testType = TestType::with(
+                'measures.measureType',
+                'measures.measureRanges.gender',
+                'testTypeCategory',
+                'specimenTypes'
+            )->get();
+
         } else {
             $testType = TestType::with(
                 'measures.measureType',

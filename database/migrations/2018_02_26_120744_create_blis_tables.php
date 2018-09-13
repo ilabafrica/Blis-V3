@@ -592,6 +592,7 @@ class CreateBlisTables extends Migration
             $table->foreign('result_id')->references('id')->on('results');
             $table->foreign('susceptibility_range_id')
                 ->references('id')->on('susceptibility_ranges');
+            $table->unique(['result_id','antibiotic_id']);
         });
 
         /*

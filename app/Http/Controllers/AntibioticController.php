@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
  */
 
 use App\Models\Antibiotic;
+use App\Models\MeasureRange;
 use Illuminate\Http\Request;
 
 class AntibioticController extends Controller
@@ -18,10 +19,17 @@ class AntibioticController extends Controller
     public function index(Request $request)
     {
         if ($request->query('search')) {
+
             $search = $request->query('search');
             $antibiotics = Antibiotic::where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
+        } else if($request->query('measure_range_id')){
+
+            $antibiotics = MeasureRange::find($request->query('measure_range_id'))
+                ->antibiotics;
+
         } else {
+
             $antibiotics = Antibiotic::orderBy('id', 'ASC')->paginate(10);
         }
 

@@ -153,6 +153,18 @@ export default new Router({
     },
     //Routine and Reference Testing
     {
+      path: '/test/:testId/measure/:measureId/result/:resultId/measurerange/:measureRangeId',
+      name: 'TestCultureSusceptibility',
+      component: require('../components/test/culture/susceptibility'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/test/:testId/measure/:measureId',
+      name: 'TestCulture',
+      component: require('../components/test/culture/isolatedorganism'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
       path: '/test/index',
       name: 'Test',
       component: require('../components/test/index'),

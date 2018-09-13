@@ -193,6 +193,7 @@ class TestController extends Controller
             $specimen->collected_by = $request->input('collected_by');
             $specimen->time_collected = $request->input('time_collected');
             $specimen->time_received = $request->input('time_received');
+            $specimen->save();
 
             $test = Test::find($request->input('test_id'));
             $test->specimen_id = $specimen->id;

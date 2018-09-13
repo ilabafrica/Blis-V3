@@ -9,6 +9,7 @@ namespace App\Http\Controllers;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use App\Models\Measure;
 use App\Models\MeasureRange;
 use Illuminate\Http\Request;
 
@@ -158,4 +159,12 @@ class MeasureRangeController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+
+    public function getByMeasureId($id)
+    {
+        $measureRanges = Measure::find($id)->measureRanges;
+
+        return response()->json($measureRanges);
+    }
+
 }

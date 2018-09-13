@@ -14,4 +14,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class AntibioticSusceptibility extends Model
 {
+    public $fillable = ['antibiotic_id', 'result_id', 'susceptibility_range_id'];
+
+    public function susceptibilityRange()
+    {
+        return $this->belongsTo('App\Models\SusceptibilityRange');
+    }
+
+    public function result()
+    {
+        return $this->belongsTo('App\Models\Result');
+    }
+
+    public function antibiotic()
+    {
+        return $this->belongsTo('App\Models\Antibiotic');
+    }
 }

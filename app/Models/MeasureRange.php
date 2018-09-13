@@ -25,4 +25,9 @@ class MeasureRange extends Model
     {
         return $this->hasMany('App\Models\SusceptibilityBreakPoint');
     }
+
+    public function antibiotics()
+    {
+        return $this->belongsToMany('App\Models\Antibiotic','susceptibility_break_points','measure_range_id','antibiotic_id');
+    }
 }

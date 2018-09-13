@@ -274,8 +274,15 @@
       },
 
       enterResults (test) {
-        this.editedIndex = this.tests.indexOf(test)
-        this.$refs.resultForm.modal(test);
+
+        if (test.test_type.culture == 1) {
+          this.$router.push({
+            name:'TestCulture',
+            params:{testId:test.id,measureId:test.test_type.measures[0].id}
+          })
+        }else{
+          this.$refs.resultForm.modal(test);
+        }
       },
 
       rejectSpecimen (test) {
