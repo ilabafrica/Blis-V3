@@ -31,14 +31,8 @@
     </div>
 </template>
 
-<style scoped>
-    td tr td{
-        padding: 0px !important;
-    }
-</style>
-
 <script>
-import apiCall from "../../../utils/api";
+import apiCall from "../../utils/api";
 import Chart from "chart.js";
 export default {
    

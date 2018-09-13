@@ -21,6 +21,7 @@ const actions = {
       .catch(resp => {
         commit(USER_ERROR)
         dispatch(AUTH_LOGOUT)
+        window.location.reload(true);
       })
   },
 }

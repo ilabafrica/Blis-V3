@@ -14,21 +14,10 @@ class ResultsStatisticsController extends Controller
 {
     // get the patient history
     public function patientHistory(Request $request){
-        if ($request->query('by_patient')) { // grouped by particular patient
+        if ($request->query('id')) { // grouped by particular patient
             // return Patient::find(315)->tests()->get();
-            $patient = Patient::find(315);
-            if($patient){
-                $tests = $patient->tests()->get();
-                $encounters = [];
-                $results = [];
-                $specimen = [];
-                foreach ($tests as $key => $value) {
-                    $value->encounters = $value->encounter()->get();
-                    $value->results = $value->results()->get();               
-                    $value->specimen = $value->specimen()->get(); 
-                }
-                $patient->tests = $tests;
-            }
+            $patient = Patient::with(['name','gender','tests.results.measure', 'tests.testType', 'tests.specimen.collectedBy', 'tests.specimen.receivedBy'])->find($request->query('id'));
+            
             return $patient;
         }
     }

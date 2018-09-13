@@ -30,6 +30,7 @@ Route::group(['prefix' => 'stats'], function () {
     });
     Route::group(['prefix' => 'results'], function () {
         Route::get('/totals', 'Statistics\ResultsStatisticsController@alphanumericCounts');
+        Route::get('/patient', 'Statistics\ResultsStatisticsController@patientHistory');
     });
     Route::get('/logins', 'Statistics\UserStatisticsController@logins');
     Route::get('/users', 'Statistics\UserStatisticsController@getUsers');

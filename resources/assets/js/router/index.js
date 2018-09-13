@@ -194,11 +194,25 @@ export default new Router({
       component: require('../components/statistics/tests/type'),
       beforeEnter: ifAuthenticated,
     },
-    //Result Stats
+    //Reports
     {
-      path: '/stats/results',
-      name: 'results_stats_type',
-      component: require('../components/statistics/tests/result'),
+      path: '/reports/infection',
+      name: 'infection_report',
+      component: require('../components/reports/infection'),
+      beforeEnter: ifAuthenticated,
+    },
+    //Patient Reports
+    {
+      path: '/reports/patients',
+      name: 'patient_reports',
+      component: require('../components/reports/patient/index'),
+      beforeEnter: ifAuthenticated,
+    },
+    //Patient Reports
+    {
+      path: '/reports/patients/:id',
+      name: 'patient_reports_single',
+      component: require('../components/reports/patient/single'),
       beforeEnter: ifAuthenticated,
     },
     {

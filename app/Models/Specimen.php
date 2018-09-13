@@ -26,4 +26,19 @@ class Specimen extends Model
     {
         return $this->belongsTo('App\Models\SpecimenType');
     }
+    /*
+     * User (collected) relationship
+     */
+    public function collectedBy()
+    {
+        return $this->belongsTo('App\User', 'collected_by', 'id');
+    }
+
+    /*
+     * User (received) relationship
+     */
+    public function receivedBy()
+    {
+        return $this->belongsTo('App\User', 'received_by', 'id');
+    }
 }

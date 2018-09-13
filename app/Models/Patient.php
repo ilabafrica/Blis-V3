@@ -51,7 +51,7 @@ class Patient extends Model
 
     public function encounter()
     {
-        return $this->belongsTo('App\Models\Encounter');
+        return $this->hasMany('App\Models\Encounter');
     }
 
     public function organization()
