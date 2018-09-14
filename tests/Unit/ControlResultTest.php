@@ -17,19 +17,28 @@ class ControlResultTest extends TestCase
 	use SetUp;
 	use DatabaseMigrations;
 	public function setVariables(){
-		$this->controlResultData=array(
-			"result"=>'Sample String',
-			"measure_id"=>1,
-			"control_test_id"=>1,
-			"measure_range_id"=>1,
-		);
+		//
 	}
 
 	public function testStoreControlResult()
 	{
-		$response=$this->post('/api/controlresult',$this->controlResultData);
+
+		$controlTest = factory(\App\Models\ControlTest::class)->create();
+
+
+		$measure = factory(\App\Models\Measure::class)->create([
+			'test_type_id' => $controlTest->id,
+			'measure_type_id' => \App\Models\MeasureType::free_text,
+		]);
+
+		$response=$this->post('/api/controlresult',[
+			"control_test_id"=>$controlTest->id,
+			"measure_id"=>$measure->id,
+			"result"=>'44:7',
+		]);
+
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("control_test_id",$response->original);
+		$this->assertArrayHasKey("lot",$response->original);
 	}
 
 }

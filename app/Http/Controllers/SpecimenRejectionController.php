@@ -58,17 +58,14 @@ class SpecimenRejectionController extends Controller
 
                 $rejection->test_phase_id = TestPhase::pre_analytical;
             }
-            //$rejection->rejection_reason_ids = $request->input('rejection_reason_ids');
             $rejection->authorized_person_informed = $request->input('authorized_person_informed');
             $rejection->rejected_by = Auth::user()->id;
             $rejection->time_rejected = date('Y-m-d H:i:s');
             $rejection->save();
 
             foreach ($request->input('rejection_reason_ids') as $rejectionReasonId) {
-                // $specimenRejection = SpecimenRejection::find($rejection->id);
                 $rejectionReason = RejectionReason::find($rejectionReasonId);
-                // $specimenRejection->attach($rejectionReason);
-                $rejection->attach($rejectionReason);
+                $rejectionReason->specimenRejection()->attach($rejection);
             }
             return response()->json($rejection);
         }
@@ -113,9 +110,7 @@ class SpecimenRejectionController extends Controller
             $specimenRejection->specimen_id = $request->input('specimen_id');
             $specimenRejection->test_phase_id = $request->input('test_phase_id');
             $specimenRejection->rejected_by = $request->input('rejected_by');
-            $specimenRejection->rejection_reason_id = $request->input('rejection_reason_id');
-            $specimenRejection->reject_explained_to = $request->input('reject_explained_to');
-            $specimenRejection->time_rejected = $request->input('time_rejected');
+            $specimenRejection->authorized_person_informed = $request->input('authorized_person_informed');
 
             try {
                 $specimenRejection->save();
