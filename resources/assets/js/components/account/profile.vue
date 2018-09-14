@@ -47,11 +47,9 @@
     <v-tabs
       color="blue"
       dark
-      slider-color="white"
-    >
+      slider-color="white">
       <v-tab
-        ripple
-      >
+        ripple>
         Edit Profile
       </v-tab>
       <v-tab-item>

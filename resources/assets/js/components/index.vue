@@ -29,13 +29,11 @@
         </v-btn>
         <v-list>
           <v-list-tile to="/account/profile">
-            <v-list-tile>
-              <v-list-tile-title>Edit Profile</v-list-tile-title>
-            </v-list-tile>
+            <v-list-tile-title>Edit Profile</v-list-tile-title>
           </v-list-tile>
-            <v-list-tile @click="logout">
-              <v-list-tile-title>Logout</v-list-tile-title>
-            </v-list-tile>
+          <v-list-tile @click="logout">
+            <v-list-tile-title>Logout</v-list-tile-title>
+          </v-list-tile>
         </v-list>
       </v-menu>
     </v-toolbar>
