@@ -42,17 +42,38 @@ $factory->define(\App\Models\Patient::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(\App\Models\TestTypeCategory::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
+$factory->define(\App\Models\TestType::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'description' => $faker->word,
+        'culture' => 0,
+        'test_type_category_id' => factory(\App\Models\TestTypeCategory::class)->create()->id,
+    ];
+});
+
 $factory->define(\App\Models\Encounter::class, function (Faker\Generator $faker) {
     return [
         'identifier' => $faker->word,
-        'patient_id' => \App\Models\Patient::inRandomOrder()->first()->id,
-        'location_id' => \App\Models\Location::inRandomOrder()->first()->id,
+        'patient_id' => factory(\App\Models\Patient::class)->create()->id,
+        'location_id' => factory(\App\Models\Location::class)->create()->id,
         'encounter_class_id' => \App\Models\EncounterClass::outpatient,
         'encounter_status_id' => null,
         'bed_no' => $faker->word,
         'practitioner_name' => $faker->word,
         'practitioner_contact' => $faker->word,
         'practitioner_organisation' => $faker->word,
+    ];
+});
+
+$factory->define(\App\Models\SpecimenType::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
     ];
 });
 
@@ -63,7 +84,7 @@ $factory->define(\App\Models\Specimen::class, function (Faker\Generator $faker) 
     return [
         'identifier' => $faker->word,
         'accession_identifier' => $faker->word,
-        'specimen_type_id' => null,
+        'specimen_type_id' => factory(\App\Models\SpecimenType::class)->create()->id,
         'received_by' => $userId,
         'collected_by' => $userId,
         'time_collected' => $collected_at,
@@ -72,85 +93,72 @@ $factory->define(\App\Models\Specimen::class, function (Faker\Generator $faker) 
     ];
 });
 
-$factory->define(\App\Models\Test::class, function (Faker\Generator $faker) {
-    $testTypeId = \App\Models\TestType::inRandomOrder()->first()->id;
-    $user_id = \App\User::inRandomOrder()->first()->id;
-    $specimenTypeId = \App\Models\TestTypeMapping::where('test_type_id',$testTypeId)->first()->specimen_type_id;
-    $specimen = factory(App\Models\Specimen::class)->create([
-        'specimen_type_id' => $specimenTypeId,
-    ]);
-    $test_status = rand(1,4);
-    $created_at = date('Y-m-d H:i:s',strtotime("-".rand(0,10)." days"));
-    switch ($test_status) {
-        case 1: //pending
-            $tested_by = NULL;
-            $verified_by = NULL;
-            $time_started = NULL;
-            $specimen_id = NULL;
-            $time_completed = NULL;
-            $time_verified = NULL;
-            break;
-        
-        case 2: //started
-            $tested_by = NULL;
-            $verified_by = NULL;
-            $time_started = date('Y-m-d H:i:s',strtotime($created_at."+".rand(20,1800)." minutes"));
-            $specimen_id = $specimen->id;
-            $time_completed = NULL;
-            $time_verified = NULL;
-            break;
-        
-        case 3: //completed
-            $tested_by = \App\User::inRandomOrder()->first()->id;
-            $verified_by = NULL;
-            $time_started = date($created_at,strtotime("+".rand(20,1800)." minutes"));
-            $specimen_id = $specimen->id;
-            $time_completed = date('Y-m-d H:i:s',strtotime($time_started."+".rand(10,3600)." minutes"));
-            $time_verified = NULL;
-            break;
-        
-        case 4: //verified
-            $tested_by = \App\User::inRandomOrder()->first()->id;
-            $verified_by = \App\User::where("id","!=",$tested_by)->inRandomOrder()->first()->id;
-            $time_started = date('Y-m-d H:i:s',strtotime($created_at."+".rand(20,1800)." minutes"));
-            $specimen_id = $specimen->id;
-            $time_completed = date('Y-m-d H:i:s',strtotime($time_started."+".rand(20,3600)." minutes"));
-            $time_verified = date('Y-m-d H:i:s',strtotime($time_completed."+".rand(5,3600)." minutes"));;
-            break;
-        
-        default:
-            $tested_by = NULL;
-            $verified_by = NULL;
-            $time_started = NULL;
-            $specimen_id = NULL;
-            $time_completed = NULL;
-            $time_verified = NULL;            
-            break;
-    }
-
+$factory->define(\App\Models\Measure::class, function (Faker\Generator $faker) {
     return [
-        'encounter_id' => factory(\App\Models\Encounter::class)->create()->id,
+        'test_type_id' => null,
+        'measure_type_id' => null,
+        'name' => $faker->word,
+    ];
+});
+
+$factory->define(\App\Models\Test::class, function (Faker\Generator $faker) {
+    return [
+        'encounter_id' => factory(\App\Models\Encounter::class)->create([
+            'patient_id' => \App\Models\Patient::inRandomOrder()->first()->id,
+            'location_id' => \App\Models\Location::inRandomOrder()->first()->id,
+        ])->id,
         'identifier' => $faker->word,
-        'test_type_id' => $testTypeId,
-        'specimen_id' => $specimen_id,
-        'test_status_id' => $test_status,
-        'created_by' => $user_id,
-        'tested_by' => $tested_by,
-        'verified_by' => $verified_by,
+        'test_type_id' => null,
+        'specimen_id' => null,
+        'test_status_id' => null,
+        'created_by' => null,
+        'tested_by' => null,
+        'verified_by' => null,
         'requested_by' => $faker->word,
-        'time_started' => $time_started,
-        'time_completed' => $time_completed,
-        'time_verified' => $time_verified,
-        'created_at' => $created_at
+        'time_started' => null,
+        'time_completed' => null,
+        'time_verified' => null,
+        'created_at' => null
     ];
 });
 
 $factory->define(\App\Models\Result::class, function (Faker\Generator $faker) {
     return [
-        'test_id' => NULL,// must be passed
-        'measure_id' => NULL,// must be passed
+        'test_id' => NULL,
+        'measure_id' => NULL,
         'result' => $faker->word,
-        'measure_range_id' => NULL,// must be passed
+        'measure_range_id' => NULL,
+        'time_entered' => date('Y-m-d H:i:s'),
+    ];
+});
+
+$factory->define(\App\Models\Lot::class, function (Faker\Generator $faker) {
+    return [
+        'number' => $faker->word,
+        'description' => $faker->word,
+        'expiry' => date('Y-m-d H:i:s'),
+        'instrument_id' => NULL,
+    ];
+});
+
+$factory->define(\App\Models\ControlTest::class, function (Faker\Generator $faker) {
+    return [
+        'lot_id' => factory(\App\Models\Lot::class)->create()->id,
+        'tested_by' => \App\User::inRandomOrder()->first()->id,
+        'test_type_id' => factory(\App\Models\TestType::class)->create()->id,
+        'control_test_status_id' => \App\Models\ControlTestStatus::completed,
+        'time_started' => date('Y-m-d H:i:s'),
+        'time_completed' => date('Y-m-d H:i:s'),
+        'time_verified' => date('Y-m-d H:i:s'),
+    ];
+});
+
+$factory->define(\App\Models\Result::class, function (Faker\Generator $faker) {
+    return [
+        'test_id' => NULL,
+        'measure_id' => NULL,
+        'result' => $faker->word,
+        'measure_range_id' => NULL,
         'time_entered' => date('Y-m-d H:i:s'),
     ];
 });
@@ -165,5 +173,11 @@ $factory->define(\App\Models\Organization::class, function (Faker\Generator $fak
         'address' => $faker->randomNumber(),
         'part_of' => $faker->randomNumber(),
         'end_point' => $faker->word
+    ];
+});
+
+$factory->define(\App\Models\RejectionReason::class, function (Faker\Generator $faker) {
+    return [
+        'display' => $faker->word,
     ];
 });

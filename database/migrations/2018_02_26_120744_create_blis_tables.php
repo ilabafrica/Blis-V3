@@ -276,7 +276,7 @@ class CreateBlisTables extends Migration
             $table->boolean('culture')->default(0);
             $table->integer('test_type_category_id')->unsigned();
             $table->string('targetTAT', 50)->nullable();
-            $table->boolean('active')->default(0);
+            $table->boolean('active')->default(1);
 
             $table->foreign('test_type_category_id')
                 ->references('id')->on('test_type_categories');

@@ -54,7 +54,7 @@ class EncounterTest extends TestCase
 
 	public function testShowEncounter()
 	{
-		$response=$this->post('/api/encounter',$this->encounterData);
+		$this->post('/api/encounter',$this->encounterData);
 		$response=$this->get('/api/encounter/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("bed_no",$response->original);

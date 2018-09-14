@@ -74,7 +74,6 @@ class PatientTest extends TestCase
 		  'birth_date' => '1997-06-19',
 		  'deceased' => 0,
 		  'deceased_date_time' => NULL,
-		  'address' => NULL,
 		  'marital_status' => 11,
 		  'photo' => NULL,
 		  'animal' => 0,
@@ -82,7 +81,6 @@ class PatientTest extends TestCase
 		  'breed_id' => NULL,
 		  'practitioner_id' => NULL,
 		  'organization_id' => NULL,
-		  'created_by' => 32,
 		  'created_at' => '2018-06-19 10:38:02',
 		  'updated_at' => '2018-06-19 10:38:02',
 		  'name' => 
@@ -105,7 +103,7 @@ class PatientTest extends TestCase
 		  ],
 		]);
 		$this->assertEquals(200,$update->getStatusCode());
-		$this->assertArrayHasKey("created_by",$update->original);
+		$this->assertArrayHasKey("gender_id",$update->original);
 	}
 
 	public function testDeletePatient()

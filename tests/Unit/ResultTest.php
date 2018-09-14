@@ -16,59 +16,46 @@ class ResultTest extends TestCase
 {
 	use SetUp;
 	use DatabaseMigrations;
+
 	public function setVariables(){
-		$this->resultData=array(
-			"test_id"=>1,
-			"measure_id"=>1,
-			"result"=>'Sample String',
-			"measure_range_id"=>1,
-			"time_entered"=>'Sample String',
-			"measures"=>1,
-		);
-		$this->updatedResultData=array(
-			"test_id"=>1,
-			"measure_id"=>1,
-			"result"=>'Sample updated String',
-			"measure_range_id"=>1,
-			"time_entered"=>'Sample updated String',
-			"measures"=>1,
-		);
+		//
 	}
 
-	public function testStoreResult()
+	public function testFreeTextResult()
 	{
-		$response=$this->post('/api/result',$this->resultData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("time_entered",$response->original);
-	}
 
-	public function testListResult()
-	{
-		$response=$this->get('/api/result');
-		$this->assertEquals(200,$response->getStatusCode());
-	}
+		$test = factory(\App\Models\Test::class)->create([
+			'encounter_id' => factory(\App\Models\Encounter::class)->create()->id,
+			'test_type_id' => factory(\App\Models\TestType::class)->create()->id,
+			'specimen_id' => factory(\App\Models\Specimen::class)->create()->id,
+			'test_status_id' => \App\Models\TestStatus::completed,
+			'created_by' => 1,
+			'tested_by' => 1,
+			'verified_by' => 1,
+			'time_started' =>  date('Y-m-d H:i:s'),
+			'time_completed' =>  date('Y-m-d H:i:s'),
+			'created_at' =>  date('Y-m-d H:i:s')
+		]);
 
-	public function testShowResult()
-	{
-		$response=$this->post('/api/result',$this->resultData);
-		$response=$this->get('/api/result/1');
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("time_entered",$response->original);
-	}
+		$measure = factory(\App\Models\Measure::class)->create([
+			'test_type_id' => $test->id,
+			'measure_type_id' => \App\Models\MeasureType::free_text,
+		]);
 
-	public function testUpdateResult()
-	{
-		$response=$this->post('/api/result',$this->resultData);
-		$response=$this->put('/api/result/1',$this->updatedResultData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("time_entered",$response->original);
-	}
+		$storeResponse=$this->post('/api/result',[
+			"test_id"=>$test->id,
+			"measures" => [
+				$measure->id => [
+					"result"=>'Sample String',
+				]
+			]
+		]);
 
-	public function testDeleteResult()
-	{
-		$response=$this->post('/api/result',$this->resultData);
-		$response=$this->delete('/api/result/1');
-		$this->assertEquals(200,$response->getStatusCode());
-	}
+		$this->assertEquals(200,$storeResponse->getStatusCode());
+		$this->assertArrayHasKey("results",$storeResponse->original);
 
+		$showResponse=$this->get('/api/result/'.$test->id);
+		$this->assertEquals(200,$showResponse->getStatusCode());
+		$this->assertArrayHasKey("time_entered",$showResponse->original);
+	}
 }
