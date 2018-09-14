@@ -1,7 +1,8 @@
 <template>
     <div>
         <v-layout row wrap>
-            <p class="flex xs11" style="font-size:2rem; font-weight:100">Patient Report</p>
+            <p class="flex xs12 md9" style="font-size:2rem; font-weight:100">Patient Report</p>
+            <v-btn @click.native="getPDF()">Get PDF</v-btn>
         </v-layout>
         <v-layout row wrap ma-4 v-if="patient.name">
             <v-flex md-4>
@@ -30,11 +31,11 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{test.specimen.id}}</td>
+                            <td>{{test.specimen.specimen_type.name}}</td>
                             <td>{{test.specimen.collected_by.name}}</td>
                             <td>{{test.specimen.time_collected}}</td>
                             <td>{{test.specimen.time_received}}</td>
-                            <td>{{test.specimen.specimen_status_id}}</td>
+                            <td>{{test.specimen.status.name}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -56,7 +57,7 @@
                             <td>{{result.measure.name}}</td>
                             <td>{{result.result}}</td>
                             <td>{{result.time_entered}}</td>
-                            <td>{{test.specimen.specimen_status_id}}</td>
+                            <td>{{test.specimen.status.name}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -126,6 +127,23 @@ export default {
             console.log(error.response)
         })
     },
+    getPDF(){
+        apiCall({url:this.url_prefix+"results/patient?pdf=true&id="+this.$route.params.id, method:"GET"})
+        .then(resp=>{
+            // console.log(resp)
+            // let bl = resp.substring(resp.lastIndexOf('.pdf"')+5)
+            // window.open("data:application/pdf;base64," + resp.substring(resp.lastIndexOf('.pdf"')+5));
+            // const file = new Blob([resp], {type: 'application/pdf'});
+            // //build a url from the file
+            // const fileURL = URL.createObjectURL(file);
+            // //open the url on new window
+            // window.open(fileURL);
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+        
+    }
   }
 };
 </script>

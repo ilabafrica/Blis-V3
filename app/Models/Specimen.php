@@ -26,6 +26,11 @@ class Specimen extends Model
     {
         return $this->belongsTo('App\Models\SpecimenType');
     }
+
+    public function status()
+    {
+        return $this->belongsTo('App\Models\SpecimenStatus','specimen_status_id');
+    }
     /*
      * User (collected) relationship
      */
