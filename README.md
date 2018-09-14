@@ -1,3 +1,7 @@
+<p>
+<a href="https://travis-ci.org/ilabafrica/Blis-V3"><img src="https://travis-ci.org/ilabafrica/Blis-V3.svg" alt="Build Status"></a>
+</p>
+
 # Basic Laboratory Information System
 
 BLIS is an open-source system to track patient specimens,Test and laboratory results.
