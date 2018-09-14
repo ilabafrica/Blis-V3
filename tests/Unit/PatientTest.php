@@ -74,7 +74,7 @@ class PatientTest extends TestCase
 		  'birth_date' => '1997-06-19',
 		  'deceased' => 0,
 		  'deceased_date_time' => NULL,
-		  'address_id' => NULL,
+		  'address' => NULL,
 		  'marital_status' => 11,
 		  'photo' => NULL,
 		  'animal' => 0,

@@ -19,12 +19,14 @@ class MeasureTest extends TestCase
 	public function setVariables(){
 		$this->measureData=array(
 			"measure_type_id"=>1,
+			"test_type_id"=>1,
 			"name"=>'Sample String',
 			"unit"=>'Sample String',
 			"description"=>'Sample String',
 		);
 		$this->updatedMeasureData=array(
 			"measure_type_id"=>1,
+			"test_type_id"=>1,
 			"name"=>'Sample updated String',
 			"unit"=>'Sample updated String',
 			"description"=>'Sample updated String',

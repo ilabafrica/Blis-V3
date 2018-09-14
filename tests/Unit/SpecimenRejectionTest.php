@@ -21,19 +21,19 @@ class SpecimenRejectionTest extends TestCase
 			"specimen_id"=>1,
 			"test_phase_id"=>1,
 			"test_id"=>1,
+			"authorized_person_informed"=>1,
 			"rejected_by"=>1,
-			"rejection_reason_id"=>1,
-			"reject_explained_to"=>'Sample String',
 			"time_rejected"=>'Sample String',
+			"rejection_reason_ids"=>[1,2],
 		);
 		$this->updatedSpecimenRejectionData=array(
 			"specimen_id"=>1,
 			"test_phase_id"=>1,
 			"test_id"=>1,
+			"authorized_person_informed"=>1,
 			"rejected_by"=>1,
-			"rejection_reason_id"=>1,
-			"reject_explained_to"=>'Sample updated String',
-			"time_rejected"=>'Sample updated String',
+			"time_rejected"=>'Sample String',
+			"rejection_reason_ids"=>1,
 		);
 	}
 
