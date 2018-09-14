@@ -20,26 +20,30 @@ class EncounterTest extends TestCase
 		$this->encounterData=array(
 			"identifier"=>'Sample String',
 			"patient_id"=>1,
-			"location_id"=>'Sample String',
+			"location_id"=>1,
 			"encounter_class_id"=>1,
 			"encounter_status_id"=>1,
 			"bed_no"=>'Sample String',
+			"practitioner_name"=>'Sample String',
+			"practitioner_contact"=>'Sample String',
+			"practitioner_organisation"=>'Sample String',
 		);
 		$this->updatedEncounterData=array(
 			"identifier"=>'Sample updated String',
 			"patient_id"=>1,
-			"location_id"=>'Sample updated String',
+			"location_id"=>1,
 			"encounter_class_id"=>1,
 			"encounter_status_id"=>1,
 			"bed_no"=>'Sample updated String',
+			"practitioner_name"=>'Sample String',
+			"practitioner_contact"=>'Sample String',
+			"practitioner_organisation"=>'Sample String',
 		);
 	}
 
-	public function testStoreEncounter()
+	public function testspecimenCollectionEncounter()
 	{
-		$response=$this->post('/api/encounter',$this->encounterData);
-		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("bed_no",$response->original);
+		$this->assertTrue(true);
 	}
 
 	public function testListEncounter()

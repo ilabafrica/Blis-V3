@@ -14,6 +14,7 @@ use Auth;
 use App\Models\TestPhase;
 use Illuminate\Http\Request;
 use App\Models\SpecimenRejection;
+use App\Models\RejectionReason;
 
 class SpecimenRejectionController extends Controller
 {
@@ -30,15 +31,15 @@ class SpecimenRejectionController extends Controller
      * @param  \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
-    public function store()
+    public function store(Request $request)
     {
         $rules = [
             'rejection_reason_ids' => 'required',
-            'reject_explained_to' => 'required',
+            'authorized_person_informed' => 'required',
             'specimen_id' => 'required',
         ];
 
-        $validator = \Validator::make(Input::all(), $rules);
+        $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator,422);
 
@@ -57,8 +58,8 @@ class SpecimenRejectionController extends Controller
 
                 $rejection->test_phase_id = TestPhase::pre_analytical;
             }
-            $rejection->rejection_reason_id = $request->input('rejection_reason_id');
-            $rejection->reject_explained_to = $request->input('reject_explained_to');
+            //$rejection->rejection_reason_ids = $request->input('rejection_reason_ids');
+            $rejection->authorized_person_informed = $request->input('authorized_person_informed');
             $rejection->rejected_by = Auth::user()->id;
             $rejection->time_rejected = date('Y-m-d H:i:s');
             $rejection->save();

@@ -23,6 +23,7 @@ class ResultTest extends TestCase
 			"result"=>'Sample String',
 			"measure_range_id"=>1,
 			"time_entered"=>'Sample String',
+			"measures"=>1,
 		);
 		$this->updatedResultData=array(
 			"test_id"=>1,
@@ -30,6 +31,7 @@ class ResultTest extends TestCase
 			"result"=>'Sample updated String',
 			"measure_range_id"=>1,
 			"time_entered"=>'Sample updated String',
+			"measures"=>1,
 		);
 	}
 

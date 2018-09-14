@@ -18,25 +18,21 @@ class ReferralTest extends TestCase
 	use DatabaseMigrations;
 	public function setVariables(){
 		$this->referralData=array(
-			"time_dispatch"=>'Sample String',
-			"storage_condition"=>'Sample String',
-			"transport_type"=>'Sample String',
-			"referral_reason_id"=>1,
-			"priority_specimen"=>'Sample String',
-			"organization_id"=>1,
-			"person"=>'Sample String',
-			"contacts"=>'Sample String',
+			"time_dispatched_to"=>'Sample String',
+			"time_dispatched_from"=>'Sample String',
+			"time_receiveded_from"=>'Sample String',
+			"specimen_id"=>1,
+			"referred_from"=>1,
+			"referred_to"=>1,
 			"user_id"=>1,
 		);
 		$this->updatedReferralData=array(
-			"time_dispatch"=>'Sample updated String',
-			"storage_condition"=>'Sample updated String',
-			"transport_type"=>'Sample updated String',
-			"referral_reason_id"=>1,
-			"priority_specimen"=>'Sample updated String',
-			"organization_id"=>1,
-			"person"=>'Sample updated String',
-			"contacts"=>'Sample updated String',
+			"time_dispatched_to"=>'Sample String',
+			"time_dispatched_from"=>'Sample String',
+			"time_receiveded_from"=>'Sample String',
+			"specimen_id"=>1,
+			"referred_from"=>1,
+			"referred_to"=>1,
 			"user_id"=>1,
 		);
 	}

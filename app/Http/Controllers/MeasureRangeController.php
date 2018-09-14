@@ -108,8 +108,6 @@ class MeasureRangeController extends Controller
     {
         $rules = [
             'measure_id' => 'required',
-            'gender_id' => 'required',
-            'display' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
@@ -117,9 +115,9 @@ class MeasureRangeController extends Controller
             return response()->json($validator, 422);
         } else {
             $measureRange = MeasureRange::findOrFail($id);
-            $measureRange->code = $request->input('code');
+            //$measureRange->code = $request->input('code');
             $measureRange->code_id = $request->input('code_id');
-            $measureRange->system = $request->input('system');
+            //$measureRange->system = $request->input('system');
             $measureRange->measure_id = $request->input('measure_id');
             $measureRange->age_min = $request->input('age_min');
             $measureRange->age_max = $request->input('age_max');

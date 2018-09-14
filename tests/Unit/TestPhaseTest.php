@@ -18,10 +18,12 @@ class TestPhaseTest extends TestCase
 	use DatabaseMigrations;
 	public function setVariables(){
 		$this->testPhaseData=array(
-			"name"=>'Sample String',
+			"code"=>'Sample String',
+			"display"=>'Sample String',
 		);
 		$this->updatedTestPhaseData=array(
-			"name"=>'Sample updated String',
+			"code"=>1,
+			"display"=>'Sample updated String',
 		);
 	}
 
@@ -29,7 +31,7 @@ class TestPhaseTest extends TestCase
 	{
 		$response=$this->post('/api/testphase',$this->testPhaseData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testListTestPhase()
@@ -43,7 +45,7 @@ class TestPhaseTest extends TestCase
 		$response=$this->post('/api/testphase',$this->testPhaseData);
 		$response=$this->get('/api/testphase/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testUpdateTestPhase()
@@ -51,7 +53,7 @@ class TestPhaseTest extends TestCase
 		$response=$this->post('/api/testphase',$this->testPhaseData);
 		$response=$this->put('/api/testphase/1',$this->updatedTestPhaseData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testDeleteTestPhase()

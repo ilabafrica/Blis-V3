@@ -42,6 +42,7 @@ class TestStatusController extends Controller
             $testStatus = new TestStatus;
             $testStatus->name = $request->input('name');
             $testStatus->test_phase_id = $request->input('test_phase_id');
+            $testStatus->code = $request->input('code');
 
             try {
                 $testStatus->save();

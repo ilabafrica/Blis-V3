@@ -20,14 +20,20 @@ class ControlTestTest extends TestCase
 		$this->controlTestData=array(
 			"lot_id"=>1,
 			"tested_by"=>1,
-			"control_id"=>1,
-			"control_type_id"=>1,
+			"test_type_id"=>1,
+			"control_test_status_id"=>1,
+			"time_started"=>'Some String',
+			"time_completed"=>'Some String',
+			"time_verified"=>'Some String',
 		);
 		$this->updatedControlTestData=array(
 			"lot_id"=>1,
 			"tested_by"=>1,
-			"control_id"=>1,
-			"control_type_id"=>1,
+			"test_type_id"=>1,
+			"control_test_status_id"=>1,
+			"time_started"=>'Some String',
+			"time_completed"=>'Some String',
+			"time_verified"=>'Some String',
 		);
 	}
 
@@ -35,7 +41,7 @@ class ControlTestTest extends TestCase
 	{
 		$response=$this->post('/api/controltest',$this->controlTestData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("control_type_id",$response->original);
+		$this->assertArrayHasKey("control_test_status_id",$response->original);
 	}
 
 	public function testListControlTest()
@@ -49,7 +55,7 @@ class ControlTestTest extends TestCase
 		$response=$this->post('/api/controltest',$this->controlTestData);
 		$response=$this->get('/api/controltest/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("control_type_id",$response->original);
+		$this->assertArrayHasKey("control_test_status_id",$response->original);
 	}
 
 	public function testUpdateControlTest()
@@ -57,7 +63,7 @@ class ControlTestTest extends TestCase
 		$response=$this->post('/api/controltest',$this->controlTestData);
 		$response=$this->put('/api/controltest/1',$this->updatedControlTestData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("control_type_id",$response->original);
+		$this->assertArrayHasKey("control_test_status_id",$response->original);
 	}
 
 	public function testDeleteControlTest()
