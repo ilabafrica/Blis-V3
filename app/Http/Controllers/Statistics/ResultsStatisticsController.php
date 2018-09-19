@@ -15,83 +15,20 @@ class ResultsStatisticsController extends Controller
 {
     // get the patient history
     public function patientHistory(Request $request){
-        if ($request->query('pdf')) { // by particular patient and pdf-ed
+        if ($request->query('pdf') && $request->query('id')) { // by particular patient and pdf-ed
             $pdf = new PatientReportPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $patient = Patient::with(['name','gender','tests.results.measure', 'tests.testType', 'tests.specimen.status', 'tests.specimen.specimenType', 'tests.specimen.collectedBy', 'tests.specimen.receivedBy', 'tests.testStatus'])->find($request->query('id'));
 
-                    // set default monospaced font
-            $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-            // set margins
-            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-            // set auto page breaks
-            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-            // set image scale factor
-            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-            // set cell padding
-            $pdf->setCellPaddings(1, 1, 1, 1);
-
-            
-
-            // ---------------------------------------------------------
-
-            // set default font subsetting mode
-            $pdf->setFontSubsetting(true);
-
-            // Set font
-            // dejavusans is a UTF-8 Unicode font, if you only need to
-            // print standard ASCII chars, you can use core fonts like
-            // helvetica or times to reduce file size.
-            $pdf->SetFont('dejavusans', '', 10, '', true);
-
-            // Add a page
-            // This method has several options, check the source code documentation for more information.
-            $pdf->AddPage();
-
-            $header = array('Specimen Type', 'Collected By', 'Date Collected', 'Date Received', 'Status');
-            $header2 = array('Result ID', 'Measure', 'Result', 'Date Entered', 'Status');
-            $patient = Patient::with(['name','gender','tests.results.measure', 'tests.testType', 'tests.specimen.status', 'tests.specimen.specimenType', 'tests.specimen.collectedBy', 'tests.specimen.receivedBy'])->find($request->query('id'));
-
-            // var_dump($patient);
-            // dd($patient["tests"]);
-            $name = 'Patient Name: '.$patient->name->family . ', '.$patient->name->given;
-            $gender = 'Gender: '.$patient->gender->display;
-            $age = "Age: ". $patient->birth_date;
-            $pdf->SetFont('', 'B',12);
-            $pdf->Cell(80, 0, $name, 0, 0, 'L', 0, '', 0);
-            $pdf->Cell(40, 0, $gender, 0, 0, 'L', 0, '', 0);
-            $pdf->Cell(40, 0, $age, 0, 0, 'L', 0, '', 0);
-            $pdf->SetFont('','',10);
-            $pdf->Ln(8);
-
-            foreach ($patient["tests"] as $key => $test) {
-                # code...
-                // print specimen table
-                // dd($test["specimen"]->collectedBy->name);
-                
-                $pdf->Cell(50, 0, "Test # ".$test->id, 0, 1, 'L', 0, '', 0);
-                $pdf->Cell(50, 0, "Test Type: ".$test->testType->name, 0, 1, 'L', 0, '', 0);
-                $pdf->Cell(50, 0, "Test Ordered: ".$test->created_at, 0, 1, 'L', 0, '', 0);
-                $pdf->Ln(3);
-                $pdf->Cell(40, 0, "Specimen", 0, 1, 'L', 0, '', 0);
-                $pdf->SpecimenTable($header, $test->specimen);
-                $pdf->Ln(10);
-                $pdf->Cell(40, 0, "Results", 0, 1, 'L', 0, '', 0);
-                $pdf->ResultsTable($header2, $test->results);
-                
-                $pdf->Ln(20);
-            }
-            
-
-            // Close and output PDF document
-            // This method has several options, check the source code documentation for more information.
-            return $pdf->Output('example_001.pdf', 'E');
+            //use a custom view to make the html content to be used in generation of the pdf
+            //this approach allows for more html like styling though limited
+            $view = \View::make('pdf', compact('patient'));
+            $html_content = $view->render();
+            $pdf->AddPage();        
+            $pdf->writeHTML($html_content, true, false, true, false, '');
+            return $pdf->Output('example_001.pdf', 'I');
         }
         else if ($request->query('id')) { // grouped by particular patient
-            $patient = Patient::with(['name','gender','tests.results.measure', 'tests.testType', 'tests.specimen.status', 'tests.specimen.specimenType', 'tests.specimen.collectedBy', 'tests.specimen.receivedBy'])->find($request->query('id'));
+            $patient = Patient::with(['name','gender','tests.results.measure', 'tests.testType', 'tests.specimen.status', 'tests.specimen.specimenType', 'tests.specimen.collectedBy', 'tests.specimen.receivedBy', 'tests.testStatus'])->find($request->query('id'));
             return $patient;
         }
     }

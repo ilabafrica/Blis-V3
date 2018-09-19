@@ -128,16 +128,9 @@ export default {
         })
     },
     getPDF(){
-        apiCall({url:this.url_prefix+"results/patient?pdf=true&id="+this.$route.params.id, method:"GET"})
+        apiCall({url:this.url_prefix+"results/patient?pdf=true&id="+this.$route.params.id, method:"GET", data:'PDF'})
         .then(resp=>{
-            // console.log(resp)
-            // let bl = resp.substring(resp.lastIndexOf('.pdf"')+5)
-            // window.open("data:application/pdf;base64," + resp.substring(resp.lastIndexOf('.pdf"')+5));
-            // const file = new Blob([resp], {type: 'application/pdf'});
-            // //build a url from the file
-            // const fileURL = URL.createObjectURL(file);
-            // //open the url on new window
-            // window.open(fileURL);
+            // console.log(resp)           
         })
         .catch(error => {
             console.log(error.response)
