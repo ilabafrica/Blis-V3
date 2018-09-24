@@ -1,25 +1,28 @@
 <template>
     <div>
-        <v-layout row wrap>
-            <p class="flex xs12 md9" style="font-size:2rem; font-weight:100">Patient Report</p>
-            <v-btn @click.native="getPDF()">Get PDF</v-btn>
-        </v-layout>
-        <v-layout row wrap ma-4 v-if="patient.name">
-            <v-flex md-4>
-                Patient Name: {{patient.name.family}}, {{patient.name.given}}
+        <v-layout row wrap align-center>
+            <v-flex xs12 md6 pa-4 v-if="patient.name" style="font-size:1.4em;">
+                <b>Patient Name:</b> {{patient.name.family}}, {{patient.name.given}}<br>
+                <b>Gender:</b> {{patient.gender.display}} <br>
+                <b>Date Of Birth:</b> {{patient.birth_date}}
             </v-flex>
-            <v-flex md-4>
-                Gender: {{patient.gender.display}}
-            </v-flex>
-            <v-flex md-4>
-                Age: {{patient.birth_date}}
+            <v-flex xs12 md6 text-md-right pr-5>
+                <p style="font-size:1.4rem; font-weight:100">Patient Report</p>
+                <v-btn @click.native="getPDF()">Get PDF</v-btn>
             </v-flex>
         </v-layout>
-        <v-layout row white wrap ma-4 pt-2 v-if="patient.tests" v-for="test in patient.tests" :key="test.id">
-            <v-flex md6 title pa-2>Test Num: {{test.id}}</v-flex>
-            <v-flex md6 title pa-2>Test Ordered: {{test.created_at}}</v-flex>
+        <v-layout row wrap ml-4 mr-4 align-center v-if="patient.tests" v-for="test in patient.tests" :key="test.id">
+            <v-flex xs12 mt-4 mb-3>
+                <v-divider></v-divider>
+            </v-flex>
+            <v-flex md6 title pa-2 style="color:#5c5c5c;"><b>Test Num:</b> {{test.id}}</v-flex>
+            <v-flex md6 pa-2 subheading>
+                <b>Test Type:</b> {{test.test_type.name}} <br>
+                <b>Test Ordered:</b> {{test.created_at}} <br>
+                <b>Test Status:</b> {{test.test_status.name}} <br>
+            </v-flex>
             <v-flex md12 white>
-                <table class="table text-md-right" v-if="test.specimen.id">
+                <table class="table text-md-right elevation-1" v-if="test.specimen.id">
                     <thead>
                         <tr>
                             <th>Specimen Type</th>
@@ -41,7 +44,7 @@
                 </table>
             </v-flex>
             <v-flex md12 pt-2>
-                <table class="table text-md-right" md12 v-if="test.results">
+                <table class="table text-md-right elevation-1" md12 v-if="test.results">
                     <thead>
                         <tr>
                             <th>Result</th>
@@ -67,7 +70,13 @@
 </template>
 
 <style scoped>
-    
+    th{
+        background-color: #5c5c5c;
+        color: white !important;
+    }
+    b{
+        color: #5c5c5c;
+    }
 </style>
 
 

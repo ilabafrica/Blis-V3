@@ -16,12 +16,20 @@
 @if(count($patient->tests)!=0)
     @foreach($patient->tests as $key => $test)        
         <hr />
-        <h3 style="color:#555">Test Number: {{$test->id}} </h3>
-        <b>Test Type:</b> {{$test->testType->name}}<br/>
-        <b>Test Ordered At:</b> {{$test->created_at}}<br/>
-        <b>Test Status:</b> {{$test->testStatus->name}}<br/><br/>
+        <table style="padding-top:20px;">
+            <tr>                
+                <td width="50%" style="">
+                    <h3 style="color:#555">Test Number: {{$test->id}} </h3>
+                </td>
+                <td width="50%">
+                    <b>Test Type:</b> {{$test->testType->name}}<br/>
+                    <b>  Test Ordered At:</b> {{$test->created_at}}<br/>
+                    <b>  Test Status:</b> {{$test->testStatus->name}}<br/><br/>
+                </td>
+            </tr>
+        </table>
             @if($test->specimen)
-                <table border="1" width="100%" cellpadding="10"  style="margin-left:20px;">
+                <table border="1" width="100%" cellpadding="10"  style="padding-left:20px;">
                     <tr style="background-color:#1e1e1e; color:white; padding:15px;">
                         <th width="20%">Specimen Type</th>
                         <th width="20%">Collected By</th>
