@@ -19,8 +19,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-            <v-btn round outline xs12 sm6 color="blue darken-1" :disabled="!valid" @click.native="verify">
-              <!-- if completed and permissions right -->
+            <v-btn round outline xs12 sm6 color="blue darken-1" :disabled="!valid" @click.native="verify"
+              v-if="test.test_status.code === 'completed' && $can('verify_test_result')">
               Verify <v-icon right dark>check_circle_outline</v-icon>
             </v-btn>
         </v-card-actions>
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+  import { EventBus } from './../../app.js';
   import apiCall from '../../utils/api'
   export default {
     data: () => ({
@@ -58,6 +59,7 @@
         apiCall({url: '/api/test/verify/'+this.test.id, method: 'GET' })
         .then(resp => {
           console.log(resp)
+          EventBus.$emit('update-test-list', resp);
         })
         .catch(error => {
           console.log(error.response)

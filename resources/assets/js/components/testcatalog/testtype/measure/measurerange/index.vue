@@ -2,9 +2,14 @@
   <div>
     <v-dialog v-model="dialogNumericRange" max-width="500px">
       <v-card>
-        <v-card-title>
-          Numeric Range Details
-        </v-card-title>
+        <v-toolbar dark color="primary" class="elevation-0">
+          <v-toolbar-title>Numeric Range Details</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn round outline color="blue lighten-1" flat @click.native="close">
+            Cancel
+            <v-icon right dark>close</v-icon>
+          </v-btn>
+        </v-toolbar>
         <v-card-text>
             <v-flex xs12 sm12 d-flex>
             <v-select
@@ -50,11 +55,12 @@
               label="Upper Measure Range">
             </v-text-field>
           </v-flex>
+          <v-flex xs3 offset-xs9 text-xs-right>
+            <v-btn round outline xs12 sm6 color="blue darken-1" :disabled="!valid" @click.native="save">
+              Save <v-icon right dark>cloud_upload</v-icon>
+            </v-btn>
+          </v-flex>
         </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" flat @click.stop="closeMeasureRangeDialog">Close</v-btn>
-          <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveMeasureRange">Save</v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
 

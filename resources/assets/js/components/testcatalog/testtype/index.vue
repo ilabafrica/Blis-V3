@@ -1,12 +1,25 @@
 <template>
   <div>
-    <v-layout row justify-center>
-      <v-btn color="primary" dark @click.stop="dialog = true">New Test Type</v-btn>
+    <v-layout row>
       <v-dialog v-model="dialog" max-width="500px">
+        <v-btn
+          outline
+          small
+          color="primary"
+          slot="activator"
+          flat>
+          New Test Type
+          <v-icon right dark>playlist_add</v-icon>
+        </v-btn>
         <v-card>
-          <v-card-title>
-            Test Details
-          </v-card-title>
+          <v-toolbar dark color="primary" class="elevation-0">
+            <v-toolbar-title>Test Details</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn round outline color="blue lighten-1" flat @click.native="close">
+              Cancel
+              <v-icon right dark>close</v-icon>
+            </v-btn>
+          </v-toolbar>
           <v-card-text>
             <v-flex xs12 sm12 md12>
               <v-text-field
@@ -46,11 +59,12 @@
                 label="Use Culture Options">
               </v-checkbox>
             </v-flex>
+            <v-flex xs3 offset-xs9 text-xs-right>
+              <v-btn round outline xs12 sm6 color="blue darken-1" :disabled="!valid" @click.native="saveTestType">
+                Save <v-icon right dark>cloud_upload</v-icon>
+              </v-btn>
+            </v-flex>
           </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary" flat @click.stop="closeMainDialog">Close</v-btn>
-            <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveTestType">Save</v-btn>
-          </v-card-actions>
         </v-card>
       </v-dialog>
     </v-layout>

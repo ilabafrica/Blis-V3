@@ -2,11 +2,24 @@
   <div>
     <result ref="resultForm"></result>
     <v-dialog v-model="dialog" max-width="500px">
-      <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
+      <v-btn
+        outline
+        small
+        color="primary"
+        slot="activator"
+        flat>
+        New Control Test
+        <v-icon right dark>playlist_add</v-icon>
+      </v-btn>
       <v-card>
-        <v-card-title>
-          <span class="headline">{{ formTitle }}</span>
-        </v-card-title>
+        <v-toolbar dark color="primary" class="elevation-0">
+          <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn round outline color="blue lighten-1" flat @click.native="close">
+            Cancel
+            <v-icon right dark>close</v-icon>
+          </v-btn>
+        </v-toolbar>
         <v-form ref="form" v-model="valid" lazy-validation>
         <v-card-text>
           <v-container grid-list-md>
@@ -31,14 +44,14 @@
                   label="Test Type"
                 ></v-select>
               </v-flex>
+              <v-flex xs3 offset-xs9 text-xs-right>
+                <v-btn round outline xs12 sm6 color="blue darken-1" :disabled="!valid" @click.native="createControlTest">
+                  Save <v-icon right dark>cloud_upload</v-icon>
+                </v-btn>
+              </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="createControlTest">Save</v-btn>
-        </v-card-actions>
         </v-form>
       </v-card>
     </v-dialog>
@@ -66,7 +79,8 @@
         <td class="text-xs-left">{{ props.item.lot.expiry }}</td>
         <td class="text-xs-left">{{ props.item.lot.instrument.name }}</td>
         <td class="justify-left layout px-0">
-          <v-btn outline color="teal lighten-1" small flat @click="editItem(props.item)">
+          <v-btn outline color="teal lighten-1" small flat @click="editItem(props.item)"
+            v-if="props.item.control_test_status.code === 'pending'">
             Edit Test
             <v-icon right dark>edit</v-icon>
           </v-btn>
@@ -145,7 +159,7 @@
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'New Control Test' : 'Edit Control Test'
       },
 
       length: function() {

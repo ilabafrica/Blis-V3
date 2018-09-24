@@ -40,7 +40,7 @@
             title="Delete"
             color="pink"
             flat
-            @click="delete(props.item)">
+            @click="deleteOrganism(props.item)">
             Delete Organism
             <v-icon right dark>delete</v-icon>
           </v-btn>
@@ -61,6 +61,7 @@
     data: () => ({
       search: '',
       query: '',
+      delete: false,
       headers: [
         { text: 'Organism', value: 'organism' },
         { text: 'Actions', value: 'actions', sortable: false }
@@ -81,8 +82,7 @@
     mounted() {
       // Listen for the update-isolated-organism-list event and its payload.
       EventBus.$on('update-isolated-organism-list', data => {
-        console.log('update-isolated-organism-list')
-        Object.assign(this.results[this.editedIndex], data)
+        this.results = data.results;
       });
     },
 
@@ -104,6 +104,23 @@
 
       organism () {
         this.$refs.organismForm.modal(this.$route.params.measureId,this.$route.params.testId);
+      },
+
+      deleteOrganism (item) {
+
+        confirm('Are you sure you want to delete this item?') && (this.delete = true)
+
+        if (this.delete) {
+          apiCall({url: '/api/result/deleteorganism/'+item.id, method: 'GET' })
+          .then(resp => {
+            console.log(resp)
+            const index = this.results.indexOf(item)
+            this.results.splice(index, 1)
+          })
+          .catch(error => {
+            console.log(error.response)
+          })
+        }
       },
     }
   }

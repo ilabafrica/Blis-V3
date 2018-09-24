@@ -579,19 +579,16 @@ class CreateBlisTables extends Migration
          */
         Schema::create('antibiotic_susceptibilities', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
+            $table->integer('user_id')->unsigned()->nullable();
             $table->integer('antibiotic_id')->unsigned();
             $table->integer('result_id')->unsigned();
-            $table->integer('susceptibility_range_id')->unsigned();
+            $table->integer('susceptibility_range_id')->unsigned()->nullable();
             $table->integer('zone_diameter')->unsigned()->nullable();
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('antibiotic_id')->references('id')->on('antibiotics');
             $table->foreign('result_id')->references('id')->on('results');
-            $table->foreign('susceptibility_range_id')
-                ->references('id')->on('susceptibility_ranges');
             $table->unique(['result_id','antibiotic_id']);
         });
 

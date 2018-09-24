@@ -53,9 +53,5 @@ class ResultTest extends TestCase
 
 		$this->assertEquals(200,$storeResponse->getStatusCode());
 		$this->assertArrayHasKey("results",$storeResponse->original);
-
-		$showResponse=$this->get('/api/result/'.$test->id);
-		$this->assertEquals(200,$showResponse->getStatusCode());
-		$this->assertArrayHasKey("time_entered",$showResponse->original);
 	}
 }

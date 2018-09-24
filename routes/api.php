@@ -153,7 +153,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('encounter/addtests', 'EncounterController@addTests');
         Route::post('encounter/specimencollection', 'EncounterController@specimenCollection');
         Route::post('result/susceptibility', 'ResultController@susceptibility');
-        Route::resource('result', 'ResultController');
+        Route::post('result', 'ResultController@store');
+        Route::post('result/show/{id}', 'ResultController@show');
+        Route::get('result/deletesusceptibility/{id}', 'ResultController@deleteSusceptibility');
+        Route::get('result/deleteorganism/{id}', 'ResultController@deleteOrganism');
         Route::resource('controltest', 'ControlTestController');
         Route::post('controlresult', 'ControlResultController@store');
         Route::resource('controlmeasurerange', 'ControlMeasureRangeController');

@@ -126,9 +126,9 @@ class DevSeeder extends Seeder
 
 
         $testTypeGXM = TestType::create(["name" => "GXM", "test_type_category_id" => $test_categories->id]);
-        $measureGXM = Measure::create(array("measure_type_id" => "4","test_type_id" => $testTypeGXM->id, "name" => "GXM", "unit" => ""));
+        $measureGXM = Measure::create(array("measure_type_id" => MeasureType::free_text,"test_type_id" => $testTypeGXM->id, "name" => "GXM", "unit" => ""));
         $measureBloodGroup = Measure::create(
-            ["measure_type_id" => "2","test_type_id" => $testTypeGXM->id,
+            ["measure_type_id" => MeasureType::alphanumeric,"test_type_id" => $testTypeGXM->id,
                 "name" => "Blood Grouping",
                 "unit" => ""]);
         MeasureRange::create(["measure_id" => $measureBloodGroup->id, "display" => "O-"]);
@@ -142,36 +142,36 @@ class DevSeeder extends Seeder
 
         $measuresUrinalysisData = [
             // Urine Microscopy
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "Pus cells", "unit" => ""],
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "S. haematobium", "unit" => ""],
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "T. vaginalis", "unit" => ""],
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "Yeast cells", "unit" => ""],
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "Red blood cells", "unit" => ""],
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "Bacteria", "unit" => ""],
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "Spermatozoa", "unit" => ""],
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "Epithelial cells", "unit" => ""],
             // Urine Chemistry
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "Glucose", "unit" => ""],
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "Ketones", "unit" => ""],
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "Proteins", "unit" => ""],
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "Blood", "unit" => ""],
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "Bilirubin", "unit" => ""],
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "Urobilinogen Phenlpyruvic acid", "unit" => ""],
-            ["measure_type_id" => "4", "test_type_id" => $testTypeUrinalysis->id,
+            ["measure_type_id" => MeasureType::free_text, "test_type_id" => $testTypeUrinalysis->id,
                 "name" => "pH", "unit" => ""],
         ];
 
@@ -232,19 +232,19 @@ class DevSeeder extends Seeder
         /* Measures table */
         $measureHIV = [
             [
-                "measure_type_id" => "2",
+                "measure_type_id" => MeasureType::alphanumeric,
                 "test_type_id" => $testTypeHIV->id,
                 "name" => "Screening",
                 "unit" => "",
             ],
             [
-                "measure_type_id" => "2",
+                "measure_type_id" => MeasureType::alphanumeric,
                 "test_type_id" => $testTypeHIV->id,
                 "name" => "Confirmatory Test (Statpak)",
                 "unit" => "",
             ],
             [
-                "measure_type_id" => "2",
+                "measure_type_id" => MeasureType::alphanumeric,
                 "test_type_id" => $testTypeHIV->id,
                 "name" => "Unigold",
                 "unit" =>"",
@@ -258,7 +258,7 @@ class DevSeeder extends Seeder
         }
 
         $measureBSforMPS = Measure::create([
-            "measure_type_id" => "2",
+            "measure_type_id" => MeasureType::alphanumeric,
             "test_type_id" => $testTypeBS->id,
             "name" => "BS for mps",
             "unit" => ""]);
@@ -355,47 +355,47 @@ class DevSeeder extends Seeder
 
         /*New measures for prevalence*/
         $measure_salmonella = Measure::create([
-            "measure_type_id" => "2",
+            "measure_type_id" => MeasureType::alphanumeric,
             "test_type_id" => $test_types_salmonella->id,
             "name" => "Salmonella Antigen Test",
             "unit" => ""]);
         $measure_direct = Measure::create([
-            "measure_type_id" => "2",
+            "measure_type_id" => MeasureType::alphanumeric,
             "test_type_id" => $test_types_direct->id,
             "name" => "Direct COOMBS Test",
             "unit" => ""]);
         $measure_du = Measure::create([
-            "measure_type_id" => "2",
+            "measure_type_id" => MeasureType::alphanumeric,
             "test_type_id" => $test_types_du->id,
             "name" => "Du Test",
             "unit" => ""]);
         $measure_sickling = Measure::create([
-            "measure_type_id" => "2",
+            "measure_type_id" => MeasureType::alphanumeric,
             "test_type_id" => $test_types_sickling->id,
             "name" => "Sickling Test",
             "unit" => ""]);
         $measure_borrelia = Measure::create([
-            "measure_type_id" => "2",
+            "measure_type_id" => MeasureType::alphanumeric,
             "test_type_id" => $test_types_borrelia->id,
             "name" => "Borrelia",
             "unit" => ""]);
         $measure_vdrl = Measure::create([
-            "measure_type_id" => "2",
+            "measure_type_id" => MeasureType::alphanumeric,
             "test_type_id" => $test_types_vdrl->id,
             "name" => "VDRL",
             "unit" => ""]);
         $measure_pregnancy = Measure::create([
-            "measure_type_id" => "2",
+            "measure_type_id" => MeasureType::alphanumeric,
             "test_type_id" => $test_types_pregnancy->id,
             "name" => "Pregnancy Test",
             "unit" => ""]);
         $measure_brucella = Measure::create([
-            "measure_type_id" => "2",
+            "measure_type_id" => MeasureType::alphanumeric,
             "test_type_id" => $test_types_brucella->id,
             "name" => "Brucella",
             "unit" => ""]);
         $measure_pylori = Measure::create([
-            "measure_type_id" => "2",
+            "measure_type_id" => MeasureType::alphanumeric,
             "test_type_id" => $test_types_pylori->id,
             "name" => "H. Pylori",
             "unit" => ""]);
@@ -744,7 +744,7 @@ class DevSeeder extends Seeder
         $testTypeTPHA = TestType::create(["name" => "TPHA","test_type_category_id" => $testTypeCategoryMicrobiology->id,]);
 
         $measureCrag = Measure::create([
-            "measure_type_id" => "2",
+            "measure_type_id" => MeasureType::alphanumeric,
             "test_type_id" => $testTypeCrag->id,
             "name" => "Crag",
             "unit" => "",
@@ -754,37 +754,37 @@ class DevSeeder extends Seeder
 
 
         $measureDifferential = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeDifferential->id,
             "name" => "Differential",
             "unit" => "",
         ]);
         $measureTotalCellCount = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeTotalCellCount->id,
             "name" => "Total Cell Count",
             "unit" => "",
         ]);
         $measureLymphocytes = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeLymphocytes->id,
             "name" => "Lymphocytes",
             "unit" => "",
         ]);
         $measureQuantitativeCulture = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeQuantitativeCulture->id,
             "name" => "Quantitative Culture",
             "unit" => "",
         ]);
         $measureRBC = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeRBC->id,
             "name" => "RBC Count",
             "unit" => "",
         ]);
         $measureTPHA = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeTPHA->id,
             "name" => "TPHA",
             "unit" => "",
@@ -854,81 +854,81 @@ class DevSeeder extends Seeder
         ]);
 
         $measureHCG  = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeHCG->id,
             "name" => "HCG",
             "unit" => ""]);
         $measureBilirubin  = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeBilirubin->id,
             "name" => "Bilirubin",
             "unit" => ""]);
         $measureBlood  = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeBlood->id,
             "name" => "Blood",
             "unit" => ""]);
         $measureGlucose  = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeGlucose->id,
             "name" => "Glucose",
             "unit" => ""]);
         $measureKetones  = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeKetones->id,
             "name" => "Ketones",
             "unit" => ""]);
         $measureLeukocytes  = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeLeukocytes->id,
             "name" => "Leukocytes",
             "unit" => ""]);
         $measureMicroscopy  = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeMicroscopy->id,
             "name" => "Microscopy",
             "unit" => ""]);
         $measureNitrite  = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeNitrite->id,
             "name" => "Nitrite",
             "unit" => ""]);
         $measurePH  = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypePH->id,
             "name" => "pH",
             "unit" => ""]);
         $measureProtein  = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeProtein->id,
             "name" => "Protein",
             "unit" => ""]);
         $measureSpecificGravity  = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeSpecificGravity->id,
             "name" => "Specific Gravity",
             "unit" => ""]);
         $measureUrobilinogen  = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeUrobilinogen->id,
             "name" => "Urobilinogen",
             "unit" => ""]);
 
         /* Measures table */
         $measureAppearance = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeAppearance->id,
             "name" => "Appearance", "unit" => ""]);
         $measureCultureAndSensitivity = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::multi_alphanumeric,
             "test_type_id" => $testTypeCultureAndSensitivity->id,
             "name" => "Organisms Isolated"]);
         $measureGramStain = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeGramStain->id,
             "name" => "Gram Stain", 'unit' => '']);
         $measureIndiaInkStain = Measure::create([
-            "measure_type_id" => "2",
+            "measure_type_id" => MeasureType::alphanumeric,
             "test_type_id" => $testTypeIndiaInkStain->id,
             "name" => "India Ink Stain"
         ]);
@@ -936,33 +936,33 @@ class DevSeeder extends Seeder
         MeasureRange::create(["measure_id" => $measureIndiaInkStain->id, "display" => "Negative"]);
 
         $measureProtein = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeProtein->id,
             "name" => "Protein",
         ]);
         $measureWetPreparation = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeWetPreparation->id,
             "name" => "Wet preparation (saline preparation)",
         ]);
         $measureWhiteBloodCellCount = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeWhiteBloodCellCount->id,
             "name" => "White Blood Cell Count",
         ]);
         $measureZNStain = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeZNStain->id,
             "name" => "ZN Stain",
         ]);
         $measureModifiedZn = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeModifiedZn->id,
             "name" => "Modified ZN", "unit" => "",
         ]);
 
         $measureWetSalineIodinePrep = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeWetSalineIodinePrep->id,
             "name" => "Wet Saline Iodine Prep", "unit" => "",
         ]);
@@ -1254,11 +1254,11 @@ class DevSeeder extends Seeder
         $testTypeSerumCrag = TestType::create(['name' => 'Serum Crag','test_type_category_id' => $testTypeCategoryMicrobiology->id,]);
 
         $measureRPR = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeRPR->id,
             "name" => "RPR", "unit" => ""]);
         $measureSerumCrag = Measure::create([
-            "measure_type_id" => "4",
+            "measure_type_id" => MeasureType::free_text,
             "test_type_id" => $testTypeSerumCrag->id,
             "name" => "Serum Crag", "unit" => ""]);
 
@@ -8462,7 +8462,6 @@ class DevSeeder extends Seeder
                         'measure_id' => $measure->id,
                         'result' => rand($measureRange->low,$measureRange->high),
                         // 'result' => $measure->id, // todo: eventually choos a high low normal critically_high critically_low randomly... work on the logic...
-
                         'measure_range_id' => $measureRange->id,
                     ]);
 
@@ -8477,7 +8476,12 @@ class DevSeeder extends Seeder
                     ]);
 
                 }elseif ($measure->measure_type_id == MeasureType::multi_alphanumeric) {
-                    # code...: when the moment comes, microscopy, micro biology
+                    factory(\App\Models\Result::class)->create([
+                        'test_id' => $test->id,
+                        'measure_id' => $measure->id,
+                        'result' => $measureRange->display,
+                        'measure_range_id' => $measureRange->id,
+                    ]);
                 }else{
                     // no measure range for free text
                     factory(\App\Models\Result::class)->create([

@@ -108,17 +108,7 @@ class ResultController extends Controller
             $test->save();
             // sending to emr on completion for now
             EMR::sendTestResults($test->id);
-
-            return response()->json(Test::find($test->id)->load(
-                'testStatus.testPhase',
-                'specimen.specimenType',
-                'testType.specimenTypes',
-                'testType.measures.results',
-                'results.measure.measureType',
-                'results.measure.measureRanges',
-                'testType.measures.measureType',
-                'testType.measures.measureRanges'
-            ));
+            return response()->json(Test::find($test->id)->loader());
         }
     }
 
@@ -169,14 +159,28 @@ class ResultController extends Controller
         $antibioticSusceptibility->zone_diameter = $susceptibilityZoneDiameter;
 
         $antibioticSusceptibility->save();
-
-        return response()->json($antibioticSusceptibility);
+        return response()->json(AntibioticSusceptibility::find($antibioticSusceptibility->id)
+            ->load(
+                'susceptibilityRange',
+                'result.measureRange',
+                'antibiotic'
+            )
+        );
     }
 
     public function deleteSusceptibility($id)
     {
         try {
             return response()->json(AntibioticSusceptibility::destroy($id), 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function deleteOrganism($id)
+    {
+        try {
+            return response()->json(Result::destroy($id), 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
