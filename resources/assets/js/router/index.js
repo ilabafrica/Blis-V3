@@ -209,12 +209,48 @@ export default new Router({
       path: '/stats/tests',
       name: 'tests_stats',
       component: require('../components/statistics/tests/index'),
+      beforeEnter: ifAuthenticated,
     },
     //All Specimen Stats
     {
       path: '/stats/specimen',
       name: 'specimen_stats',
       component: require('../components/statistics/specimen/index'),
+    },
+    //Search Tests Stats
+    {
+      path: '/stats/tests/search',
+      name: 'tests_stats_search',
+      component: require('../components/statistics/tests/search'),
+      beforeEnter: ifAuthenticated,
+    },
+    //Search Tests Stats
+    {
+      path: '/stats/tests/type',
+      name: 'tests_stats_type',
+      component: require('../components/statistics/tests/type'),
+      beforeEnter: ifAuthenticated,
+    },
+    //Reports
+    {
+      path: '/reports/infection',
+      name: 'infection_report',
+      component: require('../components/reports/infection'),
+      beforeEnter: ifAuthenticated,
+    },
+    //Patient Reports
+    {
+      path: '/reports/patients',
+      name: 'patient_reports',
+      component: require('../components/reports/patient/index'),
+      beforeEnter: ifAuthenticated,
+    },
+    //Patient Reports
+    {
+      path: '/reports/patients/:id',
+      name: 'patient_reports_single',
+      component: require('../components/reports/patient/single'),
+      beforeEnter: ifAuthenticated,
     },
     {
       path: '/qualitycontrol/controltest',

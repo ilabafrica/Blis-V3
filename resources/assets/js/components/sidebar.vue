@@ -25,7 +25,7 @@
       </v-list-tile-action>
       <v-list-tile-title>Patients</v-list-tile-title>
     </v-list-tile>
-    <v-list-group prepend-icon="settings" value="true">
+    <v-list-group prepend-icon="settings" no-action>
       <v-list-tile slot="activator">
         <v-list-tile-title>Lab Configuration</v-list-tile-title>
       </v-list-tile>
@@ -37,7 +37,7 @@
         <v-list-tile-title v-text="lab_configuration.label"></v-list-tile-title>
       </v-list-tile>
     </v-list-group>
-    <v-list-group prepend-icon="assignment" value="true">
+    <v-list-group prepend-icon="assignment" no-action>
       <v-list-tile slot="activator">
         <v-list-tile-title>Test Catalog</v-list-tile-title>
       </v-list-tile>
@@ -49,7 +49,7 @@
         <v-list-tile-title v-text="test_catalog.label"></v-list-tile-title>
       </v-list-tile>
     </v-list-group>
-    <v-list-group prepend-icon="security" value="true">
+    <v-list-group prepend-icon="security" no-action>
       <v-list-tile slot="activator">
         <v-list-tile-title>Access Control</v-list-tile-title>
       </v-list-tile>
@@ -77,7 +77,7 @@
           Tests
       </v-list-tile-title>
     </v-list-tile>
-    <v-list-group prepend-icon="sync_problem" value="true">
+    <v-list-group prepend-icon="sync_problem" no-action>
       <v-list-tile slot="activator">
         <v-list-tile-title>Quality Controls</v-list-tile-title>
       </v-list-tile>
@@ -88,7 +88,7 @@
         <v-list-tile-title v-text="quality_control.label"></v-list-tile-title>
       </v-list-tile>
     </v-list-group>
-    <v-list-group prepend-icon="dashboard" value="true">
+    <v-list-group prepend-icon="assessment" no-action>
       <v-list-tile slot="activator">
         <v-list-tile-title>Statistics</v-list-tile-title>
       </v-list-tile>
@@ -97,6 +97,17 @@
           <v-icon v-text="stat.icon"></v-icon>
         </v-list-tile-action>
         <v-list-tile-title v-text="stat.label"></v-list-tile-title>
+      </v-list-tile>
+    </v-list-group>
+    <v-list-group prepend-icon="dashboard" no-action>
+      <v-list-tile slot="activator">
+        <v-list-tile-title>Reports</v-list-tile-title>
+      </v-list-tile>
+      <v-list-tile v-for="(report, i) in reports" :key="i" :to="{path:report.path}">
+        <v-list-tile-action>
+          <v-icon v-text="report.icon"></v-icon>
+        </v-list-tile-action>
+        <v-list-tile-title v-text="report.label"></v-list-tile-title>
       </v-list-tile>
     </v-list-group>
   </v-list>
@@ -192,12 +203,29 @@
         {
           path: '/stats/tests',
           label: 'Test Stats',
-          icon: 'assessment'
+          icon: 'dashboard'
+        },
+        {
+          path: '/stats/tests/type',
+          label: 'Test Type',
+          icon: 'layers'
         },
         {
           path: '/stats/specimen',
           label: 'Specimen Stats',
           icon: 'assignment_turned_in'
+        },
+      ],
+      reports: [
+        {
+          path: '/reports/infection',
+          label: 'Infection Report',
+          icon: 'assignment_turned_in'
+        },
+        {
+          path: '/reports/patients',
+          label: 'Patients',
+          icon: 'people'
         },
       ]
     })

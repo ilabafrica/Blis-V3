@@ -8447,8 +8447,7 @@ class DevSeeder extends Seeder
         $this->command->info("Tests Seeded");
 
         // create results
-        foreach (Test::all() as $test) {
-
+        foreach (Test::where('test_status_id','>=',3)->get() as $test) { //make sure that only the tests completed/verified get result seeded
             \ILabAfrica\EMRInterface\DiagnosticOrder::create(['test_id' => $test->id]);
             foreach ($test->testType->measures as $measure) {
 
@@ -8461,8 +8460,9 @@ class DevSeeder extends Seeder
                     factory(\App\Models\Result::class)->create([
                         'test_id' => $test->id,
                         'measure_id' => $measure->id,
-                        // 'result' => $measure->id,
-                        // todo: eventually choos a high low normal critically_high critically_low randomly... work on the logic...
+                        'result' => rand($measureRange->low,$measureRange->high),
+                        // 'result' => $measure->id, // todo: eventually choos a high low normal critically_high critically_low randomly... work on the logic...
+
                         'measure_range_id' => $measureRange->id,
                     ]);
 
@@ -8472,6 +8472,7 @@ class DevSeeder extends Seeder
                     factory(\App\Models\Result::class)->create([
                         'test_id' => $test->id,
                         'measure_id' => $measure->id,
+                        'result' => $measureRange->display,
                         'measure_range_id' => $measureRange->id,
                     ]);
 

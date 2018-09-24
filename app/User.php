@@ -64,4 +64,12 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Test', 'verified_by');
     }
+    public function specimenCollected()
+    {
+        return $this->hasMany('App\Models\Specimen', 'collected_by');
+    }
+    public function specimenReceived()
+    {
+        return $this->hasMany('App\Models\Specimen', 'received_by');
+    }
 }

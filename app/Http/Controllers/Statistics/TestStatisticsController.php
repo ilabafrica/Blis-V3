@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Statistics;
 
 use App\User;
+use App\Models\Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -248,6 +249,7 @@ class TestStatisticsController extends Controller
         // By Patient age
         if ($request->query('by_age')) { // grouped by patient ages
             $selects = $selects. ",  SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 <= 5,1,0)) as 'under_5', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 BETWEEN 5 and 20,1,0)) as '5_to_20', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25>=20,1,0)) as 'over_20'";            
+            $wheres = $wheres . " AND t.test_status_id>2"; //the test needs to have been started in order to get the age of patient at test status. This may be changed later to reflect specimen collection date
         }else if ($request->query('age_group')) { // grouped by patient ages
             $ages = explode(',', $request->query('age_group'));
             if(count($ages)==2 && is_numeric($ages[0]) && is_numeric($ages[1])){
@@ -255,6 +257,7 @@ class TestStatisticsController extends Controller
                 $ages[1] = intval($ages[1]);
                 // dd($ages);
                 $selects = $selects. ",  SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 <=".$ages[0].",1,0)) as 'under_".$ages[0]."', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25 BETWEEN ".$ages[0]." and ".$ages[1].",1,0)) as '".$ages[0]."_to_".$ages[1]."', SUM(IF(DATEDIFF(DATE(t.time_started), p.birth_date)/365.25>=".$ages[1].",1,0)) as 'over_".$ages[1]."'";            
+                $wheres = $wheres . " AND t.test_status_id>2"; //the test needs to have been started in order to get the age of patient at test status. This may be changed later to reflect specimen collection date
             }
         }
         // By Category
@@ -301,16 +304,44 @@ class TestStatisticsController extends Controller
         }
         if($request->query('with_ids')){
             $selects = $selects. ", GROUP_CONCAT(t.id) as ids";            
-        }     
-        // return response()->json("SELECT ".$selects." FROM ".$tables." WHERE ".$wheres);
-        if($group_bys){ // is there anything to group by? if yes then
-            $tests = DB::select("SELECT ".$selects." FROM ".$tables." WHERE ".$wheres." GROUP BY ".substr($group_bys, 1));
-        }else{
-            $tests = DB::select("SELECT ".$selects." FROM ".$tables." WHERE ".$wheres);
+        }        
+        if($request->query('full_values')){
+            $tests= DB::table(DB::raw($tables))->select(DB::raw('t.*'))->whereRaw($wheres)->paginate(10);
+        }  
+        else{   
+            // return response()->json("SELECT ".$selects." FROM ".$tables." WHERE ".$wheres);
+            if($group_bys){ // is there anything to group by? if yes then
+                $tests = DB::select("SELECT ".$selects." FROM ".$tables." WHERE ".$wheres." GROUP BY ".substr($group_bys, 1));
+            }else{
+                $tests = DB::select("SELECT ".$selects." FROM ".$tables." WHERE ".$wheres);
+            }
         }
         return response()->json($tests);
     }
-
+    // fetch tests with ids in array
+    public function fetchTests(Request $request){
+        $tests=[];
+        if($request->query('test_ids')){ // check if test ids have been passed through
+            $ids_array = $this->getArrayOfInts($request->query('test_ids'));
+            if(count($ids_array)>0){
+                // $tests=DB::table('tests')->whereIn('id', $ids_array)->paginate(10);
+                $tests=Test::with(
+                    'encounter',
+                    'testStatus.testPhase',
+                    'specimen.specimenType',
+                    'testType.specimenTypes',
+                    'encounter.patient.name',
+                    'encounter.patient.gender',
+                    'testType.measures.measureType',
+                    'testType.measures.measureRanges',
+                    'testType.measures.results',
+                    'results.measure.measureType',
+                    'results.measure.measureRanges'
+                )->whereIn('id', $ids_array)->orderBy('created_at', 'DESC')->paginate(10);
+            }
+        }
+        return response()->json($tests);
+    }
     public function checkmydate($date) { // date passed in yyyy-mm-dd or yyyy/mm/dd format
         $tempDate = explode('-', $date); // try date format seperated by - i.e. yyyy-mm-dd
         // checkdate(month, day, year)
@@ -329,5 +360,17 @@ class TestStatisticsController extends Controller
         $diff=date_diff($date1,$date2);
 
         return $diff->format("%R%a days");
+    }
+
+    public function getArrayOfInts($string_of_values){ // takes a comma seperated string
+        $general_array = explode(',', $string_of_values); // generate a general array with all comma seperated values as values in array
+        $int_array=[]; // initialize an empty integer array
+        foreach ($general_array as $value) { //loop through all the values in the general array
+            if(is_numeric($value)){ // if the current value being looped is numeric
+                $int_array[]= intval($value); //add the int value of a numeric value to the integer array
+            }
+        }
+        return $int_array;
+
     }
 }

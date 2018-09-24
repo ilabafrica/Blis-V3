@@ -21,11 +21,16 @@ Route::group(['prefix' => 'stats'], function () {
         Route::get('/statuses', 'Statistics\TestStatisticsController@testStatuses');
         Route::get('/types', 'Statistics\TestStatisticsController@testTypes');
         Route::get('/type-categories', 'Statistics\TestStatisticsController@testTypeCategories');
+        Route::get('/fetch', 'Statistics\TestStatisticsController@fetchTests');
     });
     Route::group(['prefix' => 'specimen'], function () {
         Route::get('/totals', 'Statistics\SpecimenStatisticsController@specimenTotals');
         Route::get('/statuses', 'Statistics\SpecimenStatisticsController@specimenStatuses');
         Route::get('/types', 'Statistics\SpecimenStatisticsController@specimenTypes');
+    });
+    Route::group(['prefix' => 'results'], function () {
+        Route::get('/totals', 'Statistics\ResultsStatisticsController@alphanumericCounts');
+        Route::get('/patient', 'Statistics\ResultsStatisticsController@patientHistory');
     });
     Route::get('/logins', 'Statistics\UserStatisticsController@logins');
     Route::get('/users', 'Statistics\UserStatisticsController@getUsers');
