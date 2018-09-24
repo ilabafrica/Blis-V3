@@ -9,6 +9,7 @@ namespace App\Http\Controllers;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use App\Models\Measure;
 use App\Models\MeasureRange;
 use Illuminate\Http\Request;
 
@@ -92,7 +93,7 @@ class MeasureRangeController extends Controller
      */
     public function show($id)
     {
-        $measureRange = MeasureRange::findOrFail($id);
+        $measureRange = MeasureRange::find($id)->load('susceptibilityBreakPoints.antibiotic');
 
         return response()->json($measureRange);
     }
@@ -108,8 +109,6 @@ class MeasureRangeController extends Controller
     {
         $rules = [
             'measure_id' => 'required',
-            'gender_id' => 'required',
-            'display' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
@@ -117,9 +116,9 @@ class MeasureRangeController extends Controller
             return response()->json($validator, 422);
         } else {
             $measureRange = MeasureRange::findOrFail($id);
-            $measureRange->code = $request->input('code');
+            //$measureRange->code = $request->input('code');
             $measureRange->code_id = $request->input('code_id');
-            $measureRange->system = $request->input('system');
+            //$measureRange->system = $request->input('system');
             $measureRange->measure_id = $request->input('measure_id');
             $measureRange->age_min = $request->input('age_min');
             $measureRange->age_max = $request->input('age_max');
@@ -158,4 +157,12 @@ class MeasureRangeController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+
+    public function getByMeasureId($id)
+    {
+        $measureRanges = Measure::find($id)->measureRanges;
+
+        return response()->json($measureRanges);
+    }
+
 }

@@ -15,22 +15,35 @@ use EMR;
 use App\Models\Test;
 use App\Models\Result;
 use App\Models\TestStatus;
+use App\Models\AntibioticSusceptibility;
+use App\Models\SusceptibilityBreakPoint;
 use Illuminate\Http\Request;
 
 class ResultController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request
-     * @return \Illuminate\Http\Response
-     */
+    public function show($id)
+    {
+        $result = Result::find($id)->load('measureRange');
+
+        return response()->json($result);
+    }
+
     public function store(Request $request)
     {
-        $rules = [
-            'test_id' => 'required',
-            'measures' => 'required',
-        ];
+        if ($request->input('measure_range_id')) {
+
+            $rules = [
+                'test_id' => 'required',
+                'measure_id' => 'required',
+                'measure_range_id' => 'required',
+            ];
+        }else{
+
+            $rules = [
+                'test_id' => 'required',
+                'measures' => 'required',
+            ];
+        }
         $validator = \Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
@@ -42,41 +55,54 @@ class ResultController extends Controller
             $test->test_status_id = TestStatus::completed;
             $test->tested_by = Auth::user()->id;
             $results = $request->input('measures');
-            foreach ($test->testType->measures as $measure) {
 
-                if($measure->measureType->isMultiAlphanumeric()){
-                    // multi alphanumeric
-                    foreach ($results[$measure->id]['measureRanges'] as $measureRange) {
+            // to store isolated organism
+            if ($test->testType->culture) {
+                $result = Result::updateOrCreate([
+                    'test_id' => $request->input('test_id'),
+                    'measure_range_id' => $request->input('measure_range_id'),
+                    'measure_id' => $request->input('measure_id'),
+                ]);
+                $result->time_entered = date('Y-m-d H:i:s');
+                $result->save();
+            }else{
 
+                foreach ($test->testType->measures as $measure) {
+
+                    if($measure->measureType->isMultiAlphanumeric()){
+                        // multi alphanumeric
+                        foreach ($results[$measure->id]['measureRanges'] as $measureRange) {
+
+                            $result = Result::updateOrCreate([
+                                'test_id' => $request->input('test_id'),
+                                'measure_range_id' => $measureRange['measure_range_id'],
+                                'measure_id' => $measure->id,
+                            ]);
+                            $result->time_entered = date('Y-m-d H:i:s');
+                            $result->save();
+                        }
+
+                    }else if($measure->measureType->isAlphanumeric()){
+                        // alphanumeric
                         $result = Result::updateOrCreate([
-                            'test_id' => $request->input('test_id'),
-                            'measure_range_id' => $measureRange['measure_range_id'],
                             'measure_id' => $measure->id,
+                            'test_id' => $request->input('test_id'),
                         ]);
                         $result->time_entered = date('Y-m-d H:i:s');
+                        $result->measure_range_id = $results[$measure->id]['measure_range_id'];
+                        $result->save();
+
+                    }else if($measure->measureType->isFreeText()||
+                        $measure->measureType->isNumeric()){
+                        // free text | numeric
+                        $result = Result::updateOrCreate([
+                            'measure_id' => $measure->id,
+                            'test_id' => $request->input('test_id'),
+                        ]);
+                        $result->time_entered = date('Y-m-d H:i:s');
+                        $result->result = $results[$measure->id]['result'];
                         $result->save();
                     }
-
-                }else if($measure->measureType->isAlphanumeric()){
-                    // alphanumeric
-                    $result = Result::updateOrCreate([
-                        'measure_id' => $measure->id,
-                        'test_id' => $request->input('test_id'),
-                    ]);
-                    $result->time_entered = date('Y-m-d H:i:s');
-                    $result->measure_range_id = $results[$measure->id]['measure_range_id'];
-                    $result->save();
-
-                }else if($measure->measureType->isFreeText()||
-                    $measure->measureType->isNumeric()){
-                    // free text | numeric
-                    $result = Result::updateOrCreate([
-                        'measure_id' => $measure->id,
-                        'test_id' => $request->input('test_id'),
-                    ]);
-                    $result->time_entered = date('Y-m-d H:i:s');
-                    $result->result = $results[$measure->id]['result'];
-                    $result->save();
                 }
             }
             $test->save();
@@ -93,6 +119,66 @@ class ResultController extends Controller
                 'testType.measures.measureType',
                 'testType.measures.measureRanges'
             ));
+        }
+    }
+
+    public function susceptibility(Request $request)
+    {
+        $rules = [
+            'antibiotic_id' => 'required',
+            'result_id' => 'required',
+        ];
+
+        if ($request->input('zone_diameter') == '') {
+            $rules['susceptibility_range_id'] = 'required';
+        }
+        $request->validate($rules);
+
+        $susceptibilityBreakPoint = SusceptibilityBreakPoint::where(
+                'antibiotic_id',$request->input('antibiotic_id')
+            )->where('measure_range_id', $request->input('measure_range_id'))->get()->first();
+
+        if ($request->input('zone_diameter')!= '') {
+            $susceptibilityRangeId = $susceptibilityBreakPoint
+                ->getSusceptibilityRange($request->input('zone_diameter'));
+            $susceptibilityZoneDiameter = $request->input('zone_diameter');
+
+        } else{
+            $susceptibilityRangeId = $request->input('susceptibility_range_id');
+            $susceptibilityZoneDiameter = null;
+        }
+
+
+        if ($request->input('antibiotic_susceptibility_id')!= '') {
+
+            $antibioticSusceptibility = AntibioticSusceptibility::find($request->input('antibiotic_susceptibility_id'));
+        } else{
+
+            $antibioticSusceptibility = new AntibioticSusceptibility;
+        }
+        $antibioticSusceptibility = AntibioticSusceptibility::updateOrCreate([
+            'antibiotic_id' => $request->input('antibiotic_id'),
+            'result_id' => $request->input('result_id'),
+        ]);
+
+
+        $antibioticSusceptibility->antibiotic_id = $request->input('antibiotic_id');
+        $antibioticSusceptibility->result_id = $request->input('result_id');
+        $antibioticSusceptibility->susceptibility_range_id = $susceptibilityRangeId;
+        $antibioticSusceptibility->user_id = Auth::user()->id;
+        $antibioticSusceptibility->zone_diameter = $susceptibilityZoneDiameter;
+
+        $antibioticSusceptibility->save();
+
+        return response()->json($antibioticSusceptibility);
+    }
+
+    public function deleteSusceptibility($id)
+    {
+        try {
+            return response()->json(AntibioticSusceptibility::destroy($id), 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
 }

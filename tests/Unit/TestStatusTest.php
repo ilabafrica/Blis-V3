@@ -20,46 +20,48 @@ class TestStatusTest extends TestCase
 		$this->testStatusData=array(
 			"name"=>'Sample String',
 			"test_phase_id"=>1,
+			"code"=> 'Sample String',
 		);
 		$this->updatedTestStatusData=array(
 			"name"=>'Sample updated String',
 			"test_phase_id"=>1,
+			"code"=> 'Sample String',
 		);
 	}
 
 	public function testStoreTestStatus()
 	{
-		$response=$this->post('/api/teststatus',$this->testStatusData);
+		$response=$this->post('/api/testStatus',$this->testStatusData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("test_phase_id",$response->original);
 	}
 
 	public function testListTestStatus()
 	{
-		$response=$this->get('/api/teststatus');
+		$response=$this->get('/api/testStatus');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowTestStatus()
 	{
-		$response=$this->post('/api/teststatus',$this->testStatusData);
-		$response=$this->get('/api/teststatus/1');
+		$response=$this->post('/api/testStatus',$this->testStatusData);
+		$response=$this->get('/api/testStatus/1');
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("test_phase_id",$response->original);
 	}
 
 	public function testUpdateTestStatus()
 	{
-		$response=$this->post('/api/teststatus',$this->testStatusData);
-		$response=$this->put('/api/teststatus/1',$this->updatedTestStatusData);
+		$response=$this->post('/api/testStatus',$this->testStatusData);
+		$response=$this->put('/api/testStatus/1',$this->updatedTestStatusData);
 		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("test_phase_id",$response->original);
 	}
 
 	public function testDeleteTestStatus()
 	{
-		$response=$this->post('/api/teststatus',$this->testStatusData);
-		$response=$this->delete('/api/teststatus/1');
+		$response=$this->post('/api/testStatus',$this->testStatusData);
+		$response=$this->delete('/api/testStatus/1');
 		$this->assertEquals(200,$response->getStatusCode());
 	}
 

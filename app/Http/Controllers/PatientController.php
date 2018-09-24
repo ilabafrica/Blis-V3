@@ -106,7 +106,6 @@ class PatientController extends Controller
             'name_id'    => 'required',
             'gender_id'  => 'required',
             'birth_date' => 'required',
-            'created_by' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
@@ -121,11 +120,10 @@ class PatientController extends Controller
             $patient->birth_date = $request->input('birth_date');
             $patient->deceased = $request->input('deceased');
             $patient->deceased_date_time = $request->input('deceased_date_time');
-            $patient->address_id = $request->input('address_id');
             $patient->marital_status = $request->input('marital_status');
             $patient->photo = $request->input('photo');
             $patient->organization_id = $request->input('organization_id');
-            $patient->created_by = $request->input('created_by');
+            $patient->created_by = Auth::user()->id;
 
             $name = Name::findOrFail($request->input('name.id'));
             $name->family = $request->input('name.family');
@@ -167,8 +165,6 @@ class PatientController extends Controller
      */
     public function testRequest(Request $request)
     {
-
-
         $rules = [
             'patient_id' => 'required',
             'location_id'    => 'required',

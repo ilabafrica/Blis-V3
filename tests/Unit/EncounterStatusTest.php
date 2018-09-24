@@ -18,10 +18,12 @@ class EncounterStatusTest extends TestCase
 	use DatabaseMigrations;
 	public function setVariables(){
 		$this->encounterStatusData=array(
-			"name"=>'Sample String',
+			"code"=>'Sample String',
+			"display"=>'Sample String',
 		);
 		$this->updatedEncounterStatusData=array(
-			"name"=>'Sample updated String',
+			"code"=>'Sample updated String',
+			"display"=>'Sample updated String',
 		);
 	}
 
@@ -29,7 +31,7 @@ class EncounterStatusTest extends TestCase
 	{
 		$response=$this->post('/api/encounterstatus',$this->encounterStatusData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testListEncounterStatus()
@@ -43,7 +45,7 @@ class EncounterStatusTest extends TestCase
 		$response=$this->post('/api/encounterstatus',$this->encounterStatusData);
 		$response=$this->get('/api/encounterstatus/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testUpdateEncounterStatus()
@@ -51,7 +53,7 @@ class EncounterStatusTest extends TestCase
 		$response=$this->post('/api/encounterstatus',$this->encounterStatusData);
 		$response=$this->put('/api/encounterstatus/1',$this->updatedEncounterStatusData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("name",$response->original);
+		$this->assertArrayHasKey("display",$response->original);
 	}
 
 	public function testDeleteEncounterStatus()

@@ -41,6 +41,12 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\Patient', 'created_by');
     }
 
+    public function gender()
+    {
+        return $this->belongsTo('App\Models\Gender');
+    }
+
+
     public function telecom()
     {
         return $this->hasMany('App\Models\Telecom', 'created_by');

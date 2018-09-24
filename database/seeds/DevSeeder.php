@@ -10,6 +10,7 @@ use App\Models\TestType;
 use App\Models\TestPhase;
 use App\Models\TestStatus;
 use App\Models\Antibiotic;
+use App\Models\Interpretation;
 use App\Models\Instrument;
 use App\Models\MeasureType;
 use App\Models\MeasureRange;
@@ -262,26 +263,37 @@ class DevSeeder extends Seeder
             "name" => "BS for mps",
             "unit" => ""]);
 
+
+
+        $positive = Interpretation::create([
+            "code" => 'positive',
+            "name" => "Positive",
+        ]);
+        $negative = Interpretation::create([
+            "code" => 'negative',
+            "name" => "Negative",
+        ]);
+
         MeasureRange::create([
             "measure_id" => $measureBSforMPS->id,
             "display" => "No mps seen",
-            // "interpretation" => "Negative",// todo: adapt to handle interpretation_id
+            "interpretation_id" => $negative->id,
         ]);
         MeasureRange::create([
             "measure_id" => $measureBSforMPS->id,
             "display" => "+",
-            // "interpretation" => "Positive",// todo: adapt to handle interpretation_id
+            "interpretation_id" => $positive->id,
         ]);
         MeasureRange::create([
             "measure_id" => $measureBSforMPS->id,
             "display" => "++",
-            // "interpretation" => "Positive",// todo: adapt to handle interpretation_id
+            "interpretation_id" => $positive->id,
         ]);
         MeasureRange::create([
             "measure_id" => $measureBSforMPS->id,
 
             "display" => "+++",
-            // "interpretation" => "Positive",// todo: adapt to handle interpretation_id
+            "interpretation_id" => $positive->id,
         ]);
 
         /* test_type_mappings table */
@@ -687,6 +699,7 @@ class DevSeeder extends Seeder
         ]);
         $testTypeCultureAndSensitivity = TestType::create([
             "name" => "Culture and Sensitivity",
+            "culture" => 1,
             "test_type_category_id" => $testTypeCategoryMicrobiology->id
         ]);
         $testTypeGramStain = TestType::create([
@@ -8361,7 +8374,76 @@ class DevSeeder extends Seeder
 
         $this->command->info("Tests Seeding...");
 
-        factory(\App\Models\Test::class, (int)env('DEV_TEST_NO',100))->create();
+        for ($i=0; $i < (int)env('DEV_TEST_NO',100); $i++) {
+            $testTypeId = \App\Models\TestType::inRandomOrder()->first()->id;
+            $user_id = \App\User::inRandomOrder()->first()->id;
+            $specimenTypeId = \App\Models\TestTypeMapping::where('test_type_id',$testTypeId)->first()->specimen_type_id;
+            $specimen = factory(App\Models\Specimen::class)->create([
+                'specimen_type_id' => $specimenTypeId,
+            ]);
+
+            $test_status = rand(1,4);
+            $created_at = date('Y-m-d H:i:s',strtotime("-".rand(0,10)." days"));
+            switch ($test_status) {
+                case 1: //pending
+                    $tested_by = NULL;
+                    $verified_by = NULL;
+                    $time_started = NULL;
+                    $specimen_id = NULL;
+                    $time_completed = NULL;
+                    $time_verified = NULL;
+                    break;
+
+                case 2: //started
+                    $tested_by = NULL;
+                    $verified_by = NULL;
+                    $time_started = date('Y-m-d H:i:s',strtotime($created_at."+".rand(20,1800)." minutes"));
+                    $specimen_id = $specimen->id;
+                    $time_completed = NULL;
+                    $time_verified = NULL;
+                    break;
+
+                case 3: //completed
+                    $tested_by = \App\User::inRandomOrder()->first()->id;
+                    $verified_by = NULL;
+                    $time_started = date($created_at,strtotime("+".rand(20,1800)." minutes"));
+                    $specimen_id = $specimen->id;
+                    $time_completed = date('Y-m-d H:i:s',strtotime($time_started."+".rand(10,3600)." minutes"));
+                    $time_verified = NULL;
+                    break;
+
+                case 4: //verified
+                    $tested_by = \App\User::inRandomOrder()->first()->id;
+                    $verified_by = \App\User::where("id","!=",$tested_by)->inRandomOrder()->first()->id;
+                    $time_started = date('Y-m-d H:i:s',strtotime($created_at."+".rand(20,1800)." minutes"));
+                    $specimen_id = $specimen->id;
+                    $time_completed = date('Y-m-d H:i:s',strtotime($time_started."+".rand(20,3600)." minutes"));
+                    $time_verified = date('Y-m-d H:i:s',strtotime($time_completed."+".rand(5,3600)." minutes"));;
+                    break;
+
+                default:
+                    $tested_by = NULL;
+                    $verified_by = NULL;
+                    $time_started = NULL;
+                    $specimen_id = NULL;
+                    $time_completed = NULL;
+                    $time_verified = NULL;
+                    break;
+            }
+
+            factory(\App\Models\Test::class)->create([
+                'test_type_id' => $testTypeId,
+                'specimen_id' => $specimen_id,
+                'test_status_id' => $test_status,
+                'created_by' => $user_id,
+                'tested_by' => $tested_by,
+                'verified_by' => $verified_by,
+                'time_started' => $time_started,
+                'time_completed' => $time_completed,
+                'time_verified' => $time_verified,
+                'created_at' => $created_at
+            ]);
+        }
         $this->command->info("Tests Seeded");
 
         // create results
@@ -8380,6 +8462,7 @@ class DevSeeder extends Seeder
                         'measure_id' => $measure->id,
                         'result' => rand($measureRange->low,$measureRange->high),
                         // 'result' => $measure->id, // todo: eventually choos a high low normal critically_high critically_low randomly... work on the logic...
+
                         'measure_range_id' => $measureRange->id,
                     ]);
 

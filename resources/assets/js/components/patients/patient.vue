@@ -50,16 +50,16 @@
               <v-flex xs12 sm12 md12>
                 Gender
                 <v-radio-group v-if="editedIndex > -1"
-                  v-model="editedItem.gender.display" row
+                  v-model="editedItem.gender_id" row
                   >
-                  <v-radio label="Male" value="2"></v-radio>
-                  <v-radio label="Female" value="1"></v-radio>
+                  <v-radio label="Male" :value="1"></v-radio>
+                  <v-radio label="Female" :value="2"></v-radio>
                 </v-radio-group>
                 <v-radio-group v-if="editedIndex === -1"
                   v-model="editedItem.gender_id" row
                   >
-                  <v-radio label="Male" value="2"></v-radio>
-                  <v-radio label="Female" value="1"></v-radio>
+                  <v-radio label="Male" value="1"></v-radio>
+                  <v-radio label="Female" value="2"></v-radio>
                 </v-radio-group>
               </v-flex>
               <v-flex xs12 sm12 md12>

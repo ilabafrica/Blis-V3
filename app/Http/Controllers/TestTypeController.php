@@ -19,11 +19,27 @@ class TestTypeController extends Controller
     {
         if ($request->query('search')) {
             $search = $request->query('search');
-            $testType = TestType::where('name', 'LIKE', "%{$search}%")->orderBy('id', 'ASC')
-                ->with('testtypecategory')
-                ->paginate(10);
+            $testType = TestType::where('name', 'LIKE', "%{$search}%")->orderBy('id', 'ASC')->with(
+                'measures.measureType',
+                'measures.measureRanges.gender',
+                'testTypeCategory',
+                'specimenTypes'
+            )->paginate(10);
+        } else if($request->query('fetch')) {
+            $testType = TestType::with(
+                'measures.measureType',
+                'measures.measureRanges.gender',
+                'testTypeCategory',
+                'specimenTypes'
+            )->get();
+
         } else {
-            $testType = TestType::with('testtypecategory')->orderBy('id', 'ASC')->paginate(10);
+            $testType = TestType::with(
+                'measures.measureType',
+                'measures.measureRanges.gender',
+                'testTypeCategory',
+                'specimenTypes'
+            )->orderBy('id', 'ASC')->paginate(10);
         }
 
         return response()->json($testType);
@@ -50,17 +66,17 @@ class TestTypeController extends Controller
             $testType = new TestType;
             $testType->name = $request->input('name');
             $testType->description = $request->input('description');
+            $testType->culture = $request->input('culture');
             $testType->test_type_category_id = $request->input('test_type_category_id');
             $testType->targetTAT = $request->input('targetTAT');
 
             try {
                 $testType->save();
-                $testTypeId = $testType->id;
-                $testTypeData = array('testType' => $testType, 'testTypeId' => $testTypeId );
-                return response()->json($testTypeData);
-                
+                return response()->json($testType->loader());
+
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+
             }
             
         }
@@ -74,14 +90,7 @@ class TestTypeController extends Controller
      */
     public function show($id)
     {
-        $testType = TestType::find($id)->load(
-            'measures.measureType',
-            'measures.measureRanges.gender',
-            'testTypeCategory',
-            'specimenTypes'
-        );
-
-        return response()->json($testType);
+        return response()->json(TestType::find($id)->loader());
     }
 
     /**
@@ -105,13 +114,13 @@ class TestTypeController extends Controller
             $testType = TestType::findOrFail($id);
             $testType->name = $request->input('name');
             $testType->description = $request->input('description');
+            $testType->culture = $request->input('culture');
             $testType->test_type_category_id = $request->input('test_type_category_id');
             $testType->targetTAT = $request->input('targetTAT');
 
             try {
                 $testType->save();
-// $testType->load('measures.measureRanges')
-                return response()->json($testType);
+                return response()->json($testType->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

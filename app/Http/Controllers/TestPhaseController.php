@@ -31,7 +31,8 @@ class TestPhaseController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required',
+            'display' => 'required',
+            'code' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -39,7 +40,8 @@ class TestPhaseController extends Controller
             return response()->json($validator,422);
         } else {
             $testPhase = new TestPhase;
-            $testPhase->name = $request->input('name');
+            $testPhase->display = $request->input('display');
+            $testPhase->code = $request->input('code');
 
             try {
                 $testPhase->save();
@@ -74,7 +76,7 @@ class TestPhaseController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => 'required',
+            'display' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -82,7 +84,7 @@ class TestPhaseController extends Controller
             return response()->json($validator, 422);
         } else {
             $testPhase = TestPhase::findOrFail($id);
-            $testPhase->name = $request->input('name');
+            $testPhase->display = $request->input('display');
 
             try {
                 $testPhase->save();

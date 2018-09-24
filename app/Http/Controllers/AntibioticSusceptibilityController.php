@@ -15,9 +15,12 @@ use App\Models\AntibioticSusceptibility;
 
 class AntibioticSusceptibilityController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $antibioticSusceptibility = AntibioticSusceptibility::orderBy('id', 'ASC')->paginate(10);
+        $antibioticSusceptibility = AntibioticSusceptibility::with(
+            'susceptibilityRange',
+            'result.measureRange',
+            'antibiotic')->where('result_id', $request->result_id)->get();
 
         return response()->json($antibioticSusceptibility);
     }

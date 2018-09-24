@@ -127,6 +127,17 @@
                 Verify
                 <v-icon right dark>check_circle_outline</v-icon>
               </v-btn>
+
+              <v-btn
+                outline
+                small
+                title="Print"
+                color="gray"
+                flat
+                @click="report(props.item)">
+                Print
+                <v-icon right dark>print</v-icon>
+              </v-btn>
         </td>
       </template>
     </v-data-table>
@@ -274,8 +285,15 @@
       },
 
       enterResults (test) {
-        this.editedIndex = this.tests.indexOf(test)
-        this.$refs.resultForm.modal(test);
+
+        if (test.test_type.culture == 1) {
+          this.$router.push({
+            name:'TestCulture',
+            params:{testId:test.id,measureId:test.test_type.measures[0].id}
+          })
+        }else{
+          this.$refs.resultForm.modal(test);
+        }
       },
 
       rejectSpecimen (test) {
@@ -288,6 +306,15 @@
 
       detail (test) {
         this.$refs.testDetailForm.modal(test);
+      },
+
+      report (test) {
+
+      apiCall({url: '/api/report/', method: 'GET' , data: 'PDF' })
+        .then(resp => {})
+        .catch(error => {
+          console.log(error.response)
+        })
       },
     }
   }

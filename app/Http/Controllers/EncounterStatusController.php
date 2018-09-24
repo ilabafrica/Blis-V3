@@ -31,7 +31,8 @@ class EncounterStatusController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required',
+            'code' => 'required',
+            'display'=> 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -39,7 +40,8 @@ class EncounterStatusController extends Controller
             return response()->json($validator,422);
         } else {
             $encounterStatus = new EncounterStatus;
-            $encounterStatus->name = $request->input('name');
+            $encounterStatus->code = $request->input('code');
+            $encounterStatus->display = $request->input('display');
 
             try {
                 $encounterStatus->save();
@@ -74,7 +76,8 @@ class EncounterStatusController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => 'required',
+            'code' => 'required',
+            'display'=> 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -82,7 +85,8 @@ class EncounterStatusController extends Controller
             return response()->json($validator, 422);
         } else {
             $encounterStatus = EncounterStatus::findOrFail($id);
-            $encounterStatus->name = $request->input('name');
+            $encounterStatus->code = $request->input('code');
+            $encounterStatus->display = $request->input('display');
 
             try {
                 $encounterStatus->save();

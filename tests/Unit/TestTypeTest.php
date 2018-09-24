@@ -20,14 +20,18 @@ class TestTypeTest extends TestCase
 		$this->testTypeData=array(
 			"name"=>'Sample String',
 			"description"=>'Sample String',
+			"culture" => 'culture',
 			"test_type_category_id"=>1,
 			"targetTAT"=>'Sample String',
+			"active" => 0,			
 		);
-		$this->updatedTestTypeData=array(
-			"name"=>'Sample updated String',
-			"description"=>'Sample updated String',
+		$this->updatedTestTypeData=array(			
+			"name"=>'Sample String',
+			"description"=>'Sample String',
+			"culture" => 'culture',
 			"test_type_category_id"=>1,
-			"targetTAT"=>'Sample updated String',
+			"targetTAT"=>'Sample String',
+			"active" => 0,	
 		);
 	}
 

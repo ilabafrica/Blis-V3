@@ -18,6 +18,6 @@ class RejectionReason extends Model
 
     public function specimenRejection()
     {
-        return $this->belongsToMany('App\Models\SpecimenRejection','reason_specimen_rejection');
+        return $this->belongsToMany('App\Models\SpecimenRejection','reason_specimen_rejection','rejection_reason_id','specimen_rejection_id');
     }
 }

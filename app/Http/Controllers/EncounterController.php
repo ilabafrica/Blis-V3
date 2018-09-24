@@ -44,6 +44,36 @@ class EncounterController extends Controller
         return response()->json($encounters);
     }
 
+    public function store(Request $request)
+    {
+        $rules = [
+            'patient_id' => 'required',
+            'location_id'    => 'required',
+            'encounter_class_id'  => 'required',
+            'practitioner_name'  => 'required',
+        ];
+
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator, 422);
+        } else {
+            $encounter = new Encounter;
+            $encounter->patient_id = $request->input('patient_id');
+            $encounter->location_id = $request->input('location_id');
+            $encounter->practitioner_name = $request->input('practitioner_name');
+            $encounter->encounter_class_id = $request->input('encounter_class_id');
+            $encounter->bed_no = $request->input('bed_no');
+
+            try {
+                $encounter->save();
+
+                return response()->json($encounter->loader(),200);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
+    }
+
     /**
      * Display the specified resource.
      *

@@ -12,6 +12,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Referral;
 use Illuminate\Http\Request;
+use Auth;
 
 class ReferralController extends Controller
 {
@@ -34,11 +35,12 @@ class ReferralController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'storage_condition' => 'required',
-            'transport' => 'required',
-            'organization_id' => 'required',
-            'person' => 'required',
-            'contact' => 'required',
+            'time_dispatched_to' => 'required',
+            'time_dispatched_from' => 'required',
+            'time_receiveded_from' => 'required',
+            'specimen_id' => 'required',
+            'referred_from' => 'required',
+            'referred_to' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -46,14 +48,12 @@ class ReferralController extends Controller
             return response()->json($validator,422);
         } else {
             $referral = new Referral;
-            $referral->time_dispatch = $request->input('time_dispatch');
-            $referral->time_received = $request->input('time_received');
-            $referral->storage_condition = $request->input('storage_condition');
-            $referral->transport = $request->input('transport');
-            $referral->referral_reason_id = $request->input('referral_reason_id');
-            $referral->organization_id = $request->input('organization_id');
-            $referral->person = $request->input('person');
-            $referral->contact = $request->input('contact');
+            $referral->time_dispatched_to = $request->input('time_dispatched_to');
+            $referral->time_dispatched_from = $request->input('time_dispatched_from');
+            $referral->time_receiveded_from = $request->input('time_receiveded_from');
+            $referral->specimen_id = $request->input('specimen_id');
+            $referral->referred_from = $request->input('referred_from');
+            $referral->referred_to = $request->input('referred_to');
             $referral->user_id =  Auth::user()->id;
 
             try {
@@ -65,11 +65,7 @@ class ReferralController extends Controller
             }
         }
 
-
-
-
-
-        $rules = [
+      /*  $rules = [
             'rejection_reason_ids' => 'required',
             'reject_explained_to' => 'required',
             'specimen_id' => 'required',
@@ -107,11 +103,7 @@ class ReferralController extends Controller
                 $rejection->attach($rejectionReason);
             }
             return response()->json($rejection);
-        }
-
-
-
-
+        }*/
     }
 
     /**
@@ -137,26 +129,24 @@ class ReferralController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'storage_condition' => 'required',
-            'transport_type' => 'required',
-            'organization_id' => 'required',
-            'person' => 'required',
-            'contacts' => 'required',
-            'user_id' => 'required',
-
+            'time_dispatched_to' => 'required',
+            'time_dispatched_from' => 'required',
+            'time_receiveded_from' => 'required',
+            'specimen_id' => 'required',
+            'referred_from' => 'required',
+            'referred_to' => 'required',
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
             $referral = Referral::findOrFail($id);
-            $referral->time_dispatch = $request->input('time_dispatch');
-            $referral->storage_condition = $request->input('storage_condition');
-            $referral->transport_type = $request->input('transport_type');
-            $referral->referral_reason_id = $request->input('referral_reason_id');
-            $referral->organization_id = $request->input('organization_id');
-            $referral->person = $request->input('person');
-            $referral->contacts = $request->input('contacts');
+            $referral->time_dispatched_to = $request->input('time_dispatched_to');
+            $referral->time_dispatched_from = $request->input('time_dispatched_from');
+            $referral->time_receiveded_from = $request->input('time_receiveded_from');
+            $referral->specimen_id = $request->input('specimen_id');
+            $referral->referred_from = $request->input('referred_from');
+            $referral->referred_to = $request->input('referred_to');
             $referral->user_id = $request->input('user_id');
 
             try {

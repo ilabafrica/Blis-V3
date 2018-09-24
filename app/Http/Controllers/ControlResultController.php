@@ -26,7 +26,7 @@ class ControlResultController extends Controller
     {
         $rules = [
             'control_test_id' => 'required',
-            'measures' => 'required',
+            'measure_id' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
@@ -37,7 +37,7 @@ class ControlResultController extends Controller
         } else {
             $controlTest = ControlTest::find($request->input('control_test_id'));
             $controlTest->control_test_status_id = ControlTestStatus::completed;
-            $results = $request->input('measures');
+            $results = $request->input('measure_id');
             foreach ($controlTest->testType->measures as $measure) {
 
                 if($measure->measureType->isMultiAlphanumeric()){

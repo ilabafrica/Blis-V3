@@ -273,9 +273,10 @@ class CreateBlisTables extends Migration
             $table->increments('id');
             $table->string('name', 100);
             $table->string('description', 100)->nullable();
+            $table->boolean('culture')->default(0);
             $table->integer('test_type_category_id')->unsigned();
             $table->string('targetTAT', 50)->nullable();
-            $table->boolean('active')->default(0);
+            $table->boolean('active')->default(1);
 
             $table->foreign('test_type_category_id')
                 ->references('id')->on('test_type_categories');
@@ -591,6 +592,7 @@ class CreateBlisTables extends Migration
             $table->foreign('result_id')->references('id')->on('results');
             $table->foreign('susceptibility_range_id')
                 ->references('id')->on('susceptibility_ranges');
+            $table->unique(['result_id','antibiotic_id']);
         });
 
         /*
@@ -676,6 +678,7 @@ class CreateBlisTables extends Migration
             'name' => 'BLIS Super Admin',
             'username' => 'admin@blis.local',
             'email' => 'admin@blis.local',
+            'gender_id' => 1,
             'password' =>  bcrypt('password'),
         ]);
 

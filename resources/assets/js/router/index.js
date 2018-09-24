@@ -45,6 +45,13 @@ export default new Router({
       component: require('../components/patients/patient'),
       beforeEnter: ifAuthenticated,
     },
+    // User Profile
+    {
+      path: '/account/profile',
+      name: 'Profile',
+      component: require('../components/account/profile'),
+      beforeEnter: ifAuthenticated,
+    },
     // Lab Configurations
     {
       path: '/labconfiguration/healthunit',
@@ -78,15 +85,33 @@ export default new Router({
       beforeEnter: ifAuthenticated,
     },
     {
-      path: '/testcatalog/testtype',
-      name: 'TestType',
-      component: require('../components/testcatalog/testtype/index'),
+      path: '/testcatalog/testtype/:testTypeId/measure/:measureId/measurerange/:measureRangeId/breakpoint',
+      name: 'BreakPoint',
+      component: require('../components/testcatalog/testtype/measure/measurerange/breakpoint'),
       beforeEnter: ifAuthenticated,
     },
     {
-      path: '/testcatalog/measures/:id/',
+      path: '/testcatalog/testtype/:testTypeId/measure/:measureId/measurerange',
+      name: 'MeasureRange',
+      component: require('../components/testcatalog/testtype/measure/measurerange/index'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/testcatalog/testtype/:testTypeId/specimentype',
+      name: 'TestTypeSpecimenType',
+      component: require('../components/testcatalog/testtype/specimentype'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/testcatalog/testtype/:testTypeId/measure',
       name: 'Measure',
-      component: require('../components/testcatalog/testtype/measure'),
+      component: require('../components/testcatalog/testtype/measure/index'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/testcatalog/testtype',
+      name: 'TestType',
+      component: require('../components/testcatalog/testtype/index'),
       beforeEnter: ifAuthenticated,
     },
     {
@@ -127,6 +152,18 @@ export default new Router({
       beforeEnter: ifAuthenticated,
     },
     //Routine and Reference Testing
+    {
+      path: '/test/:testId/measure/:measureId/result/:resultId/measurerange/:measureRangeId',
+      name: 'TestCultureSusceptibility',
+      component: require('../components/test/culture/susceptibility'),
+      beforeEnter: ifAuthenticated,
+    },
+    {
+      path: '/test/:testId/measure/:measureId',
+      name: 'TestCulture',
+      component: require('../components/test/culture/isolatedorganism'),
+      beforeEnter: ifAuthenticated,
+    },
     {
       path: '/test/index',
       name: 'Test',

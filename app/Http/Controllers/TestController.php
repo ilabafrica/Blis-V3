@@ -116,18 +116,8 @@ class TestController extends Controller
      */
     public function show($id)
     {
-        $test = Test::find($id)->load(
-            'testStatus.testPhase',
-            'specimen.specimenType',
-            'testType.specimenTypes',
-            'testType.testTypeCategory',
-            'testType.measures.measureType',
-            'testType.measures.results',
-            'results.measure.measureType',
-            'results.measure.measureRanges',
-            'testType.measures.measureRanges.gender'
-        );
-        return response()->json($test);
+        return response()->json(Test::find($id)->loader());
+
     }
 
     /**
@@ -203,6 +193,7 @@ class TestController extends Controller
             $specimen->collected_by = $request->input('collected_by');
             $specimen->time_collected = $request->input('time_collected');
             $specimen->time_received = $request->input('time_received');
+            $specimen->save();
 
             $test = Test::find($request->input('test_id'));
             $test->specimen_id = $specimen->id;

@@ -15,4 +15,9 @@ use Illuminate\Database\Eloquent\Model;
 class Antibiotic extends Model
 {
     public $timestamps = false;
+
+    public function measureRanges()
+    {
+        return $this->belongsToMany('App\Models\MeasureRange','susceptibility_break_points', 'antibiotic_id','measure_range_id');
+    }
 }

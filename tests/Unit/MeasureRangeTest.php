@@ -53,7 +53,7 @@ class MeasureRangeTest extends TestCase
 	{
 		$response=$this->post('/api/measurerange',$this->measureRangeData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("interpretation_id",$response->original);
+		$this->assertArrayHasKey("measure_id",$response->original);
 	}
 
 	public function testListMeasureRange()
@@ -67,7 +67,7 @@ class MeasureRangeTest extends TestCase
 		$response=$this->post('/api/measurerange',$this->measureRangeData);
 		$response=$this->get('/api/measurerange/1');
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("interpretation_id",$response->original);
+		$this->assertArrayHasKey("measure_id",$response->original);
 	}
 
 	public function testUpdateMeasureRange()
@@ -75,7 +75,7 @@ class MeasureRangeTest extends TestCase
 		$response=$this->post('/api/measurerange',$this->measureRangeData);
 		$response=$this->put('/api/measurerange/1',$this->updatedMeasureRangeData);
 		$this->assertEquals(200,$response->getStatusCode());
-		$this->assertArrayHasKey("interpretation_id",$response->original);
+		$this->assertArrayHasKey("measure_id",$response->original);
 	}
 
 	public function testDeleteMeasureRange()

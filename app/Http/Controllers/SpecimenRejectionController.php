@@ -14,6 +14,7 @@ use Auth;
 use App\Models\TestPhase;
 use Illuminate\Http\Request;
 use App\Models\SpecimenRejection;
+use App\Models\RejectionReason;
 
 class SpecimenRejectionController extends Controller
 {
@@ -30,15 +31,15 @@ class SpecimenRejectionController extends Controller
      * @param  \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
-    public function store()
+    public function store(Request $request)
     {
         $rules = [
             'rejection_reason_ids' => 'required',
-            'reject_explained_to' => 'required',
+            'authorized_person_informed' => 'required',
             'specimen_id' => 'required',
         ];
 
-        $validator = \Validator::make(Input::all(), $rules);
+        $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator,422);
 
@@ -57,17 +58,14 @@ class SpecimenRejectionController extends Controller
 
                 $rejection->test_phase_id = TestPhase::pre_analytical;
             }
-            $rejection->rejection_reason_id = $request->input('rejection_reason_id');
-            $rejection->reject_explained_to = $request->input('reject_explained_to');
+            $rejection->authorized_person_informed = $request->input('authorized_person_informed');
             $rejection->rejected_by = Auth::user()->id;
             $rejection->time_rejected = date('Y-m-d H:i:s');
             $rejection->save();
 
             foreach ($request->input('rejection_reason_ids') as $rejectionReasonId) {
-                // $specimenRejection = SpecimenRejection::find($rejection->id);
                 $rejectionReason = RejectionReason::find($rejectionReasonId);
-                // $specimenRejection->attach($rejectionReason);
-                $rejection->attach($rejectionReason);
+                $rejectionReason->specimenRejection()->attach($rejection);
             }
             return response()->json($rejection);
         }
@@ -112,9 +110,7 @@ class SpecimenRejectionController extends Controller
             $specimenRejection->specimen_id = $request->input('specimen_id');
             $specimenRejection->test_phase_id = $request->input('test_phase_id');
             $specimenRejection->rejected_by = $request->input('rejected_by');
-            $specimenRejection->rejection_reason_id = $request->input('rejection_reason_id');
-            $specimenRejection->reject_explained_to = $request->input('reject_explained_to');
-            $specimenRejection->time_rejected = $request->input('time_rejected');
+            $specimenRejection->authorized_person_informed = $request->input('authorized_person_informed');
 
             try {
                 $specimenRejection->save();

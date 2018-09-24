@@ -78,14 +78,27 @@
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.number }}</td>
-        <td class="text-xs-left">{{ props.item.description }}</td>
         <td class="text-xs-left">{{ props.item.expiry }}</td>
         <td class="justify-left layout px-0">
-          <v-btn icon class="mx-0" @click="editItem(props.item)">
-            <v-icon color="teal">edit</v-icon>
+          <v-btn
+            outline
+            small
+            title="Edit"
+            color="teal"
+            flat
+            @click="editItem(props.item)">
+            Edit
+            <v-icon right dark>edit</v-icon>
           </v-btn>
-          <v-btn icon class="mx-0" @click="deleteItem(props.item)">
-            <v-icon color="pink">delete</v-icon>
+          <v-btn
+            outline
+            small
+            title="Delete"
+            color="pink"
+            flat
+            @click="deleteItem(props.item)">
+            Delete
+            <v-icon right dark>delete</v-icon>
           </v-btn>
         </td>
       </template>
@@ -124,7 +137,6 @@
       },
       headers: [
         { text: 'Lot Number', value: 'number' },
-        { text: 'Description', value: 'description' },
         { text: 'Expiry Date', value: 'expiry' },
         { text: 'Actions', value: 'name', sortable: false }
       ],
@@ -243,7 +255,7 @@
 
           apiCall({url: '/api/lot/'+this.editedItem.id, data: this.editedItem, method: 'PUT' })
           .then(resp => {
-            Object.assign(this.lot[this.editedIndex], this.editedItem)
+            Object.assign(this.lot[this.editedIndex], resp)
             console.log(resp)
             this.resetDialogReferences();
             this.saving = false;
@@ -257,7 +269,7 @@
 
           apiCall({url: '/api/lot', data: this.editedItem, method: 'POST' })
           .then(resp => {
-            this.lot.push(this.editedItem)
+            this.lot.push(resp)
             console.log(resp)
             this.resetDialogReferences();
             this.saving = false;
