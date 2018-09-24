@@ -115,10 +115,10 @@ $factory->define(\App\Models\Test::class, function (Faker\Generator $faker) {
         'tested_by' => null,
         'verified_by' => null,
         'requested_by' => $faker->word,
-        'time_started' => null,
-        'time_completed' => null,
-        'time_verified' => null,
-        'created_at' => null
+        'time_started' => date('Y-m-d H:i:s'),
+        'time_completed' => date('Y-m-d H:i:s'),
+        'time_verified' => date('Y-m-d H:i:s'),
+        'created_at' => date('Y-m-d H:i:s')
     ];
 });
 

@@ -8565,12 +8565,58 @@ class DevSeeder extends Seeder
                 'created_at' => $created_at
             ]);
         }
-        factory(\App\Models\Test::class, (int)env('DEV_TEST_NO',100))->create();
 
-        Test::create(["encounter_id" => 1, "identifier" => "4667/12/17", "test_type_id" => 4, "specimen_id" => 4, "test_status_id" => 4, "created_by" => 7, "requested_by" => "molestias", "created_by" => "2018-09-17 07:40:08", "time_sent" => "2018-09-17 07:40:08", "updated_at" => "2018-09-17 07:40:08"]);
-        Test::create(["encounter_id" => 1, "identifier" => 1, "test_type_id" => 4, "specimen_id" => 4, "test_status_id" => 4, "created_by" => 7, "requested_by" => "molestias", "created_by" => "2018-09-17 07:40:08", "time_sent" => "2018-09-17 07:40:08", "updated_at" => "2018-09-17 07:40:08"]);
-        Test::create(["encounter_id" => 1, "identifier" => "IJA316000", "test_type_id" => 4, "specimen_id" => 4, "test_status_id" => 4, "created_by" => 7, "requested_by" => "molestias", "created_by" => "2018-09-17 07:40:08", "time_sent" => "2018-09-17 07:40:08", "updated_at" => "2018-09-17 07:40:08"]);
-        Test::create(["encounter_id" => 1, "identifier" => 2017000010, "test_type_id" => 4, "specimen_id" => 4, "test_status_id" => 4, "created_by" => 7, "requested_by" => "molestias", "created_by" => "2018-09-17 07:40:08", "time_sent" => "2018-09-17 07:40:08", "updated_at" => "2018-09-17 07:40:08"]);
+        factory(\App\Models\Test::class)->create([
+            'identifier' => "4667/12/17",
+            'test_type_id' => 4,
+            'specimen_id' => $specimen_id,
+            'test_status_id' => $test_status,
+            'created_by' => $user_id,
+            'tested_by' => $tested_by,
+            'verified_by' => $verified_by,
+            'time_started' => $time_started,
+            'time_completed' => $time_completed,
+            'time_verified' => $time_verified,
+        ]);
+
+        factory(\App\Models\Test::class)->create([
+            'identifier' => 1,
+            'test_type_id' => 4,
+            'specimen_id' => $specimen_id,
+            'test_status_id' => $test_status,
+            'created_by' => $user_id,
+            'tested_by' => $tested_by,
+            'verified_by' => $verified_by,
+            'time_started' => $time_started,
+            'time_completed' => $time_completed,
+            'time_verified' => $time_verified,
+        ]);
+
+        factory(\App\Models\Test::class)->create([
+            'identifier' => 'IJA316000',
+            'test_type_id' => 4,
+            'specimen_id' => $specimen_id,
+            'test_status_id' => $test_status,
+            'created_by' => $user_id,
+            'tested_by' => $tested_by,
+            'verified_by' => $verified_by,
+            'time_started' => $time_started,
+            'time_completed' => $time_completed,
+            'time_verified' => $time_verified,
+        ]);
+
+        factory(\App\Models\Test::class)->create([
+            'identifier' => 2017000010,
+            'test_type_id' => 4,
+            'specimen_id' => $specimen_id,
+            'test_status_id' => $test_status,
+            'created_by' => $user_id,
+            'tested_by' => $tested_by,
+            'verified_by' => $verified_by,
+            'time_started' => $time_started,
+            'time_completed' => $time_completed,
+            'time_verified' => $time_verified,
+        ]);
 
         $this->command->info("Tests Seeded");
 
