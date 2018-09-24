@@ -54,7 +54,7 @@
       </v-card>
     </v-dialog>
     <v-card-title>
-      Isolated Organism
+      Isolated Organism: <b> {{measureRange.display}}</b>
       <v-spacer></v-spacer>
 
       <v-btn
@@ -64,7 +64,7 @@
         color="red"
         flat
         @click="breakPoint()">
-        Add Break Point
+        Add Antibiotic
         <v-icon right dark>bug_report</v-icon>
       </v-btn>
     </v-card-title>
@@ -74,21 +74,10 @@
       hide-actions
       class="elevation-1">
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ props.item.result.measure_range.display }}</td>
         <td class="text-xs-left">{{ props.item.antibiotic.name }}</td>
         <td class="text-xs-left">{{ props.item.zone_diameter }}</td>
         <td class="text-xs-left">{{ props.item.susceptibility_range.name }}</td>
         <td class="justify-left layout px-0">
-          <v-btn
-            outline
-            small
-            title="Edit"
-            color="teal"
-            flat
-            @click="editItem(props.item)">
-            Edit
-            <v-icon right dark>edit</v-icon>
-          </v-btn>
           <v-btn
             outline
             small
@@ -113,7 +102,6 @@
       delete: false,
       saving: false,
       headers: [
-        { text: 'Organism', value: 'organism' },
         { text: 'Antibiotic', value: 'antibiotic' },
         { text: 'Zone Diameter', value: 'zone_diameter' },
         { text: 'Result', value: 'result' },
@@ -122,7 +110,8 @@
       susceptibilities: [],
       editedIndex: -1,
       antibiotics: [],
-      susceptibilityRanges: {},
+      measureRange: {},
+      susceptibilityRanges: [],
       editedItem: {
         antibiotic_susceptibility_id: '',
         result_id: '',
@@ -161,7 +150,6 @@
 
         apiCall({url: '/api/susceptibilityrange', method: 'GET' })
         .then(resp => {
-          console.log(resp)
           this.susceptibilityRanges = resp;
         })
         .catch(error => {
@@ -170,8 +158,16 @@
 
         apiCall({url: '/api/antibiotic?measure_range_id='+this.$route.params.measureRangeId, method: 'GET' })
         .then(resp => {
-          console.log(resp)
           this.antibiotics = resp;
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+
+        apiCall({url: '/api/measurerange/'+this.$route.params.measureRangeId, method: 'GET' })
+        .then(resp => {
+          console.log(resp)
+          this.measureRange = resp;
         })
         .catch(error => {
           console.log(error.response)
@@ -188,14 +184,6 @@
 
       },
 
-      editItem (item) {
-
-        this.editedItem.antibiotic_susceptibility_id = item.id
-        this.editedIndex = this.susceptibilities.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-
       deleteItem (item) {
 
         confirm('Are you sure you want to delete this item?') && (this.delete = true)
@@ -203,7 +191,7 @@
         if (this.delete) {
           const index = this.susceptibilities.indexOf(item)
           this.susceptibilities.splice(index, 1)
-          apiCall({url: '/api/result/susceptibility'+item.id, method: 'DELETE' })
+          apiCall({url: '/api/result/deletesusceptibility/'+item.id, method: 'GET' })
           .then(resp => {
             console.log(resp)
           })
@@ -239,11 +227,7 @@
 
         apiCall({url: '/api/result/susceptibility', data: this.editedItem, method: 'POST' })
         .then(resp => {
-          if (this.editedIndex > -1) {
-            Object.assign(this.susceptibilities[this.editedIndex], this.editedItem)
-          } else {
-            this.susceptibilities.push(this.editedItem)
-          }
+            this.susceptibilities.push(resp)
           console.log(resp)
           this.resetDialogReferences();
           this.saving = false;

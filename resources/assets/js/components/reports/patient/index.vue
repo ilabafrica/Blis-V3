@@ -35,7 +35,6 @@
             flat
             v-if="$can('view_reports')"
             :to="{name:'patient_reports_single', params:{id:props.item.id}}">
-            <!-- user new view_patient_report -->
             Report
             <v-icon right dark>list_alt</v-icon>
           </v-btn>

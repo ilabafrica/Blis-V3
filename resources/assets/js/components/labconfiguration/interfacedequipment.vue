@@ -1,7 +1,15 @@
 <template>
   <div>
     <v-dialog v-model="dialog" max-width="500px">
-      <v-btn slot="activator" color="primary" dark class="mb-2">New Instrument</v-btn>
+      <v-btn
+        outline
+        small
+        color="primary"
+        slot="activator"
+        flat>
+        New Instrument
+        <v-icon right dark>playlist_add</v-icon>
+      </v-btn>
       <v-card>
         <v-toolbar dark color="primary" class="elevation-0">
           <v-toolbar-title>{{ formTitle }}</v-toolbar-title>

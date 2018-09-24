@@ -34,7 +34,7 @@ class ControlResultTest extends TestCase
 		$response=$this->post('/api/controlresult',[
 			"control_test_id"=>$controlTest->id,
 			"measure_id"=>$measure->id,
-			"result"=>'44:7',
+			"measures"=>[$measure->id => ['result'=>'44:7']],
 		]);
 
 		$this->assertEquals(200,$response->getStatusCode());

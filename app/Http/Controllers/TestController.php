@@ -239,7 +239,7 @@ class TestController extends Controller
                         ->attach($specimenRejection);
                 }
 
-                return response()->json($test->loader());
+                return response()->json(Test::find($request->input('test_id'))->loader());
 
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -275,7 +275,7 @@ class TestController extends Controller
                         ->attach($referral);
                 }
 
-                return response()->json($test->loader());
+                return response()->json(Test::find($request->input('test_id'))->loader());
 
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
