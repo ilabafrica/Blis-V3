@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
         ILabAfrica\EMRInterface\EMRServiceProvider::class,
+        ILabAfrica\EquipmentInterface\EquipmentInterfaceServiceProvider::class,
 
     ],
 
