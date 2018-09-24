@@ -22,6 +22,8 @@ use App\Models\TestTypeCategory;
 use App\Models\GramStainRange;
 use App\Models\RejectionReason;
 use App\Models\SusceptibilityBreakPoint;
+use ILabAfrica\EquipmentInterface\InstrumentMapping;
+use ILabAfrica\EquipmentInterface\InstrumentParameters;
 
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
@@ -326,6 +328,110 @@ class DevSeeder extends Seeder
 
         $this->command->info("Instrument Mappings table seeded");
 
+        
+
+        /* Test Types for prevalence */
+        $test_types_salmonella = TestType::create(["name" => "Salmonella Antigen Test", "test_type_category_id" => $test_categories->id]);
+        $test_types_direct = TestType::create(["name" => "Direct COOMBS Test", "test_type_category_id" => $testTypeCategoryTransfusion->id]);
+        $test_types_du = TestType::create(["name" => "DU Test", "test_type_category_id" => $testTypeCategoryTransfusion->id]);
+        $test_types_sickling = TestType::create(["name" => "Sickling Test", "test_type_category_id" => $testTypeCategoryHematology->id]);
+        $test_types_borrelia = TestType::create(["name" => "Borrelia", "test_type_category_id" => $test_categories->id]);
+        $test_types_vdrl = TestType::create(["name" => "VDRL", "test_type_category_id" => $testTypeCategorySerology->id]);
+        $test_types_pregnancy = TestType::create(["name" => "Pregnancy Test", "test_type_category_id" => $testTypeCategorySerology->id]);
+        $test_types_brucella = TestType::create(["name" => "Brucella", "test_type_category_id" => $testTypeCategorySerology->id]);
+        $test_types_pylori = TestType::create(["name" => "H. Pylori", "test_type_category_id" => $testTypeCategorySerology->id]);
+
+        $this->command->info("Test Types seeded");
+
+        /* Test Types and specimen types relationship for prevalence */
+        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
+            [$test_types_salmonella->id, $specimenTypeBlood->id]);
+        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
+            [$test_types_direct->id, $specimenTypeBlood->id]);
+        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
+            [$test_types_du->id, $specimenTypeBlood->id]);
+         \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
+            [$test_types_sickling->id, $specimenTypeBlood->id]);
+        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
+            [$test_types_borrelia->id, $specimenTypeUrine->id]);
+        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
+            [$test_types_vdrl->id, $specimenTypeBlood->id]);
+         \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
+            [$test_types_pregnancy->id, $specimenTypeUrine->id]);
+        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
+            [$test_types_brucella->id, $specimenTypeBlood->id]);
+        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
+            [$test_types_pylori->id, $specimenTypeStool->id]);
+        $this->command->info("TestTypes/SpecimenTypes seeded");
+
+        /*New measures for prevalence*/
+        $measure_salmonella = Measure::create([
+            "measure_type_id" => "2",
+            "test_type_id" => $test_types_salmonella->id,
+            "name" => "Salmonella Antigen Test",
+            "unit" => ""]);
+        $measure_direct = Measure::create([
+            "measure_type_id" => "2",
+            "test_type_id" => $test_types_direct->id,
+            "name" => "Direct COOMBS Test",
+            "unit" => ""]);
+        $measure_du = Measure::create([
+            "measure_type_id" => "2",
+            "test_type_id" => $test_types_du->id,
+            "name" => "Du Test",
+            "unit" => ""]);
+        $measure_sickling = Measure::create([
+            "measure_type_id" => "2",
+            "test_type_id" => $test_types_sickling->id,
+            "name" => "Sickling Test",
+            "unit" => ""]);
+        $measure_borrelia = Measure::create([
+            "measure_type_id" => "2",
+            "test_type_id" => $test_types_borrelia->id,
+            "name" => "Borrelia",
+            "unit" => ""]);
+        $measure_vdrl = Measure::create([
+            "measure_type_id" => "2",
+            "test_type_id" => $test_types_vdrl->id,
+            "name" => "VDRL",
+            "unit" => ""]);
+        $measure_pregnancy = Measure::create([
+            "measure_type_id" => "2",
+            "test_type_id" => $test_types_pregnancy->id,
+            "name" => "Pregnancy Test",
+            "unit" => ""]);
+        $measure_brucella = Measure::create([
+            "measure_type_id" => "2",
+            "test_type_id" => $test_types_brucella->id,
+            "name" => "Brucella",
+            "unit" => ""]);
+        $measure_pylori = Measure::create([
+            "measure_type_id" => "2",
+            "test_type_id" => $test_types_pylori->id,
+            "name" => "H. Pylori",
+            "unit" => ""]);
+
+
+        MeasureRange::create(["measure_id" => $measure_salmonella->id, "display" => "Positive"]);
+        MeasureRange::create(["measure_id" => $measure_salmonella->id, "display" => "Negative"]);
+        MeasureRange::create(["measure_id" => $measure_direct->id, "display" => "Positive"]);
+        MeasureRange::create(["measure_id" => $measure_direct->id, "display" => "Negative"]);
+        MeasureRange::create(["measure_id" => $measure_du->id, "display" => "Positive"]);
+        MeasureRange::create(["measure_id" => $measure_du->id, "display" => "Negative"]);
+        MeasureRange::create(["measure_id" => $measure_sickling->id, "display" => "Positive"]);
+        MeasureRange::create(["measure_id" => $measure_sickling->id, "display" => "Negative"]);
+        MeasureRange::create(["measure_id" => $measure_borrelia->id, "display" => "Positive"]);
+        MeasureRange::create(["measure_id" => $measure_borrelia->id, "display" => "Negative"]);
+        MeasureRange::create(["measure_id" => $measure_vdrl->id, "display" => "Positive"]);
+        MeasureRange::create(["measure_id" => $measure_vdrl->id, "display" => "Negative"]);
+        MeasureRange::create(["measure_id" => $measure_pregnancy->id, "display" => "Positive"]);
+        MeasureRange::create(["measure_id" => $measure_pregnancy->id, "display" => "Negative"]);
+        MeasureRange::create(["measure_id" => $measure_brucella->id, "display" => "Positive"]);
+        MeasureRange::create(["measure_id" => $measure_brucella->id, "display" => "Negative"]);
+        MeasureRange::create(["measure_id" => $measure_pylori->id, "display" => "Positive"]);
+        MeasureRange::create(["measure_id" => $measure_pylori->id, "display" => "Negative"]);
+        $this->command->info("Measures seeded again");
+
         /* Instrument Parameters table */
         InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 1]);
         InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_direct->id, "sub_test_id" => 2]);
@@ -435,108 +541,6 @@ class DevSeeder extends Seeder
         InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 79]);
 
         $this->command->info("Instrument Parameters table seeded");
-
-        /* Test Types for prevalence */
-        $test_types_salmonella = TestType::create(["name" => "Salmonella Antigen Test", "test_type_category_id" => $test_categories->id]);
-        $test_types_direct = TestType::create(["name" => "Direct COOMBS Test", "test_type_category_id" => $testTypeCategoryTransfusion->id]);
-        $test_types_du = TestType::create(["name" => "DU Test", "test_type_category_id" => $testTypeCategoryTransfusion->id]);
-        $test_types_sickling = TestType::create(["name" => "Sickling Test", "test_type_category_id" => $testTypeCategoryHematology->id]);
-        $test_types_borrelia = TestType::create(["name" => "Borrelia", "test_type_category_id" => $test_categories->id]);
-        $test_types_vdrl = TestType::create(["name" => "VDRL", "test_type_category_id" => $testTypeCategorySerology->id]);
-        $test_types_pregnancy = TestType::create(["name" => "Pregnancy Test", "test_type_category_id" => $testTypeCategorySerology->id]);
-        $test_types_brucella = TestType::create(["name" => "Brucella", "test_type_category_id" => $testTypeCategorySerology->id]);
-        $test_types_pylori = TestType::create(["name" => "H. Pylori", "test_type_category_id" => $testTypeCategorySerology->id]);
-
-        $this->command->info("Test Types seeded");
-
-        /* Test Types and specimen types relationship for prevalence */
-        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
-            [$test_types_salmonella->id, $specimenTypeBlood->id]);
-        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
-            [$test_types_direct->id, $specimenTypeBlood->id]);
-        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
-            [$test_types_du->id, $specimenTypeBlood->id]);
-         \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
-            [$test_types_sickling->id, $specimenTypeBlood->id]);
-        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
-            [$test_types_borrelia->id, $specimenTypeUrine->id]);
-        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
-            [$test_types_vdrl->id, $specimenTypeBlood->id]);
-         \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
-            [$test_types_pregnancy->id, $specimenTypeUrine->id]);
-        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
-            [$test_types_brucella->id, $specimenTypeBlood->id]);
-        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
-            [$test_types_pylori->id, $specimenTypeStool->id]);
-        $this->command->info("TestTypes/SpecimenTypes seeded");
-
-        /*New measures for prevalence*/
-        $measure_salmonella = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $test_types_salmonella->id,
-            "name" => "Salmonella Antigen Test",
-            "unit" => ""]);
-        $measure_direct = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $test_types_direct->id,
-            "name" => "Direct COOMBS Test",
-            "unit" => ""]);
-        $measure_du = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $test_types_du->id,
-            "name" => "Du Test",
-            "unit" => ""]);
-        $measure_sickling = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $test_types_sickling->id,
-            "name" => "Sickling Test",
-            "unit" => ""]);
-        $measure_borrelia = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $test_types_borrelia->id,
-            "name" => "Borrelia",
-            "unit" => ""]);
-        $measure_vdrl = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $test_types_vdrl->id,
-            "name" => "VDRL",
-            "unit" => ""]);
-        $measure_pregnancy = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $test_types_pregnancy->id,
-            "name" => "Pregnancy Test",
-            "unit" => ""]);
-        $measure_brucella = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $test_types_brucella->id,
-            "name" => "Brucella",
-            "unit" => ""]);
-        $measure_pylori = Measure::create([
-            "measure_type_id" => "2",
-            "test_type_id" => $test_types_pylori->id,
-            "name" => "H. Pylori",
-            "unit" => ""]);
-
-
-        MeasureRange::create(["measure_id" => $measure_salmonella->id, "display" => "Positive"]);
-        MeasureRange::create(["measure_id" => $measure_salmonella->id, "display" => "Negative"]);
-        MeasureRange::create(["measure_id" => $measure_direct->id, "display" => "Positive"]);
-        MeasureRange::create(["measure_id" => $measure_direct->id, "display" => "Negative"]);
-        MeasureRange::create(["measure_id" => $measure_du->id, "display" => "Positive"]);
-        MeasureRange::create(["measure_id" => $measure_du->id, "display" => "Negative"]);
-        MeasureRange::create(["measure_id" => $measure_sickling->id, "display" => "Positive"]);
-        MeasureRange::create(["measure_id" => $measure_sickling->id, "display" => "Negative"]);
-        MeasureRange::create(["measure_id" => $measure_borrelia->id, "display" => "Positive"]);
-        MeasureRange::create(["measure_id" => $measure_borrelia->id, "display" => "Negative"]);
-        MeasureRange::create(["measure_id" => $measure_vdrl->id, "display" => "Positive"]);
-        MeasureRange::create(["measure_id" => $measure_vdrl->id, "display" => "Negative"]);
-        MeasureRange::create(["measure_id" => $measure_pregnancy->id, "display" => "Positive"]);
-        MeasureRange::create(["measure_id" => $measure_pregnancy->id, "display" => "Negative"]);
-        MeasureRange::create(["measure_id" => $measure_brucella->id, "display" => "Positive"]);
-        MeasureRange::create(["measure_id" => $measure_brucella->id, "display" => "Negative"]);
-        MeasureRange::create(["measure_id" => $measure_pylori->id, "display" => "Positive"]);
-        MeasureRange::create(["measure_id" => $measure_pylori->id, "display" => "Negative"]);
-        $this->command->info("Measures seeded again");
 
         $testTypeCBC = TestType::create([
             "name" => "CBC",
