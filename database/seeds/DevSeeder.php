@@ -22,6 +22,8 @@ use App\Models\TestTypeCategory;
 use App\Models\GramStainRange;
 use App\Models\RejectionReason;
 use App\Models\SusceptibilityBreakPoint;
+use ILabAfrica\EquipmentInterface\InstrumentMapping;
+use ILabAfrica\EquipmentInterface\InstrumentParameters;
 
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
@@ -309,15 +311,24 @@ class DevSeeder extends Seeder
         $this->command->info("Test Type Mappings Seeded");
 
         /* Instruments table */
-        $instrumentsData = [
-            "name" => "Celltac F Mek 8222",
-            "ip" => "192.168.1.12",
-            "hostname" => "HEMASERVER"
-        ];
-
-        $instrument = Instrument::create($instrumentsData);
+        $instrument_celltac = Instrument::create(["name" => "celltac_f_mek_8222", "ip" => "192.168.1.12", "hostname" => "HEMASERVER"]);
+        $instrument_sysmex_xs_1000i = Instrument::create(["name" => "sysmex_xs_1000i", "ip" => "192.168.1.13", "hostname" => "HEMASERVER"]);
+        $instrument_genexpert = Instrument::create(["name" => "genexpert", "ip" => "192.168.1.14", "hostname" => "HEMASERVER"]);
+        $instrument_sysmex_poch_100i = Instrument::create(["name" => "sysmex_poch_100i", "ip" => "192.168.1.15", "hostname" => "HEMASERVER"]);
+        $instrument_humacount_60ts = Instrument::create(["name" => "humacount_60ts", "ip" => "192.168.1.16", "hostname" => "HEMASERVER"]);
 
         $this->command->info("Instruments table seeded");
+
+        /* Instrument Mapping table */
+        $instrument_mapping_celltac = InstrumentMapping::create(["instrument_id" => $instrument_celltac->id, "test_type_id" => $testTypeHIV->id]);
+        $instrument_mapping_sysmex_xs_1000i = InstrumentMapping::create(["instrument_id" => $instrument_sysmex_xs_1000i->id, "test_type_id" => $testTypeWBC->id]);
+        $instrument_mapping_genexpert = InstrumentMapping::create(["instrument_id" => $instrument_genexpert->id, "test_type_id" => $testTypeWBC->id]);
+        $instrument_mapping_sysmex_poch_100i = InstrumentMapping::create(["instrument_id" => $instrument_sysmex_poch_100i->id, "test_type_id" => $testTypeWBC->id]);
+        $instrument_mapping_humacount_60ts = InstrumentMapping::create(["instrument_id" => $instrument_humacount_60ts->id, "test_type_id" => $testTypeWBC->id]);
+
+        $this->command->info("Instrument Mappings table seeded");
+
+        
 
         /* Test Types for prevalence */
         $test_types_salmonella = TestType::create(["name" => "Salmonella Antigen Test", "test_type_category_id" => $test_categories->id]);
@@ -420,6 +431,116 @@ class DevSeeder extends Seeder
         MeasureRange::create(["measure_id" => $measure_pylori->id, "display" => "Positive"]);
         MeasureRange::create(["measure_id" => $measure_pylori->id, "display" => "Negative"]);
         $this->command->info("Measures seeded again");
+
+        /* Instrument Parameters table */
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 1]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_direct->id, "sub_test_id" => 2]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_du->id, "sub_test_id" => 3]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_sickling->id, "sub_test_id" => 4]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_borrelia->id, "sub_test_id" => 5]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_vdrl->id, "sub_test_id" => 6]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_pregnancy->id, "sub_test_id" => 7]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_brucella->id, "sub_test_id" => 8]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_pylori->id, "sub_test_id" => 9]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_pylori->id, "sub_test_id" => 10]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_brucella->id, "sub_test_id" => 11]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_pregnancy->id, "sub_test_id" => 12]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_vdrl->id, "sub_test_id" => 13]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_borrelia->id, "sub_test_id" => 14]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_sickling->id, "sub_test_id" => 15]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_du->id, "sub_test_id" => 16]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_direct->id, "sub_test_id" => 17]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 18]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_direct->id, "sub_test_id" => 19]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_du->id, "sub_test_id" => 20]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_sickling->id, "sub_test_id" => 21]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_borrelia->id, "sub_test_id" => 22]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_vdrl->id, "sub_test_id" => 23]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_xs_1000i->id, "measure_id" => $measure_pregnancy->id, "sub_test_id" => 24]);
+
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 1]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_direct->id, "sub_test_id" => 2]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_du->id, "sub_test_id" => 3]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_sickling->id, "sub_test_id" => 4]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_borrelia->id, "sub_test_id" => 5]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_vdrl->id, "sub_test_id" => 6]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_pregnancy->id, "sub_test_id" => 7]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_brucella->id, "sub_test_id" => 8]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_pylori->id, "sub_test_id" => 9]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_pylori->id, "sub_test_id" => 10]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_brucella->id, "sub_test_id" => 11]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_pregnancy->id, "sub_test_id" => 12]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_vdrl->id, "sub_test_id" => 13]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_borrelia->id, "sub_test_id" => 14]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_sickling->id, "sub_test_id" => 15]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_du->id, "sub_test_id" => 16]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_direct->id, "sub_test_id" => 17]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 18]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_direct->id, "sub_test_id" => 19]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_du->id, "sub_test_id" => 20]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_sickling->id, "sub_test_id" => 21]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_borrelia->id, "sub_test_id" => 22]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_vdrl->id, "sub_test_id" => 23]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_pregnancy->id, "sub_test_id" => 24]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 25]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_direct->id, "sub_test_id" => 26]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_du->id, "sub_test_id" => 27]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_sickling->id, "sub_test_id" => 28]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_borrelia->id, "sub_test_id" => 29]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_vdrl->id, "sub_test_id" => 30]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_pregnancy->id, "sub_test_id" => 31]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_brucella->id, "sub_test_id" => 32]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_pylori->id, "sub_test_id" => 33]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_pylori->id, "sub_test_id" => 34]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_brucella->id, "sub_test_id" => 35]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_pregnancy->id, "sub_test_id" => 36]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_vdrl->id, "sub_test_id" => 37]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_borrelia->id, "sub_test_id" => 38]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_sickling->id, "sub_test_id" => 39]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_du->id, "sub_test_id" => 40]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_direct->id, "sub_test_id" => 41]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 42]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_direct->id, "sub_test_id" => 43]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_direct->id, "sub_test_id" => 44]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_genexpert->id, "measure_id" => $measure_direct->id, "sub_test_id" => 45]);
+
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 67]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_direct->id, "sub_test_id" => 68]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_du->id, "sub_test_id" => 69]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_sickling->id, "sub_test_id" => 70]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_borrelia->id, "sub_test_id" => 71]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_vdrl->id, "sub_test_id" => 72]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_pregnancy->id, "sub_test_id" => 73]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_brucella->id, "sub_test_id" => 74]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_pylori->id, "sub_test_id" => 86]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_pylori->id, "sub_test_id" => 87]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_brucella->id, "sub_test_id" => 88]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_pregnancy->id, "sub_test_id" => 89]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_vdrl->id, "sub_test_id" => 90]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_borrelia->id, "sub_test_id" => 81]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_sickling->id, "sub_test_id" => 82]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_du->id, "sub_test_id" => 83]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_sysmex_poch_100i->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 84]);
+
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 67]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 82]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 83]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 87]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 88]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 68]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 69]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 70]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 73]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 81]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 77]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 74]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 84]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 85]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 76]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 75]);
+        InstrumentParameters::create(["instrument_mapping_id" => $instrument_mapping_humacount_60ts->id, "measure_id" => $measure_salmonella->id, "sub_test_id" => 79]);
+
+        $this->command->info("Instrument Parameters table seeded");
 
         $testTypeCBC = TestType::create([
             "name" => "CBC",
@@ -8374,6 +8495,7 @@ class DevSeeder extends Seeder
 
         $this->command->info("Tests Seeding...");
 
+<<<<<<< HEAD
         for ($i=0; $i < (int)env('DEV_TEST_NO',100); $i++) {
             $testTypeId = \App\Models\TestType::inRandomOrder()->first()->id;
             $user_id = \App\User::inRandomOrder()->first()->id;
@@ -8444,6 +8566,15 @@ class DevSeeder extends Seeder
                 'created_at' => $created_at
             ]);
         }
+=======
+        factory(\App\Models\Test::class, (int)env('DEV_TEST_NO',100))->create();
+
+        Test::create(["encounter_id" => 1, "identifier" => "4667/12/17", "test_type_id" => 4, "specimen_id" => 4, "test_status_id" => 4, "created_by" => 7, "requested_by" => "molestias", "created_by" => "2018-09-17 07:40:08", "time_sent" => "2018-09-17 07:40:08", "updated_at" => "2018-09-17 07:40:08"]);
+        Test::create(["encounter_id" => 1, "identifier" => 1, "test_type_id" => 4, "specimen_id" => 4, "test_status_id" => 4, "created_by" => 7, "requested_by" => "molestias", "created_by" => "2018-09-17 07:40:08", "time_sent" => "2018-09-17 07:40:08", "updated_at" => "2018-09-17 07:40:08"]);
+        Test::create(["encounter_id" => 1, "identifier" => "IJA316000", "test_type_id" => 4, "specimen_id" => 4, "test_status_id" => 4, "created_by" => 7, "requested_by" => "molestias", "created_by" => "2018-09-17 07:40:08", "time_sent" => "2018-09-17 07:40:08", "updated_at" => "2018-09-17 07:40:08"]);
+        Test::create(["encounter_id" => 1, "identifier" => 2017000010, "test_type_id" => 4, "specimen_id" => 4, "test_status_id" => 4, "created_by" => 7, "requested_by" => "molestias", "created_by" => "2018-09-17 07:40:08", "time_sent" => "2018-09-17 07:40:08", "updated_at" => "2018-09-17 07:40:08"]);
+
+>>>>>>> instrumentsseed
         $this->command->info("Tests Seeded");
 
         // create results
