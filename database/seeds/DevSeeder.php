@@ -8495,7 +8495,6 @@ class DevSeeder extends Seeder
 
         $this->command->info("Tests Seeding...");
 
-<<<<<<< HEAD
         for ($i=0; $i < (int)env('DEV_TEST_NO',100); $i++) {
             $testTypeId = \App\Models\TestType::inRandomOrder()->first()->id;
             $user_id = \App\User::inRandomOrder()->first()->id;
@@ -8566,7 +8565,6 @@ class DevSeeder extends Seeder
                 'created_at' => $created_at
             ]);
         }
-=======
         factory(\App\Models\Test::class, (int)env('DEV_TEST_NO',100))->create();
 
         Test::create(["encounter_id" => 1, "identifier" => "4667/12/17", "test_type_id" => 4, "specimen_id" => 4, "test_status_id" => 4, "created_by" => 7, "requested_by" => "molestias", "created_by" => "2018-09-17 07:40:08", "time_sent" => "2018-09-17 07:40:08", "updated_at" => "2018-09-17 07:40:08"]);
@@ -8574,7 +8572,6 @@ class DevSeeder extends Seeder
         Test::create(["encounter_id" => 1, "identifier" => "IJA316000", "test_type_id" => 4, "specimen_id" => 4, "test_status_id" => 4, "created_by" => 7, "requested_by" => "molestias", "created_by" => "2018-09-17 07:40:08", "time_sent" => "2018-09-17 07:40:08", "updated_at" => "2018-09-17 07:40:08"]);
         Test::create(["encounter_id" => 1, "identifier" => 2017000010, "test_type_id" => 4, "specimen_id" => 4, "test_status_id" => 4, "created_by" => 7, "requested_by" => "molestias", "created_by" => "2018-09-17 07:40:08", "time_sent" => "2018-09-17 07:40:08", "updated_at" => "2018-09-17 07:40:08"]);
 
->>>>>>> instrumentsseed
         $this->command->info("Tests Seeded");
 
         // create results
