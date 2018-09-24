@@ -40,104 +40,103 @@
         <td class="text-xs-right">{{ props.item.encounter.identifier }}</td>
         <td class="text-xs-right">{{ props.item.test_status.name }}</td>
         <td class="justify-left layout px-0">
-              <v-btn
-                outline
-                small
-                title="Details"
-                color="green"
-                flat
-                @click="detail(props.item)">
-                Details
-                <v-icon right dark>visibility</v-icon>
-              </v-btn>
-              <v-btn
-                outline
-                small
-                title="Collect Specimen"
-                color="deep-purple"
-                flat
-                v-if="!props.item.specimen && $can('accept_test_specimen')"
-                @click="collectSpecimen(props.item)">
-                Collect
-                <v-icon right dark>gradient</v-icon>
-              </v-btn>
-              <v-btn
-                outline
-                small
-                title="Start"
-                color="blue"
-                flat
-                v-if="props.item.test_status.code === 'pending' && $can('start_test')"
-                @click="start(props.item)">
-                Start
-                <v-icon right dark>play_arrow</v-icon>
-              </v-btn>
-              <v-btn
-                outline
-                small
-                title="Enter"
-                color="light-blue"
-                flat
-                v-if="props.item.test_status.code === 'started' && $can('enter_test_result')"
-                @click="enterResults(props.item)">
-                Enter
-                <v-icon right dark>library_books</v-icon>
-              </v-btn>
-              <v-btn
-                outline
-                small
-                title="Edit"
-                color="teal"
-                flat
-                v-if="props.item.test_status.code === 'completed' && $can('enter_test_result')"
-                @click="enterResults(props.item)">
-                Edit
-                <v-icon right dark>edit</v-icon>
-              </v-btn>
-              <v-btn
-                outline
-                small
-                title="Reject"
-                color="red"
-                flat
-                v-if="props.item.test_status.test_phase.code === 'analytical' && $can('reject_test_specimen')"
-                @click="rejectSpecimen(props.item)">
-                Reject
-                <v-icon right dark>block</v-icon>
-              </v-btn>
-              <v-btn
-                outline
-                small
-                title="Refer"
-                color="amber"
-                flat
-                v-if="props.item.specimen && $can('refer_test_specimen')"
-                @click="refer(props.item)">
-                Refer
-                <v-icon right dark>arrow_forward</v-icon>
-              </v-btn>
-              <v-btn
-                outline
-                small
-                title="Verify"
-                color="green"
-                flat
-                v-if="props.item.test_status.code === 'completed' && $can('verify_test_result')"
-                @click="detail(props.item)">
-                Verify
-                <v-icon right dark>check_circle_outline</v-icon>
-              </v-btn>
-
-              <v-btn
-                outline
-                small
-                title="Print"
-                color="gray"
-                flat
-                @click="report(props.item)">
-                Print
-                <v-icon right dark>print</v-icon>
-              </v-btn>
+          <v-btn
+            outline
+            small
+            title="Details"
+            color="green"
+            flat
+            @click="detail(props.item)">
+            Details
+            <v-icon right dark>visibility</v-icon>
+          </v-btn>
+          <v-btn
+            outline
+            small
+            title="Collect Specimen"
+            color="deep-purple"
+            flat
+            v-if="!props.item.specimen && $can('accept_test_specimen')"
+            @click="collectSpecimen(props.item)">
+            Collect
+            <v-icon right dark>gradient</v-icon>
+          </v-btn>
+          <v-btn
+            outline
+            small
+            title="Start"
+            color="blue"
+            flat
+            v-if="!props.item.specimen_rejection && props.item.specimen && !props.item.specimen.referral && props.item.test_status.code === 'pending' && $can('start_test')"
+            @click="start(props.item)">
+            Start
+            <v-icon right dark>play_arrow</v-icon>
+          </v-btn>
+          <v-btn
+            outline
+            small
+            title="Enter"
+            color="light-blue"
+            flat
+            v-if="!props.item.specimen_rejection && props.item.test_status.code === 'started' && $can('enter_test_result')"
+            @click="enterResults(props.item)">
+            Enter
+            <v-icon right dark>library_books</v-icon>
+          </v-btn>
+          <v-btn
+            outline
+            small
+            title="Edit"
+            color="teal"
+            flat
+            v-if="!props.item.specimen_rejection && props.item.test_status.code === 'completed' && $can('enter_test_result')"
+            @click="enterResults(props.item)">
+            Edit
+            <v-icon right dark>edit</v-icon>
+          </v-btn>
+          <v-btn
+            outline
+            small
+            title="Reject"
+            color="red"
+            flat
+            v-if="(props.item.test_status.code === 'started' || props.item.test_status.code === 'pending') && props.item.test_status.test_phase.code === 'analytical'&& !props.item.specimen_rejection && $can('reject_test_specimen')"
+            @click="rejectSpecimen(props.item)">
+            Reject
+            <v-icon right dark>block</v-icon>
+          </v-btn>
+          <v-btn
+            outline
+            small
+            title="Refer"
+            color="amber"
+            flat
+            v-if="props.item.test_status.code === 'pending' && props.item.specimen && !props.item.specimen.referral && $can('refer_test_specimen')"
+            @click="refer(props.item)">
+            Refer
+            <v-icon right dark>arrow_forward</v-icon>
+          </v-btn>
+          <v-btn
+            outline
+            small
+            title="Verify"
+            color="green"
+            flat
+            v-if="props.item.test_status.code === 'completed' && $can('verify_test_result')"
+            @click="detail(props.item)">
+            Verify
+            <v-icon right dark>check_circle_outline</v-icon>
+          </v-btn>
+          <v-btn
+            outline
+            small
+            title="Print"
+            color="gray"
+            flat
+            @click="report(props.item)">
+            Print
+            <v-icon right dark>print</v-icon>
+          </v-btn>
         </td>
       </template>
     </v-data-table>
@@ -172,6 +171,7 @@
     data: () => ({
       search: '',
       query: '',
+      editedIndex: -1,
       pagination: {
         page: 1,
         per_page: 0,
@@ -181,7 +181,7 @@
       headers: [
         { text: 'Time Ordered', value: 'created_at' },
         { text: 'Patient', value: 'patient' },
-        { text: 'Specimen ID', value: 'specimen_id' },
+        { text: 'Specimen', value: 'specimen_id' },
         { text: 'Test', value: 'test_type' },
         { text: 'Visit', value: 'encounter' },
         { text: 'Status', value: 'test_status' },
@@ -256,10 +256,12 @@
       },
 
       collectSpecimen (test) {
+        this.editedIndex = this.tests.indexOf(test)
         this.$refs.specimenCollectionForm.modal(test);
       },
 
       start (test) {
+        this.editedIndex = this.tests.indexOf(test)
 
         apiCall({url: '/api/test/start/' + test.id, method: 'GET' })
         .then(resp => {
@@ -273,6 +275,7 @@
       },
 
       verify (test) {
+        this.editedIndex = this.tests.indexOf(test)
 
         apiCall({url: '/api/test/verify/' + test.id, method: 'GET' })
         .then(resp => {
@@ -285,6 +288,7 @@
       },
 
       enterResults (test) {
+        this.editedIndex = this.tests.indexOf(test)
 
         if (test.test_type.culture == 1) {
           this.$router.push({
@@ -297,10 +301,12 @@
       },
 
       rejectSpecimen (test) {
+        this.editedIndex = this.tests.indexOf(test)
         this.$refs.specimenRejectionForm.modal(test);
       },
 
       refer (test) {
+        this.editedIndex = this.tests.indexOf(test)
         this.$refs.referralForm.modal(test);
       },
 
@@ -310,9 +316,9 @@
 
       report (test) {
 
-      apiCall({url: '/api/report/', method: 'GET' , data: 'PDF' })
-        .then(resp => {})
-        .catch(error => {
+        apiCall({url: '/api/report/', method: 'GET' , data: 'PDF' })
+          .then(resp => {})
+          .catch(error => {
           console.log(error.response)
         })
       },

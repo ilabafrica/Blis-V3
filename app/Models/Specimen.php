@@ -27,21 +27,21 @@ class Specimen extends Model
         return $this->belongsTo('App\Models\SpecimenType');
     }
 
+    public function referral()
+    {
+        return $this->hasOne('App\Models\Referral');
+    }
+
     public function status()
     {
         return $this->belongsTo('App\Models\SpecimenStatus','specimen_status_id');
     }
-    /*
-     * User (collected) relationship
-     */
+
     public function collectedBy()
     {
         return $this->belongsTo('App\User', 'collected_by', 'id');
     }
 
-    /*
-     * User (received) relationship
-     */
     public function receivedBy()
     {
         return $this->belongsTo('App\User', 'received_by', 'id');

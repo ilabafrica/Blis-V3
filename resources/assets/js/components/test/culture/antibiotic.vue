@@ -41,15 +41,14 @@
                       label="Susceptibility">
                     </v-select>
                   </v-flex>
+                  <v-flex xs3 offset-xs9 text-xs-right>
+                    <v-btn round outline xs12 sm6 color="blue darken-1" :disabled="!valid" @click.native="save">
+                      Save <v-icon right dark>cloud_upload</v-icon>
+                    </v-btn>
+                  </v-flex>
                 </v-layout>
               </v-container>
             </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn round outline xs12 sm6 color="blue darken-1" :disabled="!valid" @click.native="save">
-                Save <v-icon right dark>cloud_upload</v-icon>
-              </v-btn>
-            </v-card-actions>
         </v-form>
       </v-card>
     </v-dialog>

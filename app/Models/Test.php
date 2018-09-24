@@ -22,6 +22,11 @@ class Test extends Model
         return $this->belongsTo('App\Models\Specimen');
     }
 
+    public function specimenRejection()
+    {
+        return $this->hasOne('App\Models\SpecimenRejection');
+    }
+
     /*
      * User (created) relationship
      */
@@ -74,6 +79,8 @@ class Test extends Model
             'encounter.patient.gender',
             'results.measure.measureType',
             'results.measureRange',
+            'specimenRejection',
+            'specimen.referral',
             'specimen.specimenType',
             'testStatus.testPhase',
             'testType.measures.results',
@@ -99,8 +106,10 @@ class Test extends Model
             'encounter.patient.gender',
             'results.measure.measureType',
             'results.measure.measureRanges',
-            'specimen.specimenType',
+            'specimen.referral',
+            'specimenRejection',
             'testStatus.testPhase',
+            'specimen.specimenType',
             'testType.measures.results',
             'testType.measures.measureType',
             'testType.measures.measureRanges',

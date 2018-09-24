@@ -52,7 +52,7 @@ class ControlTestController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         $rules = [
             'lot_id' => 'required',
             'test_type_id' => 'required',
