@@ -38,48 +38,45 @@ class Encounter extends Model
         );
     }
 
-   /*
-    * Search for tests meeting the given criteria
-    *
-    * @param String $searchString
-    * @param String $dateFrom
-    * @param String $dateTo
-    * @return Collection
-    */
-    public static function search($searchString = '', $dateFrom = NULL, $dateTo = NULL)
+    /*
+     * Search for tests meeting the given criteria
+     *
+     * @param String $searchString
+     * @param String $dateFrom
+     * @param String $dateTo
+     * @return Collection
+     */
+    public static function search($searchString = '', $dateFrom = null, $dateTo = null)
     {
         $encounters = Test::with(
             'patient.name',
             'patient.gender',
             'tests.testType.specimenTypes'
-        )->where(function($q) use ($searchString){
-
-            $q->whereHas('patient', function($q)  use ($searchString)
-            {
-                $q->where(function($q) use ($searchString){
-                    $q->where('identifier', '=', $searchString )
+        )->where(function ($q) use ($searchString) {
+            $q->whereHas('patient', function ($q) use ($searchString) {
+                $q->where(function ($q) use ($searchString) {
+                    $q->where('identifier', '=', $searchString)
                       ->orWhere('ulin', 'like', "%{$searchString}%");
                 })
-                ->orWhereHas('name', function($q) use ($searchString)
-                    {
-                        $q->where('text', 'like', "%{$searchString}%");
-                    });
-            })->where(function($q) use ($searchString)
-            {
-                $q->where(function($q) use ($searchString){
-                    $q->where('identifier', '=', $searchString )//Search by visit number
+                ->orWhereHas('name', function ($q) use ($searchString) {
+                    $q->where('text', 'like', "%{$searchString}%");
+                });
+            })->where(function ($q) use ($searchString) {
+                $q->where(function ($q) use ($searchString) {
+                    $q->where('identifier', '=', $searchString)//Search by visit number
                     ->orWhere('id', '=', $searchString);
                 });
             });
         });
 
-        if ($dateFrom||$dateTo) {
-            $encounters = $encounters->where(function($q) use ($dateFrom, $dateTo)
-            {
-                if($dateFrom)$q->where('created_at', '>=', $dateFrom);
+        if ($dateFrom || $dateTo) {
+            $encounters = $encounters->where(function ($q) use ($dateFrom, $dateTo) {
+                if ($dateFrom) {
+                    $q->where('created_at', '>=', $dateFrom);
+                }
 
-                if($dateTo){
-                    $dateTo = $dateTo . ' 23:59:59';
+                if ($dateTo) {
+                    $dateTo = $dateTo.' 23:59:59';
                     $q->where('created_at', '<=', $dateTo);
                 }
             });

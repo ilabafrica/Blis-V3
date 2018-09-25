@@ -42,7 +42,7 @@ class TestTypeCategoryController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $testTypeCategory = new TestTypeCategory;
             $testTypeCategory->code = $request->input('code');

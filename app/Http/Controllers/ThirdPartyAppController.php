@@ -17,6 +17,7 @@ class ThirdPartyAppController extends Controller
     {
         $this->middleware('auth:tpa_api', ['except' => ['index']]);
     }
+
     /**
      * Display a listing of the resource.
      *

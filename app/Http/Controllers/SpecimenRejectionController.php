@@ -13,8 +13,8 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Models\TestPhase;
 use Illuminate\Http\Request;
-use App\Models\SpecimenRejection;
 use App\Models\RejectionReason;
+use App\Models\SpecimenRejection;
 
 class SpecimenRejectionController extends Controller
 {
@@ -41,10 +41,8 @@ class SpecimenRejectionController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
-
+            return response()->json($validator, 422);
         } else {
-
             $rejection = new SpecimenRejection;
             $rejection->specimen_id = $request->input('specimen_id');
 
@@ -53,9 +51,7 @@ class SpecimenRejectionController extends Controller
                 // to reject specimen only for a particular test
                 $rejection->test_phase_id = TestPhase::analytical;
                 $rejection->test_id = $request->input('test_id');
-
             } else {
-
                 $rejection->test_phase_id = TestPhase::pre_analytical;
             }
             $rejection->authorized_person_informed = $request->input('authorized_person_informed');
@@ -67,10 +63,10 @@ class SpecimenRejectionController extends Controller
                 $rejectionReason = RejectionReason::find($rejectionReasonId);
                 $rejectionReason->specimenRejection()->attach($rejection);
             }
+
             return response()->json($rejection);
         }
     }
-
 
     /**
      * Display the specified resource.
@@ -149,11 +145,10 @@ class SpecimenRejectionController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
-
-                $specimenRejection = SpecimenRejection::find($request->input('specimen_rejection_id'));
-                $rejectionReason = RejectionReason::find($request->input('rejection_reason_id'));
+            $specimenRejection = SpecimenRejection::find($request->input('specimen_rejection_id'));
+            $rejectionReason = RejectionReason::find($request->input('rejection_reason_id'));
             try {
                 $specimenRejection->attach($rejectionReason);
 
@@ -173,7 +168,7 @@ class SpecimenRejectionController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $specimenRejection = SpecimenRejection::find($request->input('specimen_rejection_id'));
             $rejectionReason = RejectionReason::find($request->input('rejection_reason_id'));

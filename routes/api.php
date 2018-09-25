@@ -36,7 +36,6 @@ Route::group(['prefix' => 'stats'], function () {
     Route::get('/users', 'Statistics\UserStatisticsController@getUsers');
     Route::get('/users/count', 'Statistics\UserStatisticsController@countUsers');
     Route::get('/genders', 'GenderController@index');
-
 });
 
 Route::middleware('auth:api')->group(function () {
@@ -44,7 +43,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/get-user', 'Auth\APIController@getUser');
 });
 Route::group(['prefix' => 'tpa'], function () {
-
     Route::post('login', 'ThirdPartyAppAuthController@login');
     Route::post('logout', 'ThirdPartyAppAuthController@logout');
     Route::post('refresh', 'ThirdPartyAppAuthController@refresh');
@@ -56,7 +54,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     // Access Control|Accounts|Permissions|Roles|Assign Permissions|Assign Roles
     Route::group(['middleware' => ['permission:manage_users']], function () {
         Route::resource('address', 'AddressController');
-        
+
         Route::resource('permission', 'PermissionController');
         Route::resource('role', 'RoleController');
         Route::get('permissionrole/attach', 'PermissionRoleController@attach');
@@ -64,11 +62,11 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('permissionrole', 'PermissionRoleController@index');
         Route::get('roleuser/attach', 'RoleUserController@attach');
         Route::get('roleuser/detach', 'RoleUserController@detach');
-        Route::get('roleuser', 'RoleUserController@index');    
+        Route::get('roleuser', 'RoleUserController@index');
     });
     Route::resource('user', 'UserController');
     Route::post('user/image', 'UserController@profilepic');
-        //Route::get('profile', 'UserController@profile');
+    //Route::get('profile', 'UserController@profile');
 
     // Health Units|Instrument|Reports|Barcode
     Route::group(['middleware' => ['permission:manage_configurations']], function () {
@@ -137,7 +135,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         'edit_test_result|'.
         'verify_test_result|'.
         'refer_test_specimen|'.
-        'manage_quality_control'],
+        'manage_quality_control', ],
     ], function () {
         Route::resource('specimenrejection', 'SpecimenRejectionController');
         Route::resource('antibioticsusceptibility', 'AntibioticSusceptibilityController');

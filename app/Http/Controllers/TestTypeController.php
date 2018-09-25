@@ -10,7 +10,6 @@ namespace App\Http\Controllers;
  */
 
 use App\Models\TestType;
-use App\Models\SpecimenTypeTestType;
 use Illuminate\Http\Request;
 
 class TestTypeController extends Controller
@@ -25,14 +24,13 @@ class TestTypeController extends Controller
                 'testTypeCategory',
                 'specimenTypes'
             )->paginate(10);
-        } else if($request->query('fetch')) {
+        } elseif ($request->query('fetch')) {
             $testType = TestType::with(
                 'measures.measureType',
                 'measures.measureRanges.gender',
                 'testTypeCategory',
                 'specimenTypes'
             )->get();
-
         } else {
             $testType = TestType::with(
                 'measures.measureType',
@@ -61,7 +59,7 @@ class TestTypeController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $testType = new TestType;
             $testType->name = $request->input('name');
@@ -72,13 +70,11 @@ class TestTypeController extends Controller
 
             try {
                 $testType->save();
-                return response()->json($testType->loader());
 
+                return response()->json($testType->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-
             }
-            
         }
     }
 
@@ -120,6 +116,7 @@ class TestTypeController extends Controller
 
             try {
                 $testType->save();
+
                 return response()->json($testType->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

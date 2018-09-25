@@ -10,9 +10,9 @@ namespace App\Http\Controllers;
  * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
  */
 
-use App\User;
 use Auth;
 use Storage;
+use App\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -47,7 +47,7 @@ class UserController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $user = new User;
             $user->name = $request->input('name');
@@ -94,7 +94,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {   
+    {
         $rules = [
             'name' => 'required',
             'email' => 'required',
@@ -110,20 +110,19 @@ class UserController extends Controller
             $user->username = $request->input('username');
             $user->email = $request->input('email');
             $user->gender_id = $request->input('gender_id');
-            if($request->input('passwordChange')){
+            if ($request->input('passwordChange')) {
                 if (! \Hash::check(request('password'), $user->password)) {
                     return response()->json([
                         'message' => 'Wrong password',
                         'status' => 422,
                     ], 422);
                 }
-            $user->password = bcrypt($request->input('newpassword'));
-            
+                $user->password = bcrypt($request->input('newpassword'));
             }
-            if($request->input('adminPasswordChange')){
+            if ($request->input('adminPasswordChange')) {
                 $user->password = bcrypt($request->input('password'));
             }
-            if($request->input('removePic')){
+            if ($request->input('removePic')) {
                 $user->profile_picture = null;
             }
             //$user->remember_token = $request->input('remember_token');
@@ -139,12 +138,12 @@ class UserController extends Controller
         }
     }
 
-    public function profilepic (Request $request)
-    { 
+    public function profilepic(Request $request)
+    {
         $rules = [
             'file' => 'image:jpeg,jpg,png|required|file',
             'id' => 'required',
-            'name' => 'required'
+            'name' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -153,9 +152,9 @@ class UserController extends Controller
         } else {
             if ($request->file('file')->isValid()) {
                 $extension = $request->file('file')->getClientOriginalExtension();
-                $fileName = rand(11111,99999).'.'.$extension;
+                $fileName = rand(11111, 99999).'.'.$extension;
                 $request->file('file')->storeAs('profile_pictures', $fileName);
-                }  
+            }
             $user = User::findOrFail($request->input('id'));
             $user->profile_picture = $fileName;
             try {

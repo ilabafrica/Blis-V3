@@ -10,9 +10,9 @@ namespace App\Http\Controllers;
  * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
  */
 
+use Auth;
 use App\Models\Referral;
 use Illuminate\Http\Request;
-use Auth;
 
 class ReferralController extends Controller
 {
@@ -23,8 +23,7 @@ class ReferralController extends Controller
         return response()->json($referral);
     }
 
-
-// move all these externally
+    // move all these externally
 
     /**
      * Store a newly created resource in storage.
@@ -45,7 +44,7 @@ class ReferralController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $referral = new Referral;
             $referral->time_dispatched_to = $request->input('time_dispatched_to');
@@ -54,7 +53,7 @@ class ReferralController extends Controller
             $referral->specimen_id = $request->input('specimen_id');
             $referral->referred_from = $request->input('referred_from');
             $referral->referred_to = $request->input('referred_to');
-            $referral->user_id =  Auth::user()->id;
+            $referral->user_id = Auth::user()->id;
 
             try {
                 $referral->save();
@@ -65,45 +64,45 @@ class ReferralController extends Controller
             }
         }
 
-      /*  $rules = [
-            'rejection_reason_ids' => 'required',
-            'reject_explained_to' => 'required',
-            'specimen_id' => 'required',
-        ];
+        /*  $rules = [
+              'rejection_reason_ids' => 'required',
+              'reject_explained_to' => 'required',
+              'specimen_id' => 'required',
+          ];
 
-        $validator = \Validator::make(Input::all(), $rules);
-        if ($validator->fails()) {
-            return response()->json($validator,422);
+          $validator = \Validator::make(Input::all(), $rules);
+          if ($validator->fails()) {
+              return response()->json($validator,422);
 
-        } else {
+          } else {
 
-            $rejection = new SpecimenRejection;
-            $rejection->specimen_id = $request->input('specimen_id');
+              $rejection = new SpecimenRejection;
+              $rejection->specimen_id = $request->input('specimen_id');
 
-            // if it is analytic rejection test_id is submitted
-            if ($request->input('test_id')) {
-                // to reject specimen only for a particular test
-                $rejection->test_phase_id = TestPhase::analytical;
-                $rejection->test_id = $request->input('test_id');
+              // if it is analytic rejection test_id is submitted
+              if ($request->input('test_id')) {
+                  // to reject specimen only for a particular test
+                  $rejection->test_phase_id = TestPhase::analytical;
+                  $rejection->test_id = $request->input('test_id');
 
-            } else {
+              } else {
 
-                $rejection->test_phase_id = TestPhase::pre_analytical;
-            }
-            $rejection->rejection_reason_id = $request->input('rejection_reason_id');
-            $rejection->reject_explained_to = $request->input('reject_explained_to');
-            $rejection->rejected_by = Auth::user()->id;
-            $rejection->time_rejected = date('Y-m-d H:i:s');
-            $rejection->save();
+                  $rejection->test_phase_id = TestPhase::pre_analytical;
+              }
+              $rejection->rejection_reason_id = $request->input('rejection_reason_id');
+              $rejection->reject_explained_to = $request->input('reject_explained_to');
+              $rejection->rejected_by = Auth::user()->id;
+              $rejection->time_rejected = date('Y-m-d H:i:s');
+              $rejection->save();
 
-            foreach ($request->input('rejection_reason_ids') as $rejectionReasonId) {
-                // $specimenRejection = SpecimenRejection::find($rejection->id);
-                $rejectionReason = RejectionReason::find($rejectionReasonId);
-                // $specimenRejection->attach($rejectionReason);
-                $rejection->attach($rejectionReason);
-            }
-            return response()->json($rejection);
-        }*/
+              foreach ($request->input('rejection_reason_ids') as $rejectionReasonId) {
+                  // $specimenRejection = SpecimenRejection::find($rejection->id);
+                  $rejectionReason = RejectionReason::find($rejectionReasonId);
+                  // $specimenRejection->attach($rejectionReason);
+                  $rejection->attach($rejectionReason);
+              }
+              return response()->json($rejection);
+          }*/
     }
 
     /**
@@ -186,11 +185,10 @@ class ReferralController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
-
-                $referral = Referral::find($request->input('specimen_referral_id'));
-                $referralReason = ReferralReason::find($request->input('referral_reason_id'));
+            $referral = Referral::find($request->input('specimen_referral_id'));
+            $referralReason = ReferralReason::find($request->input('referral_reason_id'));
             try {
                 $referral->attach($referralReason);
 
@@ -210,7 +208,7 @@ class ReferralController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $referral = Referral::find($request->input('specimen_referral_id'));
             $referralReason = ReferralReason::find($request->input('referral_reason_id'));
@@ -224,5 +222,4 @@ class ReferralController extends Controller
             }
         }
     }
-
 }

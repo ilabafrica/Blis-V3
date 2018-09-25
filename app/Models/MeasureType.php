@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class MeasureType extends Model
 {
-
     const numeric = 1;
     const alphanumeric = 2;
     const multi_alphanumeric = 3;
@@ -22,45 +21,43 @@ class MeasureType extends Model
 
     public $timestamps = false;
 
-	/**
-	 *  Check to if the Measure Type is Numeric
-	 *
-	 * @return boolean
-	 */
-	public function isNumeric()
-	{
-		return ($this->id == MeasureType::numeric) ? true : false ;
-	}
+    /**
+     *  Check to if the Measure Type is Numeric.
+     *
+     * @return bool
+     */
+    public function isNumeric()
+    {
+        return ($this->id == MeasureType::numeric) ? true : false;
+    }
 
-	/**
-	 *  Check to if the Measure Type is Alphanumeric
-	 *
-	 * @return boolean
-	 */
-	public function isAlphanumeric()
-	{
-		return ($this->id == MeasureType::alphanumeric) ? true : false ;
-	}
+    /**
+     *  Check to if the Measure Type is Alphanumeric.
+     *
+     * @return bool
+     */
+    public function isAlphanumeric()
+    {
+        return ($this->id == MeasureType::alphanumeric) ? true : false;
+    }
 
-	/**
-	 *  Check to if the Measure Type is Autocomplete
-	 *
-	 * @return boolean
-	 */
-	public function isMultiAlphanumeric()
-	{
-		return ($this->id == MeasureType::multi_alphanumeric) ? true : false ;
-	}
+    /**
+     *  Check to if the Measure Type is Autocomplete.
+     *
+     * @return bool
+     */
+    public function isMultiAlphanumeric()
+    {
+        return ($this->id == MeasureType::multi_alphanumeric) ? true : false;
+    }
 
-	/**
-	 *  Check to if the Measure Type is Free Text
-	 *
-	 * @return boolean
-	 */
-	public function isFreeText()
-	{
-		return ($this->id == MeasureType::free_text) ? true : false ;
-	}
-
-
+    /**
+     *  Check to if the Measure Type is Free Text.
+     *
+     * @return bool
+     */
+    public function isFreeText()
+    {
+        return ($this->id == MeasureType::free_text) ? true : false;
+    }
 }

@@ -21,18 +21,16 @@ class EncounterController extends Controller
     public function index(Request $request)
     {
         // Search Conditions
-        if(
-            $request->query('search')||
-            $request->query('date_from')||
+        if (
+            $request->query('search') ||
+            $request->query('date_from') ||
             $request->query('date_to')
-        ){
-
+        ) {
             $encounters = Encounter::search(
                 $request->query('search'),
                 ($request->query('date_from') ? $request->query('date_from') : date('Y-m-d')),
                 $request->query('date_to')
             );
-
         } else {
             $encounters = Encounter::with(
                 'patient.name',
@@ -67,7 +65,7 @@ class EncounterController extends Controller
             try {
                 $encounter->save();
 
-                return response()->json($encounter->loader(),200);
+                return response()->json($encounter->loader(), 200);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -117,7 +115,7 @@ class EncounterController extends Controller
             try {
                 $encounter->save();
 
-                return response()->json($encounter->loader(),200);
+                return response()->json($encounter->loader(), 200);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -142,7 +140,6 @@ class EncounterController extends Controller
         }
     }
 
-
     public function specimenCollection(Request $request)
     {
         $rules = [
@@ -156,7 +153,7 @@ class EncounterController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $specimen = new Specimen;
             $specimen->identifier = $request->input('identifier');
@@ -179,13 +176,12 @@ class EncounterController extends Controller
                 $specimen->save();
                 $encounter = Encounter::find($request->input('encounter_id'));
 
-                return response()->json($encounter->loader(),200);
+                return response()->json($encounter->loader(), 200);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
         }
     }
-
 
     public function addTests(Request $request)
     {
@@ -199,7 +195,6 @@ class EncounterController extends Controller
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-
             foreach ($request->input('testTypeIds') as $testTypeId) {
                 // save order items in tests
                 $test = new Test;

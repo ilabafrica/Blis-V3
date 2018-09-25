@@ -9,10 +9,10 @@ namespace App\Http\Controllers;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
-use App\Models\ControlTest;
-use App\Models\ControlTestStatus;
-use Illuminate\Http\Request;
 use Auth;
+use App\Models\ControlTest;
+use Illuminate\Http\Request;
+use App\Models\ControlTestStatus;
 
 class ControlTestController extends Controller
 {
@@ -42,6 +42,7 @@ class ControlTestController extends Controller
                 'controlResults.measure.measureRanges'
             )->orderBy('id', 'ASC')->paginate(10);
         }
+
         return response()->json($controlTest);
     }
 
@@ -60,7 +61,7 @@ class ControlTestController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $controlTest = new ControlTest;
             $controlTest->lot_id = $request->input('lot_id');
@@ -115,7 +116,7 @@ class ControlTestController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {   
+    {
         $rules = [
             'lot_id' => 'required',
             'test_type_id' => 'required',
@@ -142,7 +143,6 @@ class ControlTestController extends Controller
                         'controlResults.measure.measureType',
                         'controlResults.measure.measureRanges'
                     ));
-
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

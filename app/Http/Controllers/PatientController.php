@@ -10,8 +10,8 @@ namespace App\Http\Controllers;
  */
 
 use Auth;
-use App\Models\Test;
 use App\Models\Name;
+use App\Models\Test;
 use App\Models\Patient;
 use App\Models\Encounter;
 use App\Models\TestStatus;
@@ -49,7 +49,7 @@ class PatientController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $name = new Name;
             $name->text = $request->input('family');
@@ -158,7 +158,6 @@ class PatientController extends Controller
         }
     }
 
-
     /**
      * @param  \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
@@ -206,5 +205,4 @@ class PatientController extends Controller
             }
         }
     }
-
 }

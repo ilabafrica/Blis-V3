@@ -20,7 +20,7 @@ class PatientReportPDF extends TCPDF
         if ($this->page == 1) {
             // Logo
             $image_file = 'ilabafrica.jpg';
-            $this->Image($image_file,75, 10, 50, '', 'JPG', '', '', false, 300, '', false, false, 0, false, false, false);
+            $this->Image($image_file, 75, 10, 50, '', 'JPG', '', '', false, 300, '', false, false, 0, false, false, false);
             $this->ln();
             // Set font
             $this->SetFont('helvetica', 'B', 20);
@@ -47,7 +47,8 @@ class PatientReportPDF extends TCPDF
     }
 
     // Specimen table
-    public function SpecimenTable($header,$specimen) {
+    public function SpecimenTable($header, $specimen)
+    {
         // Colors, line width and bold font
         $this->SetFillColor(255, 255, 255);
         $this->SetTextColor(0);
@@ -55,9 +56,9 @@ class PatientReportPDF extends TCPDF
         $this->SetLineWidth(0.3);
         $this->SetFont('', 'B');
         // Header
-        $w = array(35, 35, 42 , 42, 35);
+        $w = [35, 35, 42, 42, 35];
         $num_headers = count($header);
-        for($i = 0; $i < $num_headers; ++$i) {
+        for ($i = 0; $i < $num_headers; $i++) {
             $this->Cell($w[$i], 7, $header[$i], 1, 0, 'C', 1);
         }
         $this->Ln();
@@ -72,10 +73,12 @@ class PatientReportPDF extends TCPDF
         $this->Cell($w[2], 6, $specimen->time_collected, '1', 0, 'L', $fill);
         $this->Cell($w[3], 6, $specimen->time_received, '1', 0, 'L', $fill);
         $this->Cell($w[4], 6, $specimen->status->name, '1', 0, 'L', $fill);
-        $fill=!$fill;
+        $fill = ! $fill;
     }
+
     // Results table
-    public function ResultsTable($header,$results) {
+    public function ResultsTable($header, $results)
+    {
         // Colors, line width and bold font
         $this->SetFillColor(255, 255, 255);
         $this->SetTextColor(0);
@@ -83,9 +86,9 @@ class PatientReportPDF extends TCPDF
         $this->SetLineWidth(0.3);
         $this->SetFont('', 'B');
         // Header
-        $w = array(35, 35, 42 , 42,25);
+        $w = [35, 35, 42, 42, 25];
         $num_headers = count($header);
-        for($i = 0; $i < $num_headers; ++$i) {
+        for ($i = 0; $i < $num_headers; $i++) {
             $this->Cell($w[$i], 7, $header[$i], 1, 0, 'C', 1);
         }
         $this->Ln();
@@ -95,14 +98,14 @@ class PatientReportPDF extends TCPDF
         $this->SetFont('');
         // Data
         $fill = 0;
-        foreach($results as $result) {
+        foreach ($results as $result) {
             $this->Cell($w[0], 6, $result->id, '1', 0, 'L', $fill);
             $this->Cell($w[1], 6, $result->measure->name, '1', 0, 'L', $fill);
             $this->Cell($w[2], 6, $result->result, '1', 0, 'R', $fill);
             $this->Cell($w[3], 6, $result->time_entered, '1', 0, 'R', $fill);
             $this->Cell($w[4], 6, $result->status, '1', 0, 'R', $fill);
             $this->Ln();
-            $fill=!$fill;
+            $fill = ! $fill;
         }
     }
 }

@@ -36,52 +36,49 @@ class MeasureRangeController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $input = $request->all();
             $measureRange = new MeasureRange;
-            $measureRange->measure_id = $request->input("measure_id");
+            $measureRange->measure_id = $request->input('measure_id');
 
             //Numeric Range
-            if ($request->input("age_min")) {
-
-                $ageMin = $request->input("age_min");
-                $ageMax = $request->input("age_max");
+            if ($request->input('age_min')) {
+                $ageMin = $request->input('age_min');
+                $ageMax = $request->input('age_max');
                 //if Months is selected
-                if($request->input("age_range")=="Months"){
+                if ($request->input('age_range') == 'Months') {
                     $ageMin /= 12;
                     $ageMax /= 12;
                 }
 
                 //if Days is selected
-                elseif ($request->input("age_range")=="Days") {
+                elseif ($request->input('age_range') == 'Days') {
                     $ageMin /= 365;
                     $ageMax /= 365;
                 }
 
                 $measureRange->age_min = $ageMin;
                 $measureRange->age_max = $ageMax;
-                $measureRange->gender_id = $request->input("gender_id");
-                $measureRange->low = $request->input("low");
-                $measureRange->high = $request->input("high");
+                $measureRange->gender_id = $request->input('gender_id');
+                $measureRange->low = $request->input('low');
+                $measureRange->high = $request->input('high');
                 $measureRange->low_critical = $request->input('low_critical');
                 $measureRange->high_critical = $request->input('high_critical');
 
             //Alphanumeric Range
-            } else if($request->input('display')){
+            } elseif ($request->input('display')) {
                 $measureRange->display = $request->input('display');
                 $measureRange->interpretation_id = $request->input('interpretation_id');
             }
 
             try {
                 $measureRange->save();
-
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-
             }
-            return response()->json($measureRange);
 
+            return response()->json($measureRange);
         }
     }
 
@@ -164,5 +161,4 @@ class MeasureRangeController extends Controller
 
         return response()->json($measureRanges);
     }
-
 }

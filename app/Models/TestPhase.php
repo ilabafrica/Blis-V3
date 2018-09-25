@@ -14,9 +14,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class TestPhase extends Model
 {
-	const pre_analytical = 1;
-	const analytical = 2;
-	const post_analytical = 3;
+    const pre_analytical = 1;
+    const analytical = 2;
+    const post_analytical = 3;
 
     public $timestamps = false;
 }

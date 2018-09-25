@@ -58,7 +58,7 @@ class Test extends Model
     {
         return $this->hasMany('App\Models\Result');
     }
-    
+
     /*
      * Test Status relationship
      */
@@ -90,16 +90,16 @@ class Test extends Model
         );
     }
 
-   /*
-    * Search for tests meeting the given criteria
-    *
-    * @param String $searchString
-    * @param String $testStatusId
-    * @param String $dateFrom
-    * @param String $dateTo
-    * @return Collection
-    */
-    public static function search($searchString = '', $testStatusId = 0, $dateFrom = NULL, $dateTo = NULL)
+    /*
+     * Search for tests meeting the given criteria
+     *
+     * @param String $searchString
+     * @param String $testStatusId
+     * @param String $dateFrom
+     * @param String $dateTo
+     * @return Collection
+     */
+    public static function search($searchString = '', $testStatusId = 0, $dateFrom = null, $dateTo = null)
     {
         $tests = Test::with(
             'encounter.patient.name',
@@ -114,55 +114,48 @@ class Test extends Model
             'testType.measures.measureType',
             'testType.measures.measureRanges',
             'testType.specimenTypes'
-        )->where(function($q) use ($searchString){
-
-            $q->whereHas('encounter', function($q) use ($searchString)
-            {
-                $q->whereHas('patient', function($q)  use ($searchString)
-                {
-                    $q->where(function($q) use ($searchString){
-                        $q->where('identifier', '=', $searchString )
+        )->where(function ($q) use ($searchString) {
+            $q->whereHas('encounter', function ($q) use ($searchString) {
+                $q->whereHas('patient', function ($q) use ($searchString) {
+                    $q->where(function ($q) use ($searchString) {
+                        $q->where('identifier', '=', $searchString)
                           ->orWhere('ulin', 'like', "%{$searchString}%");
                     })
-                    ->orWhereHas('name', function($q) use ($searchString)
-                        {
-                            $q->where('text', 'like', "%{$searchString}%");
-                        });
+                    ->orWhereHas('name', function ($q) use ($searchString) {
+                        $q->where('text', 'like', "%{$searchString}%");
                     });
+                });
             })
-            ->orWhereHas('testType', function($q) use ($searchString)
-            {
-                $q->where('name', 'like', "%{$searchString}%");//Search by test type
+            ->orWhereHas('testType', function ($q) use ($searchString) {
+                $q->where('name', 'like', "%{$searchString}%"); //Search by test type
             })
-            ->orWhereHas('specimen', function($q) use ($searchString)
-            {
-                $q->where('id', '=', $searchString );//Search by specimen number
+            ->orWhereHas('specimen', function ($q) use ($searchString) {
+                $q->where('id', '=', $searchString); //Search by specimen number
             })
-            ->orWhereHas('encounter',  function($q) use ($searchString)
-            {
-                $q->where(function($q) use ($searchString){
-                    $q->where('identifier', '=', $searchString )//Search by visit number
+            ->orWhereHas('encounter', function ($q) use ($searchString) {
+                $q->where(function ($q) use ($searchString) {
+                    $q->where('identifier', '=', $searchString)//Search by visit number
                     ->orWhere('id', '=', $searchString);
                 });
             });
         });
 
         if ($testStatusId > 0) {
-            $tests = $tests->where(function($q) use ($testStatusId)
-            {
-                $q->whereHas('testStatus.testPhase', function($q) use ($testStatusId){
-                    $q->where('id','=', $testStatusId);//Filter by test status
+            $tests = $tests->where(function ($q) use ($testStatusId) {
+                $q->whereHas('testStatus.testPhase', function ($q) use ($testStatusId) {
+                    $q->where('id', '=', $testStatusId); //Filter by test status
                 });
             });
         }
 
-        if ($dateFrom||$dateTo) {
-            $tests = $tests->where(function($q) use ($dateFrom, $dateTo)
-            {
-                if($dateFrom)$q->where('created_at', '>=', $dateFrom);
+        if ($dateFrom || $dateTo) {
+            $tests = $tests->where(function ($q) use ($dateFrom, $dateTo) {
+                if ($dateFrom) {
+                    $q->where('created_at', '>=', $dateFrom);
+                }
 
-                if($dateTo){
-                    $dateTo = $dateTo . ' 23:59:59';
+                if ($dateTo) {
+                    $dateTo = $dateTo.' 23:59:59';
                     $q->where('created_at', '<=', $dateTo);
                 }
             });

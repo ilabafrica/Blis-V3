@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class ControlResult extends Model
 {
     protected $fillable = ['control_test_id', 'measure_id', 'measure_range_id'];
+
     /**
      * Relationship between result and measure.
      *

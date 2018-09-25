@@ -521,8 +521,8 @@ class CreateBlisTables extends Migration
         Schema::create('specimen_rejections', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('specimen_id')->unsigned();
-            $table->integer('test_phase_id')->unsigned();// identifies whether its preanalytic or analytic rejection
-            $table->integer('test_id')->unsigned()->nullable();// applicable only for analytic
+            $table->integer('test_phase_id')->unsigned(); // identifies whether its preanalytic or analytic rejection
+            $table->integer('test_id')->unsigned()->nullable(); // applicable only for analytic
             $table->integer('authorized_person_informed')->unsigned()->nullable();
             $table->integer('rejected_by')->unsigned();
             $table->timestamp('time_rejected');
@@ -589,7 +589,7 @@ class CreateBlisTables extends Migration
 
             $table->foreign('antibiotic_id')->references('id')->on('antibiotics');
             $table->foreign('result_id')->references('id')->on('results');
-            $table->unique(['result_id','antibiotic_id']);
+            $table->unique(['result_id', 'antibiotic_id']);
         });
 
         /*
@@ -662,8 +662,8 @@ class CreateBlisTables extends Migration
 
             $table->foreign('control_test_id')->references('id')->on('control_tests');
             $table->foreign('measure_id')->references('id')->on('measures');
-// introduce restriction rename control_test to control and check if its not too long????
-// $table->unique(['control_id', 'measure_id', 'measure_range_id']);
+            // introduce restriction rename control_test to control and check if its not too long????
+            // $table->unique(['control_id', 'measure_id', 'measure_range_id']);
 
             $table->timestamps();
         });
@@ -684,22 +684,22 @@ class CreateBlisTables extends Migration
             [
                 'id' => '1',
                 'code' => 'numeric',
-                'name' => 'Numeric'
+                'name' => 'Numeric',
             ],
             [
                 'id' => '2',
                 'code' => 'alphanumeric',
-                'name' => 'Alphanumeric'
+                'name' => 'Alphanumeric',
             ],
             [
                 'id' => '3',
                 'code' => 'multi_alphanumeric',
-                'name' => 'Multi Alphanumeric'
+                'name' => 'Multi Alphanumeric',
             ],
             [
                 'id' => '4',
                 'code' => 'free_text',
-                'name' => 'Free Text'
+                'name' => 'Free Text',
             ],
         ];
 
@@ -752,7 +752,7 @@ class CreateBlisTables extends Migration
 
         /* Specimen Status table */
         $specimen_statuses = [
-          ['id' => '1', 'name' => 'Pending'],// mostly redandant status, only if implementation is requested
+          ['id' => '1', 'name' => 'Pending'], // mostly redandant status, only if implementation is requested
           ['id' => '2', 'name' => 'Received'],
           ['id' => '3', 'name' => 'Rejected'],
         ];
@@ -845,7 +845,6 @@ class CreateBlisTables extends Migration
 
         \App\Models\Role::create(['name' => 'Technologist']);
         \App\Models\Role::create(['name' => 'Receptionist']);
-
 
         $superUser = \App\User::find($superUser->id);
         $permissions = \App\Models\Permission::all();

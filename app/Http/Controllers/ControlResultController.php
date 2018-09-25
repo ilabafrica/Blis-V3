@@ -9,9 +9,9 @@ namespace App\Http\Controllers;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
+use App\Models\ControlTest;
 use Illuminate\Http\Request;
 use App\Models\ControlResult;
-use App\Models\ControlTest;
 use App\Models\ControlTestStatus;
 
 class ControlResultController extends Controller
@@ -32,44 +32,38 @@ class ControlResultController extends Controller
         $validator = \Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            return response()->json($validator,422);
-
+            return response()->json($validator, 422);
         } else {
             $controlTest = ControlTest::find($request->input('control_test_id'));
             $controlTest->control_test_status_id = ControlTestStatus::completed;
             $results = $request->input('measures');
             foreach ($controlTest->testType->measures as $measure) {
-
-                if($measure->measureType->isMultiAlphanumeric()){
+                if ($measure->measureType->isMultiAlphanumeric()) {
                     // multi alphanumeric
                     foreach ($results[$measure->id]['measureRanges'] as $measureRange) {
-
                         $controlResult = ControlResult::updateOrCreate([
                             'control_test_id' => $request->input('control_test_id'),
                             'measure_range_id' => $measureRange['measure_range_id'],
                             'measure_id' => $measure->id,
                         ]);
                     }
-
-                }else if($measure->measureType->isAlphanumeric()){
+                } elseif ($measure->measureType->isAlphanumeric()) {
                     // alphanumeric
                     $controlResult = ControlResult::updateOrCreate([
                         'control_test_id' => $request->input('control_test_id'),
-                        'measure_id' => $measure->id
+                        'measure_id' => $measure->id,
                     ]);
                     $controlResult->measure_range_id = $results[$measure->id]['measure_range_id'];
                     $controlResult->save();
-
-                }else if($measure->measureType->isFreeText()||
-                    $measure->measureType->isNumeric()){
+                } elseif ($measure->measureType->isFreeText() ||
+                    $measure->measureType->isNumeric()) {
                     // free text | numeric
                     $controlResult = ControlResult::updateOrCreate([
                         'control_test_id' => $request->input('control_test_id'),
-                        'measure_id' => $measure->id
+                        'measure_id' => $measure->id,
                     ]);
                     $controlResult->result = $results[$measure->id]['result'];
                     $controlResult->save();
-
                 }
             }
             $controlTest->save();

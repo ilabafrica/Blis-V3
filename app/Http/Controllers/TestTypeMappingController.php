@@ -9,10 +9,10 @@ namespace App\Http\Controllers;
  * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
-use App\Models\SpecimenType;
 use App\Models\TestType;
-use App\Models\TestTypeMapping;
+use App\Models\SpecimenType;
 use Illuminate\Http\Request;
+use App\Models\TestTypeMapping;
 
 class TestTypeMappingController extends Controller
 {
@@ -33,14 +33,14 @@ class TestTypeMappingController extends Controller
     {
         $input = $request->all();
         $specimen_types = $request->input('specimen_type');
-        for ($i = 0; $i < count($input)-1; $i++) {
+        for ($i = 0; $i < count($input) - 1; $i++) {
             $testMapping = new TestTypeMapping;
             $testMapping->specimen_type_id = $input[$i];
             $testMapping->test_type_id = array_search(null, $input);
             try {
                 $testMapping->save();
             } catch (\Illuminate\Database\QueryException $e) {
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
         }
     }
@@ -68,20 +68,20 @@ class TestTypeMappingController extends Controller
     public function update(Request $request)
     {
         $input = $request->all();
-        
-        for ($i=0; $i < count($input)-1; $i++) {
-            if(TestTypeMapping::where('test_type_id', '=', array_search(null, $input))->where('specimen_type_id', '=', $input[$i])->exists()){
+
+        for ($i = 0; $i < count($input) - 1; $i++) {
+            if (TestTypeMapping::where('test_type_id', '=', array_search(null, $input))->where('specimen_type_id', '=', $input[$i])->exists()) {
                 //if the specimen is unchanged
-            }else{
+            } else {
                 //if a new specimen has been selected
                 $testMapping = new TestTypeMapping;
                 $testMapping->specimen_type_id = $input[$i];
                 $testMapping->test_type_id = array_search(null, $input);
-                    try {
-                        $testMapping->save();
-                    } catch (\Illuminate\Database\QueryException $e) {
+                try {
+                    $testMapping->save();
+                } catch (\Illuminate\Database\QueryException $e) {
                     return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-                    } 
+                }
             }
         }
 
@@ -89,10 +89,10 @@ class TestTypeMappingController extends Controller
         $allMappings = TestTypeMapping::where('test_type_id', '=', array_search(null, $input))->pluck('specimen_type_id')->toArray();
         $unselectedSpecimens = array_diff($allMappings, $input);
 
-        if(empty($unselectedSpecimens)){
+        if (empty($unselectedSpecimens)) {
             //no specimens have been deselected
-        }else{
-            foreach ($unselectedSpecimens as $index => $id) { 
+        } else {
+            foreach ($unselectedSpecimens as $index => $id) {
                 try {
                     $testMapping = TestTypeMapping::where('test_type_id', '=', array_search(null, $input))->where('specimen_type_id', '=', $id)->firstOrFail();
                     $testMapping->delete();
@@ -112,7 +112,7 @@ class TestTypeMappingController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $specimenType = SpecimenType::find($request->input('specimen_type_id'));
             $testType = TestType::find($request->input('test_type_id'));
@@ -136,7 +136,7 @@ class TestTypeMappingController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $specimenType = SpecimenType::find($request->input('specimen_type_id'));
             $testType = TestType::find($request->input('test_type_id'));

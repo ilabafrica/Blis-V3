@@ -39,11 +39,11 @@ class MeasureController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $input = $request->all();
             $measureData = [];
-            
+
             $measure = new Measure;
             $measure->test_type_id = $request->input('test_type_id');
             $measure->measure_type_id = $request->input('measure_type_id');
@@ -55,11 +55,9 @@ class MeasureController extends Controller
                 $measure->save();
 
                 return response()->json($measure);
-                
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
-            
         }
     }
 
@@ -71,7 +69,7 @@ class MeasureController extends Controller
      */
     public function show($id)
     {
-        $measure = Measure::find($id)->load('testType','measureType','measureRanges');
+        $measure = Measure::find($id)->load('testType', 'measureType', 'measureRanges');
 
         return response()->json($measure);
     }
