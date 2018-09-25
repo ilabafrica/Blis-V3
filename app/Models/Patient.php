@@ -46,7 +46,7 @@ class Patient extends Model
 
     public function tests()
     {
-        return $this->hasManyThrough('App\Models\Test','App\Models\Encounter');
+        return $this->hasManyThrough('App\Models\Test', 'App\Models\Encounter');
     }
 
     public function encounter()

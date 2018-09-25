@@ -14,11 +14,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class TestStatus extends Model
 {
-	const pending = 1;
-	const started = 2;
-	const completed = 3;
-	const verified = 4;
-	const cancelled = 5;
+    const pending = 1;
+    const started = 2;
+    const completed = 3;
+    const verified = 4;
+    const cancelled = 5;
     public $timestamps = false;
 
     public function testPhase()

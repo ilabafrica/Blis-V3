@@ -10,11 +10,11 @@ namespace App\Http\Controllers;
  * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
  */
 
-use Auth;
 use EMR;
+use Auth;
 use App\Models\Test;
-use App\Models\Specimen;
 use App\Models\Referral;
+use App\Models\Specimen;
 use App\Models\TestPhase;
 use App\Models\TestStatus;
 use Illuminate\Http\Request;
@@ -27,20 +27,18 @@ class TestController extends Controller
     public function index(Request $request)
     {
         // Search Conditions
-        if(
-            $request->query('search')||
-            $request->query('test_status_id')||
-            $request->query('date_from')||
+        if (
+            $request->query('search') ||
+            $request->query('test_status_id') ||
+            $request->query('date_from') ||
             $request->query('date_to')
-        ){
-
+        ) {
             $tests = Test::search(
                 $request->query('search'),
                 $request->query('test_status_id'),
                 ($request->query('date_from') ? $request->query('date_from') : date('Y-m-d')),
                 $request->query('date_to')
             );
-
         } else {
             $tests = Test::with(
                 'encounter.patient.name',
@@ -58,7 +56,6 @@ class TestController extends Controller
 
         return response()->json($tests);
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -81,7 +78,7 @@ class TestController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $test = new Test;
             $test->encounter_id = $request->input('encounter_id');
@@ -117,7 +114,6 @@ class TestController extends Controller
     public function show($id)
     {
         return response()->json(Test::find($id)->loader());
-
     }
 
     /**
@@ -163,7 +159,6 @@ class TestController extends Controller
                 $test->save();
 
                 return response()->json($test->loader());
-
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -182,7 +177,7 @@ class TestController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $specimen = new Specimen;
             $specimen->identifier = $request->input('identifier');
@@ -203,7 +198,6 @@ class TestController extends Controller
                 $specimen->save();
 
                 return response()->json($test->loader());
-
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -220,7 +214,7 @@ class TestController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $specimenRejection = new SpecimenRejection;
             $specimenRejection->specimen_id = $request->input('specimen_id');
@@ -228,7 +222,6 @@ class TestController extends Controller
             $specimenRejection->test_id = $request->input('test_id');
             $specimenRejection->rejected_by = Auth::user()->id;
             $specimenRejection->time_rejected = date('Y-m-d H:i:s');
-
 
             try {
                 $specimenRejection->save();
@@ -240,7 +233,6 @@ class TestController extends Controller
                 }
 
                 return response()->json(Test::find($request->input('test_id'))->loader());
-
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -258,7 +250,7 @@ class TestController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $referral = new Referral;
             $referral->specimen_id = $request->input('specimen_id');
@@ -276,7 +268,6 @@ class TestController extends Controller
                 }
 
                 return response()->json(Test::find($request->input('test_id'))->loader());
-
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -286,7 +277,7 @@ class TestController extends Controller
     /**
      * Start Test
      * this is useful to pick up information from automated machine
-     * that does not send user information
+     * that does not send user information.
      */
     public function start($id)
     {
@@ -300,7 +291,7 @@ class TestController extends Controller
     }
 
     /**
-     * Verify Test
+     * Verify Test.
      *
      * @param
      * @return

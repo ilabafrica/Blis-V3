@@ -32,9 +32,8 @@ class PermissionRoleController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
-
             try {
                 $permissionRole = PermissionRole::create([
                     'permission_id' => $request->input('permission_id'),
@@ -57,7 +56,7 @@ class PermissionRoleController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $role = Role::find($request->input('role_id'));
             $permission = Permission::find($request->input('permission_id'));

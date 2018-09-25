@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ControlTestStatus extends Model
 {
-	const pending = 1;
-	const completed = 2;
+    const pending = 1;
+    const completed = 2;
     public $timestamps = false;
 }

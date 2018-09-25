@@ -37,7 +37,7 @@ class EncounterStatusController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $encounterStatus = new EncounterStatus;
             $encounterStatus->code = $request->input('code');

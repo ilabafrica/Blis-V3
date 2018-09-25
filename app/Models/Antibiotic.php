@@ -18,6 +18,6 @@ class Antibiotic extends Model
 
     public function measureRanges()
     {
-        return $this->belongsToMany('App\Models\MeasureRange','susceptibility_break_points', 'antibiotic_id','measure_range_id');
+        return $this->belongsToMany('App\Models\MeasureRange', 'susceptibility_break_points', 'antibiotic_id', 'measure_range_id');
     }
 }

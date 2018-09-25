@@ -9,7 +9,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
-        'created_at' => date('Y-m-d H:i:s',strtotime("-10 days"))
+        'created_at' => date('Y-m-d H:i:s', strtotime('-10 days')),
     ];
 });
 
@@ -35,10 +35,10 @@ $factory->define(\App\Models\Patient::class, function (Faker\Generator $faker) {
         'created_by' => \App\User::inRandomOrder()->first()->id,
         'identifier' => $faker->unique()->safeEmail,
         'name_id' => factory(\App\Models\Name::class)->create()->id,
-        'gender_id' => rand(1,2),
+        'gender_id' => rand(1, 2),
         'birth_date' => \Faker\Factory::create()->date(),
-        'marital_status' => $faker->word,// todo: create something relevant
-        'created_at' => date('Y-m-d H:i:s',strtotime("-10 days"))
+        'marital_status' => $faker->word, // todo: create something relevant
+        'created_at' => date('Y-m-d H:i:s', strtotime('-10 days')),
     ];
 });
 
@@ -79,8 +79,9 @@ $factory->define(\App\Models\SpecimenType::class, function (Faker\Generator $fak
 
 $factory->define(\App\Models\Specimen::class, function (Faker\Generator $faker) {
     $userId = \App\User::inRandomOrder()->first()->id;
-    $collected_at = date('Y-m-d H:i:s',strtotime("-".rand(0,10)." days"));
-    $received_at = date('Y-m-d H:i:s',strtotime($collected_at."+".rand(20,900)." minutes"));
+    $collected_at = date('Y-m-d H:i:s', strtotime('-'.rand(0, 10).' days'));
+    $received_at = date('Y-m-d H:i:s', strtotime($collected_at.'+'.rand(20, 900).' minutes'));
+
     return [
         'identifier' => $faker->word,
         'accession_identifier' => $faker->word,
@@ -118,16 +119,16 @@ $factory->define(\App\Models\Test::class, function (Faker\Generator $faker) {
         'time_started' => date('Y-m-d H:i:s'),
         'time_completed' => date('Y-m-d H:i:s'),
         'time_verified' => date('Y-m-d H:i:s'),
-        'created_at' => date('Y-m-d H:i:s')
+        'created_at' => date('Y-m-d H:i:s'),
     ];
 });
 
 $factory->define(\App\Models\Result::class, function (Faker\Generator $faker) {
     return [
-        'test_id' => NULL,
-        'measure_id' => NULL,
+        'test_id' => null,
+        'measure_id' => null,
         'result' => $faker->word,
-        'measure_range_id' => NULL,
+        'measure_range_id' => null,
         'time_entered' => date('Y-m-d H:i:s'),
     ];
 });
@@ -137,7 +138,7 @@ $factory->define(\App\Models\Lot::class, function (Faker\Generator $faker) {
         'number' => $faker->word,
         'description' => $faker->word,
         'expiry' => date('Y-m-d H:i:s'),
-        'instrument_id' => NULL,
+        'instrument_id' => null,
     ];
 });
 
@@ -155,10 +156,10 @@ $factory->define(\App\Models\ControlTest::class, function (Faker\Generator $fake
 
 $factory->define(\App\Models\Result::class, function (Faker\Generator $faker) {
     return [
-        'test_id' => NULL,
-        'measure_id' => NULL,
+        'test_id' => null,
+        'measure_id' => null,
         'result' => $faker->word,
-        'measure_range_id' => NULL,
+        'measure_range_id' => null,
         'time_entered' => date('Y-m-d H:i:s'),
     ];
 });
@@ -172,7 +173,7 @@ $factory->define(\App\Models\Organization::class, function (Faker\Generator $fak
         'telecom' => $faker->randomNumber(),
         'address' => $faker->randomNumber(),
         'part_of' => $faker->randomNumber(),
-        'end_point' => $faker->word
+        'end_point' => $faker->word,
     ];
 });
 

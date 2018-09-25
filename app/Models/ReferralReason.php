@@ -18,6 +18,6 @@ class ReferralReason extends Model
 
     public function referral()
     {
-        return $this->belongsToMany('App\Models\Referral','reason_referral');
+        return $this->belongsToMany('App\Models\Referral', 'reason_referral');
     }
 }

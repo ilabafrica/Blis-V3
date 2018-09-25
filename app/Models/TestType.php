@@ -30,7 +30,7 @@ class TestType extends Model
 
     public function specimenTypes()
     {
-        return $this->belongsToMany('App\Models\SpecimenType','test_type_mappings');
+        return $this->belongsToMany('App\Models\SpecimenType', 'test_type_mappings');
     }
 
     public function measures()
@@ -47,5 +47,4 @@ class TestType extends Model
             'specimenTypes'
         );
     }
-
 }

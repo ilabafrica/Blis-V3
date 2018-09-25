@@ -27,20 +27,20 @@ class SusceptibilityBreakPoint extends Model
 
     public function measureRange()
     {
-      return $this->belongsTo('App\Models\MeasureRange');
+        return $this->belongsTo('App\Models\MeasureRange');
     }
 
     public function getSusceptibilityRange($diameter)
     {
         if ($diameter <= $this->resistant_max) {
             return SusceptibilityRange::find(SusceptibilityBreakPoint::RESISTANT)->id;
-        }elseif ($diameter >= $this->sensitive_min) {
+        } elseif ($diameter >= $this->sensitive_min) {
             return SusceptibilityRange::find(SusceptibilityBreakPoint::SENSITIVE)->id;
-        }elseif ($diameter >= $this->intermediate_min) {
+        } elseif ($diameter >= $this->intermediate_min) {
             return SusceptibilityRange::find(SusceptibilityBreakPoint::INTERMEDIATE)->id;
-        }elseif ($diameter <= $this->intermediate_max) {
+        } elseif ($diameter <= $this->intermediate_max) {
             return SusceptibilityRange::find(SusceptibilityBreakPoint::INTERMEDIATE)->id;
-        }else{
+        } else {
             /*todo: if the caller gets this reply tell the user the diameter is not valid,
             so they can insist problematic range, what do we do?
             ask user to configure, send message to the front

@@ -37,7 +37,7 @@ class TestPhaseController extends Controller
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json($validator,422);
+            return response()->json($validator, 422);
         } else {
             $testPhase = new TestPhase;
             $testPhase->display = $request->input('display');

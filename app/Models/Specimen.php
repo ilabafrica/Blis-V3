@@ -34,7 +34,7 @@ class Specimen extends Model
 
     public function status()
     {
-        return $this->belongsTo('App\Models\SpecimenStatus','specimen_status_id');
+        return $this->belongsTo('App\Models\SpecimenStatus', 'specimen_status_id');
     }
 
     public function collectedBy()
