@@ -45,6 +45,11 @@ return [
             'driver' => 'passport',
             'provider' => 'users',
         ],
+
+        'tpa_api' => [
+            'driver' => 'jwt',
+            'provider' => 'tpas',
+        ],
     ],
 
     /*
@@ -68,6 +73,12 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+            'table' => 'users',
+        ],
+        'tpas' => [
+            'driver' => 'eloquent',
+            'model' => App\ThirdPartyApp::class,
+            'table' => 'third_party_apps',
         ],
 
         // 'users' => [
@@ -94,6 +105,11 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+        'tpas' => [
+            'provider' => 'tpas',
             'table' => 'password_resets',
             'expire' => 60,
         ],

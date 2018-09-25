@@ -1,320 +1,184 @@
 <?php
 
-$factory->define(App\Models\UserType::class, function (Faker\Generator $faker) {
-
-	return [
-		'name' => $faker->word,
-		'description' => $faker->sentence(),
-	];
-});
-
-$factory->define(App\Models\User::class, function (Faker\Generator $faker) {
-	static $password;
-
-	return [
-		'type' => 1,
-		'email' => $faker->unique()->safeEmail,
-		'password' => $password ?: $password = bcrypt('secret'),
-		'remember_token' => str_random(10),
-	];
-});
-
-$factory->define(\App\Models\CodeableConcept::class, function (Faker\Generator $faker) {
+$factory->define(App\User::class, function (Faker\Generator $faker) {
+    static $password;
 
     return [
-        'code' => $faker->word,
-        'description' => $faker->word
+        'name' => $faker->word,
+        'username' => $faker->userName,
+        'email' => $faker->unique()->safeEmail,
+        'password' => $password ?: $password = bcrypt('secret'),
+        'remember_token' => str_random(10),
+        'created_at' => date('Y-m-d H:i:s', strtotime('-10 days')),
     ];
 });
 
-$factory->define(\App\Models\HumanName::class, function (Faker\Generator $faker) {
-
-	return [
-		'created_by' => factory(\App\Models\User::class)->create()->id,
-		'use' =>factory(\App\Models\CodeableConcept::class)->create()->id,
-		'text' => $faker->word
-	];
-});
-
-$factory->define(\App\Models\ContactPoint::class, function (Faker\Generator $faker) {
-
-	return [
-		'created_by' => factory(\App\Models\User::class)->create()->id,
-		'system' => factory(\App\Models\CodeableConcept::class)->create()->id,
-		'value' => $faker->word,
-		'use' => factory(\App\Models\CodeableConcept::class)->create()->id,
-	];
-});
-
-$factory->define(\App\Models\Address::class, function (Faker\Generator $faker) {
-
+$factory->define(App\Models\Location::class, function (Faker\Generator $faker) {
     return [
-        'use' => factory(\App\Models\CodeableConcept::class)->create()->id,
-        'type' => factory(\App\Models\CodeableConcept::class)->create()->id,
+        'name' => $faker->word,
+    ];
+});
+
+$factory->define(\App\Models\Name::class, function (Faker\Generator $faker) {
+    return [
+        'use' => $faker->word,
         'text' => $faker->word,
-        'line' => $faker->word,
-        'city' => $faker->city,
-        'district' => $faker->word,
-        'state' => $faker->word,
-        'postal_code' => $faker->word,
-        'country' => $faker->country,
-        'period' => $faker->date(),
-    ];
-});
-
-$factory->define(\App\Models\Organization::class, function (Faker\Generator $faker) {
-
-	return [
-		'created_by' => factory(\App\Models\User::class)->create()->id,
-		'type' => factory(\App\Models\CodeableConcept::class)->create()->id,
-		'name' => $faker->word,
-		'alias' => $faker->word,
-		'telecom' => $faker->randomNumber(),
-		'address' => $faker->randomNumber(),
-		'part_of' => $faker->randomNumber(),
-		'end_point' => $faker->word,
-	];
-});
-
-$factory->define(\App\Models\OrganizationContact::class, function (Faker\Generator $faker) {
-
-    return [
-        'organization_id' => factory(\App\Models\Organization::class)->create()->id,
-        'purpose' => factory(\App\Models\CodeableConcept::class)->create()->id,
+        'family' => $faker->word,
+        'given' => $faker->word,
+        'prefix' => $faker->word,
+        'suffix' => $faker->word,
     ];
 });
 
 $factory->define(\App\Models\Patient::class, function (Faker\Generator $faker) {
-	
-	$userId  = factory(\App\Models\User::class)->create()->id;
-
-	return [
-		'created_by' => $userId,
-		'name' => factory(\App\Models\HumanName::class)->create(['created_by'=>$userId])->id,
-		'gender' => factory(\App\Models\CodeableConcept::class)->create()->id,
-		'birth_date' => \Faker\Factory::create()->date(),
-		'address' => factory(\App\Models\Address::class)->create()->id,
-		'marital_status' => factory(\App\Models\CodeableConcept::class)->create()->id,
-	];
-});
-
-$factory->define(\App\Models\Practitioner::class, function (Faker\Generator $faker) {
-
-	$userId  = factory(\App\Models\User::class)->create()->id;
-
-	return [
-		'created_by' => $userId,
-		'name' => factory(\App\Models\HumanName::class)->create(['created_by'=>$userId])->id,
-		'telecom' => factory(\App\Models\ContactPoint::class)->create(['created_by'=>$userId])->id,
-		'gender' => factory(\App\Models\CodeableConcept::class)->create()->id,
-		'birth_date' => \Faker\Factory::create()->date(),
-		'address' => factory(\App\Models\Address::class)->create()->id,
-	];
-});
-
-$factory->define(App\Models\StatusHistory::class, function (Faker\Generator $faker) {
-
     return [
-        'code' => $faker->randomNumber(),
-        'episode_of_care_id' => $faker->randomNumber(),
+        'created_by' => \App\User::inRandomOrder()->first()->id,
+        'identifier' => $faker->unique()->safeEmail,
+        'name_id' => factory(\App\Models\Name::class)->create()->id,
+        'gender_id' => rand(1, 2),
+        'birth_date' => \Faker\Factory::create()->date(),
+        'marital_status' => $faker->word, // todo: create something relevant
+        'created_at' => date('Y-m-d H:i:s', strtotime('-10 days')),
     ];
 });
 
-$factory->define(App\Models\Codes::class, function (Faker\Generator $faker) {
-
+$factory->define(\App\Models\TestTypeCategory::class, function (Faker\Generator $faker) {
     return [
+        'name' => $faker->word,
     ];
 });
 
-$factory->define(App\Models\EpisodeofCare::class, function (Faker\Generator $faker) {
-
+$factory->define(\App\Models\TestType::class, function (Faker\Generator $faker) {
     return [
-        'status' => $faker->randomNumber(),
-        'type' => $faker->randomNumber(),
-        'patient' => $faker->randomNumber(),
-        'organization_id' => $faker->randomNumber(),
-        'period' => $faker->randomNumber(),
-        'practitioners_id' => $faker->randomNumber(),
-        'team_id' => $faker->randomNumber(),
+        'name' => $faker->word,
+        'description' => $faker->word,
+        'culture' => 0,
+        'test_type_category_id' => factory(\App\Models\TestTypeCategory::class)->create()->id,
     ];
 });
 
-$factory->define(App\Models\EpisodeOfCareDiagnosis::class, function (Faker\Generator $faker) {
-
+$factory->define(\App\Models\Encounter::class, function (Faker\Generator $faker) {
     return [
-        'condition' => $faker->word,
-        'role' => $faker->word,
-        'rank' => $faker->word,
-        'episode_of_care_id' => $faker->randomNumber(),
+        'identifier' => $faker->word,
+        'patient_id' => factory(\App\Models\Patient::class)->create()->id,
+        'location_id' => factory(\App\Models\Location::class)->create()->id,
+        'encounter_class_id' => \App\Models\EncounterClass::outpatient,
+        'encounter_status_id' => null,
+        'bed_no' => $faker->word,
+        'practitioner_name' => $faker->word,
+        'practitioner_contact' => $faker->word,
+        'practitioner_organisation' => $faker->word,
     ];
 });
 
-$factory->define(App\Models\ProcedureRequest::class, function (Faker\Generator $faker) {
-
+$factory->define(\App\Models\SpecimenType::class, function (Faker\Generator $faker) {
     return [
-        'definition_id' => $faker->randomNumber(),
-        'based_on' => $faker->word,
-        'replaces' => $faker->word,
-        'requisition' => $faker->randomNumber(),
-        'status' => $faker->randomNumber(),
-        'intent' => $faker->randomNumber(),
-        'priority' => $faker->randomNumber(),
-        'do_not_perform' => $faker->boolean,
-        'category' => $faker->randomNumber(),
-        'code' => $faker->randomNumber(),
-        'subject' => $faker->word,
-        'context' => $faker->randomNumber(),
-        'occurence' => $faker->dateTimeBetween(),
-        'asneeded' => $faker->randomNumber(),
-        'authored_on' => $faker->dateTimeBetween(),
-        'requester' => $faker->randomNumber(),
-        'performer_type' => $faker->randomNumber(),
-        'performer' => $faker->randomNumber(),
-        'reason_code' => $faker->randomNumber(),
-        'reason_reference' => $faker->word,
-        'supporting_info' => $faker->word,
-        'specimen' => $faker->randomNumber(),
-        'body_site' => $faker->randomNumber(),
-        'note' => $faker->word,
-        'relevant_history' => $faker->word,
+        'name' => $faker->word,
     ];
 });
 
-$factory->define(App\Models\Ingredient::class, function (Faker\Generator $faker) {
+$factory->define(\App\Models\Specimen::class, function (Faker\Generator $faker) {
+    $userId = \App\User::inRandomOrder()->first()->id;
+    $collected_at = date('Y-m-d H:i:s', strtotime('-'.rand(0, 10).' days'));
+    $received_at = date('Y-m-d H:i:s', strtotime($collected_at.'+'.rand(20, 900).' minutes'));
 
     return [
-        'quantity' => $faker->randomNumber(),
-        'substance' => $faker->randomNumber(),
+        'identifier' => $faker->word,
+        'accession_identifier' => $faker->word,
+        'specimen_type_id' => factory(\App\Models\SpecimenType::class)->create()->id,
+        'received_by' => $userId,
+        'collected_by' => $userId,
+        'time_collected' => $collected_at,
+        'time_received' => $received_at,
+
     ];
 });
 
-$factory->define(App\Models\Quantity::class, function (Faker\Generator $faker) {
-
+$factory->define(\App\Models\Measure::class, function (Faker\Generator $faker) {
     return [
-        'value' => $faker->word,
-        'comparator' => $faker->word,
-        'unit' => $faker->word,
-        'system' => $faker->word,
-        'code' => $faker->word,
+        'test_type_id' => null,
+        'measure_type_id' => null,
+        'name' => $faker->word,
     ];
 });
 
-$factory->define(App\Models\Collection::class, function (Faker\Generator $faker) {
-
+$factory->define(\App\Models\Test::class, function (Faker\Generator $faker) {
     return [
-        'collector' => $faker->randomNumber(),
-        'collection_time' => $faker->dateTimeBetween(),
-        'quantity_id' => $faker->randomNumber(),
-        'method' => $faker->randomNumber(),
-        'body_site' => $faker->randomNumber(),
+        'encounter_id' => factory(\App\Models\Encounter::class)->create([
+            'patient_id' => \App\Models\Patient::inRandomOrder()->first()->id,
+            'location_id' => \App\Models\Location::inRandomOrder()->first()->id,
+        ])->id,
+        'identifier' => $faker->word,
+        'test_type_id' => null,
+        'specimen_id' => null,
+        'test_status_id' => null,
+        'created_by' => null,
+        'tested_by' => null,
+        'verified_by' => null,
+        'requested_by' => $faker->word,
+        'time_started' => date('Y-m-d H:i:s'),
+        'time_completed' => date('Y-m-d H:i:s'),
+        'time_verified' => date('Y-m-d H:i:s'),
+        'created_at' => date('Y-m-d H:i:s'),
     ];
 });
 
-$factory->define(App\Models\PatientContact::class, function (Faker\Generator $faker) {
-
+$factory->define(\App\Models\Result::class, function (Faker\Generator $faker) {
     return [
-        'patient_id' => $faker->randomNumber(),
-        'relationship' => $faker->randomNumber(),
-        'name' => $faker->name,
+        'test_id' => null,
+        'measure_id' => null,
+        'result' => $faker->word,
+        'measure_range_id' => null,
+        'time_entered' => date('Y-m-d H:i:s'),
+    ];
+});
+
+$factory->define(\App\Models\Lot::class, function (Faker\Generator $faker) {
+    return [
+        'number' => $faker->word,
+        'description' => $faker->word,
+        'expiry' => date('Y-m-d H:i:s'),
+        'instrument_id' => null,
+    ];
+});
+
+$factory->define(\App\Models\ControlTest::class, function (Faker\Generator $faker) {
+    return [
+        'lot_id' => factory(\App\Models\Lot::class)->create()->id,
+        'tested_by' => \App\User::inRandomOrder()->first()->id,
+        'test_type_id' => factory(\App\Models\TestType::class)->create()->id,
+        'control_test_status_id' => \App\Models\ControlTestStatus::completed,
+        'time_started' => date('Y-m-d H:i:s'),
+        'time_completed' => date('Y-m-d H:i:s'),
+        'time_verified' => date('Y-m-d H:i:s'),
+    ];
+});
+
+$factory->define(\App\Models\Result::class, function (Faker\Generator $faker) {
+    return [
+        'test_id' => null,
+        'measure_id' => null,
+        'result' => $faker->word,
+        'measure_range_id' => null,
+        'time_entered' => date('Y-m-d H:i:s'),
+    ];
+});
+
+// caters for facilities
+$factory->define(\App\Models\Organization::class, function (Faker\Generator $faker) {
+    return [
+        'created_by' => factory(\App\User::class)->create()->id,
+        'name' => $faker->word,
+        'alias' => $faker->word,
         'telecom' => $faker->randomNumber(),
         'address' => $faker->randomNumber(),
-        'gender' => $faker->randomNumber(),
-        'organization_id' => $faker->randomNumber(),
-        'period' => $faker->date(),
+        'part_of' => $faker->randomNumber(),
+        'end_point' => $faker->word,
     ];
 });
 
-$factory->define(App\Models\Container::class, function (Faker\Generator $faker) {
-
+$factory->define(\App\Models\RejectionReason::class, function (Faker\Generator $faker) {
     return [
-        'description' => $faker->word,
-        'type' => $faker->randomNumber(),
-        'capacity' => $faker->randomNumber(),
-        'quantity_id' => $faker->randomNumber(),
-        'additive' => $faker->randomNumber(),
-    ];
-});
-
-$factory->define(App\Models\Specimen::class, function (Faker\Generator $faker) {
-
-    return [
-        'accession_identifier' => $faker->randomNumber(),
-        'status' => $faker->randomNumber(),
-        'type' => $faker->randomNumber(),
-        'subject' => $faker->randomNumber(),
-        'received_time' => $faker->dateTimeBetween(),
-        'parent' => $faker->randomNumber(),
-        'note' => $faker->word,
-    ];
-});
-
-$factory->define(App\Models\Substance::class, function (Faker\Generator $faker) {
-
-    return [
-        'status' => $faker->randomNumber(),
-        'category' => $faker->randomNumber(),
-        'code' => $faker->randomNumber(),
-        'description' => $faker->word,
-    ];
-
-});
-$factory->define(App\Models\CareTeam::class, function (Faker\Generator $faker) {
-
-    return [
-        'identifiers' => $faker->word,
-        'status_id' => $faker->randomNumber(),
-        'category' => $faker->randomNumber(),
-        'name' => $faker->name,
-        'subject' => $faker->randomNumber(),
-        'context' => $faker->randomNumber(),
-        'period' => $faker->randomNumber(),
-        'reason_code' => $faker->randomNumber(),
-        'reason_reference' => $faker->word,
-        'organization_id' => $faker->randomNumber(),
-        'comment' => $faker->word,
-    ];
-});
-
-$factory->define(App\Models\ReferralRequest::class, function (Faker\Generator $faker) {
-
-    return [
-        'based_on' => $faker->randomNumber(),
-        'replaces' => $faker->randomNumber(),
-        'group_identifier' => $faker->randomNumber(),
-        'status' => $faker->randomNumber(),
-        'type' => $faker->randomNumber(),
-        'priority' => $faker->randomNumber(),
-        'service_requested' => $faker->word,
-        'subject' => $faker->randomNumber(),
-        'occurence' => $faker->dateTimeBetween(),
-        'requester' => $faker->randomNumber(),
-        'specialty' => $faker->randomNumber(),
-        'recipient' => $faker->randomNumber(),
-        'reason_code' => $faker->randomNumber(),
-        'reason_reference' => $faker->word,
-        'supporting_info' => $faker->word,
-        'description' => $faker->word,
-        'note' => $faker->word,
-    ];
-});
-
-$factory->define(App\Models\Status::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->name,
-    ];
-});
-
-$factory->define(App\Models\Processing::class, function (Faker\Generator $faker) {
-    return [
-        'description' => $faker->word,
-        'procedure' => $faker->randomNumber(),
-        'period' => $faker->dateTimeBetween(),
-    ];
-});
-
-$factory->define(App\Models\CareTeamPractitioner::class, function (Faker\Generator $faker) {
-    return [
-        'team_id' => $faker->randomNumber(),
-        'practioner_id' => $faker->randomNumber(),
+        'display' => $faker->word,
     ];
 });

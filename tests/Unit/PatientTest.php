@@ -1,98 +1,116 @@
 <?php
 namespace Tests\Unit;
+/**
+ * (c) @iLabAfrica
+ * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
+ * Team Lead	 - Emmanuel Kweyu.
+ * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
+ */
 
+use Tests\SetUp;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PatientTest extends TestCase
 {
+	use SetUp;
 	use DatabaseMigrations;
-
-	public function setup(){
-		parent::Setup();
-		$this->setVariables();
-	}
-
 	public function setVariables(){
-    	$this->patientData=array(
-        
-			"created_by"=>1,
-			"active"=>1,
-			"identifier"=>1,
-			"gender"=>1,
-			"name" => "s",
-			"address"=>"ss",
-			"birth_date"=>'2017:12:12 15:30:00',
-			"marital_status"=>1,
-			"photo"=>'Sample String',
-			"animal_species"=>'Sample String',
-			"animal_breed"=>'Sample String',
-			"animal_gender_status"=>'Sample String',
-
-        );
-    	$this->updatedpatientData=array(
-        
-			"created_by"=>1,
-			"active"=>2,
-			"identifier"=>2,
-			"gender"=>2,
-			"name" => "b",
-			"address"=>"bb",
-			"birth_date"=>'2016:12:12 15:30:00',
+		$this->patientData=array(
+			"identifier"=>'Sample updated String',
+			"active"=>'Sample updated String',
+			"name" => "Given Name",
+			"name_id"=>1,
+			"gender_id"=>1,
+			"deceased"=>'Sample updated String',
+			"deceased_date_time"=>'2016:12:12 15:30:00',
+			"address_id"=>1,
 			"marital_status"=>1,
 			"photo"=>'Sample updated String',
-			"animal_species"=>'Sample updated String',
-			"animal_breed"=>'Sample updated String',
-			"animal_gender_status"=>'Sample updated String',
-
-        );
+			"animal"=>'Sample updated String',
+			"species_id"=>1,
+			"breed_id"=>1,
+			"gender" => "Male",
+			"birth_date" => "1977-05-18",
+			"given" => "Given",
+			"family" => "Family",
+			"practitioner_id"=>1,
+			"organization_id"=>1,
+			"created_by"=>1,
+		);
 	}
 
 	public function testStorePatient()
 	{
-		$response=$this->json('POST', '/api/patient',$this->patientData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("created_by", $response->original);
+		$response=$this->post('/api/patient',$this->patientData);
+		$this->assertEquals(200,$response->getStatusCode());
+		$this->assertArrayHasKey("created_by",$response->original);
 	}
 
 	public function testListPatient()
 	{
-		$response=$this->json('GET', '/api/patient');
-		$response->assertStatus(200);
+		$response=$this->get('/api/patient');
+		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 	public function testShowPatient()
 	{
-		$this->json('POST', '/api/patient',$this->patientData);
-		$response=$this->json('GET', '/api/patient/1');
-		$response->assertStatus(200);
+		$response=$this->post('/api/patient',$this->patientData);
+		$response=$this->get('/api/patient/1');
+		$this->assertEquals(200,$response->getStatusCode());
 		$this->assertArrayHasKey("created_by",$response->original);
-		$this->assertEquals($this->patientData['photo'], $response->original->photo);
 	}
 
 	public function testUpdatePatient()
 	{
-		$this->json('POST', '/api/patient',$this->patientData);
-		$response = $this->json('PUT', '/api/patient/1', $this->updatedpatientData);
-		$response->assertStatus(200);
-		$this->assertArrayHasKey("created_by",$response->original);
-		$this->assertEquals($this->updatedpatientData['photo'], $response->original->photo);
+		$store=$this->post('/api/patient',$this->patientData);
+		$update=$this->put('/api/patient/'.$store->original->id,[
+		  'id' => 1,
+		  'identifier' => 'yjacobi@example.com',
+		  'active' => 1,
+		  'name_id' => 1,
+		  'gender_id' => 1,
+		  'birth_date' => '1997-06-19',
+		  'deceased' => 0,
+		  'deceased_date_time' => NULL,
+		  'marital_status' => 11,
+		  'photo' => NULL,
+		  'animal' => 0,
+		  'species_id' => NULL,
+		  'breed_id' => NULL,
+		  'practitioner_id' => NULL,
+		  'organization_id' => NULL,
+		  'created_at' => '2018-06-19 10:38:02',
+		  'updated_at' => '2018-06-19 10:38:02',
+		  'name' => 
+		  [
+		    'id' => 1,
+		    'use' => 'modi',
+		    'text' => 'consectetur',
+		    'family' => 'dolor',
+		    'given' => 'laboriosam',
+		    'prefix' => 'eos',
+		    'suffix' => 'nisi',
+		    'created_at' => '2018-06-19 10:37:59',
+		    'updated_at' => '2018-06-19 10:37:59',
+		  ],
+		  'gender' => 
+		  [
+		    'id' => 1,
+		    'code' => 'Male',
+		    'display' => 'Male',
+		  ],
+		]);
+		$this->assertEquals(200,$update->getStatusCode());
+		$this->assertArrayHasKey("gender_id",$update->original);
 	}
 
 	public function testDeletePatient()
 	{
-		$this->json('POST', '/api/patient',$this->patientData);
+		$response=$this->post('/api/patient',$this->patientData);
 		$response=$this->delete('/api/patient/1');
-		$this->assertEquals(200, $response->getStatusCode());
-		$response=$this->json('GET', '/api/patient/1');
-		$this->assertEquals(404, $response->getStatusCode());
-	}
-
-	public function testDeletePatientFail()
-	{
-		$response=$this->delete('/api/patient/9999999999');
-		$this->assertEquals(404, $response->getStatusCode());
+		$this->assertEquals(200,$response->getStatusCode());
 	}
 
 }
