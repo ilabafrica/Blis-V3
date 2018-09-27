@@ -10,19 +10,6 @@ BLIS is an open-source system to track patient specimens,Test and laboratory res
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-### Prerequisites
-
-What things you need to install the software and how to install them
-
-```
-1. PHP >= 5.6.4
-2. OpenSSL PHP Extension
-3. PDO PHP Extension
-4. Mbstring PHP Extension
-5. Tokenizer PHP Extension
-6. XML PHP Extension
-```
-
 ### Installing
 
 A step by step series of examples that tell you have to get a development env running
