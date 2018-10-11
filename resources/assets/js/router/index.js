@@ -183,6 +183,13 @@ export default new Router({
       component: require('../components/qualitycontrol/lot'),
       beforeEnter: ifAuthenticated,
     },
+    //Inventory
+    {
+      path: '/inventory/supplier',
+      name: 'Supplier',
+      component: require('../components/inventory/supplier'),
+      beforeEnter: ifAuthenticated,
+    },
     // General Stats
     {
       path: '/stats/',
