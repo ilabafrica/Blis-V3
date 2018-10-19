@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-dialog v-model="dialog" max-width="500px">
-      <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
+      <v-btn slot="activator" color="primary" dark class="mb-2">New Item Request</v-btn>
       <v-card>
         <v-card-title>
           <span class="headline">{{ formTitle }}</span>
@@ -11,31 +11,49 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm12 md12>
+                <v-overflow-btn
+                  :items="items"
+                  v-model="editedItem.item_id"
+                  item-text="name"
+                  item-value="id"
+                  label="Instrument"
+                ></v-overflow-btn>
+              </v-flex>
+              <v-flex xs12 sm12 md12>
                 <v-text-field
-                  v-model="editedItem.name"
-                  :rules="[v => !!v || 'Name is Required']"
-                  label="Name">
+                  v-model="editedItem.curr_bal"
+                  :rules="[v => !!v || 'Current Balance is Required']"
+                  label="Current Balance">
+                </v-text-field>
+              </v-flex>
+              <v-flex xs12 sm12 md12>
+                <v-overflow-btn
+                  :items="labsections"
+                  v-model="editedItem.lab_section_id"
+                  item-text="name"
+                  item-value="id"
+                  label="Lab Section"
+                ></v-overflow-btn>
+              </v-flex>
+              <v-flex xs12 sm12 md12>
+                <v-text-field
+                  v-model="editedItem.tests_done"
+                  :rules="[v => !!v || 'Tests Done is Required']"
+                  label="Tests Done">
                 </v-text-field>
               </v-flex>
               <v-flex xs12 sm12 md12>
                 <v-text-field
-                  v-model="editedItem.phone"
-                  :rules="[v => !!v || 'Phone is Required']"
-                  label="Phone">
+                  v-model="editedItem.quantity_requested"
+                  :rules="[v => !!v || 'Quantity Requested. is Required']"
+                  label="Quantity Requested.">
                 </v-text-field>
               </v-flex>
               <v-flex xs12 sm12 md12>
                 <v-text-field
-                  v-model="editedItem.email"
-                  :rules="[v => !!v || 'Email Address is Required']"
-                  label="Email Address">
-                </v-text-field>
-              </v-flex>
-              <v-flex xs12 sm12 md12>
-                <v-text-field
-                  v-model="editedItem.address"
-                  :rules="[v => !!v || 'Address is Required']"
-                  label="Address">
+                  v-model="editedItem.remarks"
+                  :rules="[v => !!v || 'Remarks is Required']"
+                  label="Remarks">
                 </v-text-field>
               </v-flex>
             </v-layout>
@@ -50,8 +68,42 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog
+      v-model="detailsdialog"
+      max-width="500"
+    >
+      <v-card>
+        <v-card-title class="headline">Request Details</v-card-title>
+
+        <v-card-text>
+          
+          Lab Section: {{editedItem}}
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="dialog = false"
+          >
+            Disagree
+          </v-btn>
+
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="dialog = false"
+          >
+            Agree
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-card-title>
-      Suppliers
+      Requests
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -65,14 +117,30 @@
 
     <v-data-table
       :headers="headers"
-      :items="supplier"
+      :items="request"
       hide-actions
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.name }}</td>
-        <td class="text-xs-left">{{ props.item.phone }}</td>
-        <td class="justify-left layout px-0">
+        <td>{{ props.item.created_at }}</td>
+        <td class="text-xs-left">{{ props.item.user.name }}</td>
+        <td class="text-xs-left">{{ props.item.item.name }}</td>
+        <td class="text-xs-left">{{ props.item.quantity_requested }}</td>
+        <td class="text-xs-left">{{ props.item.quantity_issued }}</td>
+        <td class="text-xs-left">
+          <v-btn small color="primary" dark>{{ props.item.status.name }}</v-btn>
+        </td>
+        <td class="justify-center layout px-0">
+          <v-btn
+            outline
+            small
+            title="Edit"
+            color="success"
+            flat
+            @click="viewItem(props.item)">
+            View
+            <v-icon right dark>remove_red_eye</v-icon>
+          </v-btn>
           <v-btn
             outline
             small
@@ -113,8 +181,11 @@
     data: () => ({
       valid: true,
       dialog: false,
+      detailsdialog: false,
       delete: false,
       saving: false,
+      items: [],
+      labsections: [],
       search: '',
       query: '',
       pagination: {
@@ -124,23 +195,31 @@
         visible: 10
       },
       headers: [
-        { text: 'Name', value: 'name' },
-        { text: 'Phone', value: 'phone' },
+        { text: 'Date', value: 'date' },
+        { text: 'Requested By', value: 'requested_by' },
+        { text: 'Item', value: 'item' },
+        { text: 'Quantity Requested', value: 'quantity_requested' },
+        { text: 'Quantity Issued', value: 'quantity_issued' },
+        { text: 'Status', value: 'quantity_issued' },
         { text: 'Actions', value: 'name', sortable: false }
       ],
-      supplier: [],
+      request: [],
       editedIndex: -1,
       editedItem: {
-        name: '',
-        phone: '',
-        email: '',
-        address: '',
+        item_id: '',
+        curr_bal: '',
+        lab_section_id: '',
+        tests_done: '',
+        quantity_requested: '',
+        remarks: '',
       },
       defaultItem: {
-        name: '',
-        phone: '',
-        email: '',
-        address: '',
+        item_id: '',
+        curr_bal: '',
+        lab_section_id: '',
+        tests_done: '',
+        quantity_requested: '',
+        remarks: '',
       }
     }),
 
@@ -173,11 +252,29 @@
             this.query = this.query+'&search='+this.search;
         }
 
-        apiCall({url: '/supplier?' + this.query, method: 'GET' })
+        apiCall({url: '/request?' + this.query, method: 'GET' })
         .then(resp => {
           console.log(resp)
-          this.supplier = resp.data;
+          this.request = resp.data;
           this.pagination.total = resp.total;
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+
+        apiCall({url: '/item', method: 'GET' })
+        .then(resp => {
+          console.log(resp)
+          this.items = resp.data;
+        })
+        .catch(error => {
+          console.log(error.response)
+        })
+
+        apiCall({url: '/api/testtypecategory', method: 'GET' })
+        .then(resp => {
+          console.log(resp)
+          this.labsections = resp.data;
         })
         .catch(error => {
           console.log(error.response)
@@ -185,19 +282,25 @@
       },
 
       editItem (item) {
-        this.editedIndex = this.supplier.indexOf(item)
+        this.editedIndex = this.request.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
+
+      viewItem (item) {
+        this.editedIndex = this.request.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.detailsdialog = true
+      },      
 
       deleteItem (item) {
 
         confirm('Are you sure you want to delete this item?') && (this.delete = true)
 
         if (this.delete) {
-          const index = this.supplier.indexOf(item)
-          this.supplier.splice(index, 1)
-          apiCall({url: '/supplier/'+item.id, method: 'DELETE' })
+          const index = this.request.indexOf(item)
+          this.request.splice(index, 1)
+          apiCall({url: '/request/'+item.id, method: 'DELETE' })
           .then(resp => {
             console.log(resp)
           })
@@ -228,9 +331,9 @@
         // update
         if (this.editedIndex > -1) {
 
-          apiCall({url: '/supplier/'+this.editedItem.id, data: this.editedItem, method: 'PUT' })
+          apiCall({url: '/request/'+this.editedItem.id, data: this.editedItem, method: 'PUT' })
           .then(resp => {
-            Object.assign(this.supplier[this.editedIndex], this.editedItem)
+            Object.assign(this.request[this.editedIndex], this.editedItem)
             console.log(resp)
             this.resetDialogReferences();
             this.saving = false;
@@ -242,9 +345,9 @@
         // store
         } else {
 
-          apiCall({url: '/supplier', data: this.editedItem, method: 'POST' })
+          apiCall({url: '/request', data: this.editedItem, method: 'POST' })
           .then(resp => {
-            this.supplier.push(this.editedItem)
+            this.item.push(this.editedItem)
             console.log(resp)
             this.resetDialogReferences();
             this.saving = false;
