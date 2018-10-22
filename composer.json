@@ -9,7 +9,7 @@
         "fideloper/proxy": "~4.0",
         "ilabafrica/emrinterface": "v0.2.0",
         "ilabafrica/equipmentinterface": "v0.1.2",
-        "ilabafrica/inventory": "^0.0.1",
+        "ilabafrica/inventory": "v0.0.2",
         "laravel/framework": "5.6.*",
         "laravel/passport": "^5.0",
         "laravel/tinker": "~1.0",
