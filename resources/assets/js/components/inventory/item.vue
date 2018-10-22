@@ -73,7 +73,6 @@
       </v-card>
     </v-dialog>
     <v-dialog v-model="issueDialog" max-width="1200px">
-      <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
       <v-card>
         <v-card-title>
           <span class="headline">{{ formTitle }}</span>
@@ -83,7 +82,7 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs8 sm8 md8>
-                <v-flex xs12 sm12 md12>
+                  <v-flex xs12 sm12 md12>
                     <v-data-table
                       :headers="requestheaders"
                       :items="request"
@@ -93,7 +92,8 @@
                       <template slot="items" slot-scope="props">
                         <td>
                           <v-radio-group
-                            v-model="editedItem.supplier_id"
+                            v-model="requestItem.request_id"
+                            :rules="[v => !!v || 'Request ID is Required']"
                             name="rowSelector">
                             <v-radio :value="props.item.id"/>
                           </v-radio-group>
@@ -101,30 +101,35 @@
                         <td class="text-xs-left">{{ props.item.user.name }}</td>
                         <td class="text-xs-left">{{ props.item.lab.name }}</td>
                         <td class="text-xs-left">{{ props.item.quantity_requested }}</td>
+                        <td class="text-xs-left">{{ props.item.quantity_issued }}</td>
                         <td class="text-xs-left">{{ props.item.remarks }}</td>
                       </template>
                     </v-data-table>
                   </v-flex>
                   <v-flex xs6 sm6 md6>
                     <v-text-field
+                      readonly
+                      v-model="requestItem.stock_id"
+                      :rules="[v => !!v || 'Stock ID is Required']"
+                      label="Stock ID">
+                    </v-text-field>
+                  </v-flex>
+                  <v-flex xs6 sm6 md6>
+                    <v-text-field
                       v-model="requestItem.quantity"
-                      :rules="[v => !!v || 'Quantity Singned Out is Required']"
-                      label="Quantity Singned Out">
+                      :rules="[v => !!v || 'Quantity Signed Out is Required']"
+                      label="Quantity Signed Out">
                     </v-text-field>
                   </v-flex>
                   <v-flex xs6 sm6 md6>
                     <v-text-field
+                      readonly
                       v-model="requestItem.date_issued"
-                      :rules="[v => !!v || 'Quantity Singned Out is Required']"
-                      label="Date Singned Out">
+                      :rules="[v => !!v || 'Date Signed Out is Required']"
+                      label="Date Signed Out"
+                      @click="showIssueCalendar()">
                     </v-text-field>
-                  </v-flex>
-                  <v-flex xs6 sm6 md6>
-                    <v-text-field
-                      v-model="requestItem.issued_by"
-                      :rules="[v => !!v || 'Issued By is Required']"
-                      label="Issued By">
-                    </v-text-field>
+                    <v-date-picker v-show="issue_calendar" v-model="requestItem.date_issued" :landscape="landscape" :reactive="reactive"></v-date-picker>
                   </v-flex>
                   <v-flex xs6 sm6 md6>
                     <v-text-field
@@ -161,7 +166,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="save">Save</v-btn>
+          <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveIssueStock">Save</v-btn>
         </v-card-actions>
         </v-form>
       </v-card>
@@ -395,6 +400,7 @@
     data: () => ({
       expiry_calendar: false,
       rec_calendar: false,
+      issue_calendar: false,
       valid: true,
       dialog: false,
       issueDialog: false,
@@ -438,7 +444,8 @@
         { text: 'Selection', value: 'selection' },
         { text: 'Requested By', value: 'requested_by' },
         { text: 'Lab Section', value: 'lab_section' },
-        { text: 'Quantity', value: 'quantity' },
+        { text: 'Quantity Requested', value: 'quantity_requested' },
+        { text: 'Quantity Issued', value: 'quantity_issued' },
         { text: 'Remarks', value: 'remarks' }
       ],
       item: [],
@@ -446,6 +453,16 @@
       request: [],
       editedIndex: -1,
       requestItem: {
+        stock_id: '',
+        request_id: '',
+        quantity: '',
+        date_issued: '',
+        issued_by: '',
+        received_by: '',
+        remarks: '',
+      },
+      defaultrequestItem: {
+        stock_id: '',
         request_id: '',
         quantity: '',
         date_issued: '',
@@ -454,6 +471,7 @@
         remarks: '',
       },
       stockItem: {
+        stock_id: '',
         item_id: '',
         lot_no: '',
         batch_no: '',
@@ -554,6 +572,10 @@
         this.rec_calendar = true
       },
 
+      showIssueCalendar(){
+        this.issue_calendar = true
+      },
+
       editItem (item) {
         this.editedIndex = this.item.indexOf(item)
         this.editedItem = Object.assign({}, item)
@@ -584,10 +606,10 @@
       },
 
       issueItem(item){
+        this.requestItem.stock_id = item.id
         apiCall({url: '/requestIssue/'+item.item_id, method: 'GET' })
         .then(resp => {
           let request = resp
-          console.log("Stock history response is:",request) 
           Vue.set(this,"request",request)
           //this.request = resp.data.request;
           console.log('requests')
@@ -597,7 +619,7 @@
         .catch(error => {
           console.log(error.response)
         })
-
+        //console.log("Stock history response is:",this.itemdetails) 
         this.issueDialog = true
       },
 
@@ -636,6 +658,11 @@
       resetStockDialogReferences() {
         this.stockItem = Object.assign({}, this.defaultstockItem)
         this.addStock = false
+      },
+
+      resetIssueDialogReferences() {
+        this.requestItem = Object.assign({}, this.defaultrequestItem)
+        this.issueDialog = false
       },
 
       save () {
@@ -678,6 +705,18 @@
           .then(resp => {
             console.log(resp)
             this.resetStockDialogReferences();
+            //this.saving = false;
+          })
+          .catch(error => {
+            console.log(error.response)
+        })
+      },
+
+      saveIssueStock () {
+        apiCall({url: '/issueStock', data: this.requestItem, method: 'POST' })
+          .then(resp => {
+            console.log(resp)
+            this.resetIssueDialogReferences();
             //this.saving = false;
           })
           .catch(error => {
