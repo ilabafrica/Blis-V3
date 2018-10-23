@@ -75,7 +75,7 @@
     <v-dialog v-model="issueDialog" max-width="1200px">
       <v-card>
         <v-card-title>
-          <span class="headline">{{ formTitle }}</span>
+          <span class="headline">Issue Stock Items</span>
         </v-card-title>
         <v-form ref="form" v-model="valid" lazy-validation>
         <v-card-text>
@@ -165,7 +165,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="resetIssueDialogReferences">Cancel</v-btn>
           <v-btn color="blue darken-1" :disabled="!valid" flat @click.native="saveIssueStock">Save</v-btn>
         </v-card-actions>
         </v-form>
@@ -174,7 +174,7 @@
     <v-dialog v-model="addStock" max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">Receive New Medicine Stock</span>
+          <span class="headline">Receive New Medical Stock</span>
         </v-card-title>
         <v-form ref="form" v-model="valid" lazy-validation>
         <v-card-text>
@@ -276,7 +276,6 @@
           <v-btn icon dark @click.native="receiveDialog = false">
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>Settings</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn dark flat @click.native="addStock = true">Add new Stock</v-btn>
@@ -703,6 +702,7 @@
       saveStock () {
         apiCall({url: '/stock', data: this.stockItem, method: 'POST' })
           .then(resp => {
+            this.stock.push(this.stockItem)
             console.log(resp)
             this.resetStockDialogReferences();
             //this.saving = false;
