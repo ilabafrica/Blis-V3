@@ -17,12 +17,12 @@ use App\Models\ReferralReason;
 use App\Models\RejectionReason;
 use Illuminate\Database\Seeder;
 use App\Models\TestTypeCategory;
+use ILabAfrica\Inventory\Models\Item;
 use App\Models\SusceptibilityBreakPoint;
+use ILabAfrica\Inventory\Models\Supplier;
+use ILabAfrica\Inventory\Models\RequestStatus;
 use ILabAfrica\EquipmentInterface\InstrumentMapping;
 use ILabAfrica\EquipmentInterface\InstrumentParameters;
-use ILabAfrica\Inventory\Models\RequestStatus;
-use ILabAfrica\Inventory\Models\Supplier;
-use ILabAfrica\Inventory\Models\Item;
 
 class DevSeeder extends Seeder
 {
@@ -8503,12 +8503,12 @@ class DevSeeder extends Seeder
 
         RequestStatus::create([
             'code' => 'pending',
-            'name' => 'Pending'
+            'name' => 'Pending',
         ]);
 
         RequestStatus::create([
             'code' => 'issued',
-            'name' => 'Issued'
+            'name' => 'Issued',
         ]);
 
         $this->command->info('Request Status Seeded');
@@ -8517,35 +8517,35 @@ class DevSeeder extends Seeder
             'name' => 'Dimetrica Medical Supplies',
             'phone' => '0703673736',
             'email' => 'info@md.co.ke',
-            'address' => 'Nairobi, Kenya'
+            'address' => 'Nairobi, Kenya',
         ]);
 
         Supplier::create([
             'name' => 'KEMSA(Kenya Medical Supplies Authority)',
             'phone' => '0726618520',
             'email' => 'info@kemsa.co.ke',
-            'address' => 'Nairobi, Kenya'
+            'address' => 'Nairobi, Kenya',
         ]);
 
         Supplier::create([
             'name' => 'Centric Medical Solutions',
             'phone' => '0716 911 434',
             'email' => 'info@centricmedicalsolutions.com',
-            'address' => 'Nairobi, Kenya'
+            'address' => 'Nairobi, Kenya',
         ]);
 
         Supplier::create([
             'name' => 'Philips Medical Systems',
             'phone' => '+254-202711885 ',
             'email' => 'info@philips.com',
-            'address' => 'Nairobi, Kenya'
+            'address' => 'Nairobi, Kenya',
         ]);
 
         Supplier::create([
             'name' => 'Trauma Surgicals and Healthcare Ltd',
             'phone' => '3870066 ',
             'email' => 'traumasurgcare@gmail.com',
-            'address' => 'Nairobi, Kenya'
+            'address' => 'Nairobi, Kenya',
         ]);
 
         $this->command->info('Suppliers Seeded');
@@ -8557,7 +8557,7 @@ class DevSeeder extends Seeder
             'max' => '1000',
             'storage_req' => 'Dry',
             'remarks' => 'Good',
-            'supplier_id' => '1'
+            'supplier_id' => '1',
         ]);
 
         Item::create([
@@ -8567,7 +8567,7 @@ class DevSeeder extends Seeder
             'max' => '1000',
             'storage_req' => 'Cool & Dry',
             'remarks' => 'Good',
-            'supplier_id' => '1'
+            'supplier_id' => '1',
         ]);
 
         Item::create([
@@ -8577,7 +8577,7 @@ class DevSeeder extends Seeder
             'max' => '1000',
             'storage_req' => 'Cool & Dry',
             'remarks' => 'Good',
-            'supplier_id' => '2'
+            'supplier_id' => '2',
         ]);
 
         $this->command->info('Item Seeded');
