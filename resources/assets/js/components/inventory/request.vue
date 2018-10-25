@@ -178,6 +178,7 @@
 <script>
   import apiCall from '../../utils/api'
   export default {
+    name:'InventoryRequest',
     data: () => ({
       valid: true,
       dialog: false,

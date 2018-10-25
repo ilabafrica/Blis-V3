@@ -395,7 +395,9 @@
 </template>
 <script>
   import apiCall from '../../utils/api'
+  import Vue from "vue";
   export default {
+    name:'InventoryItem',
     data: () => ({
       expiry_calendar: false,
       rec_calendar: false,

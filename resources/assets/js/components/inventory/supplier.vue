@@ -110,6 +110,7 @@
 <script>
   import apiCall from '../../utils/api'
   export default {
+    name:'InventorySupplier',
     data: () => ({
       valid: true,
       dialog: false,
