@@ -69,7 +69,7 @@ class MeasureController extends Controller
      */
     public function show($id)
     {
-        $measure = Measure::find($id)->load('testType', 'measureType', 'measureRanges');
+        $measure = Measure::find($id)->load('testType', 'measureType', 'measureRanges', 'measureRanges.gender', 'measureRanges.interpretation' );
 
         return response()->json($measure);
     }
