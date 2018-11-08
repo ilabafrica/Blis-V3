@@ -28,6 +28,13 @@ class SpecimenTypeController extends Controller
         return response()->json($specimenType);
     }
 
+    public function specimencollection($id)
+    {
+        $testTypes = SpecimenType::with('testTypes')->whereId($id)->get();
+
+        return response()->json($testTypes);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

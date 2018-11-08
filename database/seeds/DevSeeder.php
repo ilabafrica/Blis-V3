@@ -34,8 +34,8 @@ class DevSeeder extends Seeder
     public function run()
     {
         $organizations = [
-          ['name' => 'Coolest Clinic in Town', 'created_by' => 1],
-          ['name' => 'iLabAfrica Fantasy Hospital', 'created_by' => 1],
+          ['name' => 'Coolest Clinic in Town'],
+          ['name' => 'iLabAfrica Fantasy Hospital'],
         ];
         foreach ($organizations as $organization) {
             Organization::create($organization);
