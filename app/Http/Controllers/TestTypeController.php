@@ -39,7 +39,7 @@ class TestTypeController extends Controller
                 'specimenTypes'
             )->orderBy('id', 'ASC')->paginate(10);
         }
-        
+
         return response()->json($testType);
     }
 

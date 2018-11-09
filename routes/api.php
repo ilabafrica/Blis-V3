@@ -101,6 +101,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('referralreason', 'ReferralReasonController');
         Route::resource('specimenstatus', 'SpecimenStatusController');
         Route::resource('specimentype', 'SpecimenTypeController');
+        Route::get('specimentype/specimencollection/{id}', 'SpecimenTypeController@specimencollection');
         Route::resource('antibiotic', 'AntibioticController');
     });
 
