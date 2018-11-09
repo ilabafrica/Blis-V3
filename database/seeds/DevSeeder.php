@@ -17,10 +17,10 @@ use App\Models\ReferralReason;
 use App\Models\RejectionReason;
 use Illuminate\Database\Seeder;
 use App\Models\TestTypeCategory;
+use ILabAfrica\EMRInterface\EMR;
 use App\Models\SusceptibilityBreakPoint;
 use ILabAfrica\EquipmentInterface\InstrumentMapping;
 use ILabAfrica\EquipmentInterface\InstrumentParameters;
-
 class DevSeeder extends Seeder
 {
     /**
@@ -8605,6 +8605,9 @@ class DevSeeder extends Seeder
         // create results
         foreach (Test::where('test_status_id', '>=', 3)->get() as $test) { //make sure that only the tests completed/verified get result seeded
             \ILabAfrica\EMRInterface\DiagnosticOrder::create(['test_id' => $test->id]);
+
+            // turn test to to below
+            // $test->created_by = Auth::guard('tpa_api')->user()->id, use the default on in whichever way
             foreach ($test->testType->measures as $measure) {
                 $measureRange = MeasureRange::where('measure_id', $measure->id)
                     ->inRandomOrder()->first();
@@ -8643,11 +8646,32 @@ class DevSeeder extends Seeder
         }
         $this->command->info('Results Seeded');
 
-        \App\ThirdPartyApp::create([
+        $defaultId = \App\ThirdPartyApp::create([
             'id' => (string) Str::uuid(),
             'name' => 'Default EMR',
-            'email' => 'emr@blis.local',
+            'email' => 'default@emr.dev',
             'password' =>  bcrypt('password'),
+        ])->id;
+
+        $mL4AfrikaId = \App\ThirdPartyApp::create([
+            'id' => (string) Str::uuid(),
+            'name' => 'ML4Afrika',
+            'email' => 'ml4afrika@emr.dev',
+            'password' =>  bcrypt('password'),
+        ])->id;
+
+        // default
+        EMR::create([
+            'result_url' => 'http://play.local/api/medbookresult',
+            'third_party_app_id' => $defaultId,
+            'knows_test_menu' => 1,
+        ]);
+
+        // ml4afrika
+        EMR::create([
+            'result_url' => 'http://play.local/api/ml4afrikaresult',
+            'third_party_app_id' => $mL4AfrikaId,
+            'knows_test_menu' => 0,
         ]);
     }
 }
