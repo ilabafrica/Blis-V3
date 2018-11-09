@@ -29,7 +29,7 @@ class MeasureRangeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         $rules = [
             'measure_id' => 'required',
         ];
