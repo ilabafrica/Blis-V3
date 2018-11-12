@@ -36,6 +36,14 @@ class Test extends Model
     }
 
     /*
+     * User (created) relationship
+     */
+    public function thirdPartyCreator()
+    {
+        return $this->belongsTo('App\ThirdPartyApp', 'created_by', 'id');
+    }
+
+    /*
      * User (tested) relationship
      */
     public function testedBy()
