@@ -15,6 +15,7 @@ use App\Models\Specimen;
 use App\Models\Encounter;
 use App\Models\TestStatus;
 use Illuminate\Http\Request;
+use App\Models\SpecimenTrackerModel;
 
 class EncounterController extends Controller
 {
@@ -143,12 +144,12 @@ class EncounterController extends Controller
     public function specimenCollection(Request $request)
     {
         $rules = [
-            'encounter_id' => 'required',
+            //'encounter_id' => 'required',
             'specimen_type_id' => 'required',
             'collected_by' => 'required',
             'time_collected' => 'required',
             'time_received' => 'required',
-            'testIds' => 'required',
+            //'testIds' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
@@ -164,6 +165,7 @@ class EncounterController extends Controller
             $specimen->collected_by = $request->input('collected_by');
             $specimen->time_collected = $request->input('time_collected');
             $specimen->time_received = $request->input('time_received');
+          
 
             foreach ($request->input('testIds') as $id) {
                 $test = Test::find($id);
@@ -173,7 +175,23 @@ class EncounterController extends Controller
             }
 
             try {
+              
                 $specimen->save();
+
+                $count = Specimen::count() + 1;
+                $tracker =date('Y_m_d');
+
+                $data = 'ILAB_'.$count. '_'.$tracker;
+
+                $specimentracker = new SpecimenTrackerModel;
+                $specimentracker->specimens_id = $data;
+
+                    try{
+                        $specimentracker->save();
+                    }catch (\Illuminate\Database\QueryException $e) {
+                    return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                    }
+             
                 $encounter = Encounter::find($request->input('encounter_id'));
 
                 return response()->json($encounter->loader(), 200);
