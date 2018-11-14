@@ -8,7 +8,6 @@ use App\Models\TestType;
 use App\Models\Antibiotic;
 use App\Models\Instrument;
 use App\Models\MeasureType;
-use Illuminate\Support\Str;
 use App\Models\MeasureRange;
 use App\Models\Organization;
 use App\Models\SpecimenType;
@@ -17,7 +16,6 @@ use App\Models\ReferralReason;
 use App\Models\RejectionReason;
 use Illuminate\Database\Seeder;
 use App\Models\TestTypeCategory;
-use ILabAfrica\EMRInterface\EMR;
 use App\Models\SusceptibilityBreakPoint;
 use ILabAfrica\EquipmentInterface\InstrumentMapping;
 use ILabAfrica\EquipmentInterface\InstrumentParameters;
@@ -8645,33 +8643,5 @@ class DevSeeder extends Seeder
             }
         }
         $this->command->info('Results Seeded');
-
-        $defaultId = \App\ThirdPartyApp::create([
-            'id' => (string) Str::uuid(),
-            'name' => 'Default EMR',
-            'email' => 'default@emr.dev',
-            'password' =>  bcrypt('password'),
-        ])->id;
-
-        $mL4AfrikaId = \App\ThirdPartyApp::create([
-            'id' => (string) Str::uuid(),
-            'name' => 'ML4Afrika',
-            'email' => 'ml4afrika@emr.dev',
-            'password' =>  bcrypt('password'),
-        ])->id;
-
-        // default
-        EMR::create([
-            'result_url' => 'http://play.local/api/medbookresult',
-            'third_party_app_id' => $defaultId,
-            'knows_test_menu' => 1,
-        ]);
-
-        // ml4afrika
-        EMR::create([
-            'result_url' => 'http://play.local/api/ml4afrikaresult',
-            'third_party_app_id' => $mL4AfrikaId,
-            'knows_test_menu' => 0,
-        ]);
     }
 }
