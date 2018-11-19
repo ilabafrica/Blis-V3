@@ -14,6 +14,8 @@ class Patient extends Model
 {
     protected $table = 'patients';
 
+    protected $fillable = ['identifier',];
+
     public function address()
     {
         return $this->hasMany('App\Models\Address');

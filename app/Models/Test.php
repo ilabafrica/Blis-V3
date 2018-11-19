@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Test extends Model
 {
+    public $fillable = ['identifier'];
+
     public function testType()
     {
         return $this->belongsTo('App\Models\TestType');
