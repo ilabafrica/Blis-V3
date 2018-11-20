@@ -178,7 +178,7 @@ return [
         ILabAfrica\EMRInterface\EMRServiceProvider::class,
         ILabAfrica\EquipmentInterface\EquipmentInterfaceServiceProvider::class,
         ILabAfrica\Inventory\InventoryServiceProvider::class,
-
+        ILabAfrica\SpecimenTracker\SpecimenTrackerServiceProvider::class,
     ],
 
     /*

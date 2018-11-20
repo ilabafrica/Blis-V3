@@ -15,6 +15,7 @@ use App\Models\Specimen;
 use App\Models\Encounter;
 use App\Models\TestStatus;
 use Illuminate\Http\Request;
+use ILabAfrica\SpecimenTracker\Controllers\SpecimenTracker;
 
 class EncounterController extends Controller
 {
@@ -143,12 +144,10 @@ class EncounterController extends Controller
     public function specimenCollection(Request $request)
     {
         $rules = [
-            'encounter_id' => 'required',
             'specimen_type_id' => 'required',
             'collected_by' => 'required',
             'time_collected' => 'required',
             'time_received' => 'required',
-            'testIds' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
@@ -156,7 +155,7 @@ class EncounterController extends Controller
             return response()->json($validator, 422);
         } else {
             $specimen = new Specimen;
-            $specimen->identifier = $request->input('identifier');
+            $specimen->identifier = SpecimenTracker::identifier();
             $specimen->accession_identifier = $request->input('accession_identifier');
             $specimen->specimen_type_id = $request->input('specimen_type_id');
             $specimen->parent_id = $request->input('parent_id');

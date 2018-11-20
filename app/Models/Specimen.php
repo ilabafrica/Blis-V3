@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Specimen extends Model
 {
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function test()
     {
