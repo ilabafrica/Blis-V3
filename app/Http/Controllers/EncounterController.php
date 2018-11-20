@@ -144,12 +144,10 @@ class EncounterController extends Controller
     public function specimenCollection(Request $request)
     {
         $rules = [
-            //'encounter_id' => 'required',
             'specimen_type_id' => 'required',
             'collected_by' => 'required',
             'time_collected' => 'required',
             'time_received' => 'required',
-            //'testIds' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);

@@ -37,7 +37,6 @@ class SpecimenTypeController extends Controller
     public function store(Request $request)
     {
         $rules = [
-          //  'code' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -45,7 +44,6 @@ class SpecimenTypeController extends Controller
             return response()->json($validator, 422);
         } else {
             $specimenType = new SpecimenType;
-           // $specimenType->code = $request->input('code');
             $specimenType->name = $request->input('name');
 
             try {
@@ -81,7 +79,6 @@ class SpecimenTypeController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-           // 'code' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -89,7 +86,6 @@ class SpecimenTypeController extends Controller
             return response()->json($validator, 422);
         } else {
             $specimenType = SpecimenType::findOrFail($id);
-          //  $specimenType->code = $request->input('code');
             $specimenType->name = $request->input('name');
 
             try {
