@@ -110,8 +110,7 @@ class CreateBlisTables extends Migration
         Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('identifier')->nullable();
-            $table->integer('created_by')->unsigned();
-            $table->boolean('active')->default(1);
+            $table->boolean('active')->nullable();
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('alias')->nullable();

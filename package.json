@@ -19,7 +19,10 @@
     "dependencies": {
         "@casl/ability": "^2.4.2",
         "@casl/vue": "^0.4.3",
+        "ajv": "^6.5.4",
         "chart.js": "^2.7.2",
+        "imagemin": "^6.0.0",
+        "img-loader": "^3.0.0",
         "vue-router": "^3.0.1",
         "vuetify": "^1.0.18",
         "vuex": "^3.0.1"

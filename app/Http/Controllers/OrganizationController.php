@@ -31,9 +31,6 @@ class OrganizationController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'created_by' => 'required',
-            'active' => 'required',
-            'description' => 'required',
             'name' => 'required',
 
         ];
@@ -43,7 +40,6 @@ class OrganizationController extends Controller
         } else {
             $organization = new Organization;
             $organization->identifier = $request->input('identifier');
-            $organization->created_by = $request->input('created_by');
             $organization->active = $request->input('active');
             $organization->description = $request->input('description');
             $organization->name = $request->input('name');
@@ -84,9 +80,6 @@ class OrganizationController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'created_by' => 'required',
-            'active' => 'required',
-            'description' => 'required',
             'name' => 'required',
 
         ];
@@ -96,7 +89,6 @@ class OrganizationController extends Controller
         } else {
             $organization = Organization::findOrFail($id);
             $organization->identifier = $request->input('identifier');
-            $organization->created_by = $request->input('created_by');
             $organization->active = $request->input('active');
             $organization->description = $request->input('description');
             $organization->name = $request->input('name');
