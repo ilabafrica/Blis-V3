@@ -177,7 +177,8 @@ return [
         Zizaco\Entrust\EntrustServiceProvider::class,
         ILabAfrica\EMRInterface\EMRServiceProvider::class,
         ILabAfrica\EquipmentInterface\EquipmentInterfaceServiceProvider::class,
-       
+        ILabAfrica\Inventory\InventoryServiceProvider::class,
+        ILabAfrica\SpecimenTracker\SpecimenTrackerServiceProvider::class,
     ],
 
     /*
@@ -228,7 +229,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
         'EMR'   => ILabAfrica\EMRInterface\EMRFacade::class,
-        'Uuid' => Webpatser\Uuid\Uuid::class,
     ],
 
 ];

@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use App\Models\ReferralReason;
 use App\Models\RejectionReason;
 use App\Models\SpecimenRejection;
+use ILabAfrica\SpecimenTracker\Controllers\SpecimenTracker;
 
 class TestController extends Controller
 {
@@ -180,7 +181,7 @@ class TestController extends Controller
             return response()->json($validator, 422);
         } else {
             $specimen = new Specimen;
-            $specimen->identifier = $request->input('identifier');
+            $specimen->identifier = SpecimenTracker::identifier();
             $specimen->accession_identifier = $request->input('accession_identifier');
             $specimen->specimen_type_id = $request->input('specimen_type_id');
             $specimen->parent_id = $request->input('parent_id');

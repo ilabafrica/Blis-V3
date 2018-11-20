@@ -12,7 +12,6 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Models\Specimen;
 use Illuminate\Http\Request;
-use App\Models\SpecimenTrackerModel;
 
 class SpecimenController extends Controller
 {
@@ -21,10 +20,6 @@ class SpecimenController extends Controller
         $specimen = Specimen::orderBy('id', 'ASC')->paginate(10);
 
         return response()->json($specimen);
-
-
-
-
     }
 
     /**
@@ -55,8 +50,6 @@ class SpecimenController extends Controller
             $specimen->collected_by = $request->input('collected_by');
             $specimen->time_collected = $request->input('time_collected');
             $specimen->time_received = $request->input('time_received');
-        
-     
 
             try {
                 $specimen->save();
@@ -65,10 +58,7 @@ class SpecimenController extends Controller
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
         }
-  
     }
-
-
 
     /**
      * Display the specified resource.
@@ -106,7 +96,7 @@ class SpecimenController extends Controller
             return response()->json($validator, 422);
         } else {
             $specimen = Specimen::findOrFail($id);
-               $specimen->identifier = $request->input('identifier');
+            $specimen->identifier = $request->input('identifier');
             $specimen->accession_identifier = $request->input('accession_identifier');
             $specimen->specimen_type_id = $request->input('specimen_type_id');
             $specimen->parent_id = $request->input('parent_id');

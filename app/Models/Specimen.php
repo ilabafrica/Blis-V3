@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Specimen extends Model
 {
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function test()
     {
@@ -46,12 +46,4 @@ class Specimen extends Model
     {
         return $this->belongsTo('App\User', 'received_by', 'id');
     }
-
-    
-     public function specimenid()
-     {
-
-         return $this->hasOne('App\Models\SpecimenTrackerModel');
-    
-     }
 }

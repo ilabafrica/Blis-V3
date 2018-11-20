@@ -481,6 +481,7 @@ class CreateBlisTables extends Migration
             $table->foreign('specimen_type_id')->references('id')->on('specimen_types');
             $table->foreign('specimen_status_id')->references('id')->on('specimen_statuses');
             $table->foreign('received_by')->references('id')->on('users');
+            $table->timestamps();
         });
 
         /*

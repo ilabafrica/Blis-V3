@@ -18,6 +18,4 @@ class SpecimenType extends Model
     {
         return $this->belongsToMany('App\Models\TestType', 'test_type_mappings');
     }
-
-     
 }

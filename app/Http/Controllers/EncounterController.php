@@ -15,7 +15,7 @@ use App\Models\Specimen;
 use App\Models\Encounter;
 use App\Models\TestStatus;
 use Illuminate\Http\Request;
-use App\Models\SpecimenTrackerModel;
+use ILabAfrica\SpecimenTracker\Controllers\SpecimenTracker;
 
 class EncounterController extends Controller
 {
@@ -157,7 +157,7 @@ class EncounterController extends Controller
             return response()->json($validator, 422);
         } else {
             $specimen = new Specimen;
-            $specimen->identifier = $request->input('identifier');
+            $specimen->identifier = SpecimenTracker::identifier();
             $specimen->accession_identifier = $request->input('accession_identifier');
             $specimen->specimen_type_id = $request->input('specimen_type_id');
             $specimen->parent_id = $request->input('parent_id');
@@ -165,7 +165,6 @@ class EncounterController extends Controller
             $specimen->collected_by = $request->input('collected_by');
             $specimen->time_collected = $request->input('time_collected');
             $specimen->time_received = $request->input('time_received');
-          
 
             foreach ($request->input('testIds') as $id) {
                 $test = Test::find($id);
@@ -175,23 +174,7 @@ class EncounterController extends Controller
             }
 
             try {
-              
-                $specimen->save();
-
-                $count = Specimen::count() + 1;
-                $tracker =date('Y_m_d');
-
-                $data = 'ILAB_'.$count. '_'.$tracker;
-
-                $specimentracker = new SpecimenTrackerModel;
-                $specimentracker->specimens_id = $data;
-
-                    try{
-                        $specimentracker->save();
-                    }catch (\Illuminate\Database\QueryException $e) {
-                    return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-                    }
-             
+                $specimen->save();             
                 $encounter = Encounter::find($request->input('encounter_id'));
 
                 return response()->json($encounter->loader(), 200);

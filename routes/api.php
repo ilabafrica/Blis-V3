@@ -15,8 +15,6 @@
 Route::post('/register', 'Auth\APIController@register');
 Route::post('/login', 'Auth\APIController@login');
 
-Route::get('tracker', 'SpecimenTrackerController@tracker')->name('tracker');
-
 Route::group(['prefix' => 'stats'], function () {
     Route::group(['prefix' => 'tests'], function () {
         Route::get('/totals', 'Statistics\TestStatisticsController@testsTotals');
@@ -38,8 +36,6 @@ Route::group(['prefix' => 'stats'], function () {
     Route::get('/users', 'Statistics\UserStatisticsController@getUsers');
     Route::get('/users/count', 'Statistics\UserStatisticsController@countUsers');
     Route::get('/genders', 'GenderController@index');
-       Route::get('/tracker', 'SpecimenTrackerController@index');
-
 });
 
 Route::middleware('auth:api')->group(function () {
