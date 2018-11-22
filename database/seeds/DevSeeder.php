@@ -22,6 +22,7 @@ use ILabAfrica\Inventory\Models\Supplier;
 use ILabAfrica\Inventory\Models\RequestStatus;
 use ILabAfrica\EquipmentInterface\InstrumentMapping;
 use ILabAfrica\EquipmentInterface\InstrumentParameters;
+
 class DevSeeder extends Seeder
 {
     /**

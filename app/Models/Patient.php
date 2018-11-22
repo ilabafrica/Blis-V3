@@ -14,7 +14,7 @@ class Patient extends Model
 {
     protected $table = 'patients';
 
-    protected $fillable = ['identifier',];
+    protected $fillable = ['identifier'];
 
     public function address()
     {

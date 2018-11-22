@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Encounter extends Model
 {
-    protected $fillable = ['identifier', 'encounter_class_id', 'patient_id',];
+    protected $fillable = ['identifier', 'encounter_class_id', 'patient_id'];
 
     public function patient()
     {
