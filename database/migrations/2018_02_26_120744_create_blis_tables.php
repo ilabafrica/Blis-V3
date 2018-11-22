@@ -110,8 +110,7 @@ class CreateBlisTables extends Migration
         Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('identifier')->nullable();
-            $table->integer('created_by')->unsigned();
-            $table->boolean('active')->default(1);
+            $table->boolean('active')->nullable();
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('alias')->nullable();
@@ -481,6 +480,7 @@ class CreateBlisTables extends Migration
             $table->foreign('specimen_type_id')->references('id')->on('specimen_types');
             $table->foreign('specimen_status_id')->references('id')->on('specimen_statuses');
             $table->foreign('received_by')->references('id')->on('users');
+            $table->timestamps();
         });
 
         /*

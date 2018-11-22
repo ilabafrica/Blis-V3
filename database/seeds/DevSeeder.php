@@ -16,7 +16,10 @@ use App\Models\ReferralReason;
 use App\Models\RejectionReason;
 use Illuminate\Database\Seeder;
 use App\Models\TestTypeCategory;
+use ILabAfrica\Inventory\Models\Item;
 use App\Models\SusceptibilityBreakPoint;
+use ILabAfrica\Inventory\Models\Supplier;
+use ILabAfrica\Inventory\Models\RequestStatus;
 use ILabAfrica\EquipmentInterface\InstrumentMapping;
 use ILabAfrica\EquipmentInterface\InstrumentParameters;
 class DevSeeder extends Seeder
@@ -29,8 +32,8 @@ class DevSeeder extends Seeder
     public function run()
     {
         $organizations = [
-          ['name' => 'Coolest Clinic in Town', 'created_by' => 1],
-          ['name' => 'iLabAfrica Fantasy Hospital', 'created_by' => 1],
+          ['name' => 'Coolest Clinic in Town'],
+          ['name' => 'iLabAfrica Fantasy Hospital'],
         ];
         foreach ($organizations as $organization) {
             Organization::create($organization);
@@ -296,20 +299,24 @@ class DevSeeder extends Seeder
         $this->command->info('Test Type Mappings Seeded');
 
         /* Instruments table */
-        $instrument_celltac = Instrument::create(['name' => 'celltac_f_mek_8222', 'ip' => '192.168.1.12', 'hostname' => 'HEMASERVER']);
+        $instrument_celltac_f_mek = Instrument::create(['name' => 'celltac_f_mek', 'ip' => '192.168.1.12', 'hostname' => 'HEMASERVER']);
         $instrument_sysmex_xs_1000i = Instrument::create(['name' => 'sysmex_xs_1000i', 'ip' => '192.168.1.13', 'hostname' => 'HEMASERVER']);
         $instrument_genexpert = Instrument::create(['name' => 'genexpert', 'ip' => '192.168.1.14', 'hostname' => 'HEMASERVER']);
         $instrument_sysmex_poch_100i = Instrument::create(['name' => 'sysmex_poch_100i', 'ip' => '192.168.1.15', 'hostname' => 'HEMASERVER']);
         $instrument_humacount_60ts = Instrument::create(['name' => 'humacount_60ts', 'ip' => '192.168.1.16', 'hostname' => 'HEMASERVER']);
+        $instrument_coulter_act = Instrument::create(['name' => 'coulter_act', 'ip' => '192.168.1.17', 'hostname' => 'HEMASERVER']);
+        $instrument_ilab_aries = Instrument::create(['name' => 'ilab_aries', 'ip' => '192.168.1.17', 'hostname' => 'HEMASERVER']);
 
         $this->command->info('Instruments table seeded');
 
         /* Instrument Mapping table */
-        $instrument_mapping_celltac = InstrumentMapping::create(['instrument_id' => $instrument_celltac->id, 'test_type_id' => $testTypeHIV->id]);
+        $instrument_mapping_celltac = InstrumentMapping::create(['instrument_id' => $instrument_celltac_f_mek->id, 'test_type_id' => $testTypeWBC->id]);
         $instrument_mapping_sysmex_xs_1000i = InstrumentMapping::create(['instrument_id' => $instrument_sysmex_xs_1000i->id, 'test_type_id' => $testTypeWBC->id]);
         $instrument_mapping_genexpert = InstrumentMapping::create(['instrument_id' => $instrument_genexpert->id, 'test_type_id' => $testTypeWBC->id]);
         $instrument_mapping_sysmex_poch_100i = InstrumentMapping::create(['instrument_id' => $instrument_sysmex_poch_100i->id, 'test_type_id' => $testTypeWBC->id]);
         $instrument_mapping_humacount_60ts = InstrumentMapping::create(['instrument_id' => $instrument_humacount_60ts->id, 'test_type_id' => $testTypeWBC->id]);
+        $instrument_mapping_coulter_act = InstrumentMapping::create(['instrument_id' => $instrument_coulter_act->id, 'test_type_id' => $testTypeWBC->id]);
+        $instrument_mapping_ilab_aries = InstrumentMapping::create(['instrument_id' => $instrument_ilab_aries->id, 'test_type_id' => $testTypeWBC->id]);
 
         $this->command->info('Instrument Mappings table seeded');
 
@@ -521,6 +528,42 @@ class DevSeeder extends Seeder
         InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humacount_60ts->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 76]);
         InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humacount_60ts->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 75]);
         InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humacount_60ts->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 79]);
+
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 1]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 2]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 3]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 4]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 5]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 6]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 7]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 8]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 9]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 10]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 11]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 12]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 13]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 14]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 15]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 16]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 17]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 18]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 19]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 20]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 21]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_celltac->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 22]);
+
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_coulter_act->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 1]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_coulter_act->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 2]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_coulter_act->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 3]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_coulter_act->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 4]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_coulter_act->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 5]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_coulter_act->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 6]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_coulter_act->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 7]);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_coulter_act->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => 8]);
+
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_ilab_aries->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => '^^^BUN']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_ilab_aries->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => '^^^GT']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_ilab_aries->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => '^^^TRI']);
 
         $this->command->info('Instrument Parameters table seeded');
 
@@ -8456,6 +8499,87 @@ class DevSeeder extends Seeder
 
         $this->command->info('Susceptibility Break Points Seeded');
 
+        RequestStatus::create([
+            'code' => 'pending',
+            'name' => 'Pending',
+        ]);
+
+        RequestStatus::create([
+            'code' => 'issued',
+            'name' => 'Issued',
+        ]);
+
+        $this->command->info('Request Status Seeded');
+
+        Supplier::create([
+            'name' => 'Dimetrica Medical Supplies',
+            'phone' => '0703673736',
+            'email' => 'info@md.co.ke',
+            'address' => 'Nairobi, Kenya',
+        ]);
+
+        Supplier::create([
+            'name' => 'KEMSA(Kenya Medical Supplies Authority)',
+            'phone' => '0726618520',
+            'email' => 'info@kemsa.co.ke',
+            'address' => 'Nairobi, Kenya',
+        ]);
+
+        Supplier::create([
+            'name' => 'Centric Medical Solutions',
+            'phone' => '0716 911 434',
+            'email' => 'info@centricmedicalsolutions.com',
+            'address' => 'Nairobi, Kenya',
+        ]);
+
+        Supplier::create([
+            'name' => 'Philips Medical Systems',
+            'phone' => '+254-202711885 ',
+            'email' => 'info@philips.com',
+            'address' => 'Nairobi, Kenya',
+        ]);
+
+        Supplier::create([
+            'name' => 'Trauma Surgicals and Healthcare Ltd',
+            'phone' => '3870066 ',
+            'email' => 'traumasurgcare@gmail.com',
+            'address' => 'Nairobi, Kenya',
+        ]);
+
+        $this->command->info('Suppliers Seeded');
+
+        Item::create([
+            'name' => 'Gloves - Industrial Grade',
+            'unit' => 'Pieces ',
+            'min' => '100',
+            'max' => '1000',
+            'storage_req' => 'Dry',
+            'remarks' => 'Good',
+            'supplier_id' => '1',
+        ]);
+
+        Item::create([
+            'name' => 'Spirit',
+            'unit' => 'Litres ',
+            'min' => '500',
+            'max' => '1000',
+            'storage_req' => 'Cool & Dry',
+            'remarks' => 'Good',
+            'supplier_id' => '1',
+        ]);
+
+        Item::create([
+            'name' => 'Pills',
+            'unit' => 'Kilograms ',
+            'min' => '500',
+            'max' => '1000',
+            'storage_req' => 'Cool & Dry',
+            'remarks' => 'Good',
+            'supplier_id' => '2',
+        ]);
+
+        $this->command->info('Item Seeded');
+
         // create users, tobe used randomly
         factory(\App\User::class, 10)->create();
         $this->command->info('Users Seeded');
@@ -8587,6 +8711,71 @@ class DevSeeder extends Seeder
 
         factory(\App\Models\Test::class)->create([
             'identifier' => 2017000010,
+            'test_type_id' => 4,
+            'specimen_id' => $specimen_id,
+            'test_status_id' => $test_status,
+            'created_by' => $user_id,
+            'tested_by' => $tested_by,
+            'verified_by' => $verified_by,
+            'time_started' => $time_started,
+            'time_completed' => $time_completed,
+            'time_verified' => $time_verified,
+        ]);
+
+        factory(\App\Models\Test::class)->create([
+            'identifier' => '0019928',
+            'test_type_id' => 4,
+            'specimen_id' => $specimen_id,
+            'test_status_id' => $test_status,
+            'created_by' => $user_id,
+            'tested_by' => $tested_by,
+            'verified_by' => $verified_by,
+            'time_started' => $time_started,
+            'time_completed' => $time_completed,
+            'time_verified' => $time_verified,
+        ]);
+
+        factory(\App\Models\Test::class)->create([
+            'identifier' => 1,
+            'test_type_id' => 4,
+            'specimen_id' => $specimen_id,
+            'test_status_id' => $test_status,
+            'created_by' => $user_id,
+            'tested_by' => $tested_by,
+            'verified_by' => $verified_by,
+            'time_started' => $time_started,
+            'time_completed' => $time_completed,
+            'time_verified' => $time_verified,
+        ]);
+
+        factory(\App\Models\Test::class)->create([
+            'identifier' => 130,
+            'test_type_id' => 4,
+            'specimen_id' => $specimen_id,
+            'test_status_id' => $test_status,
+            'created_by' => $user_id,
+            'tested_by' => $tested_by,
+            'verified_by' => $verified_by,
+            'time_started' => $time_started,
+            'time_completed' => $time_completed,
+            'time_verified' => $time_verified,
+        ]);
+
+        factory(\App\Models\Test::class)->create([
+            'identifier' => 131,
+            'test_type_id' => 4,
+            'specimen_id' => $specimen_id,
+            'test_status_id' => $test_status,
+            'created_by' => $user_id,
+            'tested_by' => $tested_by,
+            'verified_by' => $verified_by,
+            'time_started' => $time_started,
+            'time_completed' => $time_completed,
+            'time_verified' => $time_verified,
+        ]);
+
+        factory(\App\Models\Test::class)->create([
+            'identifier' => 132,
             'test_type_id' => 4,
             'specimen_id' => $specimen_id,
             'test_status_id' => $test_status,

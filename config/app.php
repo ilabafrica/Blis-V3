@@ -177,7 +177,8 @@ return [
         Zizaco\Entrust\EntrustServiceProvider::class,
         ILabAfrica\EMRInterface\EMRServiceProvider::class,
         ILabAfrica\EquipmentInterface\EquipmentInterfaceServiceProvider::class,
-
+        ILabAfrica\Inventory\InventoryServiceProvider::class,
+        ILabAfrica\SpecimenTracker\SpecimenTrackerServiceProvider::class,
     ],
 
     /*
