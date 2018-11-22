@@ -53,6 +53,7 @@ class SpecimenController extends Controller
 
             try {
                 $specimen->save();
+
                 return response()->json($specimen);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
