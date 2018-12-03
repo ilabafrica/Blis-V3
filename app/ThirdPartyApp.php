@@ -50,4 +50,14 @@ class ThirdPartyApp extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function emr()
+    {
+        return $this->hasOne('\ILabAfrica\EMRInterface\EMR', 'third_party_app_id');
+    }
+
+    public function access()
+    {
+        return $this->hasOne('\App\Models\ThirdPartyAccess', 'third_party_app_id');
+    }
 }

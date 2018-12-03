@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Test extends Model
 {
+    public $fillable = ['identifier'];
+
     public function testType()
     {
         return $this->belongsTo('App\Models\TestType');
@@ -33,6 +35,14 @@ class Test extends Model
     public function createdBy()
     {
         return $this->belongsTo('App\User', 'created_by', 'id');
+    }
+
+    /*
+     * User (created) relationship
+     */
+    public function thirdPartyCreator()
+    {
+        return $this->belongsTo('App\ThirdPartyApp', 'created_by', 'id');
     }
 
     /*

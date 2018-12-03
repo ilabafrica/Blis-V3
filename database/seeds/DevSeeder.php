@@ -8,7 +8,6 @@ use App\Models\TestType;
 use App\Models\Antibiotic;
 use App\Models\Instrument;
 use App\Models\MeasureType;
-use Illuminate\Support\Str;
 use App\Models\MeasureRange;
 use App\Models\Organization;
 use App\Models\SpecimenType;
@@ -8794,6 +8793,9 @@ class DevSeeder extends Seeder
         // create results
         foreach (Test::where('test_status_id', '>=', 3)->get() as $test) { //make sure that only the tests completed/verified get result seeded
             \ILabAfrica\EMRInterface\DiagnosticOrder::create(['test_id' => $test->id]);
+
+            // turn test to to below
+            // $test->created_by = Auth::guard('tpa_api')->user()->id, use the default on in whichever way
             foreach ($test->testType->measures as $measure) {
                 $measureRange = MeasureRange::where('measure_id', $measure->id)
                     ->inRandomOrder()->first();
@@ -8831,12 +8833,5 @@ class DevSeeder extends Seeder
             }
         }
         $this->command->info('Results Seeded');
-
-        \App\ThirdPartyApp::create([
-            'id' => (string) Str::uuid(),
-            'name' => 'Default EMR',
-            'email' => 'emr@blis.local',
-            'password' =>  bcrypt('password'),
-        ]);
     }
 }
