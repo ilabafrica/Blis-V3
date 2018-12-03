@@ -19,7 +19,7 @@ class CreateThirdpartyAccess extends Migration
             $table->uuid('third_party_app_id')->nullable();
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('access_token',500)->nullable();
+            $table->string('access_token', 500)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
