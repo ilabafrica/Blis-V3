@@ -85,7 +85,7 @@ $factory->define(\App\Models\Specimen::class, function (Faker\Generator $faker) 
     return [
         'identifier' => $faker->word,
         'accession_identifier' => $faker->word,
-        'specimen_type_id' => factory(\App\Models\SpecimenType::class)->create()->id,
+        'specimen_type_id' => \App\Models\SpecimenType::inRandomOrder()->first()->id,
         'received_by' => $userId,
         'collected_by' => $userId,
         'time_collected' => $collected_at,
