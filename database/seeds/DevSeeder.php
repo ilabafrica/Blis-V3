@@ -107,12 +107,16 @@ class DevSeeder extends Seeder
         $testTypeCategoryHematology = TestTypeCategory::create(['name' => 'HEMATOLOGY']);
         $testTypeCategorySerology = TestTypeCategory::create(['name' => 'SEROLOGY']);
         $testTypeCategoryTransfusion = TestTypeCategory::create(['name' => 'BLOOD TRANSFUSION']);
+        $testTypeCategoryChemistry = TestTypeCategory::create(['name' => 'CHEMISTRY']);
         $this->command->info('Lab Sections seeded');
 
         $testTypeHIV = TestType::create(['name' => 'HIV', 'test_type_category_id' => $testTypeCategorySerology->id]);
         $testTypeBS = TestType::create(['name' => 'BS for mps', 'test_type_category_id' => $test_categories->id]);
         $testTypeUrinalysis = TestType::create(['name' => 'Urinalysis', 'test_type_category_id' => $test_categories->id]);
         $testTypeWBC = TestType::create(['name' => 'WBC', 'test_type_category_id' => $test_categories->id]);
+        $test_types_lfts = TestType::create(['name' => 'LFTS', 'test_type_category_id' => $testTypeCategoryChemistry->id]);
+        $test_types_rfts = TestType::create(['name' => 'RFTS', 'test_type_category_id' => $testTypeCategoryChemistry->id]);
+        $test_types_lipid_profile = TestType::create(['name' => 'LIPID PROFILE', 'test_type_category_id' => $testTypeCategoryChemistry->id]);
 
         $this->command->info('test_types seeded');
 
@@ -304,7 +308,8 @@ class DevSeeder extends Seeder
         $instrument_sysmex_poch_100i = Instrument::create(['name' => 'sysmex_poch_100i', 'ip' => '192.168.1.15', 'hostname' => 'HEMASERVER']);
         $instrument_humacount_60ts = Instrument::create(['name' => 'humacount_60ts', 'ip' => '192.168.1.16', 'hostname' => 'HEMASERVER']);
         $instrument_coulter_act = Instrument::create(['name' => 'coulter_act', 'ip' => '192.168.1.17', 'hostname' => 'HEMASERVER']);
-        $instrument_ilab_aries = Instrument::create(['name' => 'ilab_aries', 'ip' => '192.168.1.17', 'hostname' => 'HEMASERVER']);
+        $instrument_ilab_aries = Instrument::create(['name' => 'ilab_aries', 'ip' => '192.168.1.18', 'hostname' => 'HEMASERVER']);
+        $instrument_humastar_100 = Instrument::create(['name' => 'humastar_100', 'ip' => '192.168.1.19', 'hostname' => 'HEMASERVER']);
 
         $this->command->info('Instruments table seeded');
 
@@ -316,6 +321,9 @@ class DevSeeder extends Seeder
         $instrument_mapping_humacount_60ts = InstrumentMapping::create(['instrument_id' => $instrument_humacount_60ts->id, 'test_type_id' => $testTypeWBC->id]);
         $instrument_mapping_coulter_act = InstrumentMapping::create(['instrument_id' => $instrument_coulter_act->id, 'test_type_id' => $testTypeWBC->id]);
         $instrument_mapping_ilab_aries = InstrumentMapping::create(['instrument_id' => $instrument_ilab_aries->id, 'test_type_id' => $testTypeWBC->id]);
+        $instrument_mapping_humastar_100_lfts = InstrumentMapping::create(['instrument_id' => $instrument_humastar_100->id, 'test_type_id' => $test_types_lfts->id]);
+        $instrument_mapping_humastar_100_rfts = InstrumentMapping::create(['instrument_id' => $instrument_humastar_100->id, 'test_type_id' => $test_types_rfts->id]);
+        $instrument_mapping_humastar_100_lipid = InstrumentMapping::create(['instrument_id' => $instrument_humastar_100->id, 'test_type_id' => $test_types_lipid_profile->id]);
 
         $this->command->info('Instrument Mappings table seeded');
 
@@ -351,6 +359,12 @@ class DevSeeder extends Seeder
             [$test_types_brucella->id, $specimenTypeBlood->id]);
         \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
             [$test_types_pylori->id, $specimenTypeStool->id]);
+        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
+            [$test_types_lfts->id, $specimenTypeBlood->id]);
+        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
+            [$test_types_lipid_profile->id, $specimenTypeBlood->id]);
+        \DB::insert('INSERT INTO test_type_mappings (test_type_id, specimen_type_id) VALUES (?, ?)',
+            [$test_types_rfts->id, $specimenTypeUrine->id]);
         $this->command->info('TestTypes/SpecimenTypes seeded');
 
         /*New measures for prevalence*/
@@ -399,6 +413,76 @@ class DevSeeder extends Seeder
             'test_type_id' => $test_types_pylori->id,
             'name' => 'H. Pylori',
             'unit' => '', ]);
+        $measure_albumin = Measure::create([
+            'measure_type_id' => MeasureType::free_text,
+            'test_type_id' => $test_types_lfts->id,
+            'name' => 'Albumin',
+            'unit' => '']);
+        $measure_alkaline_phosphate = Measure::create([
+            'measure_type_id' => MeasureType::free_text,
+            'test_type_id' => $test_types_lfts->id,
+            'name' => 'Alkaline Phosphate',
+            'unit' => '']);
+        $measure_direct_bilirubin = Measure::create([
+            'measure_type_id' => MeasureType::free_text,
+            'test_type_id' => $test_types_lfts->id,
+            'name' => 'Direct Bilirubin',
+            'unit' => '']);
+        $measure_total_bilirubin = Measure::create([
+            'measure_type_id' => MeasureType::free_text,
+            'test_type_id' => $test_types_lfts->id,
+            'name' => 'Total Bilirubin',
+            'unit' => '']);
+        $measure_asat = Measure::create([
+            'measure_type_id' => MeasureType::free_text,
+            'test_type_id' => $test_types_lfts->id,
+            'name' => 'ASAT',
+            'unit' => '']);
+        $measure_sgot = Measure::create([
+            'measure_type_id' => MeasureType::free_text,
+            'test_type_id' => $test_types_lfts->id,
+            'name' => 'SGOT',
+            'unit' => '']);
+        $measure_alat = Measure::create([
+            'measure_type_id' => MeasureType::free_text,
+            'test_type_id' => $test_types_lfts->id,
+            'name' => 'ALAT',
+            'unit' => '']);
+        $measure_total_proteins = Measure::create([
+            'measure_type_id' => MeasureType::free_text,
+            'test_type_id' => $test_types_lfts->id,
+            'name' => 'Total Proteins',
+            'unit' => '']);
+        $measure_creatinine = Measure::create([
+            'measure_type_id' => MeasureType::free_text,
+            'test_type_id' => $test_types_lfts->id,
+            'name' => 'Creatinine',
+            'unit' => '']);
+        $measure_urea = Measure::create([
+            'measure_type_id' => MeasureType::free_text,
+            'test_type_id' => $test_types_lfts->id,
+            'name' => 'UREA',
+            'unit' => '']);
+        $measure_greaa = Measure::create([
+            'measure_type_id' => MeasureType::free_text,
+            'test_type_id' => $test_types_rfts->id,
+            'name' => 'GREAA',
+            'unit' => '']);
+        $measure_ureavv = Measure::create([
+            'measure_type_id' => MeasureType::free_text,
+            'test_type_id' => $test_types_rfts->id,
+            'name' => 'UREAVV',
+            'unit' => '']);
+        $measure_tg = Measure::create([
+            'measure_type_id' => MeasureType::free_text,
+            'test_type_id' => $test_types_lipid_profile->id,
+            'name' => 'TG',
+            'unit' => '']);
+        $measure_ldl = Measure::create([
+            'measure_type_id' => MeasureType::free_text,
+            'test_type_id' => $test_types_lipid_profile->id,
+            'name' => 'LDL',
+            'unit' => '']);
 
         MeasureRange::create(['measure_id' => $measure_salmonella->id, 'display' => 'Positive']);
         MeasureRange::create(['measure_id' => $measure_salmonella->id, 'display' => 'Negative']);
@@ -563,6 +647,21 @@ class DevSeeder extends Seeder
         InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_ilab_aries->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => '^^^BUN']);
         InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_ilab_aries->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => '^^^GT']);
         InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_ilab_aries->id, 'measure_id' => $measure_salmonella->id, 'sub_test_id' => '^^^TRI']);
+
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humastar_100_lfts->id, 'measure_id' => $measure_albumin->id, 'sub_test_id' => 'Alb']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humastar_100_lfts->id, 'measure_id' => $measure_alkaline_phosphate->id, 'sub_test_id' => 'APDEA']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humastar_100_lfts->id, 'measure_id' => $measure_direct_bilirubin->id, 'sub_test_id' => 'Bilda']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humastar_100_lfts->id, 'measure_id' => $measure_total_bilirubin->id, 'sub_test_id' => 'Bilta']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humastar_100_lfts->id, 'measure_id' => $measure_asat->id, 'sub_test_id' => 'GOT']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humastar_100_lfts->id, 'measure_id' => $measure_sgot->id, 'sub_test_id' => 'GOT']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humastar_100_lfts->id, 'measure_id' => $measure_alat->id, 'sub_test_id' => 'GPT']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humastar_100_lfts->id, 'measure_id' => $measure_total_proteins->id, 'sub_test_id' => 'Prot']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humastar_100_lfts->id, 'measure_id' => $measure_creatinine->id, 'sub_test_id' => 'Creaa']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humastar_100_lfts->id, 'measure_id' => $measure_urea->id, 'sub_test_id' => 'UreaUV']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humastar_100_rfts->id, 'measure_id' => $measure_greaa->id, 'sub_test_id' => 'GREAA']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humastar_100_rfts->id, 'measure_id' => $measure_ureavv->id, 'sub_test_id' => 'UREAVV']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humastar_100_lipid->id, 'measure_id' => $measure_tg->id, 'sub_test_id' => 'TG']);
+        InstrumentParameters::create(['instrument_mapping_id' => $instrument_mapping_humastar_100_lipid->id, 'measure_id' => $measure_ldl->id, 'sub_test_id' => 'LDL']);
 
         $this->command->info('Instrument Parameters table seeded');
 
