@@ -26,6 +26,11 @@ class MeasureRange extends Model
         return $this->belongsTo('App\Models\Measure');
     }
 
+    public function interpretation()
+    {
+        return $this->belongsTo('App\Models\Interpretation');
+    }
+
     public function susceptibilityBreakPoints()
     {
         return $this->hasMany('App\Models\SusceptibilityBreakPoint');

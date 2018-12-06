@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Specimen extends Model
 {
-    public $timestamps = true;
-
     public function test()
     {
         return $this->hasMany('App\Models\Test');

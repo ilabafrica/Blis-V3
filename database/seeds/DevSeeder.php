@@ -8,7 +8,6 @@ use App\Models\TestType;
 use App\Models\Antibiotic;
 use App\Models\Instrument;
 use App\Models\MeasureType;
-use Illuminate\Support\Str;
 use App\Models\MeasureRange;
 use App\Models\Organization;
 use App\Models\SpecimenType;
@@ -17,7 +16,10 @@ use App\Models\ReferralReason;
 use App\Models\RejectionReason;
 use Illuminate\Database\Seeder;
 use App\Models\TestTypeCategory;
+use ILabAfrica\Inventory\Models\Item;
 use App\Models\SusceptibilityBreakPoint;
+use ILabAfrica\Inventory\Models\Supplier;
+use ILabAfrica\Inventory\Models\RequestStatus;
 use ILabAfrica\EquipmentInterface\InstrumentMapping;
 use ILabAfrica\EquipmentInterface\InstrumentParameters;
 
@@ -31,8 +33,8 @@ class DevSeeder extends Seeder
     public function run()
     {
         $organizations = [
-          ['name' => 'Coolest Clinic in Town', 'created_by' => 1],
-          ['name' => 'iLabAfrica Fantasy Hospital', 'created_by' => 1],
+          ['name' => 'Coolest Clinic in Town'],
+          ['name' => 'iLabAfrica Fantasy Hospital'],
         ];
         foreach ($organizations as $organization) {
             Organization::create($organization);
@@ -8597,6 +8599,87 @@ class DevSeeder extends Seeder
 
         $this->command->info('Susceptibility Break Points Seeded');
 
+        RequestStatus::create([
+            'code' => 'pending',
+            'name' => 'Pending',
+        ]);
+
+        RequestStatus::create([
+            'code' => 'issued',
+            'name' => 'Issued',
+        ]);
+
+        $this->command->info('Request Status Seeded');
+
+        Supplier::create([
+            'name' => 'Dimetrica Medical Supplies',
+            'phone' => '0703673736',
+            'email' => 'info@md.co.ke',
+            'address' => 'Nairobi, Kenya',
+        ]);
+
+        Supplier::create([
+            'name' => 'KEMSA(Kenya Medical Supplies Authority)',
+            'phone' => '0726618520',
+            'email' => 'info@kemsa.co.ke',
+            'address' => 'Nairobi, Kenya',
+        ]);
+
+        Supplier::create([
+            'name' => 'Centric Medical Solutions',
+            'phone' => '0716 911 434',
+            'email' => 'info@centricmedicalsolutions.com',
+            'address' => 'Nairobi, Kenya',
+        ]);
+
+        Supplier::create([
+            'name' => 'Philips Medical Systems',
+            'phone' => '+254-202711885 ',
+            'email' => 'info@philips.com',
+            'address' => 'Nairobi, Kenya',
+        ]);
+
+        Supplier::create([
+            'name' => 'Trauma Surgicals and Healthcare Ltd',
+            'phone' => '3870066 ',
+            'email' => 'traumasurgcare@gmail.com',
+            'address' => 'Nairobi, Kenya',
+        ]);
+
+        $this->command->info('Suppliers Seeded');
+
+        Item::create([
+            'name' => 'Gloves - Industrial Grade',
+            'unit' => 'Pieces ',
+            'min' => '100',
+            'max' => '1000',
+            'storage_req' => 'Dry',
+            'remarks' => 'Good',
+            'supplier_id' => '1',
+        ]);
+
+        Item::create([
+            'name' => 'Spirit',
+            'unit' => 'Litres ',
+            'min' => '500',
+            'max' => '1000',
+            'storage_req' => 'Cool & Dry',
+            'remarks' => 'Good',
+            'supplier_id' => '1',
+        ]);
+
+        Item::create([
+            'name' => 'Pills',
+            'unit' => 'Kilograms ',
+            'min' => '500',
+            'max' => '1000',
+            'storage_req' => 'Cool & Dry',
+            'remarks' => 'Good',
+            'supplier_id' => '2',
+        ]);
+
+        $this->command->info('Item Seeded');
+
         // create users, tobe used randomly
         factory(\App\User::class, 10)->create();
         $this->command->info('Users Seeded');
@@ -8850,6 +8933,9 @@ class DevSeeder extends Seeder
         // create results
         foreach (Test::where('test_status_id', '>=', 3)->get() as $test) { //make sure that only the tests completed/verified get result seeded
             \ILabAfrica\EMRInterface\DiagnosticOrder::create(['test_id' => $test->id]);
+
+            // turn test to to below
+            // $test->created_by = Auth::guard('tpa_api')->user()->id, use the default on in whichever way
             foreach ($test->testType->measures as $measure) {
                 $measureRange = MeasureRange::where('measure_id', $measure->id)
                     ->inRandomOrder()->first();
@@ -8887,12 +8973,5 @@ class DevSeeder extends Seeder
             }
         }
         $this->command->info('Results Seeded');
-
-        \App\ThirdPartyApp::create([
-            'id' => (string) Str::uuid(),
-            'name' => 'Default EMR',
-            'email' => 'emr@blis.local',
-            'password' =>  bcrypt('password'),
-        ]);
     }
 }

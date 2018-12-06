@@ -28,6 +28,13 @@ class SpecimenTypeController extends Controller
         return response()->json($specimenType);
     }
 
+    public function specimencollection($id)
+    {
+        $testTypes = SpecimenType::with('testTypes')->whereId($id)->get();
+
+        return response()->json($testTypes);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -37,7 +44,6 @@ class SpecimenTypeController extends Controller
     public function store(Request $request)
     {
         $rules = [
-
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -79,7 +85,6 @@ class SpecimenTypeController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-
         ];
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {

@@ -172,7 +172,7 @@ class EncounterController extends Controller
             }
 
             try {
-                $specimen->save();             
+                $specimen->save();
                 $encounter = Encounter::find($request->input('encounter_id'));
 
                 return response()->json($encounter->loader(), 200);

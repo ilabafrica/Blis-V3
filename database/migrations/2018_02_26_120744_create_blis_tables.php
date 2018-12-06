@@ -110,8 +110,7 @@ class CreateBlisTables extends Migration
         Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('identifier')->nullable();
-            $table->integer('created_by')->unsigned();
-            $table->boolean('active')->default(1);
+            $table->boolean('active')->nullable();
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('alias')->nullable();
@@ -500,6 +499,7 @@ class CreateBlisTables extends Migration
             $table->integer('verified_by')->unsigned()->nullable();
             $table->integer('cancelled_by')->unsigned()->nullable();
             $table->string('requested_by', 60);
+            $table->string('comment')->nullable();
             $table->timestamp('time_started')->nullable();
             $table->timestamp('time_cancelled')->nullable();
             $table->timestamp('time_completed')->nullable();
