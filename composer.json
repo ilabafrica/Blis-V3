@@ -7,8 +7,8 @@
     "require": {
         "php": ">=7.1.3",
         "fideloper/proxy": "~4.0",
-        "ilabafrica/emrinterface": "v0.*",
-        "ilabafrica/equipmentinterface": "v0.1.2",
+        "ilabafrica/emrinterface": "v0.2.0",
+        "ilabafrica/equipmentinterface": "v0.1.*",
         "ilabafrica/inventory": "v0.*",
         "ilabafrica/specimentracker": "v0.*",
         "laravel/framework": "5.6.*",
