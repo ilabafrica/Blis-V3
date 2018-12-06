@@ -8685,6 +8685,7 @@ class DevSeeder extends Seeder
                 'time_verified' => $time_verified,
                 'created_at' => $created_at,
             ]);
+
         }
 
         factory(\App\Models\Test::class)->create([
@@ -8803,6 +8804,46 @@ class DevSeeder extends Seeder
             'time_completed' => $time_completed,
             'time_verified' => $time_verified,
         ]);
+
+        factory(\App\Models\Test::class)->create([
+                'test_type_id' => 5,
+                'specimen_id' => 4,
+                'test_status_id' => 1,
+                'created_by' => $user_id,
+                'tested_by' => $tested_by,
+                'verified_by' => $verified_by,
+                'time_started' => $time_started,
+                'time_completed' => $time_completed,
+                'time_verified' => $time_verified,
+                'created_at' => $created_at,
+        ]);
+
+        factory(\App\Models\Test::class)->create([
+                'test_type_id' => 6,
+                'specimen_id' => 5,
+                'test_status_id' => 1,
+                'created_by' => $user_id,
+                'tested_by' => $tested_by,
+                'verified_by' => $verified_by,
+                'time_started' => $time_started,
+                'time_completed' => $time_completed,
+                'time_verified' => $time_verified,
+                'created_at' => $created_at,
+        ]);
+
+        factory(\App\Models\Test::class)->create([
+                'test_type_id' => 7,
+                'specimen_id' => 7,
+                'test_status_id' => 1,
+                'created_by' => $user_id,
+                'tested_by' => $tested_by,
+                'verified_by' => $verified_by,
+                'time_started' => $time_started,
+                'time_completed' => $time_completed,
+                'time_verified' => $time_verified,
+                'created_at' => $created_at,
+        ]);
+
 
         $this->command->info('Tests Seeded');
 
