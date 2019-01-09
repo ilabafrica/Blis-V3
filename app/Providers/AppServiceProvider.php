@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Result;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use App\Observers\ResultObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,8 +16,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        //Set Default length of a string data type
         Schema::defaultStringLength(191);
+        Result::observe(ResultObserver::class);
     }
 
     /**
