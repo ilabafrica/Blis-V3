@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Result;
+use App\Models\Result;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\ResultObserver;

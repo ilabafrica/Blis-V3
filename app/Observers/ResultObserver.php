@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Result;
-use App\ResultLog;
+use App\Models\Result;
+use App\Models\ResultLog;
 
 class ResultObserver
 {
