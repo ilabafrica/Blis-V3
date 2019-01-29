@@ -8932,8 +8932,6 @@ class DevSeeder extends Seeder
 
         // create results
         foreach (Test::where('test_status_id', '>=', 3)->get() as $test) { //make sure that only the tests completed/verified get result seeded
-            \ILabAfrica\EMRInterface\DiagnosticOrder::create(['test_id' => $test->id]);
-
             // turn test to to below
             // $test->created_by = Auth::guard('tpa_api')->user()->id, use the default on in whichever way
             foreach ($test->testType->measures as $measure) {
