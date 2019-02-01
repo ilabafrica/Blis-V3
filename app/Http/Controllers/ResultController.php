@@ -96,6 +96,10 @@ class ResultController extends Controller
                     }
                 }
             }
+            // if its being saved for the first time
+            if (! $test->time_completed) {
+                $test->time_completed = date('Y-m-d H:i:s');
+            }
             $test->save();
             // sending to emr on completion for now
             EMR::sendTestResults($test->id);

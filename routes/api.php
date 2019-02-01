@@ -43,11 +43,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/get-user', 'Auth\APIController@getUser');
 });
 Route::group(['prefix' => 'tpa'], function () {
-    Route::post('login', 'ThirdPartyAppAuthController@login');
-    Route::post('logout', 'ThirdPartyAppAuthController@logout');
-    Route::post('refresh', 'ThirdPartyAppAuthController@refresh');
-    Route::post('me', 'ThirdPartyAppAuthController@me');
-    Route::post('payload', 'ThirdPartyAppAuthController@payload');
+    Route::post('/login', 'ThirdPartyAppAuthController@login');
+    Route::post('/logout', 'ThirdPartyAppAuthController@logout');
+    Route::post('/refresh', 'ThirdPartyAppAuthController@refresh');
+    Route::post('/me', 'ThirdPartyAppAuthController@me');
+    Route::post('/payload', 'ThirdPartyAppAuthController@payload');
 });
 
 Route::group(['middleware' => 'auth:api'], function () {

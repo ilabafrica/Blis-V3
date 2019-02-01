@@ -419,72 +419,72 @@ class DevSeeder extends Seeder
             'measure_type_id' => MeasureType::free_text,
             'test_type_id' => $test_types_lfts->id,
             'name' => 'Albumin',
-            'unit' => '']);
+            'unit' => '', ]);
         $measure_alkaline_phosphate = Measure::create([
             'measure_type_id' => MeasureType::free_text,
             'test_type_id' => $test_types_lfts->id,
             'name' => 'Alkaline Phosphate',
-            'unit' => '']);
+            'unit' => '', ]);
         $measure_direct_bilirubin = Measure::create([
             'measure_type_id' => MeasureType::free_text,
             'test_type_id' => $test_types_lfts->id,
             'name' => 'Direct Bilirubin',
-            'unit' => '']);
+            'unit' => '', ]);
         $measure_total_bilirubin = Measure::create([
             'measure_type_id' => MeasureType::free_text,
             'test_type_id' => $test_types_lfts->id,
             'name' => 'Total Bilirubin',
-            'unit' => '']);
+            'unit' => '', ]);
         $measure_asat = Measure::create([
             'measure_type_id' => MeasureType::free_text,
             'test_type_id' => $test_types_lfts->id,
             'name' => 'ASAT',
-            'unit' => '']);
+            'unit' => '', ]);
         $measure_sgot = Measure::create([
             'measure_type_id' => MeasureType::free_text,
             'test_type_id' => $test_types_lfts->id,
             'name' => 'SGOT',
-            'unit' => '']);
+            'unit' => '', ]);
         $measure_alat = Measure::create([
             'measure_type_id' => MeasureType::free_text,
             'test_type_id' => $test_types_lfts->id,
             'name' => 'ALAT',
-            'unit' => '']);
+            'unit' => '', ]);
         $measure_total_proteins = Measure::create([
             'measure_type_id' => MeasureType::free_text,
             'test_type_id' => $test_types_lfts->id,
             'name' => 'Total Proteins',
-            'unit' => '']);
+            'unit' => '', ]);
         $measure_creatinine = Measure::create([
             'measure_type_id' => MeasureType::free_text,
             'test_type_id' => $test_types_lfts->id,
             'name' => 'Creatinine',
-            'unit' => '']);
+            'unit' => '', ]);
         $measure_urea = Measure::create([
             'measure_type_id' => MeasureType::free_text,
             'test_type_id' => $test_types_lfts->id,
             'name' => 'UREA',
-            'unit' => '']);
+            'unit' => '', ]);
         $measure_greaa = Measure::create([
             'measure_type_id' => MeasureType::free_text,
             'test_type_id' => $test_types_rfts->id,
             'name' => 'GREAA',
-            'unit' => '']);
+            'unit' => '', ]);
         $measure_ureavv = Measure::create([
             'measure_type_id' => MeasureType::free_text,
             'test_type_id' => $test_types_rfts->id,
             'name' => 'UREAVV',
-            'unit' => '']);
+            'unit' => '', ]);
         $measure_tg = Measure::create([
             'measure_type_id' => MeasureType::free_text,
             'test_type_id' => $test_types_lipid_profile->id,
             'name' => 'TG',
-            'unit' => '']);
+            'unit' => '', ]);
         $measure_ldl = Measure::create([
             'measure_type_id' => MeasureType::free_text,
             'test_type_id' => $test_types_lipid_profile->id,
             'name' => 'LDL',
-            'unit' => '']);
+            'unit' => '', ]);
 
         MeasureRange::create(['measure_id' => $measure_salmonella->id, 'display' => 'Positive']);
         MeasureRange::create(['measure_id' => $measure_salmonella->id, 'display' => 'Negative']);
@@ -8768,7 +8768,6 @@ class DevSeeder extends Seeder
                 'time_verified' => $time_verified,
                 'created_at' => $created_at,
             ]);
-
         }
 
         factory(\App\Models\Test::class)->create([
@@ -8927,13 +8926,10 @@ class DevSeeder extends Seeder
                 'created_at' => $created_at,
         ]);
 
-
         $this->command->info('Tests Seeded');
 
         // create results
         foreach (Test::where('test_status_id', '>=', 3)->get() as $test) { //make sure that only the tests completed/verified get result seeded
-            \ILabAfrica\EMRInterface\DiagnosticOrder::create(['test_id' => $test->id]);
-
             // turn test to to below
             // $test->created_by = Auth::guard('tpa_api')->user()->id, use the default on in whichever way
             foreach ($test->testType->measures as $measure) {
