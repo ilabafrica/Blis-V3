@@ -32,4 +32,9 @@ class Result extends Model
     {
         return $this->belongsTo('App\Models\MeasureRange');
     }
+
+    public function logs()
+    {
+        return $this->hasMany('App\Models\ResultLog');
+    }
 }
