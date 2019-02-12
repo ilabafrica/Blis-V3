@@ -8655,7 +8655,6 @@ class DevSeeder extends Seeder
             'max' => '1000',
             'storage_req' => 'Dry',
             'remarks' => 'Good',
-            'supplier_id' => '1',
         ]);
 
         Item::create([
@@ -8665,7 +8664,6 @@ class DevSeeder extends Seeder
             'max' => '1000',
             'storage_req' => 'Cool & Dry',
             'remarks' => 'Good',
-            'supplier_id' => '1',
         ]);
 
         Item::create([
@@ -8675,7 +8673,6 @@ class DevSeeder extends Seeder
             'max' => '1000',
             'storage_req' => 'Cool & Dry',
             'remarks' => 'Good',
-            'supplier_id' => '2',
         ]);
 
         $this->command->info('Item Seeded');
