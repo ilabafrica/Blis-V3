@@ -15,7 +15,7 @@ class CreateThirdPartyAppsTable extends Migration
     {
         Schema::create('third_party_apps', function (Blueprint $table) {
             $table->uuid('id');
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('username')->nullable();
             $table->string('email')->unique();
             $table->string('password');

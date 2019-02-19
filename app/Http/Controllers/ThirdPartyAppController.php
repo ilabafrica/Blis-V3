@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\ThirdPartyApp;
 use Illuminate\Http\Request;
+use App\Models\ThirdPartyAccess;
 
 class ThirdPartyAppController extends Controller
 {
@@ -92,5 +93,39 @@ class ThirdPartyAppController extends Controller
     public function destroy(ThirdPartyApp $thirdPartyApp)
     {
         //
+    }
+
+    /**
+     * Access of BLIS to the third party application.
+     *
+     * @param  \App\ThirdPartyApp  $thirdPartyApp
+     * @return \Illuminate\Http\Response
+     */
+    public function access(Request $request)
+    {
+        $thirdPartyAccess = ThirdPartyAccess::updateOrCreate([
+            'third_party_app_id' => $request->third_party_app_id,
+        ], [
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => $request->password,
+            'client_id' => $request->client_id,
+            'client_secret' => $request->client_secret,
+        ]);
+
+        return response()->json($thirdPartyAccess);
+    }
+
+    /**
+     * Destroy BLIS access to the third party application.
+     *
+     * @param  \App\ThirdPartyApp  $thirdPartyApp
+     * @return \Illuminate\Http\Response
+     */
+    public function accessDestroy($id)
+    {
+        ThirdPartyAccess::destroy($id);
+
+        return response()->json([], 200);
     }
 }

@@ -48,6 +48,8 @@ Route::group(['prefix' => 'tpa'], function () {
     Route::post('/refresh', 'ThirdPartyAppAuthController@refresh');
     Route::post('/me', 'ThirdPartyAppAuthController@me');
     Route::post('/payload', 'ThirdPartyAppAuthController@payload');
+    Route::post('/access', 'ThirdPartyAppAuthController@access');
+    Route::get('/access/{id}/destroy', 'ThirdPartyAppAuthController@accessDestroy');
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
