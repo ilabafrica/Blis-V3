@@ -22,7 +22,7 @@ class CreateThirdpartyAccess extends Migration
             $table->string('grant_type')->nullable();//password,implicit,client_credentials,authorization_code
             $table->string('client_name')->nullable();
             $table->string('client_id')->nullable();
-            $table->string('client_secret')->nullable()
+            $table->string('client_secret')->nullable();
             $table->string('access_token', 500)->nullable();
             $table->rememberToken();
             $table->timestamps();
