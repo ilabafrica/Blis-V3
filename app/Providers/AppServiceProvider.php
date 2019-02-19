@@ -3,9 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Result;
+use App\Observers\ResultObserver;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use App\Observers\ResultObserver;
 
 class AppServiceProvider extends ServiceProvider
 {

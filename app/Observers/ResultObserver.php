@@ -16,15 +16,15 @@ class ResultObserver
     public function created(Result $result)
     {
         $user = auth()->user();
-        if($user){
+        if ($user) {
             $by = $user->id;
-        }else{
-            $by = "system";
+        } else {
+            $by = 'system';
         }
         ResultLog::create([
             'result_id'=>$result->id,
             'change'=>json_encode($result),
-            'by' => $by
+            'by' => $by,
         ]);
     }
 
@@ -37,15 +37,15 @@ class ResultObserver
     public function updated(Result $result)
     {
         $user = auth()->user();
-        if($user){
+        if ($user) {
             $by = $user->id;
-        }else{
-            $by = "system";
+        } else {
+            $by = 'system';
         }
         ResultLog::create([
             'result_id'=>$result->id,
             'change'=>json_encode($result),
-            'by' => $by
+            'by' => $by,
         ]);
     }
 
@@ -58,15 +58,15 @@ class ResultObserver
     public function deleted(Result $result)
     {
         $user = auth()->user();
-        if($user){
+        if ($user) {
             $by = $user->id;
-        }else{
-            $by = "system";
+        } else {
+            $by = 'system';
         }
         ResultLog::create([
             'result_id'=>$result->id,
             'change'=>json_encode($result),
-            'by' => $by
+            'by' => $by,
         ]);
     }
 
