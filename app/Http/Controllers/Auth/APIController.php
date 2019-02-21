@@ -26,7 +26,6 @@ class APIController extends Controller
         $user = User::whereEmail(request('username'))->first();
 
         if (! $user) {
-
             //flash('Wrong email or password')->error();
             return response()->json([
                 'message' => 'Wrong email or password',
