@@ -86,13 +86,16 @@ class ResultController extends Controller
                     } elseif ($measure->measureType->isFreeText() ||
                         $measure->measureType->isNumeric()) {
                         // free text | numeric
-                        $result = Result::updateOrCreate([
+                        $result = Result::firstOrNew([
                             'measure_id' => $measure->id,
                             'test_id' => $request->input('test_id'),
                         ]);
                         $result->time_entered = date('Y-m-d H:i:s');
+
                         $result->result = $results[$measure->id]['result'];
+                        //dd($results[$measure->id]['result']);
                         $result->save();
+                        //dd($result);
                     }
                 }
             }
