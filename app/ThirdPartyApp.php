@@ -19,7 +19,7 @@ class ThirdPartyApp extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'id', 'name', 'email', 'password',
+        'id', 'name', 'username', 'email', 'password',
     ];
 
     /**
@@ -59,5 +59,12 @@ class ThirdPartyApp extends Authenticatable implements JWTSubject
     public function access()
     {
         return $this->hasOne('\App\Models\ThirdPartyAccess', 'third_party_app_id');
+    }
+
+    public function loader()
+    {
+        return ThirdPartyApp::find($this->id)->load(
+            'emr', 'access'
+        );
     }
 }

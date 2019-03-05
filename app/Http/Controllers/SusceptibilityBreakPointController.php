@@ -50,7 +50,7 @@ class SusceptibilityBreakPointController extends Controller
             try {
                 $susceptibilityBreakPoint->save();
 
-                return response()->json($susceptibilityBreakPoint);
+                return response()->json($susceptibilityBreakPoint->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

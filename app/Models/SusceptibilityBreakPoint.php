@@ -49,4 +49,11 @@ class SusceptibilityBreakPoint extends Model
             */
         }
     }
+
+    public function loader()
+    {
+        return SusceptibilityBreakPoint::find($this->id)->load(
+            'antibiotic'
+        );
+    }
 }

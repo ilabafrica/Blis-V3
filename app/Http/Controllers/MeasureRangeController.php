@@ -78,7 +78,7 @@ class MeasureRangeController extends Controller
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
 
-            return response()->json($measureRange);
+            return response()->json($measureRange->loader());
         }
     }
 
@@ -130,7 +130,7 @@ class MeasureRangeController extends Controller
             try {
                 $measureRange->save();
 
-                return response()->json($measureRange);
+                return response()->json($measureRange->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

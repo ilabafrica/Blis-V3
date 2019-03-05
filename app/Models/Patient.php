@@ -60,4 +60,12 @@ class Patient extends Model
     {
         return $this->belongsTo('App\Models\Organization');
     }
+
+    public function loader()
+    {
+        return Patient::find($this->id)->load(
+            'name',
+            'gender'
+        );
+    }
 }
