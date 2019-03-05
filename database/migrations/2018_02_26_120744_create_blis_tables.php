@@ -856,6 +856,9 @@ class CreateBlisTables extends Migration
         }
         //Assign role Superadmin to user_id=1
         $superUser->attachRole($superRole);
+
+        \Illuminate\Support\Facades\Artisan::call('passport:install');
+        \Illuminate\Support\Facades\Artisan::call('jwt:secret');
     }
 
     /**
