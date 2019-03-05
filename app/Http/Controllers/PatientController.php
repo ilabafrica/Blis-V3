@@ -71,11 +71,11 @@ class PatientController extends Controller
 
             try {
                 $patient->save();
+
+                return response()->json($patient->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
-
-            return response()->json($patient);
         }
     }
 

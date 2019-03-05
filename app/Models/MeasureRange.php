@@ -40,4 +40,11 @@ class MeasureRange extends Model
     {
         return $this->belongsToMany('App\Models\Antibiotic', 'susceptibility_break_points', 'measure_range_id', 'antibiotic_id');
     }
+
+    public function loader()
+    {
+        return MeasureRange::find($this->id)->load(
+            'gender', 'interpretation'
+        );
+    }
 }
