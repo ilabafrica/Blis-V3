@@ -859,6 +859,7 @@ class CreateBlisTables extends Migration
 
         \Illuminate\Support\Facades\Artisan::call('passport:install');
         \Illuminate\Support\Facades\Artisan::call('jwt:secret');
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
     }
 
     /**
