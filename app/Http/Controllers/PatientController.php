@@ -25,10 +25,10 @@ class PatientController extends Controller
             $search = $request->query('search');
             $patient = Patient::whereHas('name', function ($query) use ($search) {
                 $query->where('given', 'LIKE', "%{$search}%")->orWhere('family', 'LIKE', "%{$search}%");
-            })->with('gender', 'name')
+            })->with('gender', 'name', 'encounter')
                 ->paginate(10);
         } else {
-            $patient = Patient::with('name', 'gender')->orderBy('id', 'ASC')->paginate(10);
+            $patient = Patient::with('name', 'gender', 'encounter')->orderBy('id', 'DESC')->paginate(10);
         }
 
         return response()->json($patient);

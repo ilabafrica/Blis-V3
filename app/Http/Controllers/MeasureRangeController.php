@@ -17,7 +17,7 @@ class MeasureRangeController extends Controller
 {
     public function index()
     {
-        $measureRange = MeasureRange::with('gender')->orderBy('id', 'ASC')->get();
+        $measureRange = MeasureRange::with('gender', 'susceptibilityBreakPoints')->orderBy('id', 'ASC')->get();
 
         return response()->json($measureRange);
     }

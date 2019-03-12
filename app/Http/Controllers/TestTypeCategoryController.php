@@ -19,10 +19,10 @@ class TestTypeCategoryController extends Controller
     {
         if ($request->query('search')) {
             $search = $request->query('search');
-            $testTypeCategory = TestTypeCategory::where('name', 'LIKE', "%{$search}%")
+            $testTypeCategory = TestTypeCategory::with('testTypes')->where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
         } else {
-            $testTypeCategory = TestTypeCategory::orderBy('id', 'ASC')->paginate(10);
+            $testTypeCategory = TestTypeCategory::with('testTypes')->orderBy('id', 'ASC')->paginate(10);
         }
 
         return response()->json($testTypeCategory);
@@ -51,7 +51,7 @@ class TestTypeCategoryController extends Controller
             try {
                 $testTypeCategory->save();
 
-                return response()->json($testTypeCategory);
+                return response()->json($testTypeCategory->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

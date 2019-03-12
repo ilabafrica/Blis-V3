@@ -17,7 +17,7 @@ class MeasureController extends Controller
 {
     public function index()
     {
-        $measure = Measure::orderBy('id', 'ASC')->get();
+        $measure = Measure::with('measureRanges')->orderBy('id', 'ASC')->get();
 
         return response()->json($measure);
     }
@@ -54,7 +54,7 @@ class MeasureController extends Controller
             try {
                 $measure->save();
 
-                return response()->json($measure);
+                return response()->json($measure->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
@@ -69,7 +69,7 @@ class MeasureController extends Controller
      */
     public function show($id)
     {
-        $measure = Measure::find($id)->load('testType', 'measureType', 'measureRanges', 'measureRanges.gender', 'measureRanges.interpretation');
+        $measure = Measure::find($id)->load('testType', 'measureType', 'measureRanges.susceptibilityBreakPoints', 'measureRanges.gender', 'measureRanges.interpretation');
 
         return response()->json($measure);
     }

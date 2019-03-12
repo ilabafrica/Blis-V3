@@ -75,4 +75,11 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Specimen', 'received_by');
     }
+
+    public function loader()
+    {
+        return User::find($this->id)->load(
+            'specimenReceived', 'specimenCollected'
+        );
+    }
 }

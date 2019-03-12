@@ -17,7 +17,7 @@ class RejectionReasonController extends Controller
 {
     public function index()
     {
-        $rejectionReason = RejectionReason::all();
+        $rejectionReason = RejectionReason::with('specimenRejection')->get();
 
         return response()->json($rejectionReason);
     }
@@ -44,7 +44,7 @@ class RejectionReasonController extends Controller
             try {
                 $rejectionReason->save();
 
-                return response()->json($rejectionReason);
+                return response()->json($rejectionReason->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

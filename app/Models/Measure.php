@@ -38,4 +38,11 @@ class Measure extends Model
     {
         return $this->hasMany('App\Models\ControlResult');
     }
+
+    public function loader()
+    {
+        return Measure::find($this->id)->load(
+            'measureRanges'
+        );
+    }
 }

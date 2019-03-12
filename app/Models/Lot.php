@@ -20,6 +20,13 @@ class Lot extends Model
 
     public function controlTest()
     {
-        return $this->belongsTo('App\Models\ControlTest');
+        return $this->hasMany('App\Models\ControlTest');
+    }
+
+    public function loader()
+    {
+        return Lot::find($this->id)->load(
+            'controlTest'
+        );
     }
 }

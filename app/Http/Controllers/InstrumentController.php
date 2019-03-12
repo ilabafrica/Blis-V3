@@ -18,10 +18,10 @@ class InstrumentController extends Controller
     {
         if ($request->query('search')) {
             $search = $request->query('search');
-            $instrument = Instrument::where('name', 'LIKE', "%{$search}%")
+            $instrument = Instrument::with('instrumentMapping')->where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
         } else {
-            $instrument = Instrument::orderBy('id', 'ASC')->paginate(10);
+            $instrument = Instrument::with('instrumentMapping')->orderBy('id', 'ASC')->paginate(10);
         }
 
         return response()->json($instrument);
@@ -49,7 +49,7 @@ class InstrumentController extends Controller
             try {
                 $instrument->save();
 
-                return response()->json($instrument);
+                return response()->json($instrument->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

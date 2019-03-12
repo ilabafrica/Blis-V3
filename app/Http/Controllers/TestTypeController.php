@@ -22,21 +22,24 @@ class TestTypeController extends Controller
                 'measures.measureType',
                 'measures.measureRanges.gender',
                 'testTypeCategory',
-                'specimenTypes'
+                'specimenTypes',
+                'testTypeMapping'
             )->paginate(10);
         } elseif ($request->query('fetch')) {
             $testType = TestType::with(
                 'measures.measureType',
                 'measures.measureRanges.gender',
                 'testTypeCategory',
-                'specimenTypes'
+                'specimenTypes',
+                'testTypeMapping'
             )->get();
         } else {
             $testType = TestType::with(
                 'measures.measureType',
                 'measures.measureRanges.gender',
                 'testTypeCategory',
-                'specimenTypes'
+                'specimenTypes',
+                'testTypeMapping'
             )->orderBy('id', 'ASC')->paginate(10);
         }
 
