@@ -19,10 +19,10 @@ class SpecimenTypeController extends Controller
     {
         if ($request->query('search')) {
             $search = $request->query('search');
-            $specimenType = SpecimenType::where('name', 'LIKE', "%{$search}%")
+            $specimenType = SpecimenType::with('testTypes')->where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
         } else {
-            $specimenType = SpecimenType::orderBy('name', 'ASC')->paginate(10);
+            $specimenType = SpecimenType::with('testTypes')->orderBy('name', 'ASC')->paginate(10);
         }
 
         return response()->json($specimenType);
@@ -55,7 +55,7 @@ class SpecimenTypeController extends Controller
             try {
                 $specimenType->save();
 
-                return response()->json($specimenType);
+                return response()->json($specimenType->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

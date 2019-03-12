@@ -65,7 +65,8 @@ class Patient extends Model
     {
         return Patient::find($this->id)->load(
             'name',
-            'gender'
+            'gender',
+            'encounter'
         );
     }
 }

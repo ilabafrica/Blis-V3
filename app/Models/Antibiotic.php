@@ -20,4 +20,16 @@ class Antibiotic extends Model
     {
         return $this->belongsToMany('App\Models\MeasureRange', 'susceptibility_break_points', 'antibiotic_id', 'measure_range_id');
     }
+
+    public function susceptibilityBreakPoint()
+    {
+        return $this->hasMany('App\Models\SusceptibilityBreakPoint');
+    }
+
+    public function loader()
+    {
+        return Antibiotic::find($this->id)->load(
+            'susceptibilityBreakPoint'
+        );
+    }
 }

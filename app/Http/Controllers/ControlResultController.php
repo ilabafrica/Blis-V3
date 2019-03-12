@@ -63,6 +63,7 @@ class ControlResultController extends Controller
                         'measure_id' => $measure->id,
                     ]);
                     $controlResult->result = $results[$measure->id]['result'];
+
                     $controlResult->save();
                 }
             }

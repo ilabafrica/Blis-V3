@@ -20,4 +20,11 @@ class RejectionReason extends Model
     {
         return $this->belongsToMany('App\Models\SpecimenRejection', 'reason_specimen_rejection', 'rejection_reason_id', 'specimen_rejection_id');
     }
+
+    public function loader()
+    {
+        return RejectionReason::find($this->id)->load(
+            'specimenRejection'
+        );
+    }
 }

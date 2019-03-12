@@ -18,4 +18,11 @@ class SpecimenType extends Model
     {
         return $this->belongsToMany('App\Models\TestType', 'test_type_mappings');
     }
+
+    public function loader()
+    {
+        return SpecimenType::find($this->id)->load(
+            'testTypes'
+        );
+    }
 }

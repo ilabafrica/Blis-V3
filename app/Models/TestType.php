@@ -28,6 +28,11 @@ class TestType extends Model
         return $this->hasOne('App\Models\TestTypeCategory', 'id', 'test_type_category_id');
     }
 
+    public function testTypeMapping()
+    {
+        return $this->hasMany('App\Models\TestTypeMapping');
+    }
+
     public function specimenTypes()
     {
         return $this->belongsToMany('App\Models\SpecimenType', 'test_type_mappings');
@@ -44,7 +49,8 @@ class TestType extends Model
             'measures.measureType',
             'measures.measureRanges.gender',
             'testTypeCategory',
-            'specimenTypes'
+            'specimenTypes',
+            'testTypeMapping'
         );
     }
 }

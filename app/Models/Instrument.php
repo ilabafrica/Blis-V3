@@ -22,4 +22,16 @@ class Instrument extends Model
     {
         return $this->belongsToMany('App\Models\TestType');
     }
+
+    public function instrumentMapping()
+    {
+        return $this->hasMany('ILabAfrica\EquipmentInterface\InstrumentMapping');
+    }
+
+    public function loader()
+    {
+        return Instrument::find($this->id)->load(
+            'instrumentMapping'
+        );
+    }
 }

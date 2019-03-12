@@ -44,7 +44,7 @@ class MeasureRange extends Model
     public function loader()
     {
         return MeasureRange::find($this->id)->load(
-            'gender', 'interpretation'
+            'gender', 'interpretation', 'susceptibilityBreakPoints'
         );
     }
 }

@@ -18,10 +18,10 @@ class LotController extends Controller
     {
         if ($request->query('search')) {
             $search = $request->query('search');
-            $lot = Lot::with('instrument')->where('number', 'LIKE', "%{$search}%")
+            $lot = Lot::with('instrument', 'controlTest')->where('number', 'LIKE', "%{$search}%")
                 ->paginate(10);
         } else {
-            $lot = Lot::with('instrument')->orderBy('id', 'ASC')->paginate(10);
+            $lot = Lot::with('instrument', 'controlTest')->orderBy('id', 'ASC')->paginate(10);
         }
 
         return response()->json($lot);
@@ -53,7 +53,7 @@ class LotController extends Controller
             try {
                 $lot->save();
 
-                return response()->json($lot);
+                return response()->json($lot->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

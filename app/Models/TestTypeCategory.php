@@ -24,4 +24,11 @@ class TestTypeCategory extends Model
     {
         return $this->hasMany('App\Models\TestType');
     }
+
+    public function loader()
+    {
+        return TestTypeCategory::find($this->id)->load(
+            'testTypes'
+        );
+    }
 }

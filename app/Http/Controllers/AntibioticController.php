@@ -20,13 +20,13 @@ class AntibioticController extends Controller
     {
         if ($request->query('search')) {
             $search = $request->query('search');
-            $antibiotics = Antibiotic::where('name', 'LIKE', "%{$search}%")
+            $antibiotics = Antibiotic::with('susceptibilityBreakPoint')->where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
         } elseif ($request->query('measure_range_id')) {
             $antibiotics = MeasureRange::find($request->query('measure_range_id'))
                 ->antibiotics;
         } else {
-            $antibiotics = Antibiotic::orderBy('id', 'ASC')->paginate(10);
+            $antibiotics = Antibiotic::with('susceptibilityBreakPoint')->orderBy('id', 'ASC')->paginate(10);
         }
 
         return response()->json($antibiotics);
@@ -55,7 +55,7 @@ class AntibioticController extends Controller
             try {
                 $antibiotic->save();
 
-                return response()->json($antibiotic);
+                return response()->json($antibiotic->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

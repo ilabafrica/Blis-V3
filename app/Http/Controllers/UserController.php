@@ -21,10 +21,10 @@ class UserController extends Controller
     {
         if ($request->query('search')) {
             $search = $request->query('search');
-            $user = User::where('username', 'LIKE', "%{$search}%")
+            $user = User::with('specimenCollected', 'specimenReceived')->where('username', 'LIKE', "%{$search}%")
                 ->paginate(10);
         } else {
-            $user = User::with('gender')->paginate(10);
+            $user = User::with('gender', 'specimenCollected', 'specimenReceived')->paginate(10);
         }
 
         return response()->json($user);
@@ -59,7 +59,7 @@ class UserController extends Controller
             try {
                 $user->save();
 
-                return response()->json($user);
+                return response()->json($user->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
