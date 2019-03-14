@@ -59,7 +59,7 @@ class GeneralConfigurationController extends Controller
             return response()->json($validator, 422);
         } else {
             $generalconfig = GeneralConfiguration::whereId($id)->first();
-            if(is_null($generalconfig)){
+            if (is_null($generalconfig)) {
                 $generalconfig = new GeneralConfiguration;
                 $generalconfig->name = $request->input('name');
                 $generalconfig->email = $request->input('email');
@@ -75,8 +75,7 @@ class GeneralConfigurationController extends Controller
                 } catch (\Illuminate\Database\QueryException $e) {
                     return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
                 }
-
-            }else{
+            } else {
                 $generalconfig->name = $request->input('name');
                 $generalconfig->email = $request->input('email');
                 $generalconfig->phone = $request->input('phone');
