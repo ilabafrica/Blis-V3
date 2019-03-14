@@ -13,6 +13,19 @@ class CreateBlisTables extends Migration
      */
     public function up()
     {
+        // Create table for general configurations
+        Schema::create('general_configuration', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name')->unique();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('post')->nullable();
+            $table->string('address')->nullable();
+            $table->string('code')->nullable();
+            $table->string('logo')->nullable();
+            $table->timestamps();
+        });
+
         // Create table for storing roles
         Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');

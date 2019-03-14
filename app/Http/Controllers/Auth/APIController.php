@@ -96,6 +96,5 @@ class APIController extends Controller
     public function getUser()
     {
         return auth()->user()->load('roles.permissions', 'gender');
-        //return auth()->user()::with('roles.permissions','genders')->first();
     }
 }

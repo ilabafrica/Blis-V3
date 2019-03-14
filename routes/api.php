@@ -76,7 +76,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('adhocoption', 'AdhocOptionController');
         Route::resource('code', 'CodeController');
         Route::resource('counter', 'CounterController');
-        Route::resource('organization', 'OrganizationController');
+        Route::resource('generalconfiguration', 'GeneralConfigurationController');
+        Route::post('generalconfiguration/image', 'GeneralConfigurationController@image');
     });
 
     // Lab Sections|Specimen Types|Specimen Rejection|Test Types|Drugs|Organisms
