@@ -16,6 +16,7 @@ use App\Models\ReferralReason;
 use App\Models\RejectionReason;
 use Illuminate\Database\Seeder;
 use App\Models\TestTypeCategory;
+use App\Models\GeneralConfiguration;
 use ILabAfrica\Inventory\Models\Item;
 use App\Models\SusceptibilityBreakPoint;
 use ILabAfrica\Inventory\Models\Supplier;
@@ -32,6 +33,16 @@ class DevSeeder extends Seeder
      */
     public function run()
     {
+        $generalConfig = GeneralConfiguration::create([
+            'name' => 'Cool Clinic',
+            'email' => 'coolclinic@coolmail.awesome',
+            'phone' => '+254 719 991 991',
+            'post' => '112',
+            'code' => '00100',
+            'address' => 'Strathmore University, Ole Sangale Road',
+        ]);
+        $this->command->info('general config seeded');
+
         $organizations = [
           ['name' => 'Coolest Clinic in Town'],
           ['name' => 'iLabAfrica Fantasy Hospital'],
