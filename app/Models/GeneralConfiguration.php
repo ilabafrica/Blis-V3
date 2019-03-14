@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class GeneralConfiguration extends Model
 {
-    public $table = "general_configuration";
+    public $table = 'general_configuration';
 }
