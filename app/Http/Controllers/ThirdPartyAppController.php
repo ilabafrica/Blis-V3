@@ -10,23 +10,13 @@ use App\Models\ThirdPartyAccess;
 class ThirdPartyAppController extends Controller
 {
     /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:tpa_api', ['except' => ['index']]);
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        return ThirdPartyApp::all();
     }
 
     /**
@@ -56,18 +46,7 @@ class ThirdPartyAppController extends Controller
      * @param  \App\ThirdPartyApp  $thirdPartyApp
      * @return \Illuminate\Http\Response
      */
-    public function show(ThirdPartyApp $thirdPartyApp)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\ThirdPartyApp  $thirdPartyApp
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ThirdPartyApp $thirdPartyApp)
+    public function show($id)
     {
         //
     }
@@ -79,7 +58,7 @@ class ThirdPartyAppController extends Controller
      * @param  \App\ThirdPartyApp  $thirdPartyApp
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ThirdPartyApp $thirdPartyApp)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -90,7 +69,7 @@ class ThirdPartyAppController extends Controller
      * @param  \App\ThirdPartyApp  $thirdPartyApp
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ThirdPartyApp $thirdPartyApp)
+    public function destroy($id)
     {
         //
     }
@@ -103,15 +82,18 @@ class ThirdPartyAppController extends Controller
      */
     public function access(Request $request)
     {
+        $fields = ['username','email','password','client_id','client_secret','grant_type'];
+        $accessCredentials = [];
+
+        foreach ($request->all() as $key => $value) {
+            if (in_array($key, $fields)) {
+                $accessCredentials[$key] = $value;
+            }
+        }
+
         $thirdPartyAccess = ThirdPartyAccess::updateOrCreate([
             'third_party_app_id' => $request->third_party_app_id,
-        ], [
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => $request->password,
-            'client_id' => $request->client_id,
-            'client_secret' => $request->client_secret,
-        ]);
+        ], $accessCredentials);
 
         return response()->json($thirdPartyAccess);
     }
