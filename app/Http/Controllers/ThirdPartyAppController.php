@@ -82,7 +82,16 @@ class ThirdPartyAppController extends Controller
      */
     public function access(Request $request)
     {
-        $fields = ['username','email','password','client_id','client_secret','grant_type'];
+        $fields = [
+            'username',
+            'email',
+            'password',
+            'client_id',
+            'client_secret',
+            'login_url',
+            'result_url',
+            'grant_type'
+        ];
         $accessCredentials = [];
 
         foreach ($request->all() as $key => $value) {
