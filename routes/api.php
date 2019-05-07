@@ -48,15 +48,12 @@ Route::group(['prefix' => 'tpa'], function () {
     Route::post('/refresh', 'ThirdPartyAppAuthController@refresh');
     Route::post('/me', 'ThirdPartyAppAuthController@me');
     Route::post('/payload', 'ThirdPartyAppAuthController@payload');
-    Route::post('/access', 'ThirdPartyAppAuthController@access');
-    Route::get('/access/{id}/destroy', 'ThirdPartyAppAuthController@accessDestroy');
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
     // Access Control|Accounts|Permissions|Roles|Assign Permissions|Assign Roles
     Route::group(['middleware' => ['permission:manage_users']], function () {
         Route::resource('address', 'AddressController');
-
         Route::resource('permission', 'PermissionController');
         Route::resource('role', 'RoleController');
         Route::get('permissionrole/attach', 'PermissionRoleController@attach');
@@ -65,6 +62,13 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('roleuser/attach', 'RoleUserController@attach');
         Route::get('roleuser/detach', 'RoleUserController@detach');
         Route::get('roleuser', 'RoleUserController@index');
+
+        // front end setup for third parties
+        Route::group(['prefix' => 'tpa'], function () {
+            Route::post('/access', 'ThirdPartyAppController@access');
+            Route::get('/access/{id}/destroy', 'ThirdPartyAppAuthController@accessDestroy');
+            Route::resource('thirdpartyapp', 'ThirdPartyAppController');
+        });
     });
     Route::resource('user', 'UserController');
     Route::post('user/image', 'UserController@profilepic');
