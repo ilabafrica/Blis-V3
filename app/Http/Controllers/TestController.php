@@ -306,7 +306,8 @@ class TestController extends Controller
         $test->save();
 
         // sending to emr on verification
-        EMR::sendTestResults($id);
+        $callFromController = true;
+        EMR::sendTestResults($id,$callFromController);
 
         return response()->json($test->loader());
     }
