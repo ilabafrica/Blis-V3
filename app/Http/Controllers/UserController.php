@@ -21,10 +21,10 @@ class UserController extends Controller
     {
         if ($request->query('search')) {
             $search = $request->query('search');
-            $user = User::with('specimenCollected', 'specimenReceived')->where('username', 'LIKE', "%{$search}%")
+            $user = User::with('specimenCollected', 'specimenReceived','roles')->where('username', 'LIKE', "%{$search}%")
                 ->paginate(10);
         } else {
-            $user = User::with('gender', 'specimenCollected', 'specimenReceived')->paginate(10);
+            $user = User::with('gender', 'specimenCollected', 'specimenReceived','roles')->paginate(10);
         }
 
         return response()->json($user);
@@ -42,7 +42,6 @@ class UserController extends Controller
             'name'     => 'required',
             'username' => 'required',
             'email'    => 'required',
-            //'password' => 'required',
 
         ];
         $validator = \Validator::make($request->all(), $rules);
@@ -54,7 +53,6 @@ class UserController extends Controller
             $user->username = $request->input('username');
             $user->email = $request->input('email');
             $user->password = bcrypt('mydefaultpassword');
-            //$user->remember_token = $request->input('remember_token');
 
             try {
                 $user->save();
@@ -78,13 +76,6 @@ class UserController extends Controller
 
         return response()->json($user);
     }
-
-    /*public function profile()
-    {
-        $user = Auth::user();
-
-        return response()->json($user);
-    }*/
 
     /**
      * Update the specified resource in storage.
@@ -125,8 +116,6 @@ class UserController extends Controller
             if ($request->input('removePic')) {
                 $user->profile_picture = null;
             }
-            //$user->remember_token = $request->input('remember_token');
-            //$user->remember_token = $request->input('remember_token');
 
             try {
                 $user->save();
