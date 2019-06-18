@@ -104,8 +104,9 @@ class ResultController extends Controller
                 $test->time_completed = date('Y-m-d H:i:s');
             }
             $test->save();
-            // sending to emr on completion for now
-            EMR::sendTestResults($test->id);
+            // sending to emr on completion for now, true is for
+            $callFromController = true;
+            EMR::sendTestResults($test->id,$callFromController);
 
             return response()->json(Test::find($test->id)->loader());
         }
