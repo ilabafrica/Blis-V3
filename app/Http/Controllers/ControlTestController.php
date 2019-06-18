@@ -129,7 +129,7 @@ class ControlTestController extends Controller
             $controlTest = ControlTest::findOrFail($id);
             $controlTest->lot_id = $request->input('lot_id');
             $controlTest->tested_by = Auth::user()->id;
-
+            $controlTest->test_type_id = $request->input('test_type_id');
             try {
                 $controlTest->save();
 
