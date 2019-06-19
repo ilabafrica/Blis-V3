@@ -20,11 +20,6 @@ class Permission extends EntrustPermission
         return $this->belongsToMany('App\Models\Role');
     }
 
-    public function permissionRole()
-    {
-        return $this->hasMany('App\Models\PermissionRole');
-    }
-
     /*
      * Checks if the Permission has a Role by its name.
      *

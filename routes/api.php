@@ -58,10 +58,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('role', 'RoleController');
         Route::get('permissionrole/attach', 'PermissionRoleController@attach');
         Route::get('permissionrole/detach', 'PermissionRoleController@detach');
-        Route::get('permissionrole', 'PermissionRoleController@index');
         Route::get('roleuser/attach', 'RoleUserController@attach');
         Route::get('roleuser/detach', 'RoleUserController@detach');
-        Route::get('roleuser', 'RoleUserController@index');
 
         // front end setup for third parties
         Route::group(['prefix' => 'tpa'], function () {

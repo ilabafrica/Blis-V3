@@ -12,17 +12,9 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\Permission;
 use Illuminate\Http\Request;
-use App\Models\PermissionRole;
 
 class PermissionRoleController extends Controller
 {
-    public function index()
-    {
-        $permissionsRoles = PermissionRole::all();
-
-        return response()->json($permissionsRoles);
-    }
-
     public function attach(Request $request)
     {
         $rules = [
@@ -34,13 +26,11 @@ class PermissionRoleController extends Controller
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
+            $role = Role::find($request->input('role_id'));
+            $permission = Permission::find($request->input('permission_id'));
             try {
-                $permissionRole = PermissionRole::create([
-                    'permission_id' => $request->input('permission_id'),
-                    'role_id' => $request->input('role_id'),
-                ]);
-
-                return response()->json($permissionRole);
+                $role->attachPermission($permission);
+                return response()->json($permission);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
