@@ -13,19 +13,6 @@ class CreateBlisTables extends Migration
      */
     public function up()
     {
-        // Create table for general configurations
-        Schema::create('general_configuration', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name')->unique();
-            $table->string('email')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('post')->nullable();
-            $table->string('address')->nullable();
-            $table->string('code')->nullable();
-            $table->string('logo')->nullable();
-            $table->timestamps();
-        });
-
         // Create table for storing roles
         Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');
@@ -37,7 +24,6 @@ class CreateBlisTables extends Migration
 
         // Create table for associating roles to users (Many-to-Many)
         Schema::create('role_user', function (Blueprint $table) {
-            $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('role_id')->unsigned();
 
@@ -58,7 +44,6 @@ class CreateBlisTables extends Migration
 
         // Create table for associating permissions to roles (Many-to-Many)
         Schema::create('permission_role', function (Blueprint $table) {
-            $table->increments('id');
             $table->integer('permission_id')->unsigned();
             $table->integer('role_id')->unsigned();
 
