@@ -11,18 +11,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Models\Role;
-use App\Models\RoleUser;
 use Illuminate\Http\Request;
 
 class RoleUserController extends Controller
 {
-    public function index()
-    {
-        $usersRoles = RoleUser::all();
-
-        return response()->json($usersRoles);
-    }
-
     public function attach(Request $request)
     {
         $rules = [
@@ -38,12 +30,9 @@ class RoleUserController extends Controller
             $role = Role::find($request->input('role_id'));
 
             try {
-                $roleUser = RoleUser::create([
-                    'user_id' => $request->input('user_id'),
-                    'role_id' => $request->input('role_id'),
-                ]);
+                $user->attachRole($role);
 
-                return response()->json($roleUser);
+                return response()->json($user);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }

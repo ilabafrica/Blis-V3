@@ -19,11 +19,11 @@ class PermissionController extends Controller
     {
         if ($request->query('search')) {
             $search = $request->query('search');
-            $permissions = Permission::with('permissionRole')
+            $permissions = Permission::with('roles')
                 ->where('name', 'LIKE', "%{$search}%")
                 ->paginate(10);
         } else {
-            $permissions = Permission::with('permissionRole')
+            $permissions = Permission::with('roles')
                 ->orderBy('id', 'ASC')->paginate(10);
         }
 
