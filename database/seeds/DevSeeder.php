@@ -16,8 +16,8 @@ use App\Models\ReferralReason;
 use App\Models\RejectionReason;
 use Illuminate\Database\Seeder;
 use App\Models\TestTypeCategory;
-use App\Models\GeneralConfiguration;
 use ILabAfrica\Inventory\Models\Item;
+// use App\Models\GeneralConfiguration;
 use App\Models\SusceptibilityBreakPoint;
 use ILabAfrica\Inventory\Models\Supplier;
 use ILabAfrica\Inventory\Models\RequestStatus;
@@ -33,6 +33,7 @@ class DevSeeder extends Seeder
      */
     public function run()
     {
+        /*
         $generalConfig = GeneralConfiguration::create([
             'name' => 'Cool Clinic',
             'email' => 'coolclinic@coolmail.awesome',
@@ -42,6 +43,7 @@ class DevSeeder extends Seeder
             'address' => 'Strathmore University, Ole Sangale Road',
         ]);
         $this->command->info('general config seeded');
+        */
 
         $organizations = [
           ['name' => 'Coolest Clinic in Town'],
@@ -116,10 +118,14 @@ class DevSeeder extends Seeder
 
         /* Test Categories table - These map on to the lab sections */
         $test_categories = TestTypeCategory::create(['name' => 'PARASITOLOGY']);
-        $testTypeCategoryMicrobiology = TestTypeCategory::create(['name' => 'MICROBIOLOGY']);
+        $testTypeCategoryMicrobiology = TestTypeCategory::create([
+            'name' => 'MICROBIOLOGY'
+        ]);
         $testTypeCategoryHematology = TestTypeCategory::create(['name' => 'HEMATOLOGY']);
         $testTypeCategorySerology = TestTypeCategory::create(['name' => 'SEROLOGY']);
-        $testTypeCategoryTransfusion = TestTypeCategory::create(['name' => 'BLOOD TRANSFUSION']);
+        $testTypeCategoryTransfusion = TestTypeCategory::create([
+            'name' => 'BLOOD TRANSFUSION'
+        ]);
         $testTypeCategoryChemistry = TestTypeCategory::create(['name' => 'CHEMISTRY']);
         $this->command->info('Lab Sections seeded');
 
