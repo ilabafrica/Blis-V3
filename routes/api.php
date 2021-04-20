@@ -14,6 +14,7 @@
 
 Route::post('/register', 'Auth\APIController@register');
 Route::post('/login', 'Auth\APIController@login');
+// Route::post('login', [ 'as' => 'login', 'uses' => 'Auth\APIController@login']);
 
 Route::group(['prefix' => 'stats'], function () {
     Route::group(['prefix' => 'tests'], function () {
@@ -78,8 +79,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::resource('adhocoption', 'AdhocOptionController');
         Route::resource('code', 'CodeController');
         Route::resource('counter', 'CounterController');
-        Route::resource('generalconfiguration', 'GeneralConfigurationController');
-        Route::post('generalconfiguration/image', 'GeneralConfigurationController@image');
+        Route::post('adhocconfig/image', 'AdhocConfigController@image');
+        Route::resource('adhocconfig', 'AdhocConfigController');
     });
 
     // Lab Sections|Specimen Types|Specimen Rejection|Test Types|Drugs|Organisms
@@ -112,8 +113,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     // Health Units|Instrument|Reports|Barcode
     Route::group(['middleware' => ['permission:manage_configurations']], function () {
-        Route::resource('adhoccategory', 'AdhocCategoryController');
-        Route::resource('adhocoption', 'AdhocOptionController');
+        // Route::resource('adhoccategory', 'AdhocCategoryController');
+        // Route::resource('adhocoption', 'AdhocOptionController');
         Route::resource('code', 'CodeController');
         Route::resource('counter', 'CounterController');
         Route::resource('location', 'LocationController');

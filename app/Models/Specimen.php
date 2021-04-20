@@ -44,4 +44,16 @@ class Specimen extends Model
     {
         return $this->belongsTo('App\User', 'received_by', 'id');
     }
+    public function rejected()
+    {
+        return $this->test_status_id == \App\Models\SpecimenStatus::rejected;
+    }
+    public function received()
+    {
+        return $this->specimen_status_id == \App\Models\SpecimenStatus::received;
+    }
+    public function pending()
+    {
+        return $this->specimen_status_id == \App\Models\SpecimenStatus::pending;
+    }
 }

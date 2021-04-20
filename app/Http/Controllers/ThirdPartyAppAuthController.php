@@ -24,9 +24,15 @@ class ThirdPartyAppAuthController extends Controller
      */
     public function login()
     {
+// \Log::info(request()->all());
+\Log::info(request()->username);
         $credentials = request(['email', 'password']);
+        $modifiedCredentials = [
+            'email'=>request()->username,
+            'password'=> request()->password
+        ];
 
-        if (! $token = auth('tpa_api')->attempt($credentials)) {
+        if (! $token = auth('tpa_api')->attempt($modifiedCredentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 

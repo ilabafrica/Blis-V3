@@ -30,6 +30,7 @@ class ResultController extends Controller
 
     public function store(Request $request)
     {
+        \Log::info($request->all());
         if ($request->input('measure_range_id')) {
             $rules = [
                 'test_id' => 'required',
@@ -83,8 +84,7 @@ class ResultController extends Controller
                         $result->time_entered = date('Y-m-d H:i:s');
                         $result->measure_range_id = $results[$measure->id]['measure_range_id'];
                         $result->save();
-                    } elseif ($measure->measureType->isFreeText() ||
-                        $measure->measureType->isNumeric()) {
+                    } elseif ($measure->measureType->isFreeText()) {
                         // free text | numeric
                         $result = Result::firstOrNew([
                             'measure_id' => $measure->id,
@@ -93,6 +93,19 @@ class ResultController extends Controller
                         $result->time_entered = date('Y-m-d H:i:s');
 
                         $result->result = $results[$measure->id]['result'];
+                        //dd($results[$measure->id]['result']);
+                        $result->save();
+                        //dd($result);
+                    } elseif ($measure->measureType->isNumeric()) {
+                        // free text | numeric
+                        $result = Result::firstOrNew([
+                            'measure_id' => $measure->id,
+                            'test_id' => $request->input('test_id'),
+                        ]);
+                        $result->time_entered = date('Y-m-d H:i:s');
+
+                        $result->result = $results[$measure->id]['result'];
+                        $result->measure_range_id = $results[$measure->id]['measure_range_id'];
                         //dd($results[$measure->id]['result']);
                         $result->save();
                         //dd($result);

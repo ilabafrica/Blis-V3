@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 /*
  * (c) @iLabAfrica
  * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
- * Team Lead	 - Emmanuel Kweyu.
- * Devs			 - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma|Anthony Ereng
  */
 
 use Auth;
 use App\Models\Name;
 use App\Models\Test;
 use App\Models\Patient;
+use App\Models\AdhocConfig;
 use App\Models\Encounter;
 use App\Models\TestStatus;
 use Illuminate\Http\Request;
@@ -25,10 +24,10 @@ class PatientController extends Controller
             $search = $request->query('search');
             $patient = Patient::whereHas('name', function ($query) use ($search) {
                 $query->where('given', 'LIKE', "%{$search}%")->orWhere('family', 'LIKE', "%{$search}%");
-            })->with('gender', 'name', 'encounter')
+            })->with('gender', 'name', 'encounters')
                 ->paginate(10);
         } else {
-            $patient = Patient::with('name', 'gender', 'encounter')->orderBy('id', 'DESC')->paginate(10);
+            $patient = Patient::with('name', 'gender', 'encounters')->orderBy('id', 'DESC')->paginate(10);
         }
 
         return response()->json($patient);
@@ -43,7 +42,6 @@ class PatientController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'identifier' => 'required',
             'birth_date' => 'required',
         ];
 
@@ -63,15 +61,17 @@ class PatientController extends Controller
             }
 
             $patient = new Patient;
-            $patient->identifier = $request->input('identifier');
             $patient->name_id = $name->id;
+            if (AdhocConfig::getULINFormat() == 'Manual') {
+                $patient->identifier = $request->input('identifier');
+            }else{
+                $patient->identifier = $patient->getUlin();
+            }
             $patient->gender_id = $request->input('gender_id');
             $patient->birth_date = $request->input('birth_date');
             $patient->created_by = Auth::user()->id;
-
             try {
                 $patient->save();
-
                 return response()->json($patient->loader());
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
@@ -113,7 +113,12 @@ class PatientController extends Controller
             return response()->json($validator, 422);
         } else {
             $patient = Patient::findOrFail($id);
-            $patient->identifier = $request->input('identifier');
+            if (AdhocConfig::getULINFormat() == 'Manual') {
+                $patient->identifier = $request->input('identifier');
+            }else{
+                $patient->identifier = $patient
+                    ->getUlin($request->input('given').' '.$request->input('family'));
+            }
             $patient->active = $request->input('active');
             $patient->name_id = $request->input('name_id');
             $patient->gender_id = $request->input('gender_id');

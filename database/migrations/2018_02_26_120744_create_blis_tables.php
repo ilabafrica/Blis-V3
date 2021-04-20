@@ -612,9 +612,72 @@ class CreateBlisTables extends Migration
          * @system blis.v3 defined
          * @description incrementing and resetting patient accession_identifier
          */
-        Schema::create('counter', function (Blueprint $table) {
+        Schema::create('id_counter', function (Blueprint $table) {
             $table->increments('id');
         });
+
+        Schema::create('adhoc_configs', function($table)
+        {
+            $table->increments('id');
+            $table->string('name')->unique();
+            $table->string('option');
+        });
+
+        Schema::create('config_options', function($table)
+        {
+            $table->increments('id');
+            $table->string('name');
+            $table->integer('adhoc_config_id')->unsigned();
+        });
+        $reportConfigId = \App\Models\AdhocConfig::create([
+            'name' => 'Report',
+            'option' => 'Standard'])->id;
+        $ulinConfigId = \App\Models\AdhocConfig::create([
+            'name' => 'ULIN',
+            'option' => 'Standard'])->id;
+        \App\Models\AdhocConfig::create([
+            'name' => 'Facility_Name',
+            'option' => 'iLabAfrica Medical Centre']);
+        \App\Models\AdhocConfig::create([
+            'name' => 'Facility_Code',
+            'option' => 'ILAB']);
+        \App\Models\AdhocConfig::create([
+            'name' => 'Email_Address',
+            'option' => 'ilabafrica@strathmore.edu']);
+        \App\Models\AdhocConfig::create([
+            'name' => 'Telephone',
+            'option' => '+254703034000']);
+        \App\Models\AdhocConfig::create([
+            'name' => 'Post_Address',
+            'option' => 'P.O.Box 59857, 00200-Nairobi']);
+        \App\Models\AdhocConfig::create([
+            'name' => 'Physical_Address',
+            'option' => 'Strathmore University']);
+        \App\Models\AdhocConfig::create([
+            'name' => 'Logo',
+            'option' => 'default.png']);
+
+        \App\Models\ConfigOption::create([
+            'name' => 'Standard',
+            'adhoc_config_id' => $ulinConfigId]);
+        \App\Models\ConfigOption::create([
+            'name' => 'Jinja_SLMPTA',
+            'adhoc_config_id' => $ulinConfigId]);
+        \App\Models\ConfigOption::create([
+            'name' => 'Kayunga_ISO',
+            'adhoc_config_id' => $ulinConfigId]);
+        \App\Models\ConfigOption::create([
+            'name' => 'Standard',
+            'adhoc_config_id' => $reportConfigId]);
+        \App\Models\ConfigOption::create([
+            'name' => 'Jinja_SOP',
+            'adhoc_config_id' => $reportConfigId]);
+        \App\Models\ConfigOption::create([
+            'name' => 'Mityana_SOP',
+            'adhoc_config_id' => $reportConfigId]);
+        \App\Models\ConfigOption::create([
+            'name' => 'Manual',
+            'adhoc_config_id' => $ulinConfigId]);
 
         Schema::create('instruments', function (Blueprint $table) {
             $table->increments('id');
@@ -857,7 +920,7 @@ class CreateBlisTables extends Migration
 
         \Illuminate\Support\Facades\Artisan::call('passport:install');
         \Illuminate\Support\Facades\Artisan::call('jwt:secret');
-        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        // \Illuminate\Support\Facades\Artisan::call('storage:link');
     }
 
     /**
@@ -874,7 +937,7 @@ class CreateBlisTables extends Migration
         Schema::dropIfExists('control_types');
         Schema::dropIfExists('lots');
         Schema::dropIfExists('instruments');
-        Schema::dropIfExists('counter');
+        Schema::dropIfExists('id_counter');
         Schema::dropIfExists('adhoc_options');
         Schema::dropIfExists('adhoc_categories');
         Schema::dropIfExists('susceptibility_break_points');

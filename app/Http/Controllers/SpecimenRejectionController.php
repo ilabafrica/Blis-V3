@@ -5,15 +5,14 @@ namespace App\Http\Controllers;
 /*
  * (c) @iLabAfrica
  * BLIS      - a port of the Basic Laboratory Information System (BLIS) to Laravel.
- * Team Lead     - Emmanuel Kweyu.
- * Devs      - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma.
- * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
  */
 
 use Auth;
 use App\Models\TestPhase;
 use Illuminate\Http\Request;
 use App\Models\RejectionReason;
+use App\Models\Specimen;
+use ILabAfrica\SpecimenTracker\Controllers\SpecimenTracker;
 use App\Models\SpecimenRejection;
 
 class SpecimenRejectionController extends Controller
@@ -33,10 +32,9 @@ class SpecimenRejectionController extends Controller
      */
     public function store(Request $request)
     {
+// \Log::info($request->all());
         $rules = [
             'rejection_reason_ids' => 'required',
-            'authorized_person_informed' => 'required',
-            'specimen_id' => 'required',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
@@ -44,7 +42,6 @@ class SpecimenRejectionController extends Controller
             return response()->json($validator, 422);
         } else {
             $rejection = new SpecimenRejection;
-            $rejection->specimen_id = $request->input('specimen_id');
 
             // if it is analytic rejection test_id is submitted
             if ($request->input('test_id')) {
@@ -53,6 +50,21 @@ class SpecimenRejectionController extends Controller
                 $rejection->test_id = $request->input('test_id');
             } else {
                 $rejection->test_phase_id = TestPhase::pre_analytical;
+            }
+
+            if ($request->input('specimen_id')) {
+                $rejection->specimen_id = $request->input('specimen_id');
+            }else{
+                $specimen = new Specimen;
+                $specimen->identifier = SpecimenTracker::identifier();
+                $specimen->accession_identifier = $request->input('accession_identifier');
+                $specimen->specimen_type_id = $request->input('specimen_type_id');
+                $specimen->received_by = Auth::user()->id;
+                $specimen->collected_by = $request->input('collected_by');
+                $specimen->time_collected = $request->input('time_collected');
+                $specimen->time_received = $request->input('time_received');
+                $specimen->save();
+                $rejection->specimen_id = $specimen->id;
             }
             $rejection->authorized_person_informed = $request->input('authorized_person_informed');
             $rejection->rejected_by = Auth::user()->id;

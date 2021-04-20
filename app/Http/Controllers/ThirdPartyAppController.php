@@ -19,60 +19,6 @@ class ThirdPartyAppController extends Controller
         return ThirdPartyApp::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\ThirdPartyApp  $thirdPartyApp
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ThirdPartyApp  $thirdPartyApp
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\ThirdPartyApp  $thirdPartyApp
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 
     /**
      * Access of BLIS to the third party application.
@@ -116,7 +62,6 @@ class ThirdPartyAppController extends Controller
     public function accessDestroy($id)
     {
         ThirdPartyAccess::destroy($id);
-
         return response()->json([], 200);
     }
 }

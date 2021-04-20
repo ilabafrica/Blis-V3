@@ -43,6 +43,11 @@ class TestType extends Model
         return $this->hasMany('App\Models\Measure');
     }
 
+    public function isCulture()
+    {
+        return $this->culture == 1;
+    }
+
     public function loader()
     {
         return TestType::find($this->id)->load(

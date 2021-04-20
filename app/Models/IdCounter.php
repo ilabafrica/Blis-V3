@@ -12,8 +12,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Counter extends Model
+class IdCounter extends Model
 {
-    protected $table = 'counter';
+    protected $table = 'id_counter';
     public $timestamps = false;
 }

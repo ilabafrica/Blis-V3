@@ -12,7 +12,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class TestMappingTest extends TestCase
+class TestTypeMappingTest extends TestCase
 {
 	use SetUp;
 	use DatabaseMigrations;

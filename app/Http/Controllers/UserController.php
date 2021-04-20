@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 /*
  * (c) @iLabAfrica
  * BLIS      - a port of the Basic Laboratory Information System (BLIS) to Laravel.
- * Team Lead     - Emmanuel Kweyu.
- * Devs      - Brian Maiyo|Ann Chemutai|Winnie Mbaka|Ken Mutuma.
- * More Devs     - Derrick Rono|Anthony Ereng|Emmanuel Kitsao.
  */
 
 use Auth;
@@ -141,8 +138,8 @@ class UserController extends Controller
         } else {
             if ($request->file('file')->isValid()) {
                 $extension = $request->file('file')->getClientOriginalExtension();
-                $fileName = rand(11111, 99999).'.'.$extension;
-                $request->file('file')->storeAs('profile_pictures', $fileName);
+                $fileName = 'dp_'.$request->input('id').'.'.$extension;
+                $request->file('file')->move('profile_pictures', $fileName);
             }
             $user = User::findOrFail($request->input('id'));
             $user->profile_picture = $fileName;

@@ -82,6 +82,16 @@ class Test extends Model
         return $this->belongsTo('App\Models\Encounter');
     }
 
+    public function isCompleted()
+    {
+        return $this->test_status_id == \App\Models\TestStatus::completed;
+    }
+
+    public function isVerified()
+    {
+        return $this->test_status_id == \App\Models\TestStatus::verified;
+    }
+
     public function loader()
     {
         return Test::find($this->id)->load(

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Statistics;
 use App\Models\Test;
 use App\Models\Result;
 use App\Models\Patient;
+use App\Models\AdhocConfig;
 use Illuminate\Http\Request;
 use App\Models\PatientReportPDF;
 use Illuminate\Support\Facades\DB;
@@ -12,25 +13,122 @@ use App\Http\Controllers\Controller;
 
 class ResultsStatisticsController extends Controller
 {
-    // get the patient history
     public function patientHistory(Request $request)
     {
-        if ($request->query('pdf') && $request->query('id')) { // by particular patient and pdf-ed
-            $pdf = new PatientReportPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-            $patient = Patient::with(['name', 'gender', 'tests.results.measure', 'tests.testType', 'tests.specimen.status', 'tests.specimen.specimenType', 'tests.specimen.collectedBy', 'tests.specimen.receivedBy', 'tests.testStatus'])->find($request->query('id'));
 
-            //use a custom view to make the html content to be used in generation of the pdf
-            //this approach allows for more html like styling though limited
-            $view = \View::make('pdf', compact('patient'));
-            $html_content = $view->render();
-            $pdf->AddPage();
-            $pdf->writeHTML($html_content, true, false, true, false, '');
+// patient id is a must here
+        if ($request->query('test_id')) {
 
-            return $pdf->Output('example_001.pdf', 'I');
-        } elseif ($request->query('id')) { // grouped by particular patient
-            $patient = Patient::with(['name', 'gender', 'tests.results.measure', 'tests.testType', 'tests.specimen.status', 'tests.specimen.specimenType', 'tests.specimen.collectedBy', 'tests.specimen.receivedBy', 'tests.testStatus'])->find($request->query('id'));
+            $patientReportData['tests'] = Test::with(
+                'encounter.patient'
+                'results.measure.measureRanges',
+                'testType',
+                'specimen.status',
+                'specimen.specimenType',
+                'specimen.collectedBy',
+                'specimen.receivedBy',
+            )->where('id',$request->query('test_id'))->get();
+            $patientReportData['encounters'] = [$test->encounter];
+            $patientReportData['patient'] = $test->encounter->patient;
+        }elseif ($request->query('encounter_id')) {
 
-            return $patient;
+        }elseif ($request->query('patient_id')) {
+            $patient = Patient::with([
+                'name',
+                'gender',
+                'encounters',
+                'tests.results.measure.measureRanges',
+                'tests.testType',
+                'tests.specimen.status',
+                'tests.specimen.specimenType',
+                'tests.specimen.collectedBy',
+                'tests.specimen.receivedBy',
+                'tests.encounter',
+                'tests.testStatus'
+            ])->find($request->query('patient_id'));
+            $patientReportData['tests'] = $patient->tests;
+
+
+// dd($patientReportData);
+// dd($patient);
+
+// $patientReportData = [];
+$patientReportData['encounters'] = $patient->encounters;
+$patientReportData['encounters'] = Encounter::with('patient')->where('id',$request->query('encounter_id'))->get();
+
+$patientReportData['tests'] = $patient->tests;
+$patientReportData['tests'] = Encounter::find($request->query('encounter_id'))->tests;
+$patientReportData['patient'] = $patient;
+$patientReportData['patient'] = $encounter->patient;
+/*
+
+arrange results in a standard way alll the way what I need
+
+$encounters
+$encounter
+
+$tests
+$test
+
+$patient
+
+
+test_id =113
+encounter_id =113
+$request->query('encounter_id')
+$request->query('test_id')
+$request->query('patient_id')
+
+<!-- 
+-------- BLIS
+@if(app('request')->input('encounter_id'))
+@endif
+@if(app('request')->input('test_id'))
+@endif
+    app('request')->input('encounter_id')
+    app('request')->input('test_id')
+encounter_id
+test_id
+
+$request->query('encounter_id')
+$request->query('test_id')
+$request->query('patient_id')
+
+
+reports_patient
+ResultsStatisticsController
+
+http://blis-v3.test/api/stats/results/patient?pdf=true&id=15
+
+reports index, remove cards put table, get from control index
+reports patient page doesnt load, it broken, unbreak it
+
+release
+
+print specimen tracker ... the barcode in thespecimen tracker manenoz
+consolidate every package
+
+create video user manual (microphone from jerry) - BLIS Playlist
+--------Riverside
+riverside website attach people
+
+ -->
+
+*/
+
+            if ($request->query('pdf') ) {
+                $pdf = new PatientReportPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+                $config = AdhocConfig::getConfigs();
+                $view = \View::make('pdf', compact('patient','config'));
+                $html_content = $view->render();
+                $pdf->AddPage();
+                $pdf->writeHTML($html_content, true, false, true, false, '');
+                // return $pdf->Output('report.pdf', 'I');
+                return $view;
+
+            } else {
+                return $patient;
+            }
         }
     }
 

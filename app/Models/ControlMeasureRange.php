@@ -28,7 +28,6 @@ class ControlMeasureRange extends Model
         $lower = $this->lower_range;
         $upper = $this->upper_range;
         $unit = $this->unit;
-
         return $lower.' - '.$upper.' '.$this->ControlMeasure->unit;
     }
 }

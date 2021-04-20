@@ -40,12 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-
         'api' => [
             'driver' => 'passport',
             'provider' => 'users',
         ],
-
         'tpa_api' => [
             'driver' => 'jwt',
             'provider' => 'tpas',

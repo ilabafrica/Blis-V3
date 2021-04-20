@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use TCPDF;
+use Auth;
 
 /*
  * (c) @iLabAfrica
@@ -17,6 +18,7 @@ class PatientReportPDF extends TCPDF
     //Pdf Header
     public function Header()
     {
+/*
         if ($this->page == 1) {
             // Logo
             $image_file = 'ilabafrica.jpg';
@@ -29,6 +31,16 @@ class PatientReportPDF extends TCPDF
         } else {
             $this->SetMargins(PDF_MARGIN_LEFT, 15, PDF_MARGIN_RIGHT);
         }
+*/
+/*
+        if ($this->page == 1) {
+            $this->writeHTML(\View::make('reportHeader', $this->getTestRequestInformation()), 0, false, 'C', 0, '', 0, false, 'M', 'M');
+            $this->SetHeaderMargin(100);
+            $this->SetMargins(PDF_MARGIN_LEFT, 99, PDF_MARGIN_RIGHT);
+        } else {
+            $this->SetMargins(PDF_MARGIN_LEFT, 15, PDF_MARGIN_RIGHT);
+        }
+*/
     }
 
     public function Footer()
@@ -37,6 +49,7 @@ class PatientReportPDF extends TCPDF
         // $now = new DateTime();
         // $printTime = $now->format('Y-m-d H:i');
 
+/*
         //Position at 15mm at the bottom
         $this->SetY(-15);
         //Set font
@@ -44,6 +57,21 @@ class PatientReportPDF extends TCPDF
         //set page number
         $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'L', 0, '', 0, false, 'T', 'M');
         // $this->Cell(0, 10, "Printed by: ".Auth::user()->name." Date: ".$printTime, 0, false, 'R', 0, '', 0, false, 'T', 'M');
+*/
+        $printTime = date('Y-m-d H:i');
+
+        // Position at 15 mm from bottom
+        $this->SetY(-15);
+
+        // Set font
+        $this->SetFont('helvetica', 'I', 8);
+        // $this->Cell(0, 10, "Printed by: ".Auth::user()->name." on Date: ".$printTime, 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, "Printed at: ".$printTime, 0, false, 'L', 0, '', 0, false, 'T', 'M');
+            // $patient->created_by = Auth::user()->id;
+
+        $this->SetFont('helvetica', 'I', 8);
+        // Page number
+        $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
     }
 
     // Specimen table
@@ -108,4 +136,11 @@ class PatientReportPDF extends TCPDF
             $fill = ! $fill;
         }
     }
+
+    Public function getTestRequestInformation()
+    {
+        return ['place holder'];
+    }
+
+
 }

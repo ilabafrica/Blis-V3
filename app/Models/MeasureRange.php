@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Models;
-
 /*
  * (c) @iLabAfrica
  * BLIS			 - a port of the Basic Laboratory Information System (BLIS) to Laravel.
@@ -47,4 +45,14 @@ class MeasureRange extends Model
             'gender', 'interpretation', 'susceptibilityBreakPoints'
         );
     }
+
+    public function getRangeUnit()
+    {
+        $lower = $this->lower_range;
+        $upper = $this->upper_range;
+        $unit = $this->unit;
+
+        return $lower.' - '.$upper.' '.$this->ControlMeasure->unit;
+    }
+
 }
